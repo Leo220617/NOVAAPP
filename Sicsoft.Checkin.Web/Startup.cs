@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MPOrdenes.Models;
+using NOVAAPP.Models;
 using Refit;
 using Sicsoft.Checkin.Web.Models;
 using Sicsoft.Checkin.Web.Servicios;
@@ -125,7 +125,7 @@ namespace Sicsoft.Checkin.Web
         
 
             services.AddRefitClient<ICrudApi<UsuariosViewModel, int>>()
-           .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Login"))
+           .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Usuarios"))
            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
             services.AddRefitClient<ICrudApi<RolesViewModel, int>>()
@@ -146,42 +146,48 @@ namespace Sicsoft.Checkin.Web
 
 
             services.AddRefitClient<ICrudApi<BitacoraErroresViewModel, int>>()
-   .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/BitacoraErrores"))
+   .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Bitacora"))
    .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
-            services.AddRefitClient<ICrudApi<GeneradosViewModel, int>>()
-   .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Generados"))
-   .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
-
-            services.AddRefitClient<ICrudApi<EncOrdenesCompraViewModel, int>>()
-   .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Ordenes"))
-   .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
-
-            services.AddRefitClient<ICrudApi<OrdenesViewModel, int>>()
-   .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/OrdenesProduccion"))
-   .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+            services.AddRefitClient<ICrudApi<BitacoraMovimientosViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Bitacoramovimientos"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
 
-            services.AddRefitClient<ICrudApi<ExistenciasViewModel, int>>()
-   .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Existencias"))
-   .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
-
-            services.AddRefitClient<ICrudApi<FabricacionViewModel, int>>()
-  .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Fabricacion"))
-  .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
-
-            services.AddRefitClient<ICrudApi<AgrupadoViewModel, int>>()
-  .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Agrupado"))
-  .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
-
-            services.AddRefitClient<ICrudApi<PLineasViewModel, int>>()
-  .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/PLineas"))
-  .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
-
-            services.AddRefitClient<ICrudApi<AgrupadoProduccionViewModel, int>>()
- .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/AgrupadoProcesar"))
+            services.AddRefitClient<ICrudApi<BodegasViewModel, int>>()
+ .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Bodegas"))
  .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
+            services.AddRefitClient<ICrudApi<CabysViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Cabys"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddRefitClient<ICrudApi<CajasViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Cajas"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddRefitClient<ICrudApi<ClientesViewModel, string>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Clientes"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+
+            services.AddRefitClient<ICrudApi<ImpuestosViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Impuestos"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+
+            services.AddRefitClient<ICrudApi<ListaPreciosViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/ListaPrecios"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddRefitClient<ICrudApi<ProductosViewModel, string>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Productos"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+
+            services.AddRefitClient<ICrudApi<UsuariosSucursalesViewModel, string>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/UsuariosSucursales"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
 
             return services;

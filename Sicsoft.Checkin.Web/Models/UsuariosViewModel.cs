@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace InversionGloblalWeb.Models
+namespace NOVAAPP.Models
 {
     public class UsuariosViewModel
     {
@@ -12,19 +12,19 @@ namespace InversionGloblalWeb.Models
 
         public int? idRol { get; set; }
 
-        [StringLength(200)]
-        public string Email { get; set; }
-
-        public string CedulaJuridica { get; set; }
-
-        [StringLength(100)]
+        
         public string Nombre { get; set; }
 
-        public bool? Activo { get; set; }
+      
+        public string NombreUsuario { get; set; }
 
-        [StringLength(500)]
         public string Clave { get; set; }
-        public int idLoginAceptacion { get; set; }
-        public string CardCode { get; set; }
+
+        
+        public string ClaveSupervision { get; set; }
+
+        public DateTime? FecUltSup { get; set; }
+
+        public bool Activo { get; set; }
     }
 }

@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\assets\vendor_components\flat-color-icons\PNG\512\A\" />
-    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
   <ItemGroup>

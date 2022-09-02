@@ -22,27 +22,36 @@
 
 
 </head>
-<body class="hold-transition login-page" style="background-color: #fff;">
+<body class="hold-transition login-page" style="background-color: #74BA3E;">
 
 
     <div class="container h-p100">
         <div class="row align-items-center justify-content-md-center h-p100">
             <div class="col-lg-4 col-md-8 col-12">
-                <div class="login-box bg-img rounded" style="background-color: #808285;" data-overlay="5">
+                <div class="login-box bg-img rounded" style="background-color: #FFFFFF;" >
                     <div class="login-box-body">
-                        <h3 class="text-center"><img src="/img/logo.jpg"></h3>
+                        <h3 class="text-center"><img src="/img/Novagro.png"></h3>
                         <h3 class="login-box-msg">Iniciar Sesión</h3>
 
-                        <form method="post" id="formTipos" role="form" novalidate class="form-element text-white">
+                        <form method="post" id="formTipos" role="form" novalidate class="form-element text-black">
                             <div asp-validation-summary="All" style="text-align: center;" class=" text-white"></div>
+                           
+                          
 
+                            <div>
+                                <select id="selectC" class="form-control" required name="Input.Sucursales">
+                                  <option value="0" >Seleccione Sucursal" </option>
+                                </select>
+                                
+
+                            </div>
                             <div class="form-group has-feedback">
                                 <input type="email" asp-for="Input.Email" class="form-control text-white" placeholder="Correo Electrónico" id="correoElectronico" onchange="javascript: onChangeEmail();" onkeypress="javascript: onChangeEmail()" onkeyup="javascript: onChangeEmail()">
-                                <span asp-validation-for="Input.Email" class="ion ion-email form-control-feedback text-white"></span>
+                                <span asp-validation-for="Input.Email" class="ion ion-email form-control-feedback text-black"></span>
                             </div>
                             <div class="form-group has-feedback">
                                 <input type="password" asp-for="Input.Password" class="form-control text-white" placeholder="Contraseña">
-                                <span asp-validation-for="Input.Password" class="ion ion-locked form-control-feedback text-white"></span>
+                                <span asp-validation-for="Input.Password" class="ion ion-locked form-control-feedback text-black"></span>
                             </div>
                            
                             <div class="row">
