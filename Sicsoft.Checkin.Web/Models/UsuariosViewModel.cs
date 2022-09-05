@@ -10,7 +10,7 @@ namespace NOVAAPP.Models
     {
         public int id { get; set; }
 
-        public int? idRol { get; set; }
+        public int idRol { get; set; }
 
         
         public string Nombre { get; set; }
@@ -23,7 +23,7 @@ namespace NOVAAPP.Models
         
         public string ClaveSupervision { get; set; }
 
-        public DateTime? FecUltSup { get; set; }
+        public DateTime FecUltSup { get; set; }
 
         public bool Activo { get; set; }
     }

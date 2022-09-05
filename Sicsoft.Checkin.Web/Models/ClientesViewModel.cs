@@ -10,7 +10,7 @@ namespace NOVAAPP.Models
         
         public string Codigo { get; set; }
 
-        public int? idListaPrecios { get; set; }
+        public int idListaPrecios { get; set; }
 
         
         public string Nombre { get; set; }
@@ -30,7 +30,7 @@ namespace NOVAAPP.Models
         
         public string Telefono { get; set; }
 
-        public int? Provincia { get; set; }
+        public int Provincia { get; set; }
 
        
         public string Canton { get; set; }
@@ -45,10 +45,10 @@ namespace NOVAAPP.Models
         public string Sennas { get; set; }
 
        
-        public decimal? Saldo { get; set; }
+        public decimal Saldo { get; set; }
 
-        public bool? Activo { get; set; }
+        public bool Activo { get; set; }
 
-        public bool? ProcesadoSAP { get; set; }
+        public bool ProcesadoSAP { get; set; }
     }
 }

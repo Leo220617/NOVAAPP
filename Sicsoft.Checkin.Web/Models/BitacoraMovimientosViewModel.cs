@@ -11,12 +11,12 @@ namespace NOVAAPP.Models
     {
         public int id { get; set; }
 
-        public int? idUsuario { get; set; }
+        public int idUsuario { get; set; }
 
         
         public string Descripcion { get; set; }
 
-        public DateTime? Fecha { get; set; }
+        public DateTime Fecha { get; set; }
 
       
         public string Metodo { get; set; }

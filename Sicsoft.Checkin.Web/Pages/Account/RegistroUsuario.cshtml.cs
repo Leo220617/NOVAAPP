@@ -14,8 +14,7 @@ namespace Sicsoft.CostaRica.Checkin.Web.Pages.Account
 {
     public class RegistroUsuarioModel : PageModel
     {
-        private readonly ICrudApi<LoginUsuario, int> service;
-        private readonly ICrudApi<UsuariosViewModel, int> users;
+        private readonly ICrudApi<LoginUsuario, int> service; 
         private readonly ICrudApi<RolesViewModel, int> roles;
 
         [BindProperty]
@@ -24,14 +23,13 @@ namespace Sicsoft.CostaRica.Checkin.Web.Pages.Account
         [BindProperty]
         public RolesViewModel[] Roles { get; set; }
 
-        [BindProperty]
-        public UsuariosViewModel[] Usuarios { get; set; }
+        
 
-        public RegistroUsuarioModel(ICrudApi<LoginUsuario, int> service, ICrudApi<RolesViewModel, int> roles, ICrudApi<UsuariosViewModel, int> users)
+        public RegistroUsuarioModel(ICrudApi<LoginUsuario, int> service, ICrudApi<RolesViewModel, int> roles )
         {
             this.service = service;
             this.roles = roles;
-            this.users = users;
+          
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -43,7 +41,7 @@ namespace Sicsoft.CostaRica.Checkin.Web.Pages.Account
                     return RedirectToPage("/NoPermiso");
                 }
                 Roles = await roles.ObtenerLista("");
-                Usuarios = await users.ObtenerLista("");
+              
 
            
             }
