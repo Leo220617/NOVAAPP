@@ -55,7 +55,7 @@ namespace Sicsoft.Checkin.Web
             ActionResult response = Page();
             try
             {
-                var resultado = await checkInService.Login(Input.Email, Input.Password);
+                var resultado = await checkInService.Login(Input.nombreUsuario, Input.clave);
                 string str = "";
 
                 foreach(var item in resultado.Seguridad)
@@ -67,18 +67,15 @@ namespace Sicsoft.Checkin.Web
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                 identity.AddClaim(new Claim(ClaimTypes.Name, resultado.Email));
                 identity.AddClaim(new Claim(ClaimTypes.UserData, resultado.token));
-                identity.AddClaim(new Claim(ClaimTypes.Actor, resultado.idLogin.ToString()));
+                //identity.AddClaim(new Claim(ClaimTypes.Actor, resultado.idLogin.ToString()));
                 identity.AddClaim(new Claim(ClaimTypes.Role, resultado.idRol.ToString()));
                 identity.AddClaim(new Claim("Roles",str));
-                identity.AddClaim(new Claim("CambiarClave", resultado.CambiarClave.ToString())); 
+               // identity.AddClaim(new Claim("CambiarClave", resultado.CambiarClave.ToString())); 
 
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                if(resultado.CambiarClave)
-                {
-                    return RedirectToPage("/Account/CambioContrasena");
-                }
+                
 
                 return Redirect("../Index");
 
@@ -97,14 +94,14 @@ namespace Sicsoft.Checkin.Web
                 if(exception.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
                     Errores error = JsonConvert.DeserializeObject<Errores>(exception.Content.ToString());
-                    ModelState.AddModelError("Email", error.Message);
+                    ModelState.AddModelError("User name", error.Message);
                     return Page();
                 }
                
             }
             catch(Exception ex)
             {
-                ModelState.AddModelError("Email", ex.Message);
+                ModelState.AddModelError("User name", ex.Message);
                 return Page();
             }
            

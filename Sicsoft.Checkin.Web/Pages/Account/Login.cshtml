@@ -19,7 +19,9 @@
     <link rel="stylesheet" type="text/css" href="~/css/skins/_all-skins.css">
     <link rel="stylesheet" type="text/css" href="~/assets/vendor_components/bootstrap/dist/css/bootstrap.min.css">
     
+    <style>
 
+    </style>
 
 </head>
 <body class="hold-transition login-page" style="background-color: #74BA3E;">
@@ -34,18 +36,18 @@
                         <h3 class="login-box-msg">Iniciar Sesión</h3>
 
                         <form method="post" id="formTipos" role="form" novalidate class="form-element text-black">
-                            <div asp-validation-summary="All" style="text-align: center;" class=" text-white"></div>
+                            <div asp-validation-summary="All" style="text-align: center;" class=" text-red"></div>
                            
                           
 
                             
                             <div class="form-group has-feedback">
-                                <input type="email" asp-for="Input.Email" class="form-control text-white" placeholder="Correo Electrónico" id="correoElectronico" onchange="javascript: onChangeEmail();" onkeypress="javascript: onChangeEmail()" onkeyup="javascript: onChangeEmail()">
-                                <span asp-validation-for="Input.Email" class="ion ion-email form-control-feedback text-black"></span>
+                                <input type="text" asp-for="Input.nombreUsuario" class="form-control text-black" placeholder="Nombre de Usuario" id="nombreUsuario" >
+                                <span asp-validation-for="Input.nombreUsuario" class="ion ion-person form-control-feedback text-black"></span>
                             </div>
                             <div class="form-group has-feedback">
-                                <input type="password" asp-for="Input.Password" class="form-control text-white" placeholder="Contraseña">
-                                <span asp-validation-for="Input.Password" class="ion ion-locked form-control-feedback text-black"></span>
+                                <input type="password" asp-for="Input.clave" class="form-control text-black" placeholder="Contraseña">
+                                <span asp-validation-for="Input.clave" class="ion ion-locked form-control-feedback text-black"></span>
                             </div>
                            
                             <div class="row">
@@ -93,53 +95,7 @@
 
     <!-- Bootstrap 4.0-->
     <script src="~/assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <script>
-            function onChangeEmail() {
-
-             
-
-            $.ajax({
-                type: 'GET',
-                dataType: 'json',
-                url: '@Url.Page("Login", "Buscar")',
-                data: { email: $("#correoElectronico").val()  },
-                success: function (result) {
-
-                 
-                    console.log(result);
-
-                    if (result != null) {
-                        var t = '';
-                        $("#selectC").html('');
-                        
-                        for (var i = 0; i < result.length; i++) {
-
-                            if (i == 0) {
-                                t += '<option value="' + result[i].cedulaJuridica + '" selected >' + result[i].nombreEmpresa + '</option>';
-                            } else {
-                                t += '<option value="' + result[i].cedulaJuridica + '">' + result[i].nombreEmpresa + '</option>';
-                            }
-
-                            
-                        }
-
-
-
-                        $("#selectC").html(t);
-                        
-                    }
-
-                },
-                beforeSend: function () {
-
-                },
-                complete: function () {
-
-                }
-            });
-        }
-    </script>
+ 
 </body>
     
 </html>

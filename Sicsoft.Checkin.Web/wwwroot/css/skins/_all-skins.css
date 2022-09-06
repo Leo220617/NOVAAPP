@@ -663,62 +663,62 @@ Project:	Azurex Admin - Responsive Admin Template
 /*---Skin: Purple---*/
 
 .skin-purple .main-header .navbar {
-	background-color: #808285;
+	background-color: #74BA3E;
 }
-.skin-purple .main-header .navbar .nav > li > a {
-  color: #ffffff;
-}
-.skin-purple .main-header .navbar .nav > li > a:hover,
-.skin-purple .main-header .navbar .nav > li > a:active,
-.skin-purple .main-header .navbar .nav > li > a:focus,
-.skin-purple .main-header .navbar .nav .open > a,
-.skin-purple .main-header .navbar .nav .open > a:hover,
-.skin-purple .main-header .navbar .nav .open > a:focus,
-.skin-purple .main-header .navbar .nav > .active > a,
-.skin-purple.layout-top-nav .mega-dropdown > a.nav-link.dropdown-toggle:hover{
-  background: rgba(0, 0, 0, 0.1);
-  color: #f6f6f6;
-}
+	.skin-purple .main-header .navbar .nav > li > a {
+		color: white;
+	}
+	.skin-purple .main-header .navbar .nav > li > a:hover,
+	.skin-purple .main-header .navbar .nav > li > a:active,
+	.skin-purple .main-header .navbar .nav > li > a:focus,
+	.skin-purple .main-header .navbar .nav .open > a,
+	.skin-purple .main-header .navbar .nav .open > a:hover,
+	.skin-purple .main-header .navbar .nav .open > a:focus,
+	.skin-purple .main-header .navbar .nav > .active > a,
+	.skin-purple.layout-top-nav .mega-dropdown > a.nav-link.dropdown-toggle:hover {
+		background: rgba(0, 0, 0, 0.1);
+		color:white;
+	}
 .skin-purple .main-header .navbar .sidebar-toggle {
   color: #ffffff;
 }
-.skin-purple .main-header .navbar .sidebar-toggle:hover {
-  color: #f6f6f6;
-  background: rgba(0, 0, 0, 0.1);
-}
-.skin-purple .main-header .navbar .sidebar-toggle {
-  color: #fff;
-}
+	.skin-purple .main-header .navbar .sidebar-toggle:hover {
+		color: white;
+		background: rgba(0, 0, 0, 0.1);
+	}
+	.skin-purple .main-header .navbar .sidebar-toggle {
+		color: #74BA3E;
+	}
 .skin-purple .main-header .navbar .sidebar-toggle:hover {
   background-color: transparent;
 }
-.skin-purple .top-nav-search .form-control, .skin-purple .main-header .top-nav-search .input-group .input-group-btn > .btn, 
-.skin-purple .main-header .res-only-view{
-	color: #ffffff;
+.skin-purple .top-nav-search .form-control, .skin-purple .main-header .top-nav-search .input-group .input-group-btn > .btn,
+.skin-purple .main-header .res-only-view {
+	color: #74BA3E;
 }
-.skin-purple .top-nav-search .form-control::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: #ffffff;
-}
-.skin-purple .top-nav-search .form-control::-moz-placeholder { /* Firefox 19+ */
-  color: #ffffff;
-}
-.skin-purple .top-nav-search .form-control:-ms-input-placeholder { /* IE 10+ */
-  color: #ffffff;
-}
-.skin-purple .top-nav-search .form-control:-moz-placeholder { /* Firefox 18- */
-  color: #ffffff;
-}
+	.skin-purple .top-nav-search .form-control::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+		color: #74BA3E;
+	}
+	.skin-purple .top-nav-search .form-control::-moz-placeholder { /* Firefox 19+ */
+		color: #74BA3E;
+	}
+	.skin-purple .top-nav-search .form-control:-ms-input-placeholder { /* IE 10+ */
+		color: #74BA3E;
+	}
+	.skin-purple .top-nav-search .form-control:-moz-placeholder { /* Firefox 18- */
+		color: #74BA3E;
+	}
 @media (max-width: 767px) {
   .skin-purple .main-header .navbar .dropdown-menu li.divider {
     background-color: rgba(255, 255, 255, 0.1);
   }
 	.skin-purple .main-header .navbar .dropdown-menu li a:hover {
-		background: #808285;
+		background: #74BA3E;
 	}
 }
 .skin-purple .main-header .logo {
-  color: #ffffff;
-  border-bottom: 0 solid transparent;
+	color: #74BA3E;
+	border-bottom: 0 solid transparent;
 }
 .skin-purple .main-header li.user-header {
   background-color: #fff;
@@ -734,43 +734,43 @@ Project:	Azurex Admin - Responsive Admin Template
   color: #fff;
 }
 .skin-purple .sidebar {
-	border-color: #808285;
+	border-color: #74BA3E;
 }
 .skin-purple .sidebar-menu > li.header {
-  color: #808285;
+	color: #74BA3E;
 }
 .skin-purple .sidebar-menu > li > a {
   border-left:none;
 }
-.skin-purple .sidebar-menu>li:hover>a{
-  color: #ffffff;
-  background-color: #808285;
+.skin-purple .sidebar-menu > li:hover > a {
+	color: #74BA3E;
+	background-color: #74BA3E;
 }
 .skin-purple.sidebar-collapse .sidebar-menu>li:hover>a{
 }
-.skin-purple .sidebar-menu>li.active>a, .skin-purple .sidebar-menu>li.menu-open>a{
-  color: #ffffff;
-  background: #808285;
+.skin-purple .sidebar-menu > li.active > a, .skin-purple .sidebar-menu > li.menu-open > a {
+	color: #74BA3E;
+	background: #74BA3E;
 }
 .skin-purple .sidebar-menu > li.active > a,
 .skin-purple .sidebar-menu > li.menu-open > a {
-  color: #ffffff;
+	color: #74BA3E;
 }
 .skin-purple .sidebar-menu > li.active > a {
-  border-left-color: #808285;
+	border-left-color: #74BA3E;
 }
 .skin-purple .sidebar-menu > li > .treeview-menu {
-  margin: 0 0px;
-  background: #28373e;
+	margin: 0 0px;
+	background: #74BA3E;
 }
 .skin-purple .sidebar a {
-  color: #808285;
+	color: #74BA3E;
 }
 .skin-purple .sidebar a:hover {
   text-decoration: none;
 }
 .skin-purple .sidebar-menu .treeview-menu > li > a {
-  color: #808285;
+	color: #74BA3E;
 }
 .skin-purple .sidebar-menu .treeview-menu > li.active > a,
 .skin-purple .sidebar-menu .treeview-menu > li > a:hover {
@@ -778,11 +778,11 @@ Project:	Azurex Admin - Responsive Admin Template
 }
 .skin-purple.light-sidebar .sidebar-menu .treeview-menu > li.active > a,
 .skin-purple.light-sidebar .sidebar-menu .treeview-menu > li > a:hover {
-  color: #808285;
+	color: #74BA3E;
 }
 .skin-purple .sidebar-form {
-  border-radius: 3px;
-  border: 1px solid #898989;
+	border-radius: 3px;
+	border: 1px solid #74BA3E;
 }
 .skin-purple .sidebar-form input[type="text"] {
   color: #fff;
@@ -796,28 +796,28 @@ Project:	Azurex Admin - Responsive Admin Template
   color: #fff;
 }
 .skin-purple.layout-top-nav .main-header > .logo {
-  background-color: #808285;
-  color: #ffffff;
-  border-bottom: 0 solid transparent;
+	background-color: #74BA3E;
+	color: #ffffff;
+	border-bottom: 0 solid transparent;
 }
 .skin-purple.layout-top-nav .main-header > .logo:hover {
   background-color: #808285;
 }
-.skin-purple .btn-blue{
-	background-color: #808285;
+.skin-purple .btn-blue {
+	background-color: #74BA3E;
 	color: #fff;
-	border: 1px solid #808285;
+	border: 1px solid #74BA3E;
 }
-.skin-purple .btn-blue:hover{
-	background-color: #fff;
-	color: #808285;	
-}
+	.skin-purple .btn-blue:hover {
+		background-color: #fff;
+		color: #74BA3E;
+	}
 .horizontal-menu .skin-purple.layout-top-nav .sidebar-menu > li.active > a {
-    background: #808285;
+	background: #74BA3E;
 	color: #fff;
 }
 .skin-purple .main-header .messages-menu .dropdown-toggle i::after, .skin-purple .main-header .notifications-menu .dropdown-toggle i::after, .skin-purple .main-header .tasks-menu .dropdown-toggle i::after {
-    border-color: #808285;	
+	border-color: white;
 }
 
 

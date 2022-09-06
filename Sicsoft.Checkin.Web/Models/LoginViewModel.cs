@@ -6,12 +6,12 @@ namespace Sicsoft.Checkin.Web.Models
     {
         [Required]
         [Display(Name = "User name")]
-        public string Email { get; set; }
+        public string nombreUsuario { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        public string Password { get; set; }
+        public string clave { get; set; }
 
     }
 }

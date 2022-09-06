@@ -20,7 +20,7 @@ namespace Sicsoft.Checkin.Web.Servicios
         Task<TEntity> CambiarClave([Body] TEntity payload);
 
         [Get("")]
-        Task<TEntity> Login(string email, string clave);
+        Task<TEntity> Login(string nombreUsuario, string clave);
 
         [Get("")]
         Task<TEntity[]> ObtenerLista<TQuery>(TQuery q);

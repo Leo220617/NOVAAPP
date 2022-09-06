@@ -201,6 +201,10 @@ namespace Sicsoft.Checkin.Web
             services.AddRefitClient<ICrudApi<DistritosViewModel, int>>()
 .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Distritos"))
 .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddRefitClient<ICrudApi<CorreoEnvioViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/CorreoEnvio"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
             return services;
         }
     }

@@ -1,136 +1,45 @@
 ﻿@page
-@model InversionGloblalWeb.Pages.Usuarios.IndexModel
+@model NOVAAPP.Pages.Usuarios.IndexModel
 @{
     ViewData["Title"] = "Usuarios";
-}
-
-
-@using System.Globalization;
-@{
-    NumberFormatInfo formato = new CultureInfo("en-US").NumberFormat;
-    formato.CurrencyGroupSeparator = ",";
-    formato.NumberDecimalSeparator = ".";
-
 
 }
+
+
 
 @section styles{
 
 
 }
+
 @section scripts{
 
     <script>
-    $(document).ready(function () {
-        jQuery(document).ready(function ($) {
-            $(document).ready(function () {
-                $('.mi-selector').select2();
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
+                $(document).ready(function () {
+                    $('.mi-selector').select2();
+                });
             });
+            $(".js-example-responsive").select2({
+                width: 'resolve',// need to override the changed default
+                height: 'resolve'
+            });
+
+          
+
+
+
         });
-        $(".js-example-responsive").select2({
-            width: 'resolve',// need to override the changed default
-            height: 'resolve'
-        });
-
-    
 
 
-
-    });
-
-        var ids = 0;
-        var ids2 = 0;
-        function onClickModal(id) {
-
-        ids = id;
-
-
-            Swal.fire({
-                title: '¿Desea activar/inactivar ese usuario?',
-                showDenyButton: true,
-                showCancelButton: false,
-                confirmButtonText: `Aceptar`,
-                denyButtonText: `Cancelar`,
-                customClass: {
-                    confirmButton: 'swalBtnColor',
-                    denyButton: 'swalDeny'
-                },
-            }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-
-                    Eliminar();
-
-                }
-            })
-
-
-    }
-        function  Eliminar() {
-
-
-         $.ajax({
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '@Url.Page("Index", "Eliminar")',
-                        data: { id: ids },
-             success: function (result) {
-
-                             if (result == false) {
-                                 ids = 0;
-                                // $("#Eliminar").hide();
-                                // $("#Error").show();
-                                 Swal.fire({
-                                     icon: 'error',
-                                     title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar desactivar'
-
-                                 })
-                             } else {
-                                 Swal.fire({
-                                     title: "Ha sido desactivado con éxito",
-
-                                     icon: 'success',
-                                     showCancelButton: false,
-                                     customClass: {
-                                         confirmButton: 'swalBtnColor',
-
-                                     },
-                                     confirmButtonText: 'OK'
-                                 }).then((result) => {
-                                     if (result.isConfirmed) {
-                                         location.reload();
-                                     }
-                                 })
-                             }
-             },
-             beforeSend: function () {
-
-             },
-             complete: function () {
-
-             }
-                     })
-        }
 
 
     </script>
 
 }
-@using Microsoft.AspNetCore.Http
-@using System;
-@using System.Collections.Generic;
-@using System.IO;
-@using System.Linq;
-@using System.Security.Claims;
-@using System.Threading.Tasks;
-@using Microsoft.AspNetCore.Mvc;
-@using Microsoft.AspNetCore.Mvc.RazorPages;
-@using Microsoft.Extensions.Configuration;
-@using Refit;
-@using Sicsoft.Checkin.Web.Models;
-@inject IHttpContextAccessor httpContextAccessor
-    <!-- Content Header (Page header) -->
+
+<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
         Usuarios
@@ -140,7 +49,6 @@
         <li class="breadcrumb-item active">Listado Usuarios</li>
     </ol>
 </section>
-
 <!-- Main content -->
 <section class="content">
     <div class="row">
@@ -151,7 +59,7 @@
                 <div class="box-header with-border">
                     <div class="row">
                         <div class="col-sm-8"> <h4 class="box-title">Usuarios</h4></div>
-                        <div class="col-sm-4"> <a asp-page="/Account/RegistroUsuario" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Usuario</a></div>
+                        <div class="col-sm-4"> </div>
 
                     </div>
 
@@ -163,14 +71,15 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th align="center">ID</th>
+                                    <th>ID</th>
+                                    <th>Rol</th> 
 
-                                    <th align="center">Nombre</th>
-                                    <th align="center">Email</th>
-                                    <th align="center">Rol</th>
+                                    <th>Nombre</th>
+                                    <th>Usuario</th>
+                                  
+                                      
+                                      <th>Activo</th>
 
-                                    <th align="center">Estado</th>
-                                    <th align="center">Acción</th>
 
                                 </tr>
                             </thead>
@@ -178,32 +87,17 @@
                                 @foreach (var item in Model.Objeto)
                                 {
                                 <tr>
-                                    <td>@item.id</td>
-                                    <td align="left" style="padding-top:15px;">
-                                        <a style="font-size:15px;  ">
-                                            @item.Nombre
-                                        </a>
-                                    </td>
-                                    <td align="left" style="padding-top:15px;"><a style="font-size:15px;  "> @item.Email</a></td>
-                                    <td align="left" style="padding-top:15px;"><a style="font-size:15px;  "> @((Model.Roles.Where(a => a.idRol == item.idRol).FirstOrDefault() == null ? "" : Model.Roles.Where(a => a.idRol == item.idRol).FirstOrDefault().NombreRol)) </a></td>
-                                     
-                                    @if (item.Activo.Value)
-                                    {
 
-
-                                        <td align="center" style="padding-top:15px;"><span class="badge badge-success">Activo</span></td>
-                                    }
-                                    else
-                                    {
-                                        <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Inactivo</span></td>
-                                    }
-
-                                    <td align="center" style="padding-top:15px;">
-                                        <a asp-page="./Editar" asp-route-id="@item.id" title="Editar" class="fa fa-edit icono"> </a> &nbsp;
-                                        <a onclick="javascript: onClickModal('@item.id')" title="Activar/Desactivar" class="fa fa-trash icono"></a>
-
+                                    <td>
+                                        @item.id
                                     </td>
 
+                                    <td>  @item.idRol </td> 
+                                    <td>         @item.Nombre </td>
+                                     <td>         @item.NombreUsuario </td>
+                                    
+                                         
+                                           <td>         @item.Activo </td>
                                 </tr>
 
                                 }
@@ -212,12 +106,13 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th align="center">Nombre</th>
-                                    <th align="center">Email</th>
-                                    <th align="center">Rol</th>
-                  
-                                    <th align="center">Estado</th>
-                                    <th align="center">Acción</th>
+                                                                     <th>ID</th>
+                                    <th>Rol</th> 
+
+                                    <th>Nombre</th>
+                                    <th>Usuario</th>
+                                  
+                                      <th>Activo</th>
 
                                 </tr>
                             </tfoot>
@@ -233,5 +128,3 @@
     <!-- /.row -->
 </section>
 <!-- /.content -->
- 
-

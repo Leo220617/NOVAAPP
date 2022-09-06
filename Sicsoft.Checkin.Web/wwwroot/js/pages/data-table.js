@@ -12,7 +12,10 @@ $(function () {
 			'copy', 'excel', 'pdf', 'print'
 		],
 		'paging': true,
-		responsive: true,
+		'lengthChange': true,
+
+		'autoWidth': true,
+		responsive: false,
 		order: [[0, "desc"]]
 
 	});

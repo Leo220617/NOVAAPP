@@ -267,10 +267,10 @@ a:active, a:focus, a:hover {
     background: rgba(255, 255, 255, .2);
     border-color: transparent;
 }
-.main-header #navbar-search-input.form-control:active, .main-header #navbar-search-input.form-control:focus {
-    border-color: rgba(0, 0, 0, .1);
-    background: rgba(255, 255, 255, .9);
-}
+    .main-header #navbar-search-input.form-control:active, .main-header #navbar-search-input.form-control:focus {
+        border-color: rgba(0, 0, 0, .1);
+        background: rgba(255, 255, 255, .9);
+    }
 .main-header #navbar-search-input.form-control::-moz-placeholder {
     color: #ccc;
     opacity: 1;
@@ -1576,27 +1576,23 @@ body .main-header .navbar .nav > li.search-box > a:hover, body .main-header .nav
     -o-transition: background 0s ease-out 0s;
     transition: background 0s ease-out 0s;
 }
-.form-element .form-control, .form-element .form-control:focus {
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#7aab23), to(#7aab23)), -webkit-gradient(linear, left top, left bottom, from(#d9d9d9), to(#d9d9d9));
-    background-image: -webkit-linear-gradient(#7aab23 , #7aab23), -webkit-linear-gradient(#d9d9d9, #d9d9d9);
-    background-image: -o-linear-gradient(#7aab23 , #7aab23), -o-linear-gradient(#d9d9d9, #d9d9d9);
-    background-image: linear-gradient(#7aab23 , #7aab23), linear-gradient(#d9d9d9, #d9d9d9);
-    border: 0;
-    border-radius: 0;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    float: none;
-   
-}
-    .form-element .form-control.focus, .form-element .form-control:focus {
-        background-size: 100% 2px, 100% 1px;
-        outline: 0;
-        -webkit-transition-duration: .3s;
-        -o-transition-duration: .3s;
-        transition-duration: .3s;
-        color: black !important;
-        background-color: #4688bb !important;
+    .form-element .form-control, .form-element .form-control:focus {
+        background-image: linear-gradient(#7aab23, #7aab23), linear-gradient(#74BA3E, #74BA3E);
+        border: 0;
+        border-radius: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        float: none;
     }
+        .form-element .form-control.focus, .form-element .form-control:focus {
+            background-size: 100% 2px, 100% 1px;
+            outline: 0;
+            -webkit-transition-duration: .3s;
+            -o-transition-duration: .3s;
+            transition-duration: .3s;
+            color: black !important;
+            background-color: #B8F5B7 !important;
+        }
 @-webkit-keyframes ripple {
     0% {
     -webkit-box-shadow: 0 0 0 1px transparent;
@@ -2915,7 +2911,7 @@ input[type="color"] {
     font-weight: 300;
     margin-bottom: 0px;
 	margin-top: 5px;
-    color: #99abb4;
+    color: black;
 }
 .box-header>.fa, .box-header>.glyphicon, .box-header>.ion {
     margin-right: 5px;
@@ -9681,19 +9677,19 @@ button.btn.dropdown-toggle::after, .wysihtml5-toolbar .btn.dropdown-toggle::afte
 .btn-success:active, .btn-success.active,
 .show > .btn-success.dropdown-toggle {
   background-color: #218838 !important;
-  border-color: #218838 !important;
+  border-color: black !important;
   color: #fff;
 }
 
 .btn-info {
-  background-color: #17a2b8;
-  border-color: #17a2b8;
-  color: #fff;
+    background-color: #2b2b2b;
+    border-color: black;
+    color: #fff;
 }
 
 .btn-info:hover {
-  background-color: #138496;
-  border-color: #138496;
+  background-color: darkslategray;
+  border-color: black;
   color: #fff;
 }
 
@@ -9707,12 +9703,12 @@ button.btn.dropdown-toggle::after, .wysihtml5-toolbar .btn.dropdown-toggle::afte
   opacity: 0.5;
 }
 
-.btn-info:active, .btn-info.active,
-.show > .btn-info.dropdown-toggle {
-  background-color: #2ba3f6 !important;
-  border-color: #2ba3f6 !important;
-  color: #fff;
-}
+    .btn-info:active, .btn-info.active,
+    .show > .btn-info.dropdown-toggle {
+        background-color: #74BA3E !important;
+        border-color: black !important;
+        color: #fff;
+    }
 
 .btn-warning {
   background-color: #ffc107;
@@ -12602,7 +12598,7 @@ table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTa
 }.login-box-body, .register-box-body {
     padding: 20px 20px 10px;
     border-top: 0;
-    color: #ffffff;
+    color: black;
     border-radius: 4px;
     box-shadow: 0 2px 2px 0 rgba(169, 169, 169, .14), 0 3px 1px -2px rgba(169, 169, 169, .2), 0 1px 5px 0 rgba(169, 169, 169, .12);
 }

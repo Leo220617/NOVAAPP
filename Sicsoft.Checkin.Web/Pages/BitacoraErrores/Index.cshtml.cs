@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using InversionGloblalWeb.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using InversionGloblalWeb.Models;
 using Refit;
 using Sicsoft.Checkin.Web.Servicios;
 namespace InversionGloblalWeb.Pages.BitacoraErrores
