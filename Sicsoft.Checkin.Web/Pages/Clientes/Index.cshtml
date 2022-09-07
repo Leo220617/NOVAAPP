@@ -4,7 +4,14 @@
     ViewData["Title"] = "Clientes";
 
 }
+@using System.Globalization;
+@{
+    NumberFormatInfo formato = new CultureInfo("en-US").NumberFormat;
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
 
+
+}
 
 
 @section styles{
@@ -80,7 +87,7 @@
                                      <th>Teléfono</th>
                                      <th>Provincia</th>
                                       <th>Saldo</th>
-                                      <th>Activo</th>
+                                      <th>Estado</th>
 
 
                                 </tr>
@@ -109,10 +116,18 @@
                                         @item.Provincia
                                     </td>
                                      <td>
-                                        @item.Saldo
+                                        @(Math.Round(item.Saldo,2).ToString("N",formato))
                                     </td>
                                      <td>
-                                        @item.Activo
+                                         @if(item.Activo)
+                                            {
+                                                <span class="badge badge-pill badge-success">Activo</span>
+
+                                            }else
+                                            {
+                                                <span class="badge badge-pill badge-danger">Inactivo</span>
+                                            }
+
                                     </td>
 
                                 </tr>
@@ -126,12 +141,13 @@
                                    <th>Código</th>
                                    
 
+                                    <th>Nombre</th>
                                      <th>Cédula</th>
                                      <th>Correo</th>
                                      <th>Teléfono</th>
                                      <th>Provincia</th>
                                       <th>Saldo</th>
-                                      <th>Activo</th>
+                                      <th>Estado</th>
 
                                 </tr>
                             </tfoot>

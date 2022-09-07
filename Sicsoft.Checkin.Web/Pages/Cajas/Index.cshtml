@@ -32,12 +32,78 @@
 
         });
 
+         var ids = 0;
+    function onClickModal(id) {
+        ids = id;
+        Swal.fire({
+            title: '¿Desea eliminar esta Caja?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: `Aceptar`,
+            denyButtonText: `Cancelar`,
+            customClass: {
+                confirmButton: 'swalBtnColor',
+                denyButton: 'swalDeny'
+            },
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                Eliminar();
+
+            }
+        })
+
+    }
+        function  Eliminar() {
+
+         $.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        url: '@Url.Page("Index", "Eliminar")',
+                        data: { id: ids },
+                        success: function (result) {
+
+                             if (result == false) {
+                                 ids = 0;
+                                 Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar eliminar'
+
+                                 })
+
+                             } else {
+                                 Swal.fire({
+                                     title: "Ha sido eliminado con éxito",
+
+                                     icon: 'success',
+                                     showCancelButton: false,
+                                     customClass: {
+                                         confirmButton: 'swalBtnColor',
+
+                                     },
+                                     confirmButtonText: 'OK'
+                                 }).then((result) => {
+                                     if (result.isConfirmed) {
+                                         location.reload();
+                                     }
+                                 })
+                             }
+             },
+             beforeSend: function () {
+
+             }
+                     })
+        }
 
 
 
     </script>
 
 }
+
+      
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -59,7 +125,8 @@
                 <div class="box-header with-border">
                     <div class="row">
                         <div class="col-sm-8"> <h4 class="box-title">Cajas</h4></div>
-                        <div class="col-sm-4"> </div>
+                          <div class="col-sm-4"> <a asp-page="Nuevo" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Caja</a></div>
+                      
 
                     </div>
 
@@ -75,7 +142,7 @@
                                     <th>Cod.Sucursal</th> 
 
                                     <th>Nombre</th>
-
+                                    <th>Acción</th>
 
                                 </tr>
                             </thead>
@@ -90,7 +157,13 @@
 
                                     <td>  @item.CodSuc </td> 
                                     <td>         @item.Nombre </td>
-
+                                 <td align="center" style="padding-top:15px;">
+                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
+                                            &nbsp;
+                                            <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
+                                            &nbsp;
+                                            
+                                     </td>
 
 
                                 </tr>
@@ -104,7 +177,7 @@
                                     <th>ID</th>
                                     <th>Cod.Sucursal</th> 
                                     <th>Nombre</th>
-
+                                     <th>Acción</th>
                                 </tr>
                             </tfoot>
                         </table>

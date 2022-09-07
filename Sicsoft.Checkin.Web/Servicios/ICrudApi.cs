@@ -14,7 +14,7 @@ namespace Sicsoft.Checkin.Web.Servicios
         [Post("")]
         Task<TEntity[]> AgregarBulk([Body] TEntity[] payload);
 
-        [Post("")]
+        [Post("/Insertar")]
         Task<TEntity> Agregar([Body] TEntity payload);
         [Post("")]
         Task<TEntity> CambiarClave([Body] TEntity payload);
@@ -40,7 +40,7 @@ namespace Sicsoft.Checkin.Web.Servicios
         [Get("/Consultar")]
         Task<TEntity> ObtenerPorId(int id);
 
-        [Post("/Actualizar")]
+        [Put("/Actualizar")]
         Task Editar( [Body]TEntity payload);
  
         [Delete("/Eliminar")]

@@ -82,14 +82,14 @@
                             <tbody>
                                 @foreach (var item in Model.Objeto)
                                 {
-                                <tr>
+                                    <tr>
 
                                     <td>
                                         @item.id
                                     </td>
 
                                     <td>  @item.Codigo </td> 
-                                    <td>         @item.Tarifa </td>
+                                    <td>   @( Math.Round(item.Tarifa,2) ) </td>
 
 
 

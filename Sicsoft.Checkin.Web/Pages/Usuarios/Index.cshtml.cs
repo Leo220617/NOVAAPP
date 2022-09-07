@@ -20,6 +20,7 @@ namespace NOVAAPP.Pages.Usuarios
     {
         private readonly IConfiguration configuration;
         private readonly ICrudApi<UsuariosViewModel, int> service;
+        private readonly ICrudApi<RolesViewModel, int> roles;
 
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
@@ -27,9 +28,13 @@ namespace NOVAAPP.Pages.Usuarios
         [BindProperty]
         public UsuariosViewModel[] Objeto { get; set; }
 
-        public IndexModel(ICrudApi<UsuariosViewModel, int> service)
+        [BindProperty]
+        public RolesViewModel[] RolesLista { get; set; }
+
+        public IndexModel(ICrudApi<UsuariosViewModel, int> service, ICrudApi<RolesViewModel, int> roles)
         {
             this.service = service;
+            this.roles = roles;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -41,7 +46,7 @@ namespace NOVAAPP.Pages.Usuarios
                     return RedirectToPage("/NoPermiso");
                 }
                 Objeto = await service.ObtenerLista(filtro);
-
+                RolesLista = await roles.ObtenerLista("");
 
                 return Page();
             }
@@ -51,6 +56,19 @@ namespace NOVAAPP.Pages.Usuarios
                 ModelState.AddModelError(string.Empty, error.Message);
 
                 return Page();
+            }
+        }
+        public async Task<IActionResult> OnGetEliminar(int id)
+        {
+            try
+            {
+
+                await service.Eliminar(id);
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
             }
         }
     }
