@@ -71,5 +71,6 @@ namespace NOVAAPP.Pages.Usuarios
                 return new JsonResult(false);
             }
         }
+
     }
 }

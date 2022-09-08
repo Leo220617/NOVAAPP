@@ -42,23 +42,33 @@
                             
                                 
                                     <div class="col-6">
-                                        <div class="form-group">
-                                            <h5>Código de Sucursal<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <input type="text" asp-for="Caja.CodSuc" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-6">
-                                        <div class="form-group">
+                                          <div class="form-group">
                                             <h5>Nombre de la Caja<span class="text-danger">*</span></h5>
                                             <div class="controls">
                                                 <input type="text" asp-for="Caja.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
                                             </div>
                                             
                                         </div>
+                                     
+                                    </div>
+                                    
+                                    <div class="col-6">
+                                         <div class="form-group">
+                                          <h5>Sucursal<span class="text-danger">*</span></h5>
+                                             
+                                                <select class="form-control select2  " asp-for="Caja.CodSuc">
+                                                    @foreach(var item in Model.SucursalesLista)
+                                                    {
+                                                        <option value="@item.CodSuc">@item.Nombre</option>
+                                                    }
+
+
+                                                </select>
+                                                
+                                           
+                                            
+                                        </div>
+
                                     </div>
                             
                         </div>

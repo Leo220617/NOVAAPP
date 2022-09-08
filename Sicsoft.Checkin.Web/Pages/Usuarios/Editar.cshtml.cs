@@ -17,13 +17,19 @@ namespace NOVAAPP.Pages.Usuarios
     public class EditarModel : PageModel
     {
         private readonly ICrudApi<UsuariosViewModel, int> service; //API
+        private readonly ICrudApi<RolesViewModel, int> roles;
 
         [BindProperty]
         public UsuariosViewModel Usuario { get; set; }
 
-        public EditarModel(ICrudApi<UsuariosViewModel, int> service) //CTOR 
+        [BindProperty]
+        public RolesViewModel[] RolesLista { get; set; }
+
+        public EditarModel(ICrudApi<UsuariosViewModel, int> service, ICrudApi<RolesViewModel, int> roles) //CTOR 
         {
             this.service = service;
+            this.roles = roles;
+          
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -35,7 +41,8 @@ namespace NOVAAPP.Pages.Usuarios
                     return RedirectToPage("/NoPermiso");
                 }
                 Usuario = await service.ObtenerPorId(id);
-
+                RolesLista = await roles.ObtenerLista("");
+                Usuario.Clave = "";
                 return Page();
             }
             catch (Exception ex)

@@ -32,6 +32,13 @@
                 </a>
 
                 <ul class="treeview-menu">
+                          @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "16").FirstOrDefault()))
+                        {
+
+                            <li><a asp-page="/Sucursales/Index"><i class="mdi mdi-home-outline"></i>Sucursales</a></li>
+                        }
+
+                    }
                     
                     @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "6").FirstOrDefault()))
                         {
@@ -43,7 +50,7 @@
                     @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "4").FirstOrDefault()))
                         {
 
-                            <li><a asp-page="/Bodegas/Index"><i class="mdi mdi-home-outline"></i>Bodegas</a></li>
+                            <li><a asp-page="/Bodegas/Index"><i class="mdi mdi-garage"></i>Bodegas</a></li>
                         }
 
                     }
@@ -103,6 +110,7 @@
                         }
 
                     }
+                
                     
 
 

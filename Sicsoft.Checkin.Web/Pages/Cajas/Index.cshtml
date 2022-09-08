@@ -139,7 +139,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Cod.Sucursal</th> 
+                                    <th>Sucursal</th> 
 
                                     <th>Nombre</th>
                                     <th>Acción</th>
@@ -155,7 +155,7 @@
                                         @item.id
                                     </td>
 
-                                    <td>  @item.CodSuc </td> 
+                                     <td>  @( Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" :  Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre) </td>  
                                     <td>         @item.Nombre </td>
                                  <td align="center" style="padding-top:15px;">
                                             <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
@@ -175,7 +175,7 @@
                             <tfoot>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Cod.Sucursal</th> 
+                                    <th>Sucursal</th> 
                                     <th>Nombre</th>
                                      <th>Acción</th>
                                 </tr>

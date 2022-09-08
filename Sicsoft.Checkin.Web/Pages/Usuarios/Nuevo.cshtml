@@ -48,53 +48,61 @@
                               <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="row">
                             
-                                
-                                    <div class="col-6">
+                                   <div class="col-6">
                                         <div class="form-group">
-                                            <h5>Rol<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <input type="number" asp-for="Usuario.idRol" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-6">
-                                        <div class="form-group">
-                                            <h5>Nombre<span class="text-danger">*</span></h5>
+                                            <h5>Nombre Completo<span class="text-danger">*</span></h5>
                                             <div class="controls">
                                                 <input type="text" asp-for="Usuario.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
                                             </div>
                                             
                                         </div>
                                     </div>
-                            
-                        </div>
-                        <br />
-                        <input type="checkbox" asp-for="Usuario.Activo" id="md_checkbox_10" class="chk-col-green" checked="">
-                        <label for="md_checkbox_10">Activo</label>
-                        <br />
-                        <br />
-
-
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
+                                    <div class="col-xl-6">
+                                          <div class="form-group">
                                             <h5>Nombre de Usuario<span class="text-danger">*</span></h5>
                                             <div class="controls">
                                                 <input type="text" asp-for="Usuario.NombreUsuario" class="form-control" required data-validation-required-message="Este campo es requerido">
                                             </div>
                                             
                                         </div>
-                            </div>
+                                       
+                                    </div>
+                                    
+                                 
+                            
+                        </div>
+                       
+
+
+                        <div class="row">
                             <div class="col-6">
-                                <div class="form-group">
+                                 <div class="form-group">
                                             <h5>Contraseña del Usuario<span class="text-danger">*</span></h5>
                                             <div class="controls">
-                                                <input type="text" asp-for="Usuario.Clave" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                                <input type="password" asp-for="Usuario.Clave" class="form-control" required data-validation-required-message="Este campo es requerido">
                                             </div>
                                             
                                         </div>
+                             
+
+                            </div>
+                            <div class="col-6">
+                          <div class="form-group">
+                                            <h5>Rol<span class="text-danger">*</span></h5>
+                                             
+                                                <select class="form-control select2  " asp-for="Usuario.idRol">
+                                                    @foreach(var item in Model.RolesLista)
+                                                    {
+                                                        <option value="@item.idRol">@item.NombreRol</option>
+                                                    }
+
+
+                                                </select>
+                                                
+                                           
+                                            
+                                        </div>
+                               
                             </div>
                         </div>
 

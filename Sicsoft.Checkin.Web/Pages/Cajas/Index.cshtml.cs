@@ -20,6 +20,7 @@ namespace NOVAAPP.Pages.Cajas
     {
         private readonly IConfiguration configuration;
         private readonly ICrudApi<CajasViewModel, int> service;
+        private readonly ICrudApi<SucursalesViewModel, string> sucursales;
 
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
@@ -27,9 +28,13 @@ namespace NOVAAPP.Pages.Cajas
         [BindProperty]
         public CajasViewModel[] Objeto { get; set; }
 
-        public IndexModel(ICrudApi<CajasViewModel, int> service)
+
+        [BindProperty]
+        public SucursalesViewModel[] SucursalesLista { get; set; }
+        public IndexModel(ICrudApi<CajasViewModel, int> service, ICrudApi<SucursalesViewModel, string> sucursales)
         {
             this.service = service;
+            this.sucursales = sucursales;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -41,7 +46,7 @@ namespace NOVAAPP.Pages.Cajas
                     return RedirectToPage("/NoPermiso");
                 }
                 Objeto = await service.ObtenerLista(filtro);
-
+                SucursalesLista = await sucursales.ObtenerLista("");
 
                 return Page();
             }

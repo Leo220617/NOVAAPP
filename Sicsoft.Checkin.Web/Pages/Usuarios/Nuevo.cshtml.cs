@@ -18,16 +18,22 @@ namespace NOVAAPP.Pages.Usuarios
     public class NuevoModel : PageModel
 {
     private readonly ICrudApi<UsuariosViewModel, int> service; //API
+    private readonly ICrudApi<RolesViewModel, int> roles;
 
-    [BindProperty]
+
+
+        [BindProperty]
     public UsuariosViewModel Usuario { get; set; }
+        [BindProperty]
+        public RolesViewModel[] RolesLista { get; set; }
 
-    public NuevoModel(ICrudApi<UsuariosViewModel, int> service) //CTOR 
-    {
-        this.service = service;
-    }
+        public NuevoModel(ICrudApi<UsuariosViewModel, int> service, ICrudApi<RolesViewModel, int> roles) //CTOR 
+        {
+            this.service = service;
+            this.roles = roles;
+        }
 
-    public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
     {
         try
         {
@@ -36,6 +42,7 @@ namespace NOVAAPP.Pages.Usuarios
             {
                 return RedirectToPage("/NoPermiso");
             }
+                RolesLista = await roles.ObtenerLista("");
             return Page();
         }
         catch (Exception ex)

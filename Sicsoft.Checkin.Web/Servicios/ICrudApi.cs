@@ -22,6 +22,8 @@ namespace Sicsoft.Checkin.Web.Servicios
         [Get("")]
         Task<TEntity> Login(string nombreUsuario, string clave);
 
+
+
         [Get("")]
         Task<TEntity[]> ObtenerLista<TQuery>(TQuery q);
         [Get("/Emision")]

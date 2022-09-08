@@ -17,13 +17,17 @@ namespace NOVAAPP.Pages.Cajas
     public class EditarModel : PageModel
     {
         private readonly ICrudApi<CajasViewModel, int> service; //API
+        private readonly ICrudApi<SucursalesViewModel, string> sucursales;
 
         [BindProperty]
         public CajasViewModel Caja { get; set; }
 
-        public EditarModel(ICrudApi<CajasViewModel, int> service) //CTOR 
+        [BindProperty]
+        public SucursalesViewModel[] SucursalesLista { get; set; }
+        public EditarModel(ICrudApi<CajasViewModel, int> service, ICrudApi<SucursalesViewModel, string> sucursales) //CTOR 
         {
             this.service = service;
+            this.sucursales = sucursales;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -35,6 +39,7 @@ namespace NOVAAPP.Pages.Cajas
                     return RedirectToPage("/NoPermiso");
                 }
                 Caja = await service.ObtenerPorId(id);
+                SucursalesLista = await sucursales.ObtenerLista("");
 
                 return Page();
             }
