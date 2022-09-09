@@ -6,8 +6,9 @@ namespace NOVAAPP.Models
 {
     public class ProductosViewModel
     {
-        
-       
+
+        public int id { get; set; }
+
         public string Codigo { get; set; }
 
         public int idBodega { get; set; }
@@ -22,7 +23,7 @@ namespace NOVAAPP.Models
        
         public decimal PrecioUnitario { get; set; }
 
-        public int UnidadMedida { get; set; }
+        public string UnidadMedida { get; set; }
 
       
         public string Cabys { get; set; }
@@ -40,5 +41,7 @@ namespace NOVAAPP.Models
         public decimal Stock { get; set; }
 
         public bool Activo { get; set; }
+
+        public bool ProcesadoSAP { get; set; }
     }
 }

@@ -14,7 +14,7 @@
 
 @section scripts{
 
-    <script>
+      <script>
         $(document).ready(function () {
             jQuery(document).ready(function ($) {
                 $(document).ready(function () {
@@ -32,6 +32,49 @@
 
         });
 
+     
+        function  InsertarSAP() {
+
+         $.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        url: '@Url.Page("Index", "InsertarSAP")',
+                        data: { },
+                        success: function (result) {
+                 $("#divProcesando").modal("hide");
+                              
+                             if (result == false) {
+                                 
+                                 Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar insertar a SAP'
+
+                                 })
+
+                             } else {
+                                 Swal.fire({
+                                     title: "Ha sido insertado a SAP con éxito",
+
+                                     icon: 'success',
+                                     showCancelButton: false,
+                                     customClass: {
+                                         confirmButton: 'swalBtnColor',
+
+                                     },
+                                     confirmButtonText: 'OK'
+                                 }).then((result) => {
+                                     if (result.isConfirmed) {
+                                         location.reload();
+                                     }
+                                 })
+                             }
+             },
+             beforeSend: function () {
+                 $("#divProcesando").modal("show");
+             }
+                     })
+        }
 
 
 
@@ -59,7 +102,7 @@
                 <div class="box-header with-border">
                     <div class="row">
                         <div class="col-sm-8"> <h4 class="box-title">Productos</h4></div>
-                        <div class="col-sm-4"> </div>
+                      <div class="col-sm-2"> <button onclick="javascript: InsertarSAP()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Sincronizar a SAP"> Sincronizar a SAP</button></div>
 
                     </div>
 
@@ -71,24 +114,28 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
+                                     <th>ID</th>
                                     <th>Código</th>
                                   <th>Impuesto</th>
                                     <th>Nombre</th>
                                     <th>Precio Unitario</th>
                                     <th>Unidad de Medida</th>
                                     <th>Cabys</th>
-                                    <th>Tipo de Código</th>
-                                     <th>Código de Barras</th>
+                                
                                       <th>Costo</th>
                                       <th>Stock</th>
-                                       <th>Activo</th>
+                                       <th>Estado</th>
+                                        <th>Procesado a SAP</th>
+                                       
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.Objeto)
                                 {
                                 <tr>
-
+                                      <td>
+                                        @item.id
+                                    </td>
                                     <td>
                                         @item.Codigo
                                     </td>
@@ -100,11 +147,32 @@
                                                 <td>         @item.PrecioUnitario </td>
                                                     <td>         @item.UnidadMedida </td>
                                                         <td>         @item.Cabys </td>
-                                                            <td>         @item.TipoCod </td>
-                                                                <td>         @item.CodBarras </td>
+                                                            
                                                                     <td>         @item.Costo </td>
                                                                         <td>         @item.Stock </td>
-                                                                            <td>         @item.Activo </td>
+ <td>
+                                         @if(item.Activo)
+                                            {
+                                                <span class="badge badge-pill badge-success">Activo</span>
+
+                                            }else
+                                            {
+                                                <span class="badge badge-pill badge-danger">Inactivo</span>
+                                            }
+
+                                    </td>
+                                                                            <td>
+                                        @if(item.ProcesadoSAP)
+                                            {
+                                                <span class="badge badge-pill badge-success">Procesado</span>
+
+                                            }else
+                                            {
+                                                <span class="badge badge-pill badge-danger">Sin procesar</span>
+                                            }
+
+                                    </td>
+                                                                           
                                 </tr>
 
                                 }
@@ -113,6 +181,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
+                                     <th>ID</th>
                                            <th>Código</th>
                                     <th>Impuesto</th> 
 
@@ -121,11 +190,13 @@
                                     <th>Precio Unitario</th>
                                     <th>Unidad de Medida</th>
                                     <th>Cabys</th>
-                                    <th>Tipo de Código</th>
-                                     <th>Código de Barras</th>
+                               
                                       <th>Costo</th>
                                       <th>Stock</th>
-                                       <th>Activo</th>
+                                       <th>Estado</th>
+                                       <th>Procesado a SAP</th>
+
+                                        
 
                                 </tr>
                             </tfoot>

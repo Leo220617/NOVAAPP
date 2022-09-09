@@ -32,6 +32,49 @@
 
         });
 
+     
+        function  InsertarSAP() {
+
+         $.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        url: '@Url.Page("Index", "InsertarSAP")',
+                        data: { },
+                        success: function (result) {
+                 $("#divProcesando").modal("hide");
+                              
+                             if (result == false) {
+                                 
+                                 Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar insertar a SAP'
+
+                                 })
+
+                             } else {
+                                 Swal.fire({
+                                     title: "Ha sido insertado a SAP con éxito",
+
+                                     icon: 'success',
+                                     showCancelButton: false,
+                                     customClass: {
+                                         confirmButton: 'swalBtnColor',
+
+                                     },
+                                     confirmButtonText: 'OK'
+                                 }).then((result) => {
+                                     if (result.isConfirmed) {
+                                         location.reload();
+                                     }
+                                 })
+                             }
+             },
+             beforeSend: function () {
+                 $("#divProcesando").modal("show");
+             }
+                     })
+        }
 
 
 
@@ -59,8 +102,8 @@
                 <div class="box-header with-border">
                     <div class="row">
                         <div class="col-sm-8"> <h4 class="box-title">Bodegas</h4></div>
-                        <div class="col-sm-4"> </div>
-
+                        <div class="col-sm-2"> </div>
+                      <div class="col-sm-2"> <button onclick="javascript: InsertarSAP()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Sincronizar a SAP"> Sincronizar a SAP</button></div>
                     </div>
 
 
