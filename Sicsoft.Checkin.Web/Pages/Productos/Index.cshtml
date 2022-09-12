@@ -97,6 +97,63 @@
     <div class="row">
         <div class="col-12">
 
+               <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Filtro</h4></div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="box-body">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-sm-3 pr-1">
+                                <div class="form-group">
+                                    <label>Bodega</label>
+                                      <select class="form-control select2  " asp-for="filtro.Codigo1">
+                                                    @foreach(var item in Model.Bodegas)
+                                                    {
+                                                        <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
+                                                    }
+
+
+                                                </select>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-sm-3 pr-1">
+                                <div class="form-group">
+                                    <label>Lista de Precio</label>
+                                      <select class="form-control select2  " asp-for="filtro.Codigo2">
+                                                    @foreach(var item in Model.Listas)
+                                                    {
+                                                        <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
+                                                    }
+
+
+                                                </select>
+                                </div>
+                            </div>
+
+                            
+                            
+                            <div class="col-sm-3 pl-1" style="text-align: center; padding-top: 1%;">
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary" > <i class="fa fa-search"></i></button>
+                            </div>
+ 
+
+
+                            
+                        </div>
+
+                    </form>
+                </div>
+            </div>
 
             <div class="box">
                 <div class="box-header with-border">
@@ -118,14 +175,15 @@
                                     <th>Código</th>
                                   <th>Impuesto</th>
                                     <th>Nombre</th>
+                                     <th>Bodega</th>
+                                      <th>Lista de Precio</th>
                                     <th>Precio Unitario</th>
                                     <th>Unidad de Medida</th>
                                     <th>Cabys</th>
                                 
                                       <th>Costo</th>
                                       <th>Stock</th>
-                                       <th>Estado</th>
-                                        <th>Procesado a SAP</th>
+                                    
                                        
                                 </tr>
                             </thead>
@@ -141,37 +199,18 @@
                                     </td>
 
                                    
-                                    <td>         @item.idImpuesto </td>
+                                    <td>  @( Model.Impuestos.Where(a => a.id == item.idImpuesto).FirstOrDefault() == null ? "Impuesto Inexistente" :  Model.Impuestos.Where(a => a.id == item.idImpuesto).FirstOrDefault().Codigo) </td> 
                                        
                                             <td>         @item.Nombre </td>
+                                              <td>  @( Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault() == null ? "Bodega Inexistente" :  Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault().Nombre) </td> 
+                                                 <td>  @( Model.Listas.Where(a => a.id == item.idListaPrecios).FirstOrDefault() == null ? "Lista de Precio Inexistente" :  Model.Listas.Where(a => a.id == item.idListaPrecios).FirstOrDefault().Nombre) </td> 
                                                 <td>         @item.PrecioUnitario </td>
                                                     <td>         @item.UnidadMedida </td>
                                                         <td>         @item.Cabys </td>
                                                             
                                                                     <td>         @item.Costo </td>
                                                                         <td>         @item.Stock </td>
- <td>
-                                         @if(item.Activo)
-                                            {
-                                                <span class="badge badge-pill badge-success">Activo</span>
 
-                                            }else
-                                            {
-                                                <span class="badge badge-pill badge-danger">Inactivo</span>
-                                            }
-
-                                    </td>
-                                                                            <td>
-                                        @if(item.ProcesadoSAP)
-                                            {
-                                                <span class="badge badge-pill badge-success">Procesado</span>
-
-                                            }else
-                                            {
-                                                <span class="badge badge-pill badge-danger">Sin procesar</span>
-                                            }
-
-                                    </td>
                                                                            
                                 </tr>
 
@@ -187,14 +226,15 @@
 
                                    
                                     <th>Nombre</th>
+                                        <th>Bodega</th>
+                                      <th>Lista de Precio</th>
                                     <th>Precio Unitario</th>
                                     <th>Unidad de Medida</th>
                                     <th>Cabys</th>
                                
                                       <th>Costo</th>
                                       <th>Stock</th>
-                                       <th>Estado</th>
-                                       <th>Procesado a SAP</th>
+                                     
 
                                         
 

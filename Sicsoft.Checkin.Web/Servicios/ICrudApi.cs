@@ -40,6 +40,8 @@ namespace Sicsoft.Checkin.Web.Servicios
         [Get("/")]
         Task<TEntity> ObtenerListaEspecial<TQuery>(TQuery q);
 
+        [Get("/SincronizarSAP")]
+        Task<TEntity> SincronizarSAP(int id);
 
         [Get("/Consultar")]
         Task<TEntity> ObtenerPorId(int id);

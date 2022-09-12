@@ -82,6 +82,73 @@
              }
                      })
         }
+          var ids = 0;
+    function onClickModal(id) {
+        ids = id;
+        Swal.fire({
+            title: '¿Desea sincronizar a SAP?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: `Aceptar`,
+            denyButtonText: `Cancelar`,
+            customClass: {
+                confirmButton: 'swalBtnColor',
+                denyButton: 'swalDeny'
+            },
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                Eliminar();
+
+            }
+        })
+
+    }
+
+         function  SincronizarSAP() {
+
+         $.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        url: '@Url.Page("Index", "SincronizarSAP")',
+                        data: {id: ids},
+                        success: function (result) {
+                 $("#divProcesando").modal("hide");
+                              
+                             if (result == false) {
+                                 
+                                 Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar sincronizar a SAP'
+
+                                 })
+
+                             } else {
+                                 Swal.fire({
+                                     title: "Ha sido sincronizado a SAP con éxito",
+
+                                     icon: 'success',
+                                     showCancelButton: false,
+                                     customClass: {
+                                         confirmButton: 'swalBtnColor',
+
+                                     },
+                                     confirmButtonText: 'OK'
+                                 }).then((result) => {
+                                     if (result.isConfirmed) {
+                                         location.reload();
+                                     }
+                                 })
+                             }
+             },
+             beforeSend: function () {
+                 $("#divProcesando").modal("show");
+             }
+                     })
+        }     
+       
 
 
 
@@ -112,8 +179,7 @@
                         <div class="col-sm-8"> <h4 class="box-title">Clientes</h4></div>
                           <div class="col-sm-2"> <a asp-page="Nuevo" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Cliente</a></div>
                            <div class="col-sm-2"> <button onclick="javascript: InsertarSAP()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Sincronizar a SAP"> Sincronizar a SAP</button></div>
-                    
-                       </div>
+                      
 
 
                 </div>
@@ -123,6 +189,7 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
+                                     <th>ID</th>
                                     <th>Código</th>
                                    
 
@@ -134,6 +201,7 @@
                                       <th>Saldo</th>
                                       <th>Estado</th>
                                       <th>Procesado a SAP</th>
+                                      <th>Acción</th>
 
 
                                 </tr>
@@ -142,6 +210,10 @@
                                 @foreach (var item in Model.Objeto)
                                 {
                                 <tr>
+                                    
+                                    <td>
+                                        @item.id
+                                    </td>
 
                                     <td>
                                         @item.Codigo
@@ -186,6 +258,16 @@
                                             }
 
                                     </td>
+                                      <td>
+                                           @if(item.ProcesadoSAP)
+                                           {
+                                                   
+                                                }else
+                                                {
+                                                     <button onclick="javascript: SincronizarSAP('@item.id')" class="btn btn-info btn-xs">Insertar a SAP</button>
+                                                }
+
+                                    </td>
                                 </tr>
 
                                 }
@@ -194,6 +276,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
+                                     <th>ID</th>
                                    <th>Código</th>
                                    
 
@@ -205,6 +288,7 @@
                                       <th>Saldo</th>
                                       <th>Estado</th>
                                        <th>Procesado a SAP</th>
+                                        <th>Acción</th>
                                 </tr>
                             </tfoot>
                         </table>

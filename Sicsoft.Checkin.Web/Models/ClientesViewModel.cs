@@ -6,8 +6,8 @@ namespace NOVAAPP.Models
 {
     public class ClientesViewModel
     {
- 
-        
+        public int id { get; set; }
+
         public string Codigo { get; set; }
 
         public int idListaPrecios { get; set; }
@@ -25,6 +25,7 @@ namespace NOVAAPP.Models
         public string Email { get; set; }
 
         
+
         public string CodPais { get; set; }
 
         

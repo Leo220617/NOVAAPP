@@ -66,5 +66,18 @@ namespace NOVAAPP.Pages.Clientes
                 return new JsonResult(false);
             }
         }
+        public async Task<IActionResult> OnGetSincronizarSAP(int id)
+        {
+            try
+            {
+
+                await service.SincronizarSAP(id);
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+        }
     }
 }

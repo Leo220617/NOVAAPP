@@ -20,6 +20,10 @@ namespace NOVAAPP.Pages.Productos
     {
         private readonly IConfiguration configuration;
         private readonly ICrudApi<ProductosViewModel, string> service;
+        private readonly ICrudApi<BodegasViewModel, int> serviceBodegas;
+        private readonly ICrudApi<ListaPreciosViewModel, int> serviceListas;
+        private readonly ICrudApi<ImpuestosViewModel, int> serviceImpuestos;
+
 
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
@@ -27,9 +31,21 @@ namespace NOVAAPP.Pages.Productos
         [BindProperty]
         public ProductosViewModel[] Objeto { get; set; }
 
-        public IndexModel(ICrudApi<ProductosViewModel, string> service)
+        [BindProperty]
+        public BodegasViewModel[] Bodegas { get; set; }
+
+        [BindProperty]
+        public ListaPreciosViewModel[] Listas { get; set; }
+        
+        [BindProperty]
+        public ImpuestosViewModel[] Impuestos { get; set; }
+
+        public IndexModel(ICrudApi<ProductosViewModel, string> service, ICrudApi<BodegasViewModel, int> serviceBodegas, ICrudApi<ListaPreciosViewModel, int> serviceListas, ICrudApi<ImpuestosViewModel, int> serviceImpuestos)
         {
             this.service = service;
+            this.serviceBodegas = serviceBodegas;
+            this.serviceListas = serviceListas;
+            this.serviceImpuestos = serviceImpuestos;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -40,6 +56,17 @@ namespace NOVAAPP.Pages.Productos
                 {
                     return RedirectToPage("/NoPermiso");
                 }
+
+                Bodegas = await serviceBodegas.ObtenerLista("");
+                Listas = await serviceListas.ObtenerLista("");
+                Impuestos = await serviceImpuestos.ObtenerLista("");
+
+                if (filtro.Codigo1 == 0 && filtro.Codigo2 == 0)
+                {
+                    filtro.Codigo1 = Bodegas.FirstOrDefault() == null ? 0 : Bodegas.FirstOrDefault().id;
+                    filtro.Codigo2 = Listas.FirstOrDefault() == null ? 0 : Listas.FirstOrDefault().id;
+                }
+
                 Objeto = await service.ObtenerLista(filtro);
 
 
