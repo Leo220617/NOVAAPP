@@ -99,7 +99,7 @@
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
 
-                Eliminar();
+                SincronizarSAP();
 
             }
         })
@@ -264,7 +264,7 @@
                                                    
                                                 }else
                                                 {
-                                                     <button onclick="javascript: SincronizarSAP('@item.id')" class="btn btn-info btn-xs">Insertar a SAP</button>
+                                                     <button onclick="javascript: onClickModal('@item.id')" class="btn btn-info btn-xs">Enviar a SAP</button>
                                                 }
 
                                     </td>
