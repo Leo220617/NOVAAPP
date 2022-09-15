@@ -83,10 +83,11 @@ namespace InversionGloblalWeb.Pages.SeguridadRolesModulos
             try
             {
                 filtro.Codigo1 = Convert.ToInt32(id);
-                var ModulosGenerales = await modulos.ObtenerLista("");
-                ModulosMios = await rolesMod.ObtenerLista(filtro);
+                var ModulosGenerales = await modulos.ObtenerLista(""); //Carga todos los modulos que existan
+               
+                ModulosMios = await rolesMod.ObtenerLista(filtro); //Llamada a la tabla de seguridadRolesModulos que contenga el idRol
                 // Modulos = await rolesMod.ObtenerLista("");
-                ModulosMiosS = new SeguridadModulosViewModel[ModulosMios.Length];
+                ModulosMiosS = new SeguridadModulosViewModel[ModulosMios.Length]; //hace un vector del tamaño de la cantidad de seguridadrolesmodulos que existen 
                 //ModulosS = new SeguridadModulos[Modulos.Length];
 
                 for (int j = 0; j < ModulosMiosS.Length; j++)
@@ -99,7 +100,7 @@ namespace InversionGloblalWeb.Pages.SeguridadRolesModulos
                 var i = 0;
                 foreach (var item in ModulosMios.Where(a => a.CodModulo != 0))
                 {
-                    var Modulo = ModulosGenerales.Where(a => a.CodModulo == item.CodModulo).FirstOrDefault();
+                    var Modulo = ModulosGenerales.Where(a => a.CodModulo == item.CodModulo).FirstOrDefault(); //Busco el modulo en los mios
                     ModulosMiosS[i].CodModulo = Modulo.CodModulo;
                     ModulosMiosS[i].Descripcion = Modulo.Descripcion;
 
