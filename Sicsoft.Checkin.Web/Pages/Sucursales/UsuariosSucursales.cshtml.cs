@@ -96,7 +96,7 @@ namespace NOVAAPP.Pages.Sucursales
                 filtro.Codigo1 = Convert.ToInt32(Rol.idRol);
 
                 var UsuariosGenerales = await usuarios.ObtenerLista(filtro); //Carga todos los usuarios cajeros que existan
-                UsuariosGenerales = UsuariosGenerales.Where(a => a.Activo == true).ToArray();
+                //UsuariosGenerales = UsuariosGenerales.Where(a => a.Activo == true).ToArray();
 
                 filtro.Texto = id;
                 UsuSucMios = await usuSuc.ObtenerLista(filtro); //Llamada a la tabla de seguridadRolesModulos que contenga el idRol

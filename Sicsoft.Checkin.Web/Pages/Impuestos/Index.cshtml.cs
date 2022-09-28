@@ -61,7 +61,7 @@ namespace NOVAAPP.Pages.Impuestos
                 await service.InsertarSAP();
                 return new JsonResult(true);
             }
-            catch (ApiException ex)
+            catch (Exception ex)
             {
                 return new JsonResult(false);
             }

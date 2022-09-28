@@ -23,7 +23,7 @@ namespace Sicsoft.Checkin.Web.Servicios
         Task<TEntity> Login(string nombreUsuario, string clave);
 
         [Get("/InsertarSAP")]
-        Task<TEntity> InsertarSAP();
+        Task InsertarSAP();
 
 
         [Get("")]
