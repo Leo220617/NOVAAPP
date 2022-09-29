@@ -112,6 +112,21 @@
                         }
 
                     }
+
+                       @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "22").FirstOrDefault()))
+                        {
+
+                            <li><a asp-page="/CondicionesPagos/Index"><i class="mdi mdi-email-open-outline"></i>Condiciones De Pago</a></li>
+                        }
+
+                    }
+                     @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "23").FirstOrDefault()))
+                        {
+
+                            <li><a asp-page="/Exoneraciones/Index"><i class="fa fa-file-text-o"></i>Exoneraciones</a></li>
+                        }
+
+                    }
                 
                     
 

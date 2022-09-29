@@ -1,0 +1,14 @@
+﻿using System;
+
+namespace NOVAAPP.Models
+{
+    public class ExoneracionesViewModel
+    {
+        public int id { get; set; }
+        public string TipoDoc { get; set; }
+        public string NumDoc { get; set; }
+        public string NomInst { get; set; }
+        public DateTime FechaEmision { get; set; }
+        public int PorExon { get; set; }
+    }
+}

@@ -1,0 +1,132 @@
+﻿@page
+@model NOVAAPP.Pages.Exoneraciones.NuevoModel
+@{
+    ViewData["Title"] = "Agregar Exoneraciones";
+}
+
+@section styles{
+
+
+}
+
+@section scripts{
+
+
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Exoneraciones
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Crear Nueva Exoneración</li>
+    </ol>
+</section>
+
+
+
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-8">
+                                <h6 class="box-subtitle"> Crear Nueva Exoneración</h6>
+
+                            </div>
+                            <div class="col-4">
+                                 <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
+                              <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            
+                                
+                                   <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="cyber">Tipo de Cédula:</label>
+                                        <select class="form-control" asp-for="Exoneracion.TipoDoc" required>
+                                            <option value="01">01 - Compras Autorizadas</option>
+                                <option value="02">02- Ventas Exentas a Diplomáticos</option>
+                                <option value="03">03 - Autorizadas Ley Especial</option>
+                                <option value="04" selected>04 - Exenciones Dirección General de Hacienda</option>
+                                <option value="05">05 - Transitorio V</option>
+                                <option value="06">06 - Transitorio IX</option>
+                                <option value="07">07 - Transitorio XVII</option>
+                                <option value="99">99 - Otros</option>
+
+
+                                        </select>
+                                    </div>
+                                </div>
+                                    
+                                   
+                                    <div class="col-4">
+                                           <div class="form-group">
+                                            <h5>Número de documento<span class="text-danger">*</span></h5>
+                                            <div class="controls">
+                                                <input type="text" asp-for="Exoneracion.NumDoc" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                            </div>
+                                            
+                                        </div>
+                                         
+                                    </div>
+
+                                    
+                                    <div class="col-4">
+                                           <div class="form-group">
+                                            <h5>Nombre de Institución<span class="text-danger">*</span></h5>
+                                            <div class="controls">
+                                                <input type="text" asp-for="Exoneracion.NomInst" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                            </div>
+                                            
+                                        </div>
+                                         
+                                    </div>
+                            
+                        </div>
+                        <div class="row">
+
+                             <div class="col-6">
+                            <label for="cyber">Fecha de Emisión:</label>
+                            <input type="date"  class="form-control" asp-for="Exoneracion.FechaEmision" required />
+                        </div>
+
+                               <div class="col-6">
+                                           <div class="form-group">
+                                            <h5>%Exoneración<span class="text-danger">*</span></h5>
+                                            <div class="controls">
+                                                <input type="number" asp-for="Exoneracion.PorExon" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                            </div>
+                                            
+                                        </div>
+                                         
+                                    </div>
+
+                            </div>
+                        
+                        <br />
+
+
+                     
+
+                        <div class="text-xs-right">
+                                        <button type="submit" class="btn btn-info" title="Guardar Cambios">Guardar Cambios</button>
+                                    </div>
+                        </form>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </section>
