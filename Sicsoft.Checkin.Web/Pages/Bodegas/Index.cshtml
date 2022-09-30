@@ -118,6 +118,7 @@
                                     <th>Nombre</th> 
 
                                     <th>Código Sucursal</th>
+                                    <th>Acción</th>
 
 
                                 </tr>
@@ -133,7 +134,9 @@
 
                                     <td>  @item.Nombre </td> 
                                     <td>         @item.CodSuc </td>
-
+                                      <td align="center" style="padding-top:15px;">  
+                                                <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
+                                           
 
 
                                 </tr>
@@ -147,6 +150,7 @@
                                     <th>ID</th>
                                     <th>Nombre</th> 
                                     <th>Código Sucursal</th>
+                                     <th>Acción</th>
 
                                 </tr>
                             </tfoot>

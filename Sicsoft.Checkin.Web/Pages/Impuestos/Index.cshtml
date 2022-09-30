@@ -119,6 +119,8 @@
 
                                     <th>Tarifa</th>
 
+                                    <th>Estado</th>
+
 
                                 </tr>
                             </thead>
@@ -133,6 +135,17 @@
 
                                     <td>  @item.Codigo </td> 
                                     <td>   @( Math.Round(item.Tarifa,2) ) </td>
+                                     <td>
+                                         @if(item.Activo)
+                                            {
+                                                <span class="badge badge-pill badge-success">Activo</span>
+
+                                            }else
+                                            {
+                                                <span class="badge badge-pill badge-danger">Inactivo</span>
+                                            }
+
+                                    </td>
 
 
 
@@ -147,6 +160,7 @@
                                     <th>ID</th>
                                     <th>Código</th> 
                                     <th>Tarifa</th>
+                                    <th>Estado</th>
 
                                 </tr>
                             </tfoot>
