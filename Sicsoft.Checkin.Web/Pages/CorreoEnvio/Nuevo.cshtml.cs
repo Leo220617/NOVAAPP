@@ -17,13 +17,18 @@ namespace NOVAAPP.Pages.CorreoEnvio
     public class NuevoModel : PageModel
     {
         private readonly ICrudApi<CorreoEnvioViewModel, int> service; //API
+        private readonly ICrudApi<SucursalesViewModel, string> sucursales;
 
         [BindProperty]
         public CorreoEnvioViewModel Correo { get; set; }
+        
+        [BindProperty]
+        public SucursalesViewModel[] SucursalesLista { get; set; }
 
-        public NuevoModel(ICrudApi<CorreoEnvioViewModel, int> service) //CTOR 
+        public NuevoModel(ICrudApi<CorreoEnvioViewModel, int> service, ICrudApi<SucursalesViewModel, string> sucursales) //CTOR 
         {
             this.service = service;
+            this.sucursales = sucursales;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -35,6 +40,7 @@ namespace NOVAAPP.Pages.CorreoEnvio
                 {
                     return RedirectToPage("/NoPermiso");
                 }
+                SucursalesLista = await sucursales.ObtenerLista("");
                 return Page();
             }
             catch (Exception ex)

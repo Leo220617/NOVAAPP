@@ -40,7 +40,7 @@ namespace NOVAAPP.Pages.Bodegas
                     return RedirectToPage("/NoPermiso");
                 }
                 Bodega = await service.ObtenerPorId(id);
-             
+
                 SucursalesLista = await sucursales.ObtenerLista("");
 
                 return Page();

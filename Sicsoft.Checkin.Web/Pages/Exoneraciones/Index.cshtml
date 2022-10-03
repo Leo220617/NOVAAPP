@@ -143,7 +143,9 @@
 
                                     <th>Número de Documento</th>
                                     <th>Institución Emisora</th>
+                                    <th>Cliente</th>
                                     <th>Fecha de Emisión</th>
+                                    <th>Fecha de Vencimiento</th>
                                      <th>%Exoneración</th>
                                       <th>Acción</th>
 
@@ -161,7 +163,9 @@
                                      <td>  @item.TipoDoc </td>  
                                     <td>         @item.NumDoc </td>
                                     <td>         @item.NomInst </td>
+                                     <td>  @( Model.Cliente.Where(a => a.id == item.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" :  Model.Cliente.Where(a => a.id == item.idCliente).FirstOrDefault().Nombre) </td>
                                     <td>         @item.FechaEmision.ToString("dd/MM/yyyy") </td>
+                                     <td>         @item.FechaVencimiento.ToString("dd/MM/yyyy") </td>
                                      <td>         @item.PorExon </td>
 
                                  <td align="center" style="padding-top:15px;">
@@ -186,8 +190,11 @@
 
                                     <th>Número de Documento</th>
                                     <th>Institución Emisora</th>
+                                    <th>Cliente</th>
                                     <th>Fecha de Emisión</th>
+                                     <th>Fecha de Vencimiento</th>
                                      <th>%Exoneración</th>
+                                     
                                       <th>Acción</th>
                                 </tr>
                             </tfoot>

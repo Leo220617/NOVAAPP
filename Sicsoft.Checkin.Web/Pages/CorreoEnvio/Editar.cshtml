@@ -98,7 +98,7 @@
 
 
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="form-group">
                                             <h5>Contraseña del Correo<span class="text-danger">*</span></h5>
                                             <div class="controls">
@@ -107,7 +107,7 @@
                                             
                                         </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="form-group">
                                             <h5>Puerto<span class="text-danger">*</span></h5>
                                             <div class="controls">
@@ -116,6 +116,24 @@
                                             
                                         </div>
                             </div>
+                            <div class="col-4">
+                                         <div class="form-group">
+                                          <h5>Sucursal<span class="text-danger">*</span></h5>
+                                             
+                                                <select class="form-control select2  " asp-for="Correo.CodSuc">
+                                                    @foreach(var item in Model.SucursalesLista)
+                                                    {
+                                                        <option value="@item.CodSuc">@item.Nombre</option>
+                                                    }
+
+
+                                                </select>
+                                                
+                                           
+                                            
+                                        </div>
+
+                                    </div>
                         </div>
 
                         <div class="text-xs-right">

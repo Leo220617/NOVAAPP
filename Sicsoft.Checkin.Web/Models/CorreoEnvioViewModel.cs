@@ -16,5 +16,7 @@
 
        
         public string RecepcionPassword { get; set; }
+
+        public string CodSuc { get; set; }
     }
 }

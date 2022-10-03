@@ -17,17 +17,23 @@ namespace NOVAAPP.Pages.Exoneraciones
     public class NuevoModel : PageModel
     {
         private readonly ICrudApi<ExoneracionesViewModel, int> service; //API
-
+        private readonly ICrudApi<ClientesViewModel, string> serviceC;
+        private readonly ICrudApi<CabysViewModel, int> cabys;
 
         [BindProperty]
         public ExoneracionesViewModel Exoneracion { get; set; }
+        [BindProperty]
+        public ClientesViewModel[] Cliente { get; set; }
+        [BindProperty]
+        public CabysViewModel[] Cabys { get; set; }
 
-      
 
-        public NuevoModel(ICrudApi<ExoneracionesViewModel, int> service) //CTOR 
+        public NuevoModel(ICrudApi<ExoneracionesViewModel, int> service, ICrudApi<ClientesViewModel, string> serviceC, ICrudApi<CabysViewModel, int> cabys) //CTOR 
         {
             this.service = service;
-           
+            this.serviceC = serviceC;
+            this.cabys = cabys;
+
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -39,7 +45,8 @@ namespace NOVAAPP.Pages.Exoneraciones
                 {
                     return RedirectToPage("/NoPermiso");
                 }
-              
+                Cliente = await serviceC.ObtenerLista("");
+                Cabys = await cabys.ObtenerLista("");
                 return Page();
             }
             catch (Exception ex)
