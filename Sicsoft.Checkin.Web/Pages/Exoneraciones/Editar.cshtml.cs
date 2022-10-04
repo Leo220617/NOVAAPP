@@ -17,16 +17,23 @@ namespace NOVAAPP.Pages.Exoneraciones
     public class EditarModel : PageModel
     {
         private readonly ICrudApi<ExoneracionesViewModel, int> service; //API
-       
+        private readonly ICrudApi<ClientesViewModel, string> serviceC;
+        private readonly ICrudApi<CabysViewModel, int> cabys;
 
         [BindProperty]
         public ExoneracionesViewModel Exoneracion { get; set; }
 
-       
-        public EditarModel(ICrudApi<ExoneracionesViewModel, int> service) //CTOR 
+        public ClientesViewModel[] Cliente { get; set; }
+        [BindProperty]
+        public CabysViewModel[] Cabys { get; set; }
+
+
+        public EditarModel(ICrudApi<ExoneracionesViewModel, int> service, ICrudApi<ClientesViewModel, string> serviceC, ICrudApi<CabysViewModel, int> cabys) //CTOR 
         {
             this.service = service;
-           
+            this.serviceC = serviceC;
+            this.cabys = cabys;
+
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -38,7 +45,9 @@ namespace NOVAAPP.Pages.Exoneraciones
                     return RedirectToPage("/NoPermiso");
                 }
                 Exoneracion = await service.ObtenerPorId(id);
-                
+                Cliente = await serviceC.ObtenerLista("");
+                Cabys = await cabys.ObtenerLista("");
+
 
                 return Page();
             }
@@ -69,6 +78,43 @@ namespace NOVAAPP.Pages.Exoneraciones
 
                 ModelState.AddModelError(string.Empty, ex.Message);
                 return Page();
+            }
+        }
+        public async Task<IActionResult> OnPostAgregarExoneracion(ExoneracionesViewModel recibidos)
+        {
+            string error = "";
+
+
+            try
+            {
+
+
+               await service.Editar(recibidos);
+
+                var resp2 = new
+                {
+                    success = true,
+                    Exon = ""
+                };
+                return new JsonResult(resp2);
+            }
+            catch (ApiException ex)
+            {
+                Errores errores = JsonConvert.DeserializeObject<Errores>(ex.Content.ToString());
+                ModelState.AddModelError(string.Empty, errores.Message);
+                return new JsonResult(error);
+                //return new JsonResult(false);
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError(string.Empty, ex.Message);
+                var resp2 = new
+                {
+                    success = false,
+                    Exon = ""
+                };
+                return new JsonResult(resp2);
             }
         }
     }

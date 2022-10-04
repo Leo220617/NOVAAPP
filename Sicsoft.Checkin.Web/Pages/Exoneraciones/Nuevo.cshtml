@@ -5,60 +5,255 @@
 }
 
 @section styles{
-<style>
-         
+    <style>
+                .fa {
 
-        .lab {
-            font-weight: 400;
-            font-size: 13px;
-        }
+          font-size: 25px !important;
 
-        .lab2 {
-            font-weight: 400;
-            font-size: 13px;
-        }
-        .label {
-            color: #fff !important;
-            background-color: #57b846 !important;
-            cursor: pointer;
-            text-decoration: underline;
-            background: none;
-            font-size: 17px;
-            padding: 8px 18px !important;
         }
 
-        .label-submit {
-            color: #fff !important;
-            background-color: #57b846 !important;
-            cursor: pointer;
-            background: none;
-            font-size: 13px;
-            padding: 8px 18px !important;
-        }
-        /*label
-        {
-            font-size: 15px;
-        }*/
+                .lab {
+                    font-weight: 400;
+                    font-size: 13px;
+                }
 
-        #imgGalerias {
-            display: none;
-        }
- 
+                .lab2 {
+                    font-weight: 400;
+                    font-size: 13px;
+                }
+                .label {
+                    color: #fff !important;
+                    background-color: #57b846 !important;
+                    cursor: pointer;
+                    text-decoration: underline;
+                    background: none;
+                    font-size: 17px;
+                    padding: 8px 18px !important;
+                }
+
+                .label-submit {
+                    color: #fff !important;
+                    background-color: #57b846 !important;
+                    cursor: pointer;
+                    background: none;
+                    font-size: 13px;
+                    padding: 8px 18px !important;
+                }
+                /*label
+                {
+                    font-size: 15px;
+                }*/
+
+                #imgGalerias {
+                    display: none;
+                }
+
     </style>
 
 }
 
-@section scripts{
+    @section scripts{
+
+    <script>
+        $(document).ready(function() {
+            jQuery(document).ready(function($) {
+
+            });
+
+
+
+            $(document).ready(function() {
+
+            });
+
+
+        });
+        var ProdCadena = [];
+        function onClickAgregar() {
+            var Cabys = $("#Cabys").val();
+
+            var Detalle = {
+                id: 0,
+                idEncabezado: 0,
+                CodCabys: Cabys.split("-")[0],
+                Descripcion: Cabys.split("-")[1]
+            }
+            $("#Cabys").val("0").trigger("change");
+            ProdCadena.push(Detalle);
+            RellenaTabla();
+        }
+
+        function RellenaTabla() {
+            $("#tbody").html("");
+
+            var text = "";
+
+            for (var i = 0; i < ProdCadena.length; i++) {
+                text += "<tr>";
+                text += "<td>" + i + " </td>";
+                text += "<td>" + ProdCadena[i].CodCabys + " - " + ProdCadena[i].Descripcion + " </td>";
+                text += "<td class='text-center'> <a class='fa fa-trash' onclick='javascript:EliminarProducto(" + i + ") '> </a></td>";
+                text += "</tr>";
+            }
+
+            $("#tbody").html(text);
+
+
+
+        }
+
+        function EliminarProducto(i) {
+
+            ProdCadena.splice(i, 1);
+            RellenaTabla();
+        }
+
+        function Generar() {
+            try {
+                var Exoneracion = {
+                    id: 0,
+                    TipoDoc: $("#selectTD").val(),
+                    NumDoc: $("#NumDoc").val(),
+                    NomInst: $("#NomInst").val(),
+                    FechaEmision: $("#FecEmi").val(),
+                    PorExon: $("#PorExon").val(),
+                    idCliente: $("#Cliente").val(),
+                    FechaVencimiento: $("#FecVen").val(),
+                    Imagen: $("#Imagen").val(),
+
+                    Detalle: ProdCadena
+                };
+
+                if(validar(Exoneracion))
+                {
+                    Swal.fire({
+                        title: '¿Desea guardar la exoneracion?',
+                        showDenyButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: `Aceptar`,
+                        denyButtonText: `Cancelar`,
+                        customClass: {
+                            confirmButton: 'swalBtnColor',
+                            denyButton: 'swalDeny'
+                        },
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+
+
+
+                            $.ajax({
+                                type: 'POST',
+
+                                url: '@Url.Page("Nuevo", "AgregarExoneracion")',
+                                dataType: 'json',
+                                data: { recibidos: Exoneracion },
+                                headers: {
+                                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                                },
+                                success: function(json) {
+
+
+                                   
+                                    if (json.success == true) {
+                                        Swal.fire({
+                                            title: "Ha sido generado con éxito",
+
+                                            icon: 'success',
+                                            showCancelButton: false,
+
+                                            confirmButtonText: 'OK',
+                                            customClass: {
+                                                confirmButton: 'swalBtnColor',
+
+                                            },
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                //Despues de insertar, ocupariamos el id del cliente en la bd
+                                                //para entonces setearlo en el array de clientes
+
+                                                window.location.href = window.location.href.split("/Nuevo")[0];
+
+
+                                            }
+                                        })
+
+                                    } else {
+
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: 'Ha ocurrido un error al intentar guardar'
+
+                                        })
+                                    }
+                                },
+
+                                beforeSend: function(xhr) {
+
+
+                                },
+                                complete: function() {
+
+                                },
+                                error: function(error) {
+
+
+                                }
+                            });
+                        }
+                    })
+                }else{
+                     Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Parece que faltan datos por rellenar'
+
+                })
+                }
+
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar agregar ' + e
+
+                })
+            }
+        }
+
+        function validar(e)
+        {
+            if(e.NumDoc == "" || e.NumDoc == null || e.NumDoc == undefined)
+            {
+                return false;
+            } else if(e.NomInst == "" || e.NomInst == null || e.NomInst == undefined)
+            {
+                return false;
+
+            } else if(e.PorExon == "" || e.PorExon == null || e.PorExon == undefined)
+            {
+                return false;
+
+            } else if(e.idCliente == "" || e.idCliente == null || e.idCliente == undefined)
+            {
+                return false;
+            }else
+            {
+                return true;
+            }
+        }
+
+    </script>
     <script>
         var ImageBae64 = '';
 
         var fileUploadPrincipal = document.getElementById('imgPrincipalUploadG');
-        fileUploadPrincipal.onchange = async function (e) {
+        fileUploadPrincipal.onchange = async function(e) {
 
             await readFilePrincipalP(e.srcElement);
             // idF = setInterval(cancelar(e), 2000);
 
-            var idF = setInterval(async function () {
+            var idF = setInterval(async function() {
 
                 if (ImageBae64 != "data:," && $("#base64").val() != "data:,") {
                     //alert("Imagen agregada con éxito");
@@ -69,7 +264,7 @@
             }, 1500);
 
 
-             
+
         }
         async function readFilePrincipalP(input) {
 
@@ -85,7 +280,7 @@
                     var img = document.createElement("img");
                     var canvas = document.createElement('canvas');
 
-                    reader.onload = function (e) {
+                    reader.onload = function(e) {
                         img.src = e.target.result;
                         var ctx = canvas.getContext("2d");
                         ctx.drawImage(img, 0, 0);
@@ -115,7 +310,7 @@
 
                         ImageBae64 = dataurl;
                         $("#Imagen").val(ImageBae64);
-                    //    IMG2 = e.target.result;
+                        //    IMG2 = e.target.result;
 
                     }
 
@@ -132,16 +327,16 @@
 
 }
 
-<!-- Content Header (Page header) -->
-<section class="content-header">
-    <h1>
-        Exoneraciones
-    </h1>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-        <li class="breadcrumb-item active">Crear Nueva Exoneración</li>
-    </ol>
-</section>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Exoneraciones
+        </h1>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+            <li class="breadcrumb-item active">Crear Nueva Exoneración</li>
+        </ol>
+    </section>
 
 
 
@@ -156,235 +351,199 @@
 
                             </div>
                             <div class="col-4">
-                                 <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+                                <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
 
-                                
+
                             </div>
                         </div>
                     </div>
                     <div class="box-body">
-                        <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
-                              <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        
-                               <div class="row" >
-                                <div class="col-12" style="text-align: center;">
-                                 <div class="form-group">
-                                        <center>
-                                            <img id="imgPrincipalG" src="~/adjunto.png" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
-                                            <br />
-                                            <br />
-
-                                            <label style="font-size: 13px;" class="label" for="imgPrincipalUploadG">Subir Imagen</label><input id="imgPrincipalUploadG" accept=".jpg, .png" style="opacity:0; display:none;" type="file" name="imgPrincipalUploadG" />
-                                            
-                                        <input type="text" id="Imagen" hidden asp-for="Exoneracion.Imagen" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        
-                                        
-                                        </center>
-                                    </div>
-
-                                
 
 
-                            </div>
-                            </div>
+                        <div class="row">
+                            <div class="col-12" style="text-align: center;">
+                                <div class="form-group">
+                                    <center>
+                                        <img id="imgPrincipalG" src="~/adjunto.png" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
+                                        <br />
+                                        <br />
 
-                              <div class="row">
-                            
-                                
-                                   <div class="col-4">
-                                    <div class="form-group">
-                                        <label for="cyber">Tipo de Documento:</label>
-                                        <select class="form-control" asp-for="Exoneracion.TipoDoc" required>
-                                            <option value="01">01 - Compras Autorizadas</option>
-                                <option value="02">02- Ventas Exentas a Diplomáticos</option>
-                                <option value="03">03 - Autorizadas Ley Especial</option>
-                                <option value="04" selected>04 - Exenciones Dirección General de Hacienda</option>
-                                <option value="05">05 - Transitorio V</option>
-                                <option value="06">06 - Transitorio IX</option>
-                                <option value="07">07 - Transitorio XVII</option>
-                                <option value="99">99 - Otros</option>
+                                        <label style="font-size: 13px;" class="label" for="imgPrincipalUploadG">Subir Imagen</label><input id="imgPrincipalUploadG" accept=".jpg, .png" style="opacity:0; display:none;" type="file" name="imgPrincipalUploadG" />
+
+                                        <input type="text" id="Imagen" hidden class="form-control" required data-validation-required-message="Este campo es requerido">
 
 
-                                        </select>
-                                    </div>
+                                    </center>
                                 </div>
-                                    
-                                   
-                                    <div class="col-4">
-                                           <div class="form-group">
-                                            <h5>Número de documento<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <input type="text" asp-for="Exoneracion.NumDoc" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                            </div>
-                                            
-                                        </div>
-                                         
-                                    </div>
 
-                                    
-                                    <div class="col-4">
-                                           <div class="form-group">
-                                            <h5>Nombre de Institución<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <input type="text" asp-for="Exoneracion.NomInst" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                            </div>
-                                            
-                                        </div>
-                                         
-                                    </div>
-                            
+
+
+
+                            </div>
                         </div>
+
                         <div class="row">
 
-                             <div class="col-3">
-                            <label for="cyber">Fecha de Emisión:</label>
-                            <input type="date"  class="form-control" asp-for="Exoneracion.FechaEmision" required />
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="cyber">Tipo de Documento:</label>
+                                    <select class="form-control" id="selectTD" required>
+                                        <option value="01">01 - Compras Autorizadas</option>
+                                        <option value="02">02- Ventas Exentas a Diplomáticos</option>
+                                        <option value="03">03 - Autorizadas Ley Especial</option>
+                                        <option value="04" selected>04 - Exenciones Dirección General de Hacienda</option>
+                                        <option value="05">05 - Transitorio V</option>
+                                        <option value="06">06 - Transitorio IX</option>
+                                        <option value="07">07 - Transitorio XVII</option>
+                                        <option value="99">99 - Otros</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <h5>Número de documento<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" id="NumDoc" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <h5>Nombre de Institución<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" id="NomInst" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
                         </div>
+                        <div class="row">
 
                             <div class="col-3">
-                            <label for="cyber">Fecha de Vencimiento:</label>
-                            <input type="date"  class="form-control" asp-for="Exoneracion.FechaVencimiento" required />
-                        </div>
-
-                               <div class="col-3">
-                                           <div class="form-group">
-                                            <h5>%Exoneración<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <input type="number" asp-for="Exoneracion.PorExon" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                            </div>
-                                            
-                                        </div>
-                                         
-                                    </div>
-
-                                      <div class="col-3">
-                                      <div class="form-group">
-                                          <h5>Cliente<span class="text-danger">*</span></h5>
-                                             
-                                                <select class="form-control select2  " asp-for="Exoneracion.idCliente">
-                                                    @foreach(var item in Model.Cliente)
-                                                    {
-                                                        <option value="@item.id">@item.Nombre</option>
-                                                    }
-
-
-                                                </select>
-                                                
-                                           
-                                            
-                                        </div>
-                                    </div>
-
+                                <label for="cyber">Fecha de Emisión:</label>
+                                <input type="date" class="form-control" id="FecEmi" required />
                             </div>
-                        
-                        <br />
 
+                            <div class="col-3">
+                                <label for="cyber">Fecha de Vencimiento:</label>
+                                <input type="date" class="form-control" id="FecVen" required />
+                            </div>
 
-                     
-
-                        <div class="text-xs-right">
-                                        <button type="submit" class="btn btn-info" title="Guardar Cambios">Guardar Cambios</button>
-                                    </div>
-                        </form>
-                    </div>
-                   
-                   </div>
-                    <div class="box">
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-12">
-                                      <div class="form-group">
-                                          <h5>Cabys<span class="text-danger">*</span></h5>
-                                             
-                                                <select class="form-control select2  " asp-for="Exoneracion.idCliente">
-                                                    @foreach(var item in Model.Cliente)
-                                                    {
-                                                        <option value="@item.id">@item.Nombre</option>
-                                                    }
-
-
-                                                </select>
-                                                
-                                           
-                                            
-                                        </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <h5>%Exoneración<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="number" id="PorExon" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
-                   
-                </div>
-                <div class="col-sm-12 pl-1" style="text-align: right;">
-
-                                                <a id="agregar" onclick="javascript: AgregarProductoTabla();" class="btn btn-primary" style="color: white !important;">+ Agregar </a>
-                                            </div>
-                 </div>
-                  </div>
-                      <div class="box">
-                    <div class="box-body">
-                        <!-- Table row -->
-                        <div class="row">
-                            <div class="col-12 table-responsive">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-
-                                            <th>Descripción</th> 
-                                            <th class="text-right">Eliminar</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody">
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.row -->
-
-                        <div class="row">
-                            <!-- accepted payments column -->
-                            <div class="col-12 col-sm-6">
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-12 col-sm-6 text-right">
-
-
-                                <div>
-                                    <p>Sub Total  : <span id="subG">0</span> </p>
-                                    <p>Descuento  : <span id="descG">0</span></p>
-                                    <p>Impuesto :  <span id="impG"> 0</span></p>
-
-                                </div>
-                                <div class="total-payment">
-                                    <h3><b>Total :</b>  <span id="totG">0 </span></h3>
                                 </div>
 
                             </div>
-                            <!-- /.col -->
-                        </div>
-                        <!-- /.row -->
 
-                    </div>
-                </div>
-                <div class="box">
-                    <div class="box-body">
-                        <div class="row">
-                           
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <h5>Cliente<span class="text-danger">*</span></h5>
 
-                        </div>
-                        <!-- this row will not appear when printing -->
-                        <div class="row no-print">
-                            <div class="col-12">
-                                <button id="print" class="btn btn-warning" type="button"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
-                                <button type="button" class="btn btn-success pull-right" onclick="    javascript: Generar()">
-                                    <i class="fa fa-credit-card"></i> Generar
-                                </button>
+                                    <select class="form-control select2  " id="Cliente">
+                                        <option selected value='0'> Seleccione Cliente </option>
+                                        @foreach (var item in Model.Cliente)
+                                    {
+                                        <option value="@item.id">@item.Nombre</option>
+                                    }
+
+
+                                </select>
+
+
 
                             </div>
                         </div>
+
                     </div>
+
+                    <br />
+
+                </div>
+
+            </div>
+            <div class="box">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <h5>Cabys<span class="text-danger">*</span></h5>
+
+                                <select class="form-control select2" id="Cabys">
+                                    <option selected value='0'> Seleccione Cabys </option>
+                                    @foreach (var item in Model.Cabys)
+                                    {
+
+                                        <option value="@item.CodCabys-@item.Descripcion">@item.CodCabys - @item.Descripcion</option>
+                                    }
+
+
+                                </select>
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-sm-12 pl-1" style="text-align: right;">
+
+                        <a id="agregar" onclick="javascript: onClickAgregar();" class="btn btn-primary" style="color: white !important;">+ Agregar </a>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body">
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+
+                                        <th>Descripción</th>
+                                        <th class="text-right">Eliminar</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+
+                    <div class="row no-print">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-info pull-right" onclick="javascript: Generar()" title="Guardar Cambios">Guardar Cambios</button>
+
+
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
         </div>
-    </section>
+
+    </div>
+</section>

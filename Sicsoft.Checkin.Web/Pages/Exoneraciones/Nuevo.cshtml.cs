@@ -78,5 +78,42 @@ namespace NOVAAPP.Pages.Exoneraciones
                 return Page();
             }
         }
+        public async Task<IActionResult> OnPostAgregarExoneracion(ExoneracionesViewModel recibidos)
+        {
+            string error = "";
+
+
+            try
+            {
+
+
+                var resp = await service.Agregar(recibidos);
+
+                var resp2 = new
+                {
+                    success = true,
+                    Exon = resp
+                };
+                return new JsonResult(resp2);
+            }
+            catch (ApiException ex)
+            {
+                Errores errores = JsonConvert.DeserializeObject<Errores>(ex.Content.ToString());
+                ModelState.AddModelError(string.Empty, errores.Message);
+                return new JsonResult(error);
+                //return new JsonResult(false);
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError(string.Empty, ex.Message);
+                var resp2 = new
+                {
+                    success = false,
+                    Exon = ""
+                };
+                return new JsonResult(resp2);
+            }
+        }
     }
 }

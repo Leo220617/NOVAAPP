@@ -1,123 +1,600 @@
 ﻿@page "{id}"
 @model NOVAAPP.Pages.Exoneraciones.EditarModel
 @{
-    ViewData["Title"] = "Exoneraciones";
+    ViewData["Title"] = "Editar Exoneraciones";
 }
 
-<!-- Content Header (Page header) -->
-<section class="content-header">
-    <h1>
-        Exoneraciones
-    </h1>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-        <li class="breadcrumb-item active">Editar Exoneración</li>
-    </ol>
-</section>
+@section styles{
+    <style>
+                .fa {
+
+          font-size: 25px !important;
+
+        }
+
+                .lab {
+                    font-weight: 400;
+                    font-size: 13px;
+                }
+
+                .lab2 {
+                    font-weight: 400;
+                    font-size: 13px;
+                }
+                .label {
+                    color: #fff !important;
+                    background-color: #57b846 !important;
+                    cursor: pointer;
+                    text-decoration: underline;
+                    background: none;
+                    font-size: 17px;
+                    padding: 8px 18px !important;
+                }
+
+                .label-submit {
+                    color: #fff !important;
+                    background-color: #57b846 !important;
+                    cursor: pointer;
+                    background: none;
+                    font-size: 13px;
+                    padding: 8px 18px !important;
+                }
+                /*label
+                {
+                    font-size: 15px;
+                }*/
+
+                #imgGalerias {
+                    display: none;
+                }
+
+    </style>
+
+}
+
+    @section scripts{
+
+    <script>
+        $(document).ready(function() {
+            jQuery(document).ready(function($) {
+                Recuperar();
+                RellenaCabys();
+            });
 
 
+
+            $(document).ready(function() {
+
+            });
+
+
+        });
+        var ProdCadena = [];
+        var CabysMios = [];
+        var Cabys = [];
+        function RellenaCabys() {
+            $("#selectCabys").html("");
+            var text = "";
+
+            text += "<option value='0' > Seleccione Cabys </option>";
+            for (var i = 0; i < Cabys.length; i++) {
+                text += "<option value='" + Cabys[i].CodCabys + "-" + Cabys[i].Descripcion + "'> " + Cabys[i].CodCabys + "-" + Cabys[i].Descripcion + " </option> ";
+
+            }
+
+            $("#selectCabys").html(text);
+
+        }
+        function Recuperar() {
+            try {
+                CabysMios = JSON.parse($("#CabysMios").val());
+                Cabys = JSON.parse($("#CabysLista").val());
+
+                for (var i = 0; i < CabysMios.length; i++) {
+                    var Detalle = {
+                        id: 0,
+                        idEncabezado: 0,
+                        CodCabys: CabysMios[i].CodCabys,
+                        Descripcion: Cabys.find(a => a.CodCabys == CabysMios[i].CodCabys).Descripcion
+                    }
+
+                    ProdCadena.push(Detalle);
+                }
+
+                RellenaTabla();
+                
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar recuperar ' + e
+
+                })
+            }
+        }
+
+        function onClickAgregar() {
+            var CabysS = $("#selectCabys").val();
+
+            var Detalle = {
+                id: 0,
+                idEncabezado: 0,
+                CodCabys: CabysS.split("-")[0],
+                Descripcion: CabysS.split("-")[1]
+            }
+            $("#selectCabys").val("0").trigger("change");
+            ProdCadena.push(Detalle);
+            RellenaTabla();
+        }
+
+        function RellenaTabla() {
+
+            try {
+                $("#tbody").html("");
+
+            var text = "";
+
+            for (var i = 0; i < ProdCadena.length; i++) {
+                text += "<tr>";
+                text += "<td>" + i + " </td>";
+                text += "<td>" + ProdCadena[i].CodCabys + " - " + ProdCadena[i].Descripcion + " </td>";
+                text += "<td class='text-center'> <a class='fa fa-trash' onclick='javascript:EliminarProducto(" + i + ") '> </a></td>";
+                text += "</tr>";
+            }
+
+            $("#tbody").html(text);
+            }catch(e)
+            {
+                 Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar recuperar ' + e
+
+                })
+            }
+
+            
+
+
+
+        }
+
+        function EliminarProducto(i) {
+
+            ProdCadena.splice(i, 1);
+            RellenaTabla();
+        }
+
+        function Generar() {
+            try {
+                var Exoneracion = {
+                    id: $("#id").val(),
+                    TipoDoc: $("#selectTD").val(),
+                    NumDoc: $("#NumDoc").val(),
+                    NomInst: $("#NomInst").val(),
+                    FechaEmision: $("#FecEmi").val(),
+                    PorExon: $("#PorExon").val(),
+                    idCliente: $("#Cliente").val(),
+                    FechaVencimiento: $("#FecVen").val(),
+                    Imagen: $("#Imagen").val(),
+
+                    Detalle: ProdCadena
+                };
+
+                if (validar(Exoneracion)) {
+                    Swal.fire({
+                        title: '¿Desea guardar la exoneracion?',
+                        showDenyButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: `Aceptar`,
+                        denyButtonText: `Cancelar`,
+                        customClass: {
+                            confirmButton: 'swalBtnColor',
+                            denyButton: 'swalDeny'
+                        },
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+
+
+
+                            $.ajax({
+                                type: 'POST',
+
+                                url: '@Url.Page("Editar", "AgregarExoneracion")',
+                                dataType: 'json',
+                                data: { recibidos: Exoneracion },
+                                headers: {
+                                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                                },
+                                success: function(json) {
+
+
+
+                                    if (json.success == true) {
+                                        Swal.fire({
+                                            title: "Ha sido generado con éxito",
+
+                                            icon: 'success',
+                                            showCancelButton: false,
+
+                                            confirmButtonText: 'OK',
+                                            customClass: {
+                                                confirmButton: 'swalBtnColor',
+
+                                            },
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                //Despues de insertar, ocupariamos el id del cliente en la bd
+                                                //para entonces setearlo en el array de clientes
+
+                                                window.location.href = window.location.href.split("/Editar")[0];
+
+
+                                            }
+                                        })
+
+                                    } else {
+
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: 'Ha ocurrido un error al intentar editar'
+
+                                        })
+                                    }
+                                },
+
+                                beforeSend: function(xhr) {
+
+
+                                },
+                                complete: function() {
+
+                                },
+                                error: function(error) {
+
+
+                                }
+                            });
+                        }
+                    })
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Parece que faltan datos por rellenar'
+
+                    })
+                }
+
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar editar ' + e
+
+                })
+            }
+        }
+
+        function validar(e) {
+            if (e.NumDoc == "" || e.NumDoc == null || e.NumDoc == undefined) {
+                return false;
+            } else if (e.NomInst == "" || e.NomInst == null || e.NomInst == undefined) {
+                return false;
+
+            } else if (e.PorExon == "" || e.PorExon == null || e.PorExon == undefined) {
+                return false;
+
+            } else if (e.idCliente == "" || e.idCliente == null || e.idCliente == undefined) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+    </script>
+    <script>
+        var ImageBae64 = '';
+
+        var fileUploadPrincipal = document.getElementById('imgPrincipalUploadG');
+        fileUploadPrincipal.onchange = async function(e) {
+
+            await readFilePrincipalP(e.srcElement);
+            // idF = setInterval(cancelar(e), 2000);
+
+            var idF = setInterval(async function() {
+
+                if (ImageBae64 != "data:," && $("#base64").val() != "data:,") {
+                    //alert("Imagen agregada con éxito");
+                    clearInterval(idF);
+                } else {
+                    await readFilePrincipalP(e.srcElement);
+                }
+            }, 1500);
+
+
+
+        }
+        async function readFilePrincipalP(input) {
+
+            if (input.files && input.files[0]) {
+                /*const maxAllowSize = 512000;*/
+                //const maxAllowSize = 2800000;
+                const maxAllowSize = 5000000;
+                if (input.files[0].size > maxAllowSize) {
+                    alert("Esta imagen es muy pesada");
+                    input.value = '';
+                } else {
+                    var reader = new FileReader();
+                    var img = document.createElement("img");
+                    var canvas = document.createElement('canvas');
+
+                    reader.onload = function(e) {
+                        img.src = e.target.result;
+                        var ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0);
+
+                        var MAX_WIDTH = 800;
+                        var MAX_HEIGHT = 600;
+                        var width = img.width;
+                        var height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        var ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0, width, height);
+                        var dataurl = canvas.toDataURL("image/jpg");
+                        document.getElementById('imgPrincipalG').src = e.target.result;
+
+                        ImageBae64 = dataurl;
+                        $("#Imagen").val(ImageBae64);
+                        //    IMG2 = e.target.result;
+
+                    }
+
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+
+
+
+        }
+
+    </script>
+
+}
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Exoneraciones
+        </h1>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+            <li class="breadcrumb-item active">Editar Exoneración</li>
+        </ol>
+    </section>
+
+    @using Newtonsoft.Json;
 
     <section class="content">
-         <div class="row">
+        <div class="row">
             <div class="col-12">
                 <div class="box">
                     <div class="box-header with-border">
                         <div class="row">
                             <div class="col-8">
-                                <h6 class="box-subtitle"> Crear Nueva Exoneración</h6>
+                                <h6 class="box-subtitle"> Editar Exoneración</h6>
 
                             </div>
                             <div class="col-4">
-                                 <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+                                <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
 
-                                
+
                             </div>
                         </div>
                     </div>
                     <div class="box-body">
-                        <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
-                              <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                               <input hidden asp-for="Exoneracion.id" />
+                        <input hidden asp-for="Exoneracion.id" id="id" />
+                        <input hidden id="CabysLista" value="@JsonConvert.SerializeObject(Model.Cabys)" />
+                        <input hidden id="CabysMios" value="@JsonConvert.SerializeObject(Model.Exoneracion.Detalle)" />
+
+
                         <div class="row">
-                            
-                                
-                                   <div class="col-4">
-                                    <div class="form-group">
-                                        <label for="cyber">Tipo de Documento:</label>
-                                        <select class="form-control" asp-for="Exoneracion.TipoDoc" required>
-                                            <option value="01">01 - Compras Autorizadas</option>
-                                <option value="02">02- Ventas Exentas a Diplomáticos</option>
-                                <option value="03">03 - Autorizadas Ley Especial</option>
-                                <option value="04" selected>04 - Exenciones Dirección General de Hacienda</option>
-                                <option value="05">05 - Transitorio V</option>
-                                <option value="06">06 - Transitorio IX</option>
-                                <option value="07">07 - Transitorio XVII</option>
-                                <option value="99">99 - Otros</option>
+                            <div class="col-12" style="text-align: center;">
+                                <div class="form-group">
+                                    <center>
+                                        <img id="imgPrincipalG" src="data:image/jpeg;base64,@Model.Exoneracion.Imagen" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
+                                        <br />
+                                        <br />
+
+                                        <label style="font-size: 13px;" class="label" for="imgPrincipalUploadG">Subir Imagen</label><input id="imgPrincipalUploadG" accept=".jpg, .png" style="opacity:0; display:none;" type="file" name="imgPrincipalUploadG" />
+
+                                        <input type="text" id="Imagen" hidden class="form-control" required data-validation-required-message="Este campo es requerido">
 
 
-                                        </select>
-                                    </div>
+                                    </center>
                                 </div>
-                                    
-                                   
-                                    <div class="col-4">
-                                           <div class="form-group">
-                                            <h5>Número de documento<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <input type="text" asp-for="Exoneracion.NumDoc" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                            </div>
-                                            
-                                        </div>
-                                         
-                                    </div>
 
-                                    
-                                    <div class="col-4">
-                                           <div class="form-group">
-                                            <h5>Nombre de Institución<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <input type="text" asp-for="Exoneracion.NomInst" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                            </div>
-                                            
-                                        </div>
-                                         
-                                    </div>
-                            
-                        </div>
-                        <div class="row">
 
-                             <div class="col-6">
-                            <label for="cyber">Fecha de Emisión:</label>
-                            <input type="date"  class="form-control" asp-for="Exoneracion.FechaEmision" required />
-                        </div>
 
-                               <div class="col-6">
-                                           <div class="form-group">
-                                            <h5>%Exoneración<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <input type="number" asp-for="Exoneracion.PorExon" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                            </div>
-                                            
-                                        </div>
-                                         
-                                    </div>
 
                             </div>
-                        
-                        <br />
+                        </div>
+
+                        <div class="row">
 
 
-                     
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="cyber">Tipo de Documento:</label>
+                                    <select class="form-control" id="selectTD" required asp-for="Exoneracion.TipoDoc">
+                                        <option value="01">01 - Compras Autorizadas</option>
+                                        <option value="02">02- Ventas Exentas a Diplomáticos</option>
+                                        <option value="03">03 - Autorizadas Ley Especial</option>
+                                        <option value="04" selected>04 - Exenciones Dirección General de Hacienda</option>
+                                        <option value="05">05 - Transitorio V</option>
+                                        <option value="06">06 - Transitorio IX</option>
+                                        <option value="07">07 - Transitorio XVII</option>
+                                        <option value="99">99 - Otros</option>
 
-                        <div class="text-xs-right">
-                                        <button type="submit" class="btn btn-info" title="Guardar Cambios">Guardar Cambios</button>
+
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <h5>Número de documento<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Exoneracion.NumDoc" id="NumDoc" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
-                        </form>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <h5>Nombre de Institución<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Exoneracion.NomInst" id="NomInst" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+
+                            <div class="col-3">
+                                <label for="cyber">Fecha de Emisión:</label>
+                                <input type="date" class="form-control" asp-for="Exoneracion.FechaEmision" id="FecEmi" required />
+                            </div>
+
+                            <div class="col-3">
+                                <label for="cyber">Fecha de Vencimiento:</label>
+                                <input type="date" class="form-control" id="FecVen" asp-for="Exoneracion.FechaVencimiento" required />
+                            </div>
+
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <h5>%Exoneración<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="number" id="PorExon" class="form-control" asp-for="Exoneracion.PorExon" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <h5>Cliente<span class="text-danger">*</span></h5>
+
+                                    <select class="form-control select2  " id="Cliente" asp-for="Exoneracion.idCliente">
+                                        <option selected value='0'> Seleccione Cliente </option>
+                                        @foreach (var item in Model.Cliente)
+                                    {
+                                        <option value="@item.id">@item.Nombre</option>
+                                    }
+
+
+                                </select>
+
+
+
+                            </div>
+                        </div>
+
                     </div>
 
+                    <br />
+
+                </div>
+
+            </div>
+            <div class="box">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <h5>Cabys<span class="text-danger">*</span></h5>
+
+                                <select class="form-control select2" id="selectCabys">
+                                  @*   <option selected value='0'> Seleccione Cabys </option>
+                                    @foreach (var item in Model.Cabys)
+                                    {
+
+                                        <option value="@item.CodCabys-@item.Descripcion">@item.CodCabys - @item.Descripcion</option>
+                                    }*@
+                                </select>
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-sm-12 pl-1" style="text-align: right;">
+
+                        <a id="agregar" onclick="javascript: onClickAgregar();" class="btn btn-primary" style="color: white !important;">+ Agregar </a>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body">
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+
+                                        <th>Descripción</th>
+                                        <th class="text-right">Eliminar</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+
+                    <div class="row no-print">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-info pull-right" onclick="javascript: Generar()" title="Guardar Cambios">Guardar Cambios</button>
+
+
+
+                        </div>
+                    </div>
 
                 </div>
             </div>
 
         </div>
-    </section>
+
+    </div>
+</section>

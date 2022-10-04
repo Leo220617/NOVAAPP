@@ -166,11 +166,12 @@
                                      <td>  @( Model.Cliente.Where(a => a.id == item.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" :  Model.Cliente.Where(a => a.id == item.idCliente).FirstOrDefault().Nombre) </td>
                                     <td>         @item.FechaEmision.ToString("dd/MM/yyyy") </td>
                                      <td>         @item.FechaVencimiento.ToString("dd/MM/yyyy") </td>
-                                     <td>         @item.PorExon </td>
+                                     <td>         @item.PorExon % </td>
 
                                  <td align="center" style="padding-top:15px;">
                                             <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
                                             &nbsp;
+                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> &nbsp;
                                             <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
                                             &nbsp;
                                             

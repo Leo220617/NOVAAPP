@@ -1,0 +1,518 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.Exoneraciones.ObservarModel
+@{
+    ViewData["Title"] = "Exoneraciones";
+}
+@section styles{
+    <style>
+                
+
+                .lab {
+                    font-weight: 400;
+                    font-size: 13px;
+                }
+
+                .lab2 {
+                    font-weight: 400;
+                    font-size: 13px;
+                }
+                .label {
+                    color: #fff !important;
+                    background-color: #57b846 !important;
+                    cursor: pointer;
+                    text-decoration: underline;
+                    background: none;
+                    font-size: 17px;
+                    padding: 8px 18px !important;
+                }
+
+                .label-submit {
+                    color: #fff !important;
+                    background-color: #57b846 !important;
+                    cursor: pointer;
+                    background: none;
+                    font-size: 13px;
+                    padding: 8px 18px !important;
+                }
+                /*label
+                {
+                    font-size: 15px;
+                }*/
+
+                #imgGalerias {
+                    display: none;
+                }
+
+    </style>
+
+}
+@using Microsoft.AspNetCore.Http
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using System.Linq;
+@using System.Security.Claims;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.Extensions.Configuration;
+@using Refit;
+@using Sicsoft.Checkin.Web.Models;
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+}
+@section scripts{
+   <script>
+       $(document).ready(function () {
+            jQuery(document).ready(function ($) {
+                  
+            });
+
+
+
+            $(document).ready(function () {
+                
+            });
+
+
+        });
+
+         function ImprimirPantalla()
+        {
+            try {
+               // window.print();
+                var margins = {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    width: 595
+                  };
+                
+
+                html = $(".html").html();
+                html2pdf(html, {
+                margin:1,
+                padding:0,
+                filename: 'Exoneraciones.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2,  logging: true },
+                jsPDF: { unit: 'in', format: 'A2', orientation: 'P' },
+                class: ImprimirPantalla
+            });
+
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
+        }
+
+   </script>
+   <script>
+        var ImageBae64 = '';
+
+        var fileUploadPrincipal = document.getElementById('imgPrincipalUploadG');
+        fileUploadPrincipal.onchange = async function(e) {
+
+            await readFilePrincipalP(e.srcElement);
+            // idF = setInterval(cancelar(e), 2000);
+
+            var idF = setInterval(async function() {
+
+                if (ImageBae64 != "data:," && $("#base64").val() != "data:,") {
+                    //alert("Imagen agregada con éxito");
+                    clearInterval(idF);
+                } else {
+                    await readFilePrincipalP(e.srcElement);
+                }
+            }, 1500);
+
+
+
+        }
+        async function readFilePrincipalP(input) {
+
+            if (input.files && input.files[0]) {
+                /*const maxAllowSize = 512000;*/
+                //const maxAllowSize = 2800000;
+                const maxAllowSize = 5000000;
+                if (input.files[0].size > maxAllowSize) {
+                    alert("Esta imagen es muy pesada");
+                    input.value = '';
+                } else {
+                    var reader = new FileReader();
+                    var img = document.createElement("img");
+                    var canvas = document.createElement('canvas');
+
+                    reader.onload = function(e) {
+                        img.src = e.target.result;
+                        var ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0);
+
+                        var MAX_WIDTH = 800;
+                        var MAX_HEIGHT = 600;
+                        var width = img.width;
+                        var height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        var ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0, width, height);
+                        var dataurl = canvas.toDataURL("image/jpg");
+                        document.getElementById('imgPrincipalG').src = e.target.result;
+
+                        ImageBae64 = dataurl;
+                        $("#Imagen").val(ImageBae64);
+                        //    IMG2 = e.target.result;
+
+                    }
+
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+
+
+
+        }
+
+    </script>
+}
+
+                @using Newtonsoft.Json;
+@using System.Globalization
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+       Exoneraciones
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Observar Exoneración</li>
+    </ol>
+</section>
+
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Observar Exoneración</h6>
+                           
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="btn btn-outline-info" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+                            &nbsp;
+
+                           
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                     <div class="row">
+                            <div class="col-12" style="text-align: center;">
+                                <div class="form-group">
+                                    <center>
+                                        <img id="imgPrincipalG" disabled src="data:image/jpeg;base64,@Model.Exoneracion.Imagen" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
+                                        <br />
+                                        <br />
+
+                                        
+
+                                        <input type="text" id="Imagen" hidden class="form-control" required data-validation-required-message="Este campo es requerido">
+
+
+                                    </center>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                    <div class="row">
+
+                        <div class="col-12">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Exoneración No: @Model.Exoneracion.NumDoc</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <h5> <b>Fecha de Emisión:</b> @Model.Exoneracion.FechaEmision.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+                                      
+                                        <div class="col-4">
+                                            <h5> <b>Fecha de Vencimiento:</b> @Model.Exoneracion.FechaVencimiento.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+                                          <div class="col-4">
+                                            <h5> <b>Porcentaje de Exoneración:</b> @Model.Exoneracion.PorExon%</h5>
+
+                                        </div>
+
+                                   
+
+                                          
+                                          
+
+
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-4 invoice-col">
+                            <strong>Cliente</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @( Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" : Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault().Codigo + " - "+ Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault().Nombre)  </strong>
+                                   
+
+                            </address>
+                        </div>
+
+                         <div class="col-md-4 invoice-col">
+                            <strong>Institución Emisora</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @Model.Exoneracion.NomInst </strong>
+                                   
+
+                            </address>
+                        </div>
+
+                        
+                         <div class="col-md-4 invoice-col">
+                                <strong>Tipo de Documento:@if(Model.Exoneracion.TipoDoc == "01")
+                                {
+                                    <option value="01">01 - Compras Autorizadas</option>
+                                }else 
+                                @if(Model.Exoneracion.TipoDoc == "02")
+                                {
+                                      <option value="02">02- Ventas Exentas a Diplomáticos</option>
+
+                                }  else if(Model.Exoneracion.TipoDoc == "03")
+                                {
+                                    <option value="03">03 - Autorizadas Ley Especial</option>
+
+                                } else  if(Model.Exoneracion.TipoDoc == "04")
+                                {
+                                  <option value="04" selected>04 - Exenciones Dirección General de Hacienda</option>
+                                  
+                                }else if(Model.Exoneracion.TipoDoc == "05")
+                                {
+                                    <option value="05">05 - Transitorio V</option>
+
+                                }else  if(Model.Exoneracion.TipoDoc == "06")
+                                {
+                                     <option value="06">06 - Transitorio IX</option>
+
+                                }else if(Model.Exoneracion.TipoDoc == "07")
+                                {
+                                    <option value="07">07 - Transitorio XVII</option>
+
+                                }else if(Model.Exoneracion.TipoDoc == "99")
+                                {
+                                   <option value="99">99 - Otros</option>
+                                }
+
+
+
+                            </strong>
+                            <address>
+                               
+                                   
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">Código de Cabys</th>
+                                        <th class="text-center">Descripción</th>
+                                    
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.Exoneracion.Detalle)
+                                    {
+                                        <tr>
+                                           <td>@item.id</td>
+
+                                           <td class="text-center">@item.CodCabys</td>
+                                           
+                                          
+                                            
+                                    
+                                           
+                                            <td class="text-center">@( Model.Cabys.Where(a => a.CodCabys == item.CodCabys).FirstOrDefault() == null ? "Rol Inexistente" :  Model.Cabys.Where(a => a.CodCabys == item.CodCabys).FirstOrDefault().Descripcion) </td> 
+                                           
+                                         
+
+                                        </tr>
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+
+            <!-- Default box -->
+          
+    </div>
+    </div>
+
+
+<button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
+
+</section>
+
+
+
+<div class="html" hidden>
+     <div class="row">
+        <div class="col-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Cotización</h6>
+                           
+
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Exoneración No: @Model.Exoneracion.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h5> <b>Fecha</b> @Model.Exoneracion.FechaEmision.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+                                      
+                                        <div class="col-6">
+                                            <h5> <b>Fecha de Vencimiento</b> @Model.Exoneracion.FechaVencimiento.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+                                          
+                                          
+
+
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-8 invoice-col">
+                            <strong>Cliente</strong>
+                            <address>
+                                <strong class="text-blue font-size-24">   @( Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" : Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault().Codigo + " - " + Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault().Nombre)</strong>
+                                   
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">Producto</th>
+                                  
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.Exoneracion.Detalle)
+                                    {
+                                        <tr>
+                                           <td>@item.id</td>
+                                           <td class="text-center">@item.CodCabys</td>
+                                          
+                                         
+                                    
+                                           
+
+                                        </tr>
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+
+            <!-- Default box -->
+           
+    </div>
+    </div>
+</div>
