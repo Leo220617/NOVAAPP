@@ -14,7 +14,7 @@ using Sicsoft.Checkin.Web.Servicios;
 
 namespace NOVAAPP.Pages.Clientes
 {
-    public class NuevoModel : PageModel
+    public class EditarModel : PageModel
     {
         private readonly ICrudApi<ClientesViewModel, string> service;
         private readonly ICrudApi<CantonesViewModel, int> serviceC;
@@ -42,7 +42,7 @@ namespace NOVAAPP.Pages.Clientes
         [BindProperty]
         public GruposClientesViewModel[] Grupos { get; set; }
 
-        public NuevoModel(ICrudApi<ClientesViewModel, string> service, ICrudApi<CantonesViewModel, int> serviceC, ICrudApi<DistritosViewModel, int> serviceD, ICrudApi<BarriosViewModel, int> serviceB, ICrudApi<ListaPreciosViewModel, int> precio, ICrudApi<GruposClientesViewModel, int> grupos )
+        public EditarModel(ICrudApi<ClientesViewModel, string> service, ICrudApi<CantonesViewModel, int> serviceC, ICrudApi<DistritosViewModel, int> serviceD, ICrudApi<BarriosViewModel, int> serviceB, ICrudApi<ListaPreciosViewModel, int> precio, ICrudApi<GruposClientesViewModel, int> grupos)
         {
             this.service = service;
             this.serviceC = serviceC;
@@ -51,16 +51,16 @@ namespace NOVAAPP.Pages.Clientes
             this.precio = precio;
             this.grupos = grupos;
         }
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             try
             {
                 var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
-                if (string.IsNullOrEmpty(Roles.Where(a => a == "17").FirstOrDefault()))
+                if (string.IsNullOrEmpty(Roles.Where(a => a == "27").FirstOrDefault()))
                 {
                     return RedirectToPage("/NoPermiso");
                 }
-
+                Cliente = await service.ObtenerPorId(id);
                 Cantones = await serviceC.ObtenerLista("");
                 Distritos = await serviceD.ObtenerLista("");
                 Barrios = await serviceB.ObtenerLista("");
@@ -71,6 +71,7 @@ namespace NOVAAPP.Pages.Clientes
             }
             catch (Exception ex)
             {
+                Cliente = await service.ObtenerPorId(id);
                 Cantones = await serviceC.ObtenerLista("");
                 Distritos = await serviceD.ObtenerLista("");
                 Barrios = await serviceB.ObtenerLista("");
@@ -84,7 +85,7 @@ namespace NOVAAPP.Pages.Clientes
         {
             try
             {
-                await service.Agregar(Cliente);
+                await service.Editar(Cliente);
                 return RedirectToPage("./Index");
             }
             catch (ApiException ex)

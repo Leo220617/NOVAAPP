@@ -1,7 +1,7 @@
-﻿@page
-@model NOVAAPP.Pages.Clientes.NuevoModel
+﻿@page "{id}"
+@model NOVAAPP.Pages.Clientes.EditarModel
 @{
-    ViewData["Title"] = "Agregar Clientes";
+    ViewData["Title"] = "Editar Clientes";
 }
 @section styles{
 
@@ -159,7 +159,7 @@
                     <div class="box-header with-border">
                         <div class="row">
                             <div class="col-8">
-                                <h6 class="box-subtitle"> Crear Nuevo Cliente</h6>
+                                <h6 class="box-subtitle"> Editar Cliente</h6>
 
                             </div>
                             <div class="col-4">
@@ -172,11 +172,12 @@
                     <div class="box-body">
                         <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input hidden asp-for="Cliente.id" />
                             <div class="row">
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="cyber">Tipo de Cédula:</label>
-                                        <select id="selectTP" class="form-control" asp-for="Cliente.TipoCedula" onchange="    javascript: maskCedula();" required>
+                                        <select id="selectTP" class="form-control" asp-for="Cliente.TipoCedula" required>
                                             <option value="01">Nacional</option>
                                             <option value="02">Jurídica</option>
                                             <option value="03">DIMEX</option>
@@ -190,7 +191,7 @@
                                     <div class="form-group">
                                         <h5>Cédula<span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="text" id="CedulaCliente" asp-for="Cliente.Cedula" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="12" onchange="javascript: BuscarCliente()"  onblur="javascript: validarCedula()">
+                                            <input type="text" id="CedulaCliente" asp-for="Cliente.Cedula" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="12" onchange="javascript: BuscarCliente()">
                                         </div>
 
                                     </div>
@@ -224,23 +225,12 @@
 
 
                                 </div>
-                                 <div class="col-4">
-                                <div class="form-group">
-                                    <h5>Correo Publicitario<span class="text-danger">*</span></h5>
-                                     <div class="controls">
-                                            <input type="text" asp-for="Cliente.CorreoPublicitario" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        </div>
 
-
-                                </div>
-
-
-                            </div>
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <h5>Teléfono<span class="text-danger">*</span></h5>
+                                        <h5>Correo Publicitario<span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="number" asp-for="Cliente.Telefono"  class="form-control" id="Telefono" required data-validation-required-message="Este campo es requerido">
+                                            <input type="text" asp-for="Cliente.CorreoPublicitario" class="form-control" required data-validation-required-message="Este campo es requerido">
                                         </div>
 
                                     </div>
@@ -248,7 +238,19 @@
 
                                 </div>
 
+                                  <div class="col-4">
+                                <div class="form-group">
+                                    <h5>Teléfono<span class="text-danger">*</span></h5>
+                                       <div class="controls">
+                                            <input type="number" asp-for="Cliente.Telefono"  class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        </div>
                                  
+
+
+                                </div>
+
+
+                            </div>
 
                             </div>
                             <div class="row">
@@ -353,7 +355,7 @@
 
 
                             </div>
-                               <div class="col-4">
+                              <div class="col-4">
                                 <div class="form-group">
                                     <h5>Grupo<span class="text-danger">*</span></h5>
 
@@ -371,6 +373,8 @@
 
 
                             </div>
+
+
                         </div>
                         <div class="text-xs-right">
                             <button type="submit" class="btn btn-info" title="Guardar Cambios">Guardar Cambios</button>
@@ -455,4 +459,5 @@
             }
         }
 </script>
+
 

@@ -20,6 +20,8 @@ namespace NOVAAPP.Pages.Clientes
     {
         private readonly IConfiguration configuration;
         private readonly ICrudApi<ClientesViewModel, string> service;
+        private readonly ICrudApi<GruposClientesViewModel, int> grupos;
+        private readonly ICrudApi<ListaPreciosViewModel, int> listas;
 
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
@@ -27,9 +29,17 @@ namespace NOVAAPP.Pages.Clientes
         [BindProperty]
         public ClientesViewModel[] Objeto { get; set; }
 
-        public IndexModel(ICrudApi<ClientesViewModel, string> service)
+        [BindProperty]
+        public GruposClientesViewModel[] Grupo { get; set; }
+
+        [BindProperty]
+        public ListaPreciosViewModel[] Lista { get; set; }
+
+        public IndexModel(ICrudApi<ClientesViewModel, string> service, ICrudApi<GruposClientesViewModel, int> grupos, ICrudApi<ListaPreciosViewModel, int> listas)
         {
             this.service = service;
+            this.grupos = grupos;
+            this.listas = listas;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -40,8 +50,18 @@ namespace NOVAAPP.Pages.Clientes
                 {
                     return RedirectToPage("/NoPermiso");
                 }
-                Objeto = await service.ObtenerLista(filtro);
 
+
+                Grupo = await grupos.ObtenerLista("");
+                Lista = await listas.ObtenerLista("");
+
+                if ((filtro.Codigo1 == 0 || filtro.Codigo1 == null) && (filtro.Codigo2 == 0 || filtro.Codigo2 == null))
+                {
+                    filtro.Codigo2 = 0;
+                    filtro.Codigo1 = 0;
+                }
+
+                Objeto = await service.ObtenerLista(filtro);
 
                 return Page();
             }

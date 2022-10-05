@@ -19,5 +19,7 @@ namespace InversionGloblalWeb.Models
         public DateTime FechaInicial { get; set; }
         public DateTime FechaFinal { get; set; }
 
+        public bool Procesado { get; set; }
+
     }
 }

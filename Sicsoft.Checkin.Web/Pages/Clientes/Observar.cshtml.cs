@@ -1,32 +1,34 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using NOVAAPP.Models;
+using Castle.Core.Configuration;
 using InversionGloblalWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using NOVAAPP.Models;
 using Refit;
 using Sicsoft.Checkin.Web.Servicios;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace NOVAAPP.Pages.Clientes
 {
-    public class NuevoModel : PageModel
+    public class ObservarModel : PageModel
     {
+        private readonly IConfiguration configuration;
         private readonly ICrudApi<ClientesViewModel, string> service;
         private readonly ICrudApi<CantonesViewModel, int> serviceC;
         private readonly ICrudApi<DistritosViewModel, int> serviceD;
         private readonly ICrudApi<BarriosViewModel, int> serviceB;
         private readonly ICrudApi<ListaPreciosViewModel, int> precio;
+        private readonly ICrudApi<CondicionesPagosViewModel, int> condicion;
         private readonly ICrudApi<GruposClientesViewModel, int> grupos;
 
-
+        [BindProperty(SupportsGet = true)]
+        public ParametrosFiltros filtro { get; set; }
 
         [BindProperty]
         public ClientesViewModel Cliente { get; set; }
+
 
         [BindProperty]
         public CantonesViewModel[] Cantones { get; set; }
@@ -40,52 +42,39 @@ namespace NOVAAPP.Pages.Clientes
         public ListaPreciosViewModel[] PrecioLista { get; set; }
 
         [BindProperty]
+        public CondicionesPagosViewModel[] Condiciones { get; set; }
+
+        [BindProperty]
         public GruposClientesViewModel[] Grupos { get; set; }
 
-        public NuevoModel(ICrudApi<ClientesViewModel, string> service, ICrudApi<CantonesViewModel, int> serviceC, ICrudApi<DistritosViewModel, int> serviceD, ICrudApi<BarriosViewModel, int> serviceB, ICrudApi<ListaPreciosViewModel, int> precio, ICrudApi<GruposClientesViewModel, int> grupos )
+        public ObservarModel(ICrudApi<ClientesViewModel, string> service, ICrudApi<CantonesViewModel, int> serviceC, ICrudApi<DistritosViewModel, int> serviceD, ICrudApi<BarriosViewModel, int> serviceB, ICrudApi<ListaPreciosViewModel, int> precio, ICrudApi<CondicionesPagosViewModel, int> condicion, ICrudApi<GruposClientesViewModel, int> grupos)
         {
             this.service = service;
             this.serviceC = serviceC;
             this.serviceD = serviceD;
             this.serviceB = serviceB;
             this.precio = precio;
+            this.condicion = condicion;
             this.grupos = grupos;
         }
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(string id)
         {
             try
             {
                 var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
-                if (string.IsNullOrEmpty(Roles.Where(a => a == "17").FirstOrDefault()))
+                if (string.IsNullOrEmpty(Roles.Where(a => a == "27").FirstOrDefault()))
                 {
                     return RedirectToPage("/NoPermiso");
                 }
-
+                Cliente = await service.ObtenerPorIdString(id);
                 Cantones = await serviceC.ObtenerLista("");
                 Distritos = await serviceD.ObtenerLista("");
                 Barrios = await serviceB.ObtenerLista("");
                 PrecioLista = await precio.ObtenerLista("");
+                Condiciones = await condicion.ObtenerLista("");
                 Grupos = await grupos.ObtenerLista("");
 
                 return Page();
-            }
-            catch (Exception ex)
-            {
-                Cantones = await serviceC.ObtenerLista("");
-                Distritos = await serviceD.ObtenerLista("");
-                Barrios = await serviceB.ObtenerLista("");
-                PrecioLista = await precio.ObtenerLista("");
-                Grupos = await grupos.ObtenerLista("");
-                ModelState.AddModelError(string.Empty, ex.Message);
-                return Page();
-            }
-        }
-        public async Task<IActionResult> OnPostAsync()
-        {
-            try
-            {
-                await service.Agregar(Cliente);
-                return RedirectToPage("./Index");
             }
             catch (ApiException ex)
             {
@@ -97,4 +86,3 @@ namespace NOVAAPP.Pages.Clientes
         }
     }
 }
-

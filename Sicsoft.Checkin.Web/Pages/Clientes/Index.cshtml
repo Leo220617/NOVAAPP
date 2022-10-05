@@ -172,6 +172,70 @@
     <div class="row">
         <div class="col-12">
 
+                <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Filtro</h4></div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="box-body">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-sm-3 pr-1">
+                                <div class="form-group">
+                                    <label>Grupos</label>
+                                      <select class="form-control select2  " asp-for="filtro.Codigo2">
+                                                        <option value="0"> Seleccione</option>
+
+                                                    @foreach(var item in Model.Grupo)
+                                                    {
+                                                        <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
+                                                    }
+
+
+                                                </select>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-sm-3 pr-1">
+                                <div class="form-group">
+                                    <label>Lista de Precio</label>
+                                      <select class="form-control select2  " asp-for="filtro.Codigo1">
+                                                        <option value="0"> Seleccione</option>
+
+                                                    @foreach(var item in Model.Lista)
+                                                    {
+                                                        <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
+                                                    }
+
+
+                                                </select>
+                                </div>
+                            </div>
+                             <div class="col-sm-3  pl-1"  style="text-align: center; padding-top: 2%;">
+                            <input type="checkbox" id="md_checkbox_1" class="chk-col-red"  asp-for="filtro.Procesado"   onclick="this.form.submit()"/>
+					            <label for="md_checkbox_1">Procesado SAP</label>
+                            </div>
+                            
+                            
+                            <div class="col-sm-3 pl-1" style="text-align: center; padding-top: 1%;">
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary" > <i class="fa fa-search"></i></button>
+                            </div>
+ 
+
+
+                            
+                        </div>
+
+                    </form>
+                </div>
+            </div>
 
             <div class="box">
                 <div class="box-header with-border">
@@ -179,7 +243,7 @@
                         <div class="col-sm-8"> <h4 class="box-title">Clientes</h4></div>
                           <div class="col-sm-2"> <a asp-page="Nuevo" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Cliente</a></div>
                            <div class="col-sm-2"> <button onclick="javascript: InsertarSAP()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Sincronizar a SAP"> Sincronizar a SAP</button></div>
-                      
+                       
 
 
                 </div>
@@ -189,7 +253,7 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                     <th>ID</th>
+                                
                                     <th>Código</th>
                                    
 
@@ -197,8 +261,9 @@
                                      <th>Cédula</th>
                                      <th>Correo</th>
                                      <th>Teléfono</th>
-                                     <th>Provincia</th>
+                                  
                                       <th>Saldo</th>
+                                       <th>Grupo</th>
                                       <th>Estado</th>
                                       <th>Procesado a SAP</th>
                                       <th>Acción</th>
@@ -211,9 +276,7 @@
                                 {
                                 <tr>
                                     
-                                    <td>
-                                        @item.id
-                                    </td>
+                                  
 
                                     <td>
                                         @item.Codigo
@@ -230,12 +293,13 @@
                                      <td>
                                         @item.Telefono
                                     </td>
-                                     <td>
-                                        @item.Provincia
-                                    </td>
+                                
                                      <td>
                                         @(Math.Round(item.Saldo,2).ToString("N",formato))
                                     </td>
+                                      
+                                         <td>  @( Model.Grupo.Where(a => a.id == item.idGrupo).FirstOrDefault() == null ? "Grupo Inexistente" :  Model.Grupo.Where(a => a.id == item.idGrupo).FirstOrDefault().Nombre) </td> 
+                                    
                                      <td>
                                          @if(item.Activo)
                                             {
@@ -258,16 +322,24 @@
                                             }
 
                                     </td>
-                                      <td>
+                                      <td align="center">
+
                                            @if(item.ProcesadoSAP)
                                            {
-                                                   
+                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
+                                           
+                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> 
                                                 }else
                                                 {
                                                      <button onclick="javascript: onClickModal('@item.id')" class="btn btn-info btn-xs">Enviar a SAP</button>
+                                                     <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> 
+                                                     <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
+                                                      
+                                           
                                                 }
 
                                     </td>
+
                                 </tr>
 
                                 }
@@ -276,7 +348,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                     <th>ID</th>
+                              
                                    <th>Código</th>
                                    
 
@@ -284,8 +356,9 @@
                                      <th>Cédula</th>
                                      <th>Correo</th>
                                      <th>Teléfono</th>
-                                     <th>Provincia</th>
+                                   
                                       <th>Saldo</th>
+                                       <th>Grupo</th>
                                       <th>Estado</th>
                                        <th>Procesado a SAP</th>
                                         <th>Acción</th>
@@ -299,7 +372,7 @@
             <!-- /.box -->
         </div>
         <!-- /.col -->
-    </div>
+    </div></div>
     <!-- /.row -->
 </section>
 <!-- /.content -->

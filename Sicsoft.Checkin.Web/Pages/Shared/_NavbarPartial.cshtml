@@ -127,6 +127,14 @@
                         }
 
                     }
+
+                     @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "28").FirstOrDefault()))
+                        {
+
+                            <li><a asp-page="/GruposClientes/Index"><i class="mdi mdi-account-multiple"></i>Grupos de Clientes</a></li>
+                        }
+
+                    }
                 
                     
 
