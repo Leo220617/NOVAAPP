@@ -12,12 +12,12 @@
 
 }
 
-@section scripts{
+    @section scripts{
 
     <script>
-        $(document).ready(function () {
-            jQuery(document).ready(function ($) {
-                $(document).ready(function () {
+        $(document).ready(function() {
+            jQuery(document).ready(function($) {
+                $(document).ready(function() {
                     $('.mi-selector').select2();
                 });
             });
@@ -26,75 +26,75 @@
                 height: 'resolve'
             });
 
-          
+
 
 
 
         });
 
-         var ids = 0;
-    function onClickModal(id) {
-        ids = id;
-        Swal.fire({
-            title: '¿Desea eliminar esta Exoneración?',
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: `Aceptar`,
-            denyButtonText: `Cancelar`,
-            customClass: {
-                confirmButton: 'swalBtnColor',
-                denyButton: 'swalDeny'
-            },
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
+        var ids = 0;
+        function onClickModal(id) {
+            ids = id;
+            Swal.fire({
+                title: '¿Desea eliminar esta Exoneración?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
 
-                Eliminar();
+                    Eliminar();
 
-            }
-        })
+                }
+            })
 
-    }
-        function  Eliminar() {
+        }
+        function Eliminar() {
 
-         $.ajax({
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '@Url.Page("Index", "Eliminar")',
-                        data: { id: ids },
-                        success: function (result) {
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Page("Index", "Eliminar")',
+                data: { id: ids },
+                success: function(result) {
 
-                             if (result == false) {
-                                 ids = 0;
-                                 Swal.fire({
-                                     icon: 'error',
-                                     title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar eliminar'
+                    if (result == false) {
+                        ids = 0;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error al intentar eliminar'
 
-                                 })
+                        })
 
-                             } else {
-                                 Swal.fire({
-                                     title: "Ha sido eliminado con éxito",
+                    } else {
+                        Swal.fire({
+                            title: "Ha sido eliminado con éxito",
 
-                                     icon: 'success',
-                                     showCancelButton: false,
-                                     customClass: {
-                                         confirmButton: 'swalBtnColor',
+                            icon: 'success',
+                            showCancelButton: false,
+                            customClass: {
+                                confirmButton: 'swalBtnColor',
 
-                                     },
-                                     confirmButtonText: 'OK'
-                                 }).then((result) => {
-                                     if (result.isConfirmed) {
-                                         location.reload();
-                                     }
-                                 })
-                             }
-             },
-             beforeSend: function () {
+                            },
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                beforeSend: function() {
 
-             }
-                     })
+                }
+            })
         }
 
 
@@ -103,82 +103,94 @@
 
 }
 
-      
-
-<!-- Content Header (Page header) -->
-<section class="content-header">
-    <h1>
-        Exoneraciones
-    </h1>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-        <li class="breadcrumb-item active">Listado Exoneraciones</li>
-    </ol>
-</section>
-<!-- Main content -->
-<section class="content">
-    <div class="row">
-        <div class="col-12">
 
 
-            <div class="box">
-                <div class="box-header with-border">
-                    <div class="row">
-                        <div class="col-sm-8"> <h4 class="box-title">Exoneraciones</h4></div>
-                          <div class="col-sm-4"> <a asp-page="Nuevo" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Exoneración</a></div>
-                      
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Exoneraciones
+        </h1>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+            <li class="breadcrumb-item active">Listado Exoneraciones</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+
+
+                <div class="box">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-sm-8"> <h4 class="box-title">Exoneraciones</h4></div>
+                            <div class="col-sm-4"> <a asp-page="Nuevo" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Exoneración</a></div>
+
+
+                        </div>
+
 
                     </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tipo de Documento</th>
 
+                                        <th>Número de Documento</th>
+                                        <th>Institución Emisora</th>
+                                        <th>Cliente</th>
+                                        <th>Fecha de Emisión</th>
+                                        <th>Fecha de Vencimiento</th>
+                                        <th>%Exoneración</th>
+                                        <th>Estado</th>
+                                        <th>Acción</th>
 
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="table-responsive">
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tipo de Documento</th> 
-
-                                    <th>Número de Documento</th>
-                                    <th>Institución Emisora</th>
-                                    <th>Cliente</th>
-                                    <th>Fecha de Emisión</th>
-                                    <th>Fecha de Vencimiento</th>
-                                     <th>%Exoneración</th>
-                                      <th>Acción</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.Objeto)
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Objeto)
                                 {
-                                <tr>
+                                    <tr>
 
-                                    <td>
-                                        @item.id
-                                    </td>
+                                        <td>
+                                            @item.id
+                                        </td>
 
-                                     <td>  @item.TipoDoc </td>  
-                                    <td>         @item.NumDoc </td>
-                                    <td>         @item.NomInst </td>
-                                     <td>  @( Model.Cliente.Where(a => a.id == item.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" :  Model.Cliente.Where(a => a.id == item.idCliente).FirstOrDefault().Nombre) </td>
-                                    <td>         @item.FechaEmision.ToString("dd/MM/yyyy") </td>
-                                     <td>         @item.FechaVencimiento.ToString("dd/MM/yyyy") </td>
-                                     <td>         @item.PorExon % </td>
+                                        <td>  @item.TipoDoc </td>
+                                        <td>         @item.NumDoc </td>
+                                        <td>         @item.NomInst </td>
+                                        <td>  @( Model.Cliente.Where(a => a.id == item.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" :  Model.Cliente.Where(a => a.id == item.idCliente).FirstOrDefault().Nombre) </td>
+                                        <td>         @item.FechaEmision.ToString("dd/MM/yyyy") </td>
+                                        <td>         @item.FechaVencimiento.ToString("dd/MM/yyyy") </td>
+                                        <td>         @item.PorExon % </td>
+                                        <td>
+                                            @{if (item.Activo)
+                                                {
+                                                    <span class="badge badge-pill badge-success">Activo</span>
 
-                                 <td align="center" style="padding-top:15px;">
-                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge badge-pill badge-danger">Inactivo</span>
+                                                }
+                                            }
+                                        </td>
+                                        <td align="center" style="padding-top:15px;">
+                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a>
                                             &nbsp;
                                             <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> &nbsp;
                                             <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
                                             &nbsp;
-                                            
-                                     </td>
+
+                                        </td>
 
 
-                                </tr>
+                                    </tr>
 
                                 }
 
@@ -186,17 +198,17 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                   <th>ID</th>
-                                    <th>Tipo de Documento</th> 
+                                    <th>ID</th>
+                                    <th>Tipo de Documento</th>
 
                                     <th>Número de Documento</th>
                                     <th>Institución Emisora</th>
                                     <th>Cliente</th>
                                     <th>Fecha de Emisión</th>
-                                     <th>Fecha de Vencimiento</th>
-                                     <th>%Exoneración</th>
-                                     
-                                      <th>Acción</th>
+                                    <th>Fecha de Vencimiento</th>
+                                    <th>%Exoneración</th>
+                                    <th>Estado</th>
+                                    <th>Acción</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -211,4 +223,3 @@
     <!-- /.row -->
 </section>
 <!-- /.content -->
-

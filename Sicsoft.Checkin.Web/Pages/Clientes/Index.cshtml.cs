@@ -61,6 +61,15 @@ namespace NOVAAPP.Pages.Clientes
                     filtro.Codigo1 = 0;
                 }
 
+                if(filtro.Procesado && filtro.Codigo1 == 0 && filtro.Codigo2 == 0)
+                {
+                    filtro.Codigo2 = Grupo.FirstOrDefault().id;
+                    filtro.Codigo1 = Lista.FirstOrDefault().id;
+
+                    return new RedirectToPageResult("Index",filtro);
+                }
+                    
+
                 Objeto = await service.ObtenerLista(filtro);
 
                 return Page();

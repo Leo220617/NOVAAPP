@@ -89,10 +89,15 @@ namespace NOVAAPP.Pages.Clientes
             }
             catch (ApiException ex)
             {
+                Cantones = await serviceC.ObtenerLista("");
+                Distritos = await serviceD.ObtenerLista("");
+                Barrios = await serviceB.ObtenerLista("");
+                PrecioLista = await precio.ObtenerLista("");
+                Grupos = await grupos.ObtenerLista("");
                 Errores error = JsonConvert.DeserializeObject<Errores>(ex.Content.ToString());
                 ModelState.AddModelError(string.Empty, error.Message);
 
-                return Page();
+                return new PageResult();
             }
         }
     }

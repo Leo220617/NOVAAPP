@@ -331,7 +331,9 @@
                                             <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> 
                                                 }else
                                                 {
-                                                     <button onclick="javascript: onClickModal('@item.id')" class="btn btn-info btn-xs">Enviar a SAP</button>
+                                                     
+
+                                                     <a onclick="javascript: onClickModal('@item.id')" ><img src="/sapX.png"  /></a>
                                                      <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> 
                                                      <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
                                                       

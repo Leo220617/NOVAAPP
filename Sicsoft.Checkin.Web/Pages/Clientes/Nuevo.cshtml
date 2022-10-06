@@ -176,7 +176,7 @@
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label for="cyber">Tipo de Cédula:</label>
-                                        <select id="selectTP" class="form-control" asp-for="Cliente.TipoCedula" onchange="    javascript: maskCedula();" required>
+                                        <select id="selectTP" class="form-control" asp-for="Cliente.TipoCedula" onchange="javascript: maskCedula();" required>
                                             <option value="01">Nacional</option>
                                             <option value="02">Jurídica</option>
                                             <option value="03">DIMEX</option>
@@ -188,7 +188,7 @@
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <h5>Cédula<span class="text-danger">*</span></h5>
+                                        <h5>Cédula<span class="text-danger">* (Sin guiones, sin espacios y con 0's)</span></h5>
                                         <div class="controls">
                                             <input type="text" id="CedulaCliente" asp-for="Cliente.Cedula" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="12" onchange="javascript: BuscarCliente()"  onblur="javascript: validarCedula()">
                                         </div>
@@ -240,7 +240,7 @@
                                     <div class="form-group">
                                         <h5>Teléfono<span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="number" asp-for="Cliente.Telefono"  class="form-control" id="Telefono" required data-validation-required-message="Este campo es requerido">
+                                            <input type="text" id="Telefono" asp-for="Cliente.Telefono"  class="form-control" id="Telefono" required data-validation-required-message="Este campo es requerido">
                                         </div>
 
                                     </div>
@@ -385,13 +385,12 @@
                         <div class="x_panel">
 
                             <div class="x_content">
-                                <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
-                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                 
                                     <input hidden id="Cantones" value="@JsonConvert.SerializeObject(Model.Cantones)" />
                                     <input hidden id="Distritos" value="@JsonConvert.SerializeObject(Model.Distritos)" />
                                     <input hidden id="Barrios" value="@JsonConvert.SerializeObject(Model.Barrios)" />
 
-                                </form>
+                           
 
 
                             </div>

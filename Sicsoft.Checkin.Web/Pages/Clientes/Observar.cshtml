@@ -3,10 +3,49 @@
 @{
     ViewData["Title"] = "Clientes";
 }
+@section scripts{
+    <script>
+        function ImprimirPantalla()
+        {
+            try {
+               // window.print();
+                var margins = {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    width: 595
+                  };
+                
+
+                html = $(".html").html();
+                html2pdf(html, {
+                margin:1,
+                padding:0,
+                filename: 'Cliente.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2,  logging: true },
+                jsPDF: { unit: 'in', format: 'A2', orientation: 'P' },
+                class: ImprimirPantalla
+            });
+
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
+        }
+    </script>
+}
+
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-       Clientes
+        Clientes
     </h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
@@ -23,7 +62,7 @@
                     <div class="row">
                         <div class="col-8">
                             <h6 class="box-subtitle">Observar Cliente</h6>
-                           
+
 
                         </div>
                         <div class="col-4">
@@ -31,19 +70,19 @@
 
                             &nbsp;
 
-                           
+
 
                         </div>
                     </div>
                 </div>
                 <div class="box-body">
                     <!-- title row -->
-                   
+
                     <div class="row">
 
                         <div class="col-12">
                             <div class="page-header mt-0">
-                               
+
                                 <br />
                                 <div class="text-left">
                                     <div class="row">
@@ -51,73 +90,73 @@
                                             <h5> <b>Cédula:</b> @Model.Cliente.Cedula</h5>
 
                                         </div>
-                                      
+
                                         <div class="col-3">
                                             <h5> <b>Grupo:</b> @( Model.Grupos.Where(a => a.id == Model.Cliente.idGrupo).FirstOrDefault() == null ? "Grupo de Cliente Inexistente" :  Model.Grupos.Where(a => a.id == Model.Cliente.idGrupo).FirstOrDefault().Nombre)</h5>
 
                                         </div>
 
-                                          <div class="col-3">
+                                        <div class="col-3">
                                             <h5> <b>Teléfono:</b> @Model.Cliente.Telefono</h5>
 
                                         </div>
 
-                                          <div class="col-3">
+                                        <div class="col-3">
                                             <h5> <b>Lista de Precio:</b>  @( Model.PrecioLista.Where(a => a.id == Model.Cliente.idListaPrecios).FirstOrDefault() == null ? "Lista de Precio Inexistente" :  Model.PrecioLista.Where(a => a.id == Model.Cliente.idListaPrecios).FirstOrDefault().Nombre)</h5>
 
                                         </div>
 
-                                        
-                                        
-
-                                   
-
-                                          
-                                          
 
 
+
+
+
+
+
+
+
+                                    </div>
                                 </div>
-                            </div>
 
-                        </div>
+                            </div>
                         </div>
 
                         <div class="col-12">
                             <div class="page-header mt-0">
-                               
+
                                 <br />
                                 <div class="text-left">
                                     <div class="row">
-                                       
-                                      
+
+
                                         <div class="col-4">
                                             <h5> <b>Correo:</b> @Model.Cliente.Email</h5>
 
                                         </div>
 
-                                          <div class="col-4">
+                                        <div class="col-4">
                                             <h5> <b>Corre Publicitario:</b> @Model.Cliente.CorreoPublicitario</h5>
 
                                         </div>
 
-                                        
 
-                                        
-                                          <div class="col-4">
+
+
+                                        <div class="col-4">
                                             <h5> <b>Condición de Pago:</b>  @( Model.Condiciones.Where(a => a.id == Model.Cliente.idCondicionPago).FirstOrDefault() == null ? "Condición de Pago Inexistente" :  Model.Condiciones.Where(a => a.id == Model.Cliente.idCondicionPago).FirstOrDefault().Nombre)</h5>
 
                                         </div>
 
-                                   
-
-                                          
-                                          
 
 
+
+
+
+
+                                    </div>
                                 </div>
-                            </div>
 
-                        </div>
+                            </div>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -127,16 +166,16 @@
                             <strong>Cliente</strong>
                             <address>
                                 <strong class="text-blue font-size-24"> @Model.Cliente.Codigo- @Model.Cliente.Nombre </strong>
-                                   
+
 
                             </address>
                         </div>
 
-                        
 
-        
-                        
-                      
+
+
+
+
                         <!-- /.col -->
                     </div>
                     <!-- /.row -->
@@ -146,87 +185,95 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-pale-info">
-                                       
+
                                         <th class="text-center">Provincia</th>
                                         <th class="text-center">Cantón</th>
-                                          <th class="text-center">Distrito</th>
-                                            <th class="text-center">Barrio</th>
-                                            <th class="text-center">Dirección</th>
+                                        <th class="text-center">Distrito</th>
+                                        <th class="text-center">Barrio</th>
+                                        <th class="text-center">Dirección</th>
 
-                                    
+
 
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                  
-                                
-                                
-                                        <tr>
-                                          
 
-                                           <td class="text-center">
-                                              @switch(Model.Cliente.Provincia)
+
+
+                                    <tr>
+
+
+                                        <td class="text-center">
+                                            @switch (Model.Cliente.Provincia)
                                             {
                                                 case 1:
                                                     {
-                                                       <p>San José</p>
+                                                        <p>San José</p>
                                                         break;
                                                     }
-                                                    case 2:
+                                                case 2:
                                                     {
-                                                       <p>Alajuela</p>
+                                                        <p>Alajuela</p>
                                                         break;
                                                     }
-                                                     case 3:
+                                                case 3:
                                                     {
-                                                       <p>Cartago</p>
+                                                        <p>Cartago</p>
                                                         break;
                                                     }
-                                                     case 4:
+                                                case 4:
                                                     {
-                                                       <p>Heredia</p>
+                                                        <p>Heredia</p>
                                                         break;
                                                     }
-                                                     case 5:
+                                                case 5:
                                                     {
-                                                       <p>Guanacaste</p>
+                                                        <p>Guanacaste</p>
                                                         break;
                                                     }
-                                                     case 6:
+                                                case 6:
                                                     {
-                                                       <p>Puntarenas</p>
+                                                        <p>Puntarenas</p>
                                                         break;
                                                     }
-                                                     case 7:
+                                                case 7:
                                                     {
-                                                       <p>Limón</p>
+                                                        <p>Limón</p>
                                                         break;
                                                     }
 
                                             }
 
-                                           </td>
-                                           
-                                          
-                                            
-                                    
-                                           
-                                            <td class="text-center">  @( Model.Cantones.Where(a => Convert.ToString( a.CodCanton) == Model.Cliente.Canton).FirstOrDefault() == null ? "Canton Inexistente" :  Model.Cantones.Where(a => Convert.ToString(a.CodCanton) == Model.Cliente.Canton).FirstOrDefault().NomCanton) </td>
-                                            
-                                             <td class="text-center">  @( Model.Distritos.Where(a => Convert.ToString( a.CodDistrito) == Model.Cliente.Distrito).FirstOrDefault() == null ? "Distrito Inexistente" :  Model.Distritos.Where(a => Convert.ToString(a.CodDistrito) == Model.Cliente.Distrito).FirstOrDefault().NomDistrito) </td> 
-                                            
-                                             
-                                              <td class="text-center">  @( Model.Barrios.Where(a => Convert.ToString( a.CodBarrio) == Model.Cliente.Barrio).FirstOrDefault() == null ? "Barrio Inexistente" :  Model.Barrios.Where(a => Convert.ToString(a.CodBarrio) == Model.Cliente.Barrio).FirstOrDefault().NomBarrio) </td> 
-                                             <td class="text-center">@Model.Cliente.Sennas    </td> 
-                                 
+                                        </td>
+
+                                        @{
+                                            int numCanton = Convert.ToInt32(Model.Cliente.Canton);
+                                        }
+                                        @{
+                                            int numDistrito = Convert.ToInt32(Model.Cliente.Distrito);
+                                        }
+                                        @{
+                                            int numBarrio = Convert.ToInt32(Model.Cliente.Barrio);
+                                        }
 
 
-                                           
-                                         
 
-                                        </tr>
-                                  
+                                        <td class="text-center">  @( Model.Cantones.Where(a => a.CodProvincia == Model.Cliente.Provincia && a.CodCanton == numCanton).FirstOrDefault() == null ? "Canton Inexistente" :  Model.Cantones.Where(a => a.CodProvincia == Model.Cliente.Provincia && a.CodCanton == numCanton).FirstOrDefault().NomCanton) </td>
+
+                                        <td class="text-center">  @( Model.Distritos.Where(a => a.CodProvincia == Model.Cliente.Provincia && a.CodCanton == numCanton && a.CodDistrito == numDistrito).FirstOrDefault() == null ? "Distrito Inexistente" :  Model.Distritos.Where(a =>a.CodProvincia == Model.Cliente.Provincia && a.CodCanton == numCanton && a.CodDistrito == numDistrito).FirstOrDefault().NomDistrito) </td>
+
+
+                                        <td class="text-center">  @( Model.Barrios.Where(a => a.CodProvincia == Model.Cliente.Provincia && a.CodCanton == numCanton && a.CodDistrito == numDistrito && a.CodBarrio == numBarrio).FirstOrDefault() == null ? "Barrio Inexistente" :  Model.Barrios.Where(a => a.CodProvincia == Model.Cliente.Provincia && a.CodCanton == numCanton && a.CodDistrito == numDistrito && a.CodBarrio == numBarrio).FirstOrDefault().NomBarrio) </td>
+                                        <td class="text-center">@Model.Cliente.Sennas    </td>
+
+
+
+
+
+
+                                    </tr>
+
 
                                 </tbody>
                             </table>
@@ -241,13 +288,215 @@
 
 
             <!-- Default box -->
-          
-    </div>
+
+        </div>
     </div>
 
 
-<button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
+    <button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
 
 </section>
 
 
+<!--Imprimir-->
+
+<div class="html" hidden>
+     <!-- title row -->
+
+                    <div class="row">
+
+                        <div class="col-12">
+                            <div class="page-header mt-0">
+
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <h5> <b>Cédula:</b> @Model.Cliente.Cedula</h5>
+
+                                        </div>
+
+                                        <div class="col-3">
+                                            <h5> <b>Grupo:</b> @( Model.Grupos.Where(a => a.id == Model.Cliente.idGrupo).FirstOrDefault() == null ? "Grupo de Cliente Inexistente" :  Model.Grupos.Where(a => a.id == Model.Cliente.idGrupo).FirstOrDefault().Nombre)</h5>
+
+                                        </div>
+
+                                        <div class="col-3">
+                                            <h5> <b>Teléfono:</b> @Model.Cliente.Telefono</h5>
+
+                                        </div>
+
+                                        <div class="col-3">
+                                            <h5> <b>Lista de Precio:</b>  @( Model.PrecioLista.Where(a => a.id == Model.Cliente.idListaPrecios).FirstOrDefault() == null ? "Lista de Precio Inexistente" :  Model.PrecioLista.Where(a => a.id == Model.Cliente.idListaPrecios).FirstOrDefault().Nombre)</h5>
+
+                                        </div>
+
+
+
+
+
+
+
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="page-header mt-0">
+
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+
+
+                                        <div class="col-4">
+                                            <h5> <b>Correo:</b> @Model.Cliente.Email</h5>
+
+                                        </div>
+
+                                        <div class="col-4">
+                                            <h5> <b>Corre Publicitario:</b> @Model.Cliente.CorreoPublicitario</h5>
+
+                                        </div>
+
+
+
+
+                                        <div class="col-4">
+                                            <h5> <b>Condición de Pago:</b>  @( Model.Condiciones.Where(a => a.id == Model.Cliente.idCondicionPago).FirstOrDefault() == null ? "Condición de Pago Inexistente" :  Model.Condiciones.Where(a => a.id == Model.Cliente.idCondicionPago).FirstOrDefault().Nombre)</h5>
+
+                                        </div>
+
+
+
+
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-4 invoice-col">
+                            <strong>Cliente</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @Model.Cliente.Codigo- @Model.Cliente.Nombre </strong>
+
+
+                            </address>
+                        </div>
+
+
+
+
+
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+
+                                        <th class="text-center">Provincia</th>
+                                        <th class="text-center">Cantón</th>
+                                        <th class="text-center">Distrito</th>
+                                        <th class="text-center">Barrio</th>
+                                        <th class="text-center">Dirección</th>
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+
+
+                                    <tr>
+
+
+                                        <td class="text-center">
+                                            @switch (Model.Cliente.Provincia)
+                                            {
+                                                case 1:
+                                                    {
+                                                        <p>San José</p>
+                                                        break;
+                                                    }
+                                                case 2:
+                                                    {
+                                                        <p>Alajuela</p>
+                                                        break;
+                                                    }
+                                                case 3:
+                                                    {
+                                                        <p>Cartago</p>
+                                                        break;
+                                                    }
+                                                case 4:
+                                                    {
+                                                        <p>Heredia</p>
+                                                        break;
+                                                    }
+                                                case 5:
+                                                    {
+                                                        <p>Guanacaste</p>
+                                                        break;
+                                                    }
+                                                case 6:
+                                                    {
+                                                        <p>Puntarenas</p>
+                                                        break;
+                                                    }
+                                                case 7:
+                                                    {
+                                                        <p>Limón</p>
+                                                        break;
+                                                    }
+
+                                            }
+
+                                        </td>
+
+                                         
+
+
+
+                                        <td class="text-center">  @( Model.Cantones.Where(a => a.CodProvincia == Model.Cliente.Provincia && a.CodCanton == numCanton).FirstOrDefault() == null ? "Canton Inexistente" :  Model.Cantones.Where(a => a.CodProvincia == Model.Cliente.Provincia && a.CodCanton == numCanton).FirstOrDefault().NomCanton) </td>
+
+                                        <td class="text-center">  @( Model.Distritos.Where(a => a.CodProvincia == Model.Cliente.Provincia && a.CodCanton == numCanton && a.CodDistrito == numDistrito).FirstOrDefault() == null ? "Distrito Inexistente" :  Model.Distritos.Where(a =>a.CodProvincia == Model.Cliente.Provincia && a.CodCanton == numCanton && a.CodDistrito == numDistrito).FirstOrDefault().NomDistrito) </td>
+
+
+                                        <td class="text-center">  @( Model.Barrios.Where(a => a.CodProvincia == Model.Cliente.Provincia && a.CodCanton == numCanton && a.CodDistrito == numDistrito && a.CodBarrio == numBarrio).FirstOrDefault() == null ? "Barrio Inexistente" :  Model.Barrios.Where(a => a.CodProvincia == Model.Cliente.Provincia && a.CodCanton == numCanton && a.CodDistrito == numDistrito && a.CodBarrio == numBarrio).FirstOrDefault().NomBarrio) </td>
+                                        <td class="text-center">@Model.Cliente.Sennas    </td>
+
+
+
+
+
+
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+</div>

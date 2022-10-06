@@ -10,7 +10,7 @@
     </h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-        <li class="breadcrumb-item active">Crear Nuevo Usuario</li>
+        <li class="breadcrumb-item active">Editar Usuario</li>
     </ol>
 </section>
 
@@ -23,7 +23,7 @@
                     <div class="box-header with-border">
                         <div class="row">
                             <div class="col-8">
-                                <h6 class="box-subtitle"> Crear Nuevo Usuario</h6>
+                                <h6 class="box-subtitle"> Editar Nuevo Usuario</h6>
 
                             </div>
                             <div class="col-4">
@@ -36,6 +36,7 @@
                     <div class="box-body">
                         <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
                               <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                              <input hidden asp-for="Usuario.id" />
                         <div class="row">
                             
                                    <div class="col-6">

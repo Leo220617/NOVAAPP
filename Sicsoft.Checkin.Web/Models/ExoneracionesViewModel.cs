@@ -14,6 +14,10 @@ namespace NOVAAPP.Models
         public DateTime FechaVencimiento { get; set; }
         public string Imagen { get; set; }
 
+        public bool Activo { get; set; }
+
         public DetExoneracionesViewModel[] Detalle { get; set; }
+
+       
     }
 }
