@@ -54,7 +54,7 @@ namespace NOVAAPP.Models
 
         public int idCondicionPago { get; set; }
 
-        public string Ocupacion { get; set; }
+        
 
         public string CorreoPublicitario { get; set; }
 
