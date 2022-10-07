@@ -135,7 +135,13 @@
                         }
 
                     }
-                
+                 @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "30").FirstOrDefault()))
+                        {
+
+                            <li><a asp-page="/TipoCambios/Index"><i class="mdi mdi-currency-usd"></i>Tipo de Cambio</a></li>
+                        }
+
+                    }
                     
 
 
