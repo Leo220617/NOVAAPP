@@ -44,8 +44,10 @@ namespace NOVAAPP.Pages.Exoneraciones
                 {
                     return RedirectToPage("/NoPermiso");
                 }
+                ParametrosFiltros filtro = new ParametrosFiltros();
+                filtro.Externo = true;
                 Exoneracion = await service.ObtenerPorId(id);
-                Cliente = await serviceC.ObtenerLista("");
+                Cliente = await serviceC.ObtenerLista(filtro);
                 Cabys = await cabys.ObtenerLista("");
 
 

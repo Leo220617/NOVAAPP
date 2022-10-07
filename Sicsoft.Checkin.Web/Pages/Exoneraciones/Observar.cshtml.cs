@@ -1,3 +1,4 @@
+using InversionGloblalWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NOVAAPP.Models;
@@ -39,7 +40,9 @@ namespace NOVAAPP.Pages.Exoneraciones
                     return RedirectToPage("/NoPermiso");
                 }
                 Exoneracion = await service.ObtenerPorId(id);
-                Cliente = await serviceC.ObtenerLista("");
+                ParametrosFiltros filtro = new ParametrosFiltros();
+                filtro.Externo = true;
+                Cliente = await serviceC.ObtenerLista(filtro);
                 Cabys = await cabys.ObtenerLista("");
 
                 return Page();
