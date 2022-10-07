@@ -8,15 +8,15 @@
 
 }
 
-    @section scripts{
+@section scripts{
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
-            jQuery(document).ready(function($) {
-                $(document).ready(function() {
+            jQuery(document).ready(function ($) {
+                $(document).ready(function () {
                 });
             });
 
@@ -115,23 +115,22 @@
                 dataType: 'json',
                 url: 'https://apis.gometa.org/cedulas/' + $("#CedulaCliente").val() + '&key=gkUkysPxCKUYWZS', //Nombre del metodo
                 data: {},
-                success: function(result) {
+                success: function (result) {
 
                     console.log(result);
 
-                    if(result.nombre != undefined)
-                    {
-                         $("#NombreCliente").val(result.nombre);
+                    if (result.nombre != undefined) {
+                        $("#NombreCliente").val(result.nombre);
                         $("#selectTP").val(result.tipoIdentificacion);
                     }
 
 
 
                 },
-                beforeSend: function() {
+                beforeSend: function () {
 
                 },
-                complete: function() {
+                complete: function () {
 
                 }
             });
@@ -139,146 +138,146 @@
     </script>
 
 }<!-- Content Header (Page header) -->
-    @using Newtonsoft.Json;
-    <section class="content-header">
-        <h1>
-            Clientes
-        </h1>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-            <li class="breadcrumb-item active">Crear Nuevo Cliente</li>
-        </ol>
-    </section>
+@using Newtonsoft.Json;
+<section class="content-header">
+    <h1>
+        Clientes
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Crear Nuevo Cliente</li>
+    </ol>
+</section>
 
 
 
-    <section class="content">
-        <div class="row">
-            <div class="col-12">
-                <div class="box">
-                    <div class="box-header with-border">
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle"> Crear Nuevo Cliente</h6>
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="row">
-                            <div class="col-8">
-                                <h6 class="box-subtitle"> Crear Nuevo Cliente</h6>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="cyber">Tipo de Cédula:</label>
+                                    <select id="selectTP" class="form-control" asp-for="Cliente.TipoCedula" onchange="javascript: maskCedula();" required>
+                                        <option value="01">Nacional</option>
+                                        <option value="02">Jurídica</option>
+                                        <option value="03">DIMEX</option>
+                                        <option value="04">NITE</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <h5>Cédula<span class="text-danger">* (Sin guiones, sin espacios y con 0's)</span></h5>
+                                    <div class="controls">
+                                        <input type="text" id="CedulaCliente" asp-for="Cliente.Cedula" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="12" onchange="javascript: BuscarCliente()" onblur="javascript: validarCedula()">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <h5>Nombre<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" id="NombreCliente" asp-for="Cliente.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <h5>Email<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Cliente.Email" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
 
                             </div>
                             <div class="col-4">
-                                <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
-
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <label for="cyber">Tipo de Cédula:</label>
-                                        <select id="selectTP" class="form-control" asp-for="Cliente.TipoCedula" onchange="javascript: maskCedula();" required>
-                                            <option value="01">Nacional</option>
-                                            <option value="02">Jurídica</option>
-                                            <option value="03">DIMEX</option>
-                                            <option value="04">NITE</option>
-
-
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <h5>Cédula<span class="text-danger">* (Sin guiones, sin espacios y con 0's)</span></h5>
-                                        <div class="controls">
-                                            <input type="text" id="CedulaCliente" asp-for="Cliente.Cedula" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="12" onchange="javascript: BuscarCliente()"  onblur="javascript: validarCedula()">
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="col-xl-4">
-                                    <div class="form-group">
-                                        <h5>Nombre<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" id="NombreCliente" asp-for="Cliente.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-
-
-                            </div>
-
-
-
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <h5>Email<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" asp-for="Cliente.Email" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        </div>
-
-                                    </div>
-
-
-                                </div>
-                                 <div class="col-4">
                                 <div class="form-group">
                                     <h5>Correo Publicitario<span class="text-danger">*</span></h5>
-                                     <div class="controls">
-                                            <input type="text" asp-for="Cliente.CorreoPublicitario" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        </div>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Cliente.CorreoPublicitario" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
 
 
                                 </div>
 
 
                             </div>
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <h5>Teléfono<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" id="Telefono" asp-for="Cliente.Telefono"  class="form-control" id="Telefono" required data-validation-required-message="Este campo es requerido">
-                                        </div>
-
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <h5>Teléfono<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" id="Telefono" asp-for="Cliente.Telefono" class="form-control" id="Telefono" required data-validation-required-message="Este campo es requerido">
                                     </div>
-
 
                                 </div>
 
-                                 
 
                             </div>
-                            <div class="row">
-                                <div class="col-3">
-                                    <div class="form-group">
-                                        <label for="nom">Provincia:</label>
-                                        <select id="selectP" class="form-control" asp-for="Cliente.Provincia" onchange="javascript: ModificaSelects(1)" required>
-
-                                            <option value="1" selected>San José</option>
-                                            <option value="2">Alajuela</option>
-                                            <option value="3">Cartago</option>
-                                            <option value="4">Heredia</option>
-                                            <option value="5">Guanacaste</option>
-                                            <option value="6">Puntarenas</option>
-                                            <option value="7">Limón</option>
 
 
 
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="nom">Provincia:</label>
+                                    <select id="selectP" class="form-control" asp-for="Cliente.Provincia" onchange="javascript: ModificaSelects(1)" required>
 
-                                        </select>
+                                        <option value="1" selected>San José</option>
+                                        <option value="2">Alajuela</option>
+                                        <option value="3">Cartago</option>
+                                        <option value="4">Heredia</option>
+                                        <option value="5">Guanacaste</option>
+                                        <option value="6">Puntarenas</option>
+                                        <option value="7">Limón</option>
 
-                                    </div>
 
+
+
+                                    </select>
 
                                 </div>
-                                <div class="col-3">
-                                    <div class="form-group">
-                                        <label for="nom">Cantón:</label>
-                                        <select id="selectC" class="form-control" asp-for="Cliente.Canton" onchange="javascript: ModificaSelects(2)" required>
-                                            @foreach (var item in Model.Cantones)
+
+
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="nom">Cantón:</label>
+                                    <select id="selectC" class="form-control" asp-for="Cliente.Canton" onchange="javascript: ModificaSelects(2)" required>
+                                        @foreach (var item in Model.Cantones)
                                         {
                                             <option value="@item.CodCanton">@item.NomCanton</option>
 
@@ -333,7 +332,7 @@
 
                                 </div>
 
-                                
+
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
@@ -353,7 +352,7 @@
 
 
                             </div>
-                               <div class="col-4">
+                            <div class="col-4">
                                 <div class="form-group">
                                     <h5>Grupo<span class="text-danger">*</span></h5>
 
@@ -385,12 +384,12 @@
                         <div class="x_panel">
 
                             <div class="x_content">
-                                 
-                                    <input hidden id="Cantones" value="@JsonConvert.SerializeObject(Model.Cantones)" />
-                                    <input hidden id="Distritos" value="@JsonConvert.SerializeObject(Model.Distritos)" />
-                                    <input hidden id="Barrios" value="@JsonConvert.SerializeObject(Model.Barrios)" />
 
-                           
+                                <input hidden id="Cantones" value="@JsonConvert.SerializeObject(Model.Cantones)" />
+                                <input hidden id="Distritos" value="@JsonConvert.SerializeObject(Model.Distritos)" />
+                                <input hidden id="Barrios" value="@JsonConvert.SerializeObject(Model.Barrios)" />
+
+
 
 
                             </div>
@@ -399,59 +398,57 @@
                     </div>
 
                 </div>
+            </div>
+        </div>
+    </div>
+
 
 </section>
 <script>
-     function maskCedula()
-        {
-         $("#Telefono").mask("9999-9999");
-            var TC = $("#selectTP").val();
+    function maskCedula() {
+        $("#Telefono").mask("9999-9999");
+        var TC = $("#selectTP").val();
 
-            switch(TC)
-            {
-                case "01":
+        switch (TC) {
+            case "01":
                 {
-                        $("#CedulaCliente").mask("999999999");
-                        break;
+                    $("#CedulaCliente").mask("999999999");
+                    break;
                 }
-                 case "02":
+            case "02":
                 {
-                        $("#CedulaCliente").mask("9999999999");
-                        break;
+                    $("#CedulaCliente").mask("9999999999");
+                    break;
                 }
-            }
-
         }
 
-        function validarCedula()
-        {
-             var TC = $("#selectTP").val();
+    }
 
-            switch(TC)
-            {
-                case "01":
+    function validarCedula() {
+        var TC = $("#selectTP").val();
+
+        switch (TC) {
+            case "01":
                 {
-                    if($("#CedulaCliente").val().length < 9)
-                    {
-                         
+                    if ($("#CedulaCliente").val().length < 9) {
+
                         $("#CedulaCliente").focus();
                         $("#CedulaCliente").select();
                     }
-                         
-                        break;
+
+                    break;
                 }
-                 case "02":
+            case "02":
                 {
-                    if($("#CedulaCliente").val().length < 10)
-                    {
-                         
+                    if ($("#CedulaCliente").val().length < 10) {
+
                         $("#CedulaCliente").focus();
                         $("#CedulaCliente").select();
                     }
-                         
-                        break;
+
+                    break;
                 }
-            }
         }
+    }
 </script>
 

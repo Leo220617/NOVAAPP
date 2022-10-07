@@ -1,7 +1,7 @@
 ﻿@page
 @model NOVAAPP.Pages.Usuarios.NuevoModel
 @{
-     ViewData["Title"] = "Usuarios";
+    ViewData["Title"] = "Usuarios";
 }
 @section styles{
 
@@ -26,95 +26,95 @@
 
 
 
-    <section class="content">
-        <div class="row">
-            <div class="col-12">
-                <div class="box">
-                    <div class="box-header with-border">
-                        <div class="row">
-                            <div class="col-8">
-                                <h6 class="box-subtitle"> Crear Nuevo Usuario</h6>
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle"> Crear Nuevo Usuario</h6>
 
-                            </div>
-                            <div class="col-4">
-                                 <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
 
-                                
-                            </div>
+
                         </div>
                     </div>
-                    <div class="box-body">
-                        <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
-                              <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                </div>
+                <div class="box-body">
+                    <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="row">
-                            
-                                   <div class="col-6">
-                                        <div class="form-group">
-                                            <h5>Nombre Completo<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <input type="text" asp-for="Usuario.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                            </div>
-                                            
-                                        </div>
+
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <h5>Nombre Completo<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Usuario.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
-                                    <div class="col-xl-6">
-                                          <div class="form-group">
-                                            <h5>Nombre de Usuario<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <input type="text" asp-for="Usuario.NombreUsuario" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                            </div>
-                                            
-                                        </div>
-                                       
+
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <h5>Nombre de Usuario<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Usuario.NombreUsuario" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
-                                    
-                                 
-                            
+
+                                </div>
+
+                            </div>
+
+
+
                         </div>
-                       
+
 
 
                         <div class="row">
                             <div class="col-6">
-                                 <div class="form-group">
-                                            <h5>Contraseña del Usuario<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <input type="password" asp-for="Usuario.Clave" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                            </div>
-                                            
-                                        </div>
-                             
+                                <div class="form-group">
+                                    <h5>Contraseña del Usuario<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="password" asp-for="Usuario.Clave" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
 
                             </div>
                             <div class="col-6">
-                          <div class="form-group">
-                                            <h5>Rol<span class="text-danger">*</span></h5>
-                                             
-                                                <select class="form-control select2  " asp-for="Usuario.idRol">
-                                                    @foreach(var item in Model.RolesLista)
-                                                    {
-                                                        <option value="@item.idRol">@item.NombreRol</option>
-                                                    }
+                                <div class="form-group">
+                                    <h5>Rol<span class="text-danger">*</span></h5>
+
+                                    <select class="form-control select2  " asp-for="Usuario.idRol">
+                                        @foreach (var item in Model.RolesLista)
+                                        {
+                                            <option value="@item.idRol">@item.NombreRol</option>
+                                        }
 
 
-                                                </select>
-                                                
-                                           
-                                            
-                                        </div>
-                               
+                                    </select>
+
+
+
+                                </div>
+
                             </div>
                         </div>
 
                         <div class="text-xs-right">
-                                        <button type="submit" class="btn btn-info" title="Guardar Cambios">Guardar Cambios</button>
-                                    </div>
-                        </form>
-                    </div>
-
-
+                            <button type="submit" class="btn btn-info" title="Guardar Cambios">Guardar Cambios</button>
+                        </div>
+                    </form>
                 </div>
-            </div>
 
+
+            </div>
         </div>
-    </section>
+
+    </div>
+</section>
