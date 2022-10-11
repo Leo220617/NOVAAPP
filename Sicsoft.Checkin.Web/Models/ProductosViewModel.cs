@@ -20,7 +20,8 @@ namespace NOVAAPP.Models
         
         public string Nombre { get; set; }
 
-       
+        public string Moneda { get; set; }
+
         public decimal PrecioUnitario { get; set; }
 
         public string UnidadMedida { get; set; }
@@ -43,5 +44,8 @@ namespace NOVAAPP.Models
         public bool Activo { get; set; }
 
         public bool ProcesadoSAP { get; set; }
+
+       
+
     }
 }

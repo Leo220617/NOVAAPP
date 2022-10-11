@@ -1,0 +1,209 @@
+﻿@page
+@using System.Globalization
+@model NOVAAPP.Pages.CierreCajas.IndexModel
+@{
+     ViewData["Title"] = "CierreCajas";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Cierre de Cajas
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Listado Cierra de Cajas</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Filtro</h4></div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="box-body">
+                    <form method="get">
+                        <div class="row">
+                               <div class="col-sm-2 pr-1">
+                                    <div class="form-group">
+                                        <label>Fecha Inicial</label>
+                                        <input class="form-control " id="FecInicial" type="date" asp-for="filtro.FechaInicial">
+                                    </div>
+
+
+                                </div>
+
+                                <div class="col-sm-2 pl-1">
+                                    <div class="form-group">
+                                        <label>Fecha Final</label>
+                                        <input class="form-control" id="FecFinal" type="date" asp-for="filtro.FechaFinal">
+                                    </div>
+                                </div>
+                            <div class="col-sm-2 pr-1">
+                                <div class="form-group">
+                                    <label>Usuarios</label>
+                                      <select class="form-control select2  " asp-for="filtro.Codigo1">
+                                                        <option value="0"> Seleccione</option>
+
+                                                    @foreach(var item in Model.Users)
+                                                    {
+                                                        <option value="@item.id"> @item.Nombre</option>
+                                                    }
+
+
+                                                </select>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-sm-2 pr-1">
+                                <div class="form-group">
+                                    <label>Cajas</label>
+                                      <select class="form-control select2  " asp-for="filtro.Codigo2">
+                                                        <option value="0"> Seleccione</option>
+
+                                                    @foreach(var item in Model.Cajas)
+                                                    {
+                                                        <option value="@item.id"> @item.Nombre</option>
+                                                    }
+
+
+                                                </select>
+                                </div>
+                            </div>
+                             <div class="col-sm-2  pl-1"  style="text-align: center; padding-top: 2%;">
+                            <input type="checkbox" id="md_checkbox_1" class="chk-col-red"  asp-for="filtro.Activo"   onclick="this.form.submit()"/>
+					            <label for="md_checkbox_1">Activo</label>
+                            </div>
+                            
+                            
+                            <div class="col-sm-2 pl-1" style="text-align: center; padding-top: 1%;">
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary" > <i class="fa fa-search"></i></button>
+                            </div>
+ 
+
+
+                            
+                        </div>
+
+                    </form>
+                </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box">
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    
+                                    <th>Caja</th>
+                                    <th>Usuario</th>
+                                    <th>Fecha</th>
+                                    <th>Última Actualización</th>
+                                    <th>Total Vendido Colones</th> 
+                                     <th>Total Vendido Dolares</th> 
+                                    <th>Total Vendido</th>
+                                    <th>Hora de Cierre</th>
+                                    <th>Activo</th>
+                                    <th>Acción</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Cierre)
+                                {
+                                <tr>
+                                    
+                                     <td>  @( Model.Cajas.Where(a => a.id == item.idCaja).FirstOrDefault() == null ? "Caja Inexistente" :  Model.Cajas.Where(a => a.id == item.idCaja).FirstOrDefault().Nombre) </td>  
+                                   
+                                     <td>  @( Model.Users.Where(a => a.id == item.idUsuario).FirstOrDefault() == null ? "Usuario Inexistente" :  Model.Users.Where(a => a.id == item.idUsuario).FirstOrDefault().Nombre) </td>  
+                                     <td>
+                                        @item.FechaCaja.ToString("dd/MM/yyyy")
+                                    </td>
+
+                                     <td>
+                                        @item.FecUltAct.ToString("dd/MM/yyyy")
+                                    </td>
+
+                                     <td>
+                                        ₡@Math.Round(@item.TotalVendidoColones, 2).ToString("C",formato)
+                                    </td>
+
+                                     <td>
+                                        $@Math.Round(@item.TotalVendidoFC, 2).ToString("C",formato)
+                                    </td>
+                                    <td>
+                                       ₡@Math.Round(item.TotalizadoMonedas, 2).ToString("C",formato)
+                                    </td>
+                                    <td>
+                                        @item.HoraCierre.ToString("HH:MM tt")
+                                    </td>
+                                       
+                                     <td>
+                                         @if(item.Activo)
+                                            {
+                                                <span class="badge badge-pill badge-success">Activo</span>
+
+                                            }else
+                                            {
+                                                <span class="badge badge-pill badge-danger">Inactivo</span>
+                                            }
+
+                                    </td>
+
+                                    
+                                 <td align="center" style="padding-top:15px;">
+                                            <a asp-page="./Editar" asp-route-id="@item.idCaja" class="fa fa-edit icono"> </a> 
+                                            &nbsp;
+                                         
+                                            
+                                     </td>
+
+
+                                </tr>
+
+                                }
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Caja</th>
+                                    <th>Usuario</th>
+                                    <th>Fecha</th>
+                                    <th>Última Actualización</th>
+                                    <th>Total Vendido ₡</th> 
+                                     <th>Total Vendido $</th> 
+                                    <th>Total Vendido</th>
+                                    <th>Hora de Cierre</th>
+                                    <th>Activo</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->

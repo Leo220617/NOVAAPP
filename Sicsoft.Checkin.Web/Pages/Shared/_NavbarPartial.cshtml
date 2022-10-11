@@ -142,12 +142,45 @@
                         }
 
                     }
+
+                                     @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "36").FirstOrDefault()))
+                        {
+
+                            <li><a asp-page="/CierreCajas/Index"><i class="mdi mdi-currency-usd"></i>Cierre de Cajas</a></li>
+                        }
+
+                    }
                     
 
 
                 </ul>
             </li>
             
+
+
+
+              <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-cogs"></i> <span>Transaccional</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+
+                <ul class="treeview-menu">
+
+                                     @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "36").FirstOrDefault()))
+                        {
+
+                            <li><a asp-page="/CierreCajas/Index"><i class="mdi mdi-currency-usd"></i>Cierre de Cajas</a></li>
+                        }
+
+                    }
+                    
+
+
+                </ul>
+            </li>
           
             <li class="nav-devider"></li>
             
