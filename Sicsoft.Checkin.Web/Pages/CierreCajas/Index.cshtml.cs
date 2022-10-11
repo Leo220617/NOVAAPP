@@ -73,6 +73,7 @@ namespace NOVAAPP.Pages.CierreCajas
 
 
                 }
+                filtro.Externo = true;
                 Cierre = await service.ObtenerLista(filtro);
                 Users = await users.ObtenerLista("");
                 Cajas = await cajas.ObtenerLista("");
