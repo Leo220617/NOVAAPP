@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Pages\BitacoraMovimientos\Observar.cshtml.cs~RF3df0d202.TMP" />
     <None Remove="Pages\CondicionesPagos\Index.cshtml~RF29e93270.TMP" />
     <None Remove="Pages\Sucursales\Editar.cshtml.cs~RF2dc652.TMP" />
   </ItemGroup>

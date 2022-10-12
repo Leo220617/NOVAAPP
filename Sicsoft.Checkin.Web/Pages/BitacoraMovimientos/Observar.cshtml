@@ -1,0 +1,246 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.BitacoraMovimientos.ObservarModel
+@{
+    ViewData["Title"] = "Bitacora de Movimientos";
+}
+
+@section scripts{
+    <script>
+        function ImprimirPantalla()
+        {
+            try {
+               // window.print();
+                var margins = {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    width: 595
+                  };
+                
+
+                html = $(".html").html();
+                html2pdf(html, {
+                margin:1,
+                padding:0,
+                filename: 'Movimiento.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2,  logging: true },s
+                jsPDF: { unit: 'in', format: 'A2', orientation: 'P' },
+                class: ImprimirPantalla
+            });
+
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
+        }
+    </script>
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Bitácora Movimientos
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Observar Movimiento</li>
+    </ol>
+</section>
+
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Observar Movimiento</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+                            &nbsp;
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+
+                   
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        
+                        <div class="col-md-4 invoice-col">
+                            <strong>Usuario</strong>
+                            <address>
+                                <strong class="text-blue font-size-24">  @( Model.Users.Where(a => a.id == Model.Movimiento.idUsuario).FirstOrDefault() == null ? "Usuario Inexistente" :  Model.Users.Where(a => a.id == Model.Movimiento.idUsuario).FirstOrDefault().Nombre) </strong>
+
+
+                            </address>
+                        </div>
+                         <div class="col-3">
+                                            <h5>  <b>Fecha</b> @Model.Movimiento.Fecha.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+
+
+
+
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+
+                                        <th class="text-center">Descripción</th>
+                                        <th class="text-center">Método</th>
+                                       
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+
+
+                                    <tr>
+
+                               
+                                        <td class="text-center">@Model.Movimiento.Descripcion    </td>
+                                        <td class="text-center">@Model.Movimiento.Metodo    </td>
+
+
+
+
+
+
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+
+            <!-- Default box -->
+
+        </div>
+    </div>
+
+
+    <button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
+
+</section>
+
+                            <!--Imprimir-->
+
+<div class="html" hidden>
+     <div class="box-body">
+                    <!-- title row -->
+
+                   
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        
+                        <div class="col-md-4 invoice-col">
+                            <strong>Usuario</strong>
+                            <address>
+                                <strong class="text-blue font-size-24">  @( Model.Users.Where(a => a.id == Model.Movimiento.idUsuario).FirstOrDefault() == null ? "Usuario Inexistente" :  Model.Users.Where(a => a.id == Model.Movimiento.idUsuario).FirstOrDefault().Nombre) </strong>
+
+
+                            </address>
+                        </div>
+                         <div class="col-3">
+                                            <h5>  <b>Fecha</b> @Model.Movimiento.Fecha.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+
+
+
+
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+
+                                        <th class="text-center">Descripción</th>
+                                        <th class="text-center">Método</th>
+                                       
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+
+
+                                    <tr>
+
+                               
+                                        <td class="text-center">@Model.Movimiento.Descripcion    </td>
+                                        <td class="text-center">@Model.Movimiento.Metodo    </td>
+
+
+
+
+
+
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+
+            <!-- Default box -->
+
+       
+
+
+    
+
