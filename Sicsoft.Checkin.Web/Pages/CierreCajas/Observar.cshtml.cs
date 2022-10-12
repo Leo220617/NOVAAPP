@@ -48,7 +48,7 @@ namespace NOVAAPP.Pages.CierreCajas
             this.cajo = cajo;
            
         }
-        public async Task<IActionResult> OnGetAsync(int id, string Fecha)
+        public async Task<IActionResult> OnGetAsync(int id, string Fecha, int idUsuario)
         {
             try
             {
@@ -59,8 +59,9 @@ namespace NOVAAPP.Pages.CierreCajas
                 }
                 Cajos = await cajo.ObtenerLista("");
                 var FechaCierre = Convert.ToDateTime(Fecha);
-                Cierres = await service.ObtenerCierre(id,FechaCierre);
+                Cierres = await service.ObtenerCierre(id,FechaCierre, idUsuario);
                 var idCajero = Cierres.idUsuario;
+              
                 Users = await users.ObtenerPorId(idCajero);
                 Caja = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Caja").Select(s1 => s1.Value).FirstOrDefault();
 
