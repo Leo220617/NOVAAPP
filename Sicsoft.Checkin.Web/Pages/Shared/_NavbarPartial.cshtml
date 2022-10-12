@@ -49,6 +49,14 @@
                         }
 
                     }
+                    
+                    @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "38").FirstOrDefault()))
+                        {
+
+                            <li><a asp-page="/BitacoraMovimientos/Index"><i class="mdi mdi-book-open-page-variant"></i>Bitácora Movimientos</a></li>
+                        }
+
+                    }
                     @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "4").FirstOrDefault()))
                         {
 
@@ -171,13 +179,6 @@
 
                     }
 
-                    @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "38").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/BitacoraMovimientos/Index"><i class="mdi mdi-fax"></i>Bitácora Movimientos</a></li>
-                        }
-
-                    }
                     
 
 
