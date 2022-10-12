@@ -150,7 +150,7 @@ namespace Sicsoft.Checkin.Web
    .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
             services.AddRefitClient<ICrudApi<BitacoraMovimientosViewModel, int>>()
-.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Bitacoramovimientos"))
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/BitacoraMovimientos"))
 .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
 

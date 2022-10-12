@@ -45,7 +45,7 @@
                     @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "6").FirstOrDefault()))
                         {
 
-                            <li><a asp-page="/BitacoraErrores/Index"><i class="mdi mdi-alert-circle"></i>Bitacora Errores</a></li>
+                            <li><a asp-page="/BitacoraErrores/Index"><i class="mdi mdi-alert-circle"></i>Bitácora Errores</a></li>
                         }
 
                     }
@@ -167,6 +167,14 @@
                         {
 
                             <li><a asp-page="/CierreCajas/Index"><i class="mdi mdi-fax"></i>Cierre de Cajas</a></li>
+                        }
+
+                    }
+
+                    @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "38").FirstOrDefault()))
+                        {
+
+                            <li><a asp-page="/BitacoraMovimientos/Index"><i class="mdi mdi-fax"></i>Bitácora Movimientos</a></li>
                         }
 
                     }
