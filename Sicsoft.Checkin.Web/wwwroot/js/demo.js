@@ -1,7 +1,7 @@
 //[Preview Menu Javascript]
 
 //Project:	Azurex Admin - Responsive Admin Template
-//Primary use:   This file is for demo purposes only.
+//Primary use:   This file is for demo purposes only. Cambio en los comentarios
 
 $(function () {
   'use strict'
