@@ -1,17 +1,17 @@
 ﻿@page "{id}"
-@model NOVAAPP.Pages.Bodegas.EditarModel
+@model NOVAAPP.Pages.CuentasBancarias.EditarModel
 @{
-    ViewData["Title"] = "Bodegas";
+    ViewData["Title"] = "CuentasBancarias";
 }
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Bodegas
+        Cuentas Bancarias
     </h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-        <li class="breadcrumb-item active">Editar Bodega</li>
+        <li class="breadcrumb-item active">Editar Cuenta Bancaria</li>
     </ol>
 </section>
 
@@ -24,7 +24,7 @@
                 <div class="box-header with-border">
                     <div class="row">
                         <div class="col-8">
-                            <h6 class="box-subtitle"> Editar Bodega</h6>
+                            <h6 class="box-subtitle"> Editar Cuenta Bancaria</h6>
 
                         </div>
                         <div class="col-4">
@@ -37,16 +37,15 @@
                 <div class="box-body">
                     <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input hidden asp-for="Bodega.id" />
+                        <input hidden asp-for="Cuenta.id" />
                         <div class="row">
-
 
 
                             <div class="col-6">
                                 <div class="form-group">
-                                    <h5>Nombre de la Bodega<span class="text-danger">*</span></h5>
+                                    <h5>Nombre<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="text" readonly asp-for="Bodega.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="text"   asp-for="Cuenta.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
@@ -57,7 +56,7 @@
                                 <div class="form-group">
                                     <h5>Sucursal<span class="text-danger">*</span></h5>
 
-                                    <select class="form-control select2  " asp-for="Bodega.CodSuc">
+                                    <select class="form-control select2  " asp-for="Cuenta.CodSuc">
                                         @foreach (var item in Model.SucursalesLista)
                                         {
                                             <option value="@item.CodSuc">@item.Nombre</option>
@@ -76,9 +75,9 @@
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <h5>Código SAP<span class="text-danger">*</span></h5>
+                                    <h5>Cuenta SAP<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="text" readonly asp-for="Bodega.CodSAP" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="text"   asp-for="Cuenta.CuentaSAP" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>

@@ -1,7 +1,7 @@
 ﻿@page
-@model NOVAAPP.Pages.Impuestos.IndexModel
+@model NOVAAPP.Pages.CuentasBancarias.IndexModel
 @{
-    ViewData["Title"] = "Impuestos";
+    ViewData["Title"] = "Cuentas Bancarias";
 
 }
 
@@ -32,29 +32,50 @@
 
         });
 
-     
-        function  InsertarSAP() {
+         var ids = 0;
+    function onClickModal(id) {
+        ids = id;
+        Swal.fire({
+            title: '¿Desea desactivar/activar esta Cuenta Bancaria?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: `Aceptar`,
+            denyButtonText: `Cancelar`,
+            customClass: {
+                confirmButton: 'swalBtnColor',
+                denyButton: 'swalDeny'
+            },
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                Eliminar();
+
+            }
+        })
+
+    }
+        function  Eliminar() {
 
          $.ajax({
                         type: 'GET',
                         dataType: 'json',
-                        url: '@Url.Page("Index", "InsertarSAP")',
-                        data: { },
+                        url: '@Url.Page("Index", "Eliminar")',
+                        data: { id: ids },
                         success: function (result) {
-                 $("#divProcesando").modal("hide");
-                              
+
                              if (result == false) {
-                                 
+                                 ids = 0;
                                  Swal.fire({
                                      icon: 'error',
                                      title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar insertar a SAP'
+                                     text: 'Ha ocurrido un error al intentar desactivar/activar'
 
                                  })
 
                              } else {
                                  Swal.fire({
-                                     title: "Ha sido insertado a SAP con éxito",
+                                     title: "Ha sido desactivada/activada con éxito",
 
                                      icon: 'success',
                                      showCancelButton: false,
@@ -71,7 +92,7 @@
                              }
              },
              beforeSend: function () {
-                 $("#divProcesando").modal("show");
+
              }
                      })
         }
@@ -82,14 +103,16 @@
 
 }
 
+      
+
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Impuestos
+        Cuentas Bancarias
     </h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-        <li class="breadcrumb-item active">Listado Impuestos</li>
+        <li class="breadcrumb-item active">Listado Cuentas Bancarias</li>
     </ol>
 </section>
 <!-- Main content -->
@@ -101,9 +124,10 @@
             <div class="box">
                 <div class="box-header with-border">
                     <div class="row">
-                        <div class="col-sm-8"> <h4 class="box-title">Impuestos</h4></div>
-                        <div class="col-sm-2"> </div>
-                      <div class="col-sm-2"> <button onclick="javascript: InsertarSAP()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Sincronizar a SAP"> Sincronizar a SAP</button></div>
+                        <div class="col-sm-8"> <h4 class="box-title">Cuentas Bancarias</h4></div>
+                          <div class="col-sm-4"> <a asp-page="Nuevo" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Cuenta Bancaria</a></div>
+                      
+
                     </div>
 
 
@@ -115,28 +139,30 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Código</th> 
+                                    <th>Sucursal</th> 
 
-                                    <th>Tarifa</th>
-
+                                    <th>Nombre</th>
+                                    <th>Cuenta SAP</th>
                                     <th>Estado</th>
-
+                                    <th>Acción</th>
 
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.Objeto)
                                 {
-                                    <tr>
+                                <tr>
 
                                     <td>
                                         @item.id
                                     </td>
 
-                                    <td>  @item.Codigo </td> 
-                                    <td>   @( Math.Round(item.Tarifa,2) )% </td>
-                                     <td>
-                                         @if(item.Activo)
+                                     <td>  @( Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" :  Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre) </td>  
+                                    <td>         @item.Nombre </td>
+                                    <td>         @item.CuentaSAP </td>
+
+                                       <td>
+                                         @if(item.Estado)
                                             {
                                                 <span class="badge badge-pill badge-success">Activo</span>
 
@@ -146,7 +172,13 @@
                                             }
 
                                     </td>
-
+                                 <td align="center" style="padding-top:15px;">
+                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
+                                            &nbsp;
+                                            <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
+                                            &nbsp;
+                                            
+                                     </td>
 
 
                                 </tr>
@@ -157,12 +189,13 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Código</th> 
-                                    <th>Tarifa</th>
+                                   <th>ID</th>
+                                    <th>Sucursal</th> 
+
+                                    <th>Nombre</th>
+                                    <th>Cuenta SAP</th>
                                     <th>Estado</th>
                                     <th>Acción</th>
-
                                 </tr>
                             </tfoot>
                         </table>
@@ -177,3 +210,4 @@
     <!-- /.row -->
 </section>
 <!-- /.content -->
+

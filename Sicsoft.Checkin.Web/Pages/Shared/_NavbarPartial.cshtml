@@ -193,6 +193,14 @@
                         }
 
                     }
+
+                    @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "41").FirstOrDefault()))
+                        {
+
+                            <li><a asp-page="/CuentasBancarias/Index"><i class="mdi mdi-file"></i>Cuentas Bancarias</a></li>
+                        }
+
+                    }
                 <li class="treeview">
                
 
