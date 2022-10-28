@@ -55,6 +55,7 @@
     @section scripts{
 
     <script>
+try { 
         $(document).ready(function() {
             jQuery(document).ready(function($) {
 
@@ -67,9 +68,20 @@
             });
 
 
-        });
+        }); 
+        }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         var ProdCadena = [];
         function onClickAgregar() {
+            try { 
             var Cabys = $("#Cabys").val();
 
             var Detalle = {
@@ -81,9 +93,20 @@
             $("#Cabys").val("0").trigger("change");
             ProdCadena.push(Detalle);
             RellenaTabla();
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
         function RellenaTabla() {
+            try { 
             $("#tbody").html("");
 
             var text = "";
@@ -99,7 +122,16 @@
             $("#tbody").html(text);
 
 
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
 
+                                 })
+            }
         }
 
         function EliminarProducto(i) {
@@ -223,6 +255,7 @@
 
         function validar(e)
         {
+            try { 
             if(e.NumDoc == "" || e.NumDoc == null || e.NumDoc == undefined)
             {
                 return false;
@@ -240,6 +273,16 @@
             }else
             {
                 return true;
+            }
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
             }
         }
 

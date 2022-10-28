@@ -16,6 +16,7 @@
 
     
   <script>
+try { 
         $(document).ready(function () {
             jQuery(document).ready(function ($) {
                 $(document).ready(function () {
@@ -32,10 +33,20 @@
 
 
         });
+        }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
 
      
         function  InsertarSAP() {
-
+            try { 
          $.ajax({
                         type: 'GET',
                         dataType: 'json',
@@ -75,6 +86,16 @@
                  $("#divProcesando").modal("show");
              }
                      })
+                     }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
 

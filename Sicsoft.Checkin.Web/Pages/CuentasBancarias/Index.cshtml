@@ -15,6 +15,7 @@
 @section scripts{
 
     <script>
+try { 
         $(document).ready(function () {
             jQuery(document).ready(function ($) {
                 $(document).ready(function () {
@@ -31,9 +32,20 @@
 
 
         });
+        }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
 
          var ids = 0;
     function onClickModal(id) {
+        try { 
         ids = id;
         Swal.fire({
             title: '¿Desea desactivar/activar esta Cuenta Bancaria?',
@@ -53,10 +65,20 @@
 
             }
         })
+        }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
 
     }
         function  Eliminar() {
-
+            try { 
          $.ajax({
                         type: 'GET',
                         dataType: 'json',
@@ -95,6 +117,16 @@
 
              }
                      })
+                     }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
 

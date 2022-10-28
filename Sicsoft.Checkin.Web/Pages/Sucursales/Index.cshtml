@@ -30,6 +30,7 @@
 
         var ids = 0;
     function onClickModal(id) {
+        try { 
         ids = id;
         Swal.fire({
             title: '¿Desea eliminar esta Sucursal?',
@@ -49,10 +50,20 @@
 
             }
         })
+        }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
 
     }
         function  Eliminar() {
-
+            try { 
          $.ajax({
                         type: 'GET',
                         dataType: 'json',
@@ -91,6 +102,16 @@
 
              }
                      })
+                     }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
 

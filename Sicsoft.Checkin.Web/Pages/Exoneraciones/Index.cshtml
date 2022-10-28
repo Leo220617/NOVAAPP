@@ -34,6 +34,7 @@
 
         var ids = 0;
         function onClickModal(id) {
+            try { 
             ids = id;
             Swal.fire({
                 title: '¿Desea eliminar esta Exoneración?',
@@ -53,10 +54,19 @@
 
                 }
             })
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
 
+                                 })
+            }
         }
         function Eliminar() {
-
+            try { 
             $.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -95,6 +105,16 @@
 
                 }
             })
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
 
@@ -171,12 +191,12 @@
                                         <td>
                                             @{if (item.Activo)
                                                 {
-                                                    <span class="badge badge-pill badge-success">Activo</span>
+                                                                <span class="badge badge-pill badge-success">Activo</span>
 
                                                 }
                                                 else
                                                 {
-                                                    <span class="badge badge-pill badge-danger">Inactivo</span>
+                                                                <span class="badge badge-pill badge-danger">Inactivo</span>
                                                 }
                                             }
                                         </td>

@@ -27,16 +27,25 @@
         var Barrios = [];
 
         function Recuperar() {
-
-
+              
+            try { 
             Cantones = JSON.parse($("#Cantones").val());
             Distritos = JSON.parse($("#Distritos").val());
             Barrios = JSON.parse($("#Barrios").val());  //Viene de input
 
             ModificaSelects(0);
             maskCedula();
+            } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar agregar ' + e
+
+        })
+    }
         }
         function ModificaSelects(i) {
+            try { 
             var codProvincia = parseInt($("#selectP").val());
             var codCanton = parseInt($("#selectC").val());
             var codDistrito = parseInt($("#selectD").val());
@@ -64,10 +73,18 @@
             if (i == 3) {
                 RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
             }
+             } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar agregar ' + e
 
+        })
+    }
         }
 
         function RellenaCantones(ListCantones) {
+            try { 
             var sOptions = '';
 
             $("#selectC").html('');
@@ -78,9 +95,18 @@
 
             }
             $("#selectC").html(sOptions);
+             } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar agregar ' + e
+
+        })
+    }
         }
 
         function RellenaDistritos(ListDistritos) {
+            try { 
             var sOptions = '';
 
             $("#selectD").html('');
@@ -91,9 +117,18 @@
 
             }
             $("#selectD").html(sOptions);
+             } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar agregar ' + e
+
+        })
+    }
         }
 
         function RellenaBarrios(ListBarrios) {
+            try { 
             var sOptions = '';
 
             $("#selectB").html('');
@@ -104,12 +139,21 @@
 
             }
             $("#selectB").html(sOptions);
+             } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar agregar ' + e
+
+        })
+    }
         }
 
     </script>
 
     <script>
         function BuscarCliente() {
+            try { 
             $.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -140,6 +184,16 @@
 
                 }
             });
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
     </script>
 

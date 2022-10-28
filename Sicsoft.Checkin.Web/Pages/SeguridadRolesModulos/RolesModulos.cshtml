@@ -15,6 +15,7 @@
 @section scripts{
 
     <script>
+try { 
         $(document).ready(function () {
             jQuery(document).ready(function ($) {
                 $(document).ready(function () {
@@ -29,11 +30,21 @@
             RellenaDatosAsignados();
 
         });
+        }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
 
+                                 })
+            }
         var ProdCadena = [];
         var ProdCadenaM = [];
 
         function InsertarProductoTablaMia(i) {
+            try { 
             var detalle =
             {
                 codModulo: ProdCadena[i].codModulo,
@@ -45,9 +56,20 @@
             RellenaTablaM();
             RellenaTablaG();
 
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
         function InsertarProductoTablaG(i) {
+            try { 
             var detalle =
             {
                 codModulo: ProdCadenaM[i].codModulo,
@@ -58,11 +80,20 @@
             ProdCadenaM.splice(i, 1);
             RellenaTablaM();
             RellenaTablaG();
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
 
+                                 })
+            }
         }
 
         function RellenaDatosAsignados() {
-
+            try{
 
 
              $.ajax({
@@ -110,9 +141,20 @@
 
             }
         });
+        }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
         function RellenaTablaG() {
+            try { 
             var sOptions = '';
 
             $("#tbody1").html('');
@@ -129,10 +171,21 @@
                 sOptions += '</tr>'
             }
             $("#tbody1").html(sOptions);
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
 
         function RellenaTablaM() {
+            try { 
             var sOptions = '';
 
             $("#tbody2").html('');
@@ -149,10 +202,20 @@
                 sOptions += '</tr>'
             }
             $("#tbody2").html(sOptions);
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
         function Generar() {
-
+            try { 
             var CodRol = $("#CodRol").val();
 
             for (var i = 0; i < ProdCadenaM.length; i++) {
@@ -233,12 +296,21 @@
                     }
                     });
 
+                    }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
 
+                                 })
+            }
         }
 
 
         function PasarTodasDerecha() {
-
+            try { 
             var tam = ProdCadenaM.length;
             var tam2 = ProdCadena.length;
 
@@ -258,10 +330,21 @@
 
             RellenaTablaM();
             RellenaTablaG();
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
 
         function PasarTodasIzquierda() {
+            try { 
             var tam = ProdCadena.length;
             var tam2 = ProdCadenaM.length;
 
@@ -282,6 +365,16 @@
 
             RellenaTablaM();
             RellenaTablaG();
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
         function cerrarModalError() {

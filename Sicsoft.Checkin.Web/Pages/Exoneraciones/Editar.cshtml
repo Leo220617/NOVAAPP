@@ -114,6 +114,7 @@
         }
 
         function onClickAgregar() {
+            try { 
             var CabysS = $("#selectCabys").val();
 
             var Detalle = {
@@ -125,6 +126,16 @@
             $("#selectCabys").val("0").trigger("change");
             ProdCadena.push(Detalle);
             RellenaTabla();
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
         function RellenaTabla() {
@@ -160,9 +171,19 @@
         }
 
         function EliminarProducto(i) {
-
+            try { 
             ProdCadena.splice(i, 1);
             RellenaTabla();
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
         function Generar() {

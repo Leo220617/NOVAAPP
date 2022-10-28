@@ -67,15 +67,26 @@
 
         function Recuperar() {
 
-
+            try{
             Cantones = JSON.parse($("#Cantones").val());
             Distritos = JSON.parse($("#Distritos").val());
             Barrios = JSON.parse($("#Barrios").val());  //Viene de input
 
             ModificaSelects(0);
             maskCedula();
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
         function ModificaSelects(i) {
+            try { 
             var codProvincia = parseInt($("#selectP").val());
             var codCanton = parseInt($("#selectC").val());
             var codDistrito = parseInt($("#selectD").val());
@@ -103,10 +114,20 @@
             if (i == 3) {
                 RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
             }
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
 
+                                 })
+            }
         }
 
         function RellenaCantones(ListCantones) {
+            try { 
             var sOptions = '';
 
             $("#selectC").html('');
@@ -117,6 +138,16 @@
 
             }
             $("#selectC").html(sOptions);
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
         function RellenaDistritos(ListDistritos) {
@@ -133,6 +164,7 @@
         }
 
         function RellenaBarrios(ListBarrios) {
+            try { 
             var sOptions = '';
 
             $("#selectB").html('');
@@ -143,6 +175,16 @@
 
             }
             $("#selectB").html(sOptions);
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }
 
        

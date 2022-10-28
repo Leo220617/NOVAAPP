@@ -41,7 +41,7 @@
 
      
         function  InsertarSAP() {
-
+            try { 
          $.ajax({
                         type: 'GET',
                         dataType: 'json',
@@ -103,11 +103,21 @@
 
             }
         })
+        }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
 
     }
 
          function  SincronizarSAP() {
-
+             try { 
          $.ajax({
                         type: 'GET',
                         dataType: 'json',
@@ -147,6 +157,16 @@
                  $("#divProcesando").modal("show");
              }
                      })
+                     }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+            }
         }     
        
 

@@ -67,14 +67,23 @@
 
         function Recuperar() {
 
-
+            try { 
             Cantones = JSON.parse($("#Cantones").val());
             Distritos = JSON.parse($("#Distritos").val());
             Barrios = JSON.parse($("#Barrios").val());  //Viene de input
 
             ModificaSelects(0);
             maskCedula();
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
 
+                                 })
+            }
         }
         function ModificaSelects(i) {
             var codProvincia = parseInt($("#selectP").val());
