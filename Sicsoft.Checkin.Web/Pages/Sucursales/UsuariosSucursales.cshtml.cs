@@ -93,8 +93,8 @@ namespace NOVAAPP.Pages.Sucursales
                 var Roles = await roles.ObtenerLista("");
 
                 var Rol = Roles.Where(a => a.NombreRol.ToLower().Contains("Cajero".ToLower())).FirstOrDefault();
-                filtro.Codigo1 = Convert.ToInt32(Rol.idRol);
-
+                //filtro.Codigo1 = Convert.ToInt32(Rol.idRol);
+                filtro.novapos = true;
                 var UsuariosGenerales = await usuarios.ObtenerLista(filtro); //Carga todos los usuarios cajeros que existan
                 //UsuariosGenerales = UsuariosGenerales.Where(a => a.Activo == true).ToArray();
 

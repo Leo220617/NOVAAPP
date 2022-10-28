@@ -23,5 +23,7 @@ namespace InversionGloblalWeb.Models
         public bool Externo { get; set; }
         public bool Activo { get; set; }
 
+        public bool novapos { get; set; }
+
     }
 }
