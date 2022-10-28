@@ -108,5 +108,19 @@ namespace NOVAAPP.Pages.Clientes
                 return new JsonResult(false);
             }
         }
+
+        public async Task<IActionResult> OnGetInsertarSAPByClient(int id)
+        {
+            try
+            {
+
+                await service.InsertarSAPByClient(id);
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+        }
     }
 }

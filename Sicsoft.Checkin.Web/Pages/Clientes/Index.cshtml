@@ -81,9 +81,18 @@
                  $("#divProcesando").modal("show");
              }
                      })
+
+           
+        }catch(e)
+        {
+
         }
+            
+               
+       }
           var ids = 0;
     function onClickModal(id) {
+        try { 
         ids = id;
         Swal.fire({
             title: '¿Desea sincronizar a SAP?',
@@ -115,7 +124,41 @@
             }
 
     }
+function onClickModalByClient(id) {
+    try {
+        ids = id;
+        Swal.fire({
+            title: '¿Desea sincronizar a SAP?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: `Aceptar`,
+            denyButtonText: `Cancelar`,
+            customClass: {
+                confirmButton: 'swalBtnColor',
+                denyButton: 'swalDeny'
+            },
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
 
+                InsertarSAPByClient();
+
+            }
+        })
+    } catch (e) {
+         console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+    }
+
+
+
+
+}
          function  SincronizarSAP() {
              try { 
          $.ajax({
@@ -157,7 +200,7 @@
                  $("#divProcesando").modal("show");
              }
                      })
-                     }catch(e)
+             }catch(e)
             {
                 console.log(e);
                 Swal.fire({
@@ -169,8 +212,62 @@
             }
         }     
        
+            function InsertarSAPByClient() {
+                try {
 
+                     $.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        url: '@Url.Page("Index", "InsertarSAPByClient")',
+                        data: {id: ids},
+                        success: function (result) {
+                                $("#divProcesando").modal("hide");
+                              
+                             if (result == false) {
+                                 
+                                 Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar sincronizar a SAP'
 
+                                 })
+
+                             } else {
+                                 Swal.fire({
+                                     title: "Ha sido sincronizado a SAP con éxito",
+
+                                     icon: 'success',
+                                     showCancelButton: false,
+                                     customClass: {
+                                         confirmButton: 'swalBtnColor',
+
+                                     },
+                                     confirmButtonText: 'OK'
+                                 }).then((result) => {
+                                     if (result.isConfirmed) {
+                                         location.reload();
+                                     }
+                                 })
+                             }
+             },
+             beforeSend: function () {
+                 $("#divProcesando").modal("show");
+             }
+                     })
+                } catch (e) {
+                    console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+                }
+
+            }
+            
+                
+            
 
     </script>
 
@@ -348,12 +445,14 @@
                                            {
                                             <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
                                            
-                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> 
+                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"></a> 
+
+                                            <a onclick="javascript: onClickModalByClient('@item.id')"  title="Actualizar desde SAP" ><img src="/sapX.png"  /></a>
                                                 }else
                                                 {
                                                      
 
-                                                     <a onclick="javascript: onClickModal('@item.id')" ><img src="/sapX.png"  /></a>
+                                                     <a onclick="javascript: onClickModal('@item.id')" title="Insertar a SAP" ><img src="/sapX.png"  /></a>
                                                      <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> 
                                                      <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
                                                       
