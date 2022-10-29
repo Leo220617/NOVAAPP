@@ -66,5 +66,10 @@ namespace NOVAAPP.Models
         public DateTime HoraCierre { get; set; }
 
         public decimal TotalizadoMonedas { get; set; }
+
+        public decimal TransferenciasColones { get; set; }
+
+
+        public decimal TransferenciasDolares { get; set; }
     }
 }
