@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Vendedores\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Pages\BitacoraMovimientos\Observar.cshtml.cs~RF3df0d202.TMP" />
     <None Remove="Pages\CondicionesPagos\Index.cshtml~RF29e93270.TMP" />
     <None Remove="Pages\Sucursales\Editar.cshtml.cs~RF2dc652.TMP" />
@@ -28,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Pages\Vendedores\Index.cshtml" />
     <None Include="wwwroot\assets\vendor_components\html2pdf\html2pdf.bundle.js" />
     <None Include="wwwroot\assets\vendor_components\jspf\Excel.js" />
     <None Include="wwwroot\assets\vendor_components\jspf\jspdf.min.js" />
@@ -38,6 +43,14 @@
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Vendedores\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Vendedores\Index.cshtml" />
+  </ItemGroup>
 
 
 

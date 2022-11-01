@@ -122,6 +122,13 @@
                         }
 
                     }
+                     @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "47").FirstOrDefault()))
+                        {
+
+                            <li><a asp-page="/Vendedores/Index"><i class="mdi mdi-account-multiple"></i>Vendedores</a></li>
+                        }
+
+                    }
 
                 @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "23").FirstOrDefault()))
                         {
