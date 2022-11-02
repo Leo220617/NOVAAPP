@@ -201,6 +201,7 @@
 
                             <!-- /.col -->
                         </div>
+                        <hr /> 
 
                         <!-- title row -->
                         <div class="row">
@@ -214,14 +215,6 @@
                                 </div>
                             </div>
                             <div class="col-3">
-                                <div class="form-group">
-                                    <label>Efectivo Dólares</label>
-                                     <h6> $@Math.Round(Model.Cierres.EfectivoFC, 2).ToString("C",formato)  </h6>
-
-
-                                </div>
-                            </div>
-                            <div class="col-3">
 
                                 <div class="form-group">
                                     <label>Tarjetas Colones</label>
@@ -230,6 +223,15 @@
 
                                 </div>
                             </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Efectivo Dólares</label>
+                                     <h6> $@Math.Round(Model.Cierres.EfectivoFC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            
                             <div class="col-3">
                                 <div class="form-group">
                                     <label>Tarjetas Dólares</label>
@@ -253,15 +255,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-3">
-                                <div class="form-group">
-                                    <label>Cheques Dólares</label>
-                                     <h6> $@Math.Round(Model.Cierres.ChequesFC, 2).ToString("C",formato)  </h6>
-
-
-                                </div>
-                            </div>
-                            <div class="col-3">
+                              <div class="col-3">
 
                                 <div class="form-group">
                                     <label>Otros Colones</label>
@@ -270,6 +264,15 @@
 
                                 </div>
                             </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Cheques Dólares</label>
+                                     <h6> $@Math.Round(Model.Cierres.ChequesFC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                          
                             <div class="col-3">
                                 <div class="form-group">
                                     <label>Otros Dólares</label>
@@ -328,6 +331,114 @@
                             <!-- title row -->
 
                         </div>
+                        <hr />
+                         <div class="row">
+                            <div class="col-3">
+
+                                <div class="form-group">
+                                    <label>Efectivo Colones Cajero</label>
+                                     <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.EfectivoColonesC).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Tarjetas Colones Cajero</label>
+                                    <h6> $@Math.Round(Model.Cierres.TotalVendidoFC - Model.Cierres.TarjetasColonesC, 2).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+                             <div class="col-3">
+
+                                <div class="form-group">
+                                    <label>Efectivo Dólares Cajero</label>
+                                     <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.EfectivoFCC).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+                             <div class="col-3">
+
+                                <div class="form-group">
+                                    <label>Tarjetas Dólares Cajero</label>
+                                     <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.TarjetasFCC).ToString("C",formato) </h6>
+
+                                   
+                                </div>
+                            </div>
+                            
+                            <!-- /.col -->
+                        </div>
+
+                         <div class="row">
+                            <div class="col-3">
+
+                                <div class="form-group">
+                                    <label>Cheques Colones Cajero</label>
+                                     <h6> ₡@Math.Round(Model.Cierres.ChequesColonesC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                              <div class="col-3">
+
+                                <div class="form-group">
+                                    <label>Otros Colones Cajero</label>
+                                     <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColonesC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Cheques Dólares Cajero</label>
+                                     <h6> $@Math.Round(Model.Cierres.ChequesFCC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                          
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Otros Dólares Cajero</label>
+                                    <h6> $@Math.Round(Model.Cierres.OtrosMediosFCC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- title row -->
+                          <div class="row">
+                            <div class="col-6"> 
+
+                                <div class="form-group">
+                                    <label>Transferencias Colones Cajero</label>
+                                     <h6> ₡@Math.Round(Model.Cierres.TransferenciasColonesC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Transferencias Dólares Cajero</label>
+                                     <h6> $@Math.Round(Model.Cierres.TransferenciasDolaresC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+
+                            <!-- /.col -->
+                            <!-- title row -->
+
+                        </div>
+
+
+
+                        <hr />
+
                         <div class="row">
                             <div class="col-4">
 
@@ -356,6 +467,7 @@
                             </div>
                             <!-- /.col -->
                         </div>
+                        
 
                         <div class="row">
                             <div class="col-6">
@@ -378,6 +490,9 @@
                             
                             <!-- /.col -->
                         </div>
+                        
+
+                        
 
 
                         <div class="text-xs-right">
@@ -441,6 +556,7 @@
                         <input hidden asp-for="Cierres.idUsuario" />
                         <!-- title row -->
                         <div class="row">
+
                             <div class="col-6">
 
                                 <div class="form-group">
@@ -455,12 +571,14 @@
                                     <label>Apertura Dólares</label>
                                    <h6> $@Math.Round(Model.Cierres.TotalAperturaFC, 2).ToString("C",formato) </h6>
 
-
+                                   
                                 </div>
                             </div>
 
                             <!-- /.col -->
                         </div>
+                        <hr />
+                      
 
                         <!-- title row -->
                         <div class="row">
@@ -540,7 +658,6 @@
                             </div>
                             <!-- /.col -->
                         </div>
-                        <!-- title row -->
                         <div class="row">
                             <div class="col-6">
 
@@ -564,6 +681,111 @@
                             <!-- title row -->
 
                         </div>
+                        <hr />
+                        <!-- title row -->
+                        
+                         <div class="row">
+                            <div class="col-3">
+
+                                <div class="form-group">
+                                    <label>Efectivo Colones Cajero</label>
+                                     <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.EfectivoColonesC).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Tarjetas Colones Cajero</label>
+                                    <h6> $@Math.Round(Model.Cierres.TotalVendidoFC - Model.Cierres.TarjetasColonesC, 2).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+                             <div class="col-3">
+
+                                <div class="form-group">
+                                    <label>Efectivo Dólares Cajero</label>
+                                     <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.EfectivoFCC).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+                             <div class="col-3">
+
+                                <div class="form-group">
+                                    <label>Tarjetas Dólares Cajero</label>
+                                     <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.TarjetasFCC).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+                            
+                            <!-- /.col -->
+                        </div>
+                                 <div class="row">
+                            <div class="col-3">
+
+                                <div class="form-group">
+                                    <label>Cheques Colones Cajero</label>
+                                     <h6> ₡@Math.Round(Model.Cierres.ChequesColonesC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                              <div class="col-3">
+
+                                <div class="form-group">
+                                    <label>Otros Colones Cajero</label>
+                                     <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColonesC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Cheques Dólares Cajero</label>
+                                     <h6> $@Math.Round(Model.Cierres.ChequesFCC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                          
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Otros Dólares Cajero</label>
+                                    <h6> $@Math.Round(Model.Cierres.OtrosMediosFCC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- title row -->
+                          <div class="row">
+                            <div class="col-6"> 
+
+                                <div class="form-group">
+                                    <label>Transferencias Colones Cajero</label>
+                                     <h6> ₡@Math.Round(Model.Cierres.TransferenciasColonesC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Transferencias Dólares Cajero</label>
+                                     <h6> $@Math.Round(Model.Cierres.TransferenciasDolaresC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+
+                            <!-- /.col -->
+                            <!-- title row -->
+
+                        </div>
+                        <hr />
                         <div class="row">
                             <div class="col-4">
 
@@ -590,8 +812,11 @@
 
                                 </div>
                             </div>
+                           
                             <!-- /.col -->
                         </div>
+                        
+                      
 
                         <div class="row">
                             <div class="col-6">
@@ -614,6 +839,11 @@
                             
                             <!-- /.col -->
                         </div>
+                      
+
+                        
+
+                        
 
 
                        
