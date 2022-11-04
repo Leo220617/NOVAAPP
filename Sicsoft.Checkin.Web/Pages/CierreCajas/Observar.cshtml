@@ -337,7 +337,7 @@
 
                                 <div class="form-group">
                                     <label>Efectivo Colones Cajero</label>
-                                     <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.EfectivoColonesC).ToString("C",formato) </h6>
+                                     <h6> ₡@Math.Round(Model.Cierres.EfectivoColonesC, 2).ToString("C",formato) </h6>
 
 
                                 </div>
@@ -345,7 +345,7 @@
                             <div class="col-3">
                                 <div class="form-group">
                                     <label>Tarjetas Colones Cajero</label>
-                                    <h6> $@Math.Round(Model.Cierres.TotalVendidoFC - Model.Cierres.TarjetasColonesC, 2).ToString("C",formato) </h6>
+                                    <h6> $@Math.Round(Model.Cierres.TarjetasColonesC, 2).ToString("C",formato) </h6>
 
 
                                 </div>
@@ -354,7 +354,7 @@
 
                                 <div class="form-group">
                                     <label>Efectivo Dólares Cajero</label>
-                                     <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.EfectivoFCC).ToString("C",formato) </h6>
+                                     <h6> ₡@Math.Round(Model.Cierres.EfectivoFCC, 2).ToString("C",formato) </h6>
 
 
                                 </div>
@@ -363,7 +363,7 @@
 
                                 <div class="form-group">
                                     <label>Tarjetas Dólares Cajero</label>
-                                     <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.TarjetasFCC).ToString("C",formato) </h6>
+                                     <h6> ₡@Math.Round(Model.Cierres.TarjetasFCC, 2).ToString("C",formato) </h6>
 
                                    
                                 </div>
@@ -390,7 +390,7 @@
 
 
                                 </div>
-                            </div>
+                            </div>                          
                             <div class="col-3">
                                 <div class="form-group">
                                     <label>Cheques Dólares Cajero</label>
@@ -689,7 +689,7 @@
 
                                 <div class="form-group">
                                     <label>Efectivo Colones Cajero</label>
-                                     <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.EfectivoColonesC).ToString("C",formato) </h6>
+                                     <h6> ₡@Math.Round(Model.Cierres.EfectivoColonesC, 2).ToString("C",formato) </h6>
 
 
                                 </div>
@@ -697,7 +697,7 @@
                             <div class="col-3">
                                 <div class="form-group">
                                     <label>Tarjetas Colones Cajero</label>
-                                    <h6> $@Math.Round(Model.Cierres.TotalVendidoFC - Model.Cierres.TarjetasColonesC, 2).ToString("C",formato) </h6>
+                                    <h6> $@Math.Round(Model.Cierres.TarjetasColonesC, 2).ToString("C",formato) </h6>
 
 
                                 </div>
@@ -706,7 +706,7 @@
 
                                 <div class="form-group">
                                     <label>Efectivo Dólares Cajero</label>
-                                     <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.EfectivoFCC).ToString("C",formato) </h6>
+                                     <h6> ₡@Math.Round(Model.Cierres.EfectivoFCC, 2).ToString("C",formato) </h6>
 
 
                                 </div>
@@ -715,7 +715,7 @@
 
                                 <div class="form-group">
                                     <label>Tarjetas Dólares Cajero</label>
-                                     <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.TarjetasFCC).ToString("C",formato) </h6>
+                                     <h6> ₡@Math.Round(Model.Cierres.TarjetasFCC, 2).ToString("C",formato) </h6>
 
 
                                 </div>

@@ -78,11 +78,13 @@ namespace NOVAAPP.Pages.CierreCajas
                 Users = await users.ObtenerLista("");
                 Cajas = await cajas.ObtenerLista("");
                 var RolesC = await roles.ObtenerLista("");
-                var RolCajero = RolesC.Where(a => a.NombreRol.ToLower().Contains("cajero".ToLower())).FirstOrDefault();
+                //var RolCajero = RolesC.Where(a => a.NombreRol.ToLower().Contains("cajero".ToLower())).FirstOrDefault();
 
-                Users = Users.Where(a => a.idRol == RolCajero.idRol).ToArray();
+                // Users = Users.Where(a => a.idRol == RolCajero.idRol).ToArray();
 
-                
+                Users = Users.Where(a => a.novapos == true).ToArray();
+
+
                 return Page();
             }
             catch (ApiException ex)

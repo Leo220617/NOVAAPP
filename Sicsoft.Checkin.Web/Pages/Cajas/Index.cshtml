@@ -1,7 +1,12 @@
 ﻿@page
+@using System.Globalization
 @model NOVAAPP.Pages.Cajas.IndexModel
 @{
     ViewData["Title"] = "Cajas";
+     NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
 
 }
 
@@ -138,11 +143,12 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                   <th>ID</th>
                                     <th>Sucursal</th> 
-
                                     <th>Nombre</th>
-                                    <th>Acción</th>
+                                    <th>Apertura ₡ </th>
+                                    <th>Apertura $ </th>
+                                     <th>Acción</th>
 
                                 </tr>
                             </thead>
@@ -157,6 +163,9 @@
 
                                      <td>  @( Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" :  Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre) </td>  
                                     <td>         @item.Nombre </td>
+
+                                    <td> ₡@Math.Round(@item.MontoAperturaColones, 2).ToString("C",formato)</td>
+                                    <td>  $@Math.Round(@item.MontoAperturaDolares, 2).ToString("C",formato)</td>
                                  <td align="center" style="padding-top:15px;">
                                             <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
                                             &nbsp;
@@ -177,6 +186,8 @@
                                     <th>ID</th>
                                     <th>Sucursal</th> 
                                     <th>Nombre</th>
+                                    <th>Apertura ₡ </th>
+                                    <th>Apertura $ </th>
                                      <th>Acción</th>
                                 </tr>
                             </tfoot>
