@@ -2,42 +2,174 @@
 @using System.Globalization
 @model NOVAAPP.Pages.CierreCajas.IndexModel
 @{
-     ViewData["Title"] = "CierreCajas";
+    ViewData["Title"] = "CierreCajas";
     NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
     formato.CurrencySymbol = "";
     formato.CurrencyGroupSeparator = ",";
     formato.NumberDecimalSeparator = ".";
 }
-<!-- Content Header (Page header) -->
-<section class="content-header">
-    <h1>
-        Cierre de Cajas
-    </h1>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-        <li class="breadcrumb-item active">Listado Cierra de Cajas</li>
-    </ol>
-</section>
-<!-- Main content -->
-<section class="content">
-    <div class="row">
-        <div class="col-12">
+@section styles{
 
 
-            <div class="box">
-                <div class="box-header with-border">
-                    <div class="row">
-                        <div class="col-sm-8"> <h4 class="box-title">Filtro</h4></div>
+}
+
+    @section scripts{
+
+    <script>
+        try {
+            $(document).ready(function() {
+                jQuery(document).ready(function($) {
+                    $(document).ready(function() {
+                        $('.mi-selector').select2();
+                    });
+                });
+                $(".js-example-responsive").select2({
+                    width: 'resolve',// need to override the changed default
+                    height: 'resolve'
+                });
+
+
+
+
+
+            });
+        } catch (e) {
+            console.log(e);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+            })
+        }
+
+        var ids = 0;
+        var fecha = 0;
+        var idUser = 0;
+        function onClickModal(idCaja, FechaCaja, idUsuario) {
+            try {
+                ids = idCaja;
+                fecha = FechaCaja;
+                idUser = idUsuario;
+
+                Swal.fire({
+                    title: '¿Desea desactivar/activar el Cierre?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: `Aceptar`,
+                    denyButtonText: `Cancelar`,
+                    customClass: {
+                        confirmButton: 'swalBtnColor',
+                        denyButton: 'swalDeny'
+                    },
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        EliminarCierre();
+
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+
+        }
+        function EliminarCierre() {
+            try {
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Page("Index", "EliminarCierre")',
+                    data: { idCaja: ids, FechaCaja: fecha, idUsuario: idUser },
+                    success: function(result) {
+
+                        if (result == false) {
+                            ids = 0;
+                            fecha = 0;
+                            idUser = 0;
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar descactivar/activar'
+
+                            })
+
+                        } else {
+                            Swal.fire({
+                                title: "Ha sido desactivado/activado con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    beforeSend: function() {
+
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
+
+
+
+    </script>
+
+}
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Cierre de Cajas
+        </h1>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+            <li class="breadcrumb-item active">Listado Cierra de Cajas</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+
+
+                <div class="box">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-sm-8"> <h4 class="box-title">Filtro</h4></div>
+
+
+                        </div>
 
 
                     </div>
-
-
-                </div>
-                <div class="box-body">
-                    <form method="get">
-                        <div class="row">
-                               <div class="col-sm-2 pr-1">
+                    <div class="box-body">
+                        <form method="get">
+                            <div class="row">
+                                <div class="col-sm-2 pr-1">
                                     <div class="form-group">
                                         <label>Fecha Inicial</label>
                                         <input class="form-control " id="FecInicial" type="date" asp-for="filtro.FechaInicial">
@@ -52,19 +184,19 @@
                                         <input class="form-control" id="FecFinal" type="date" asp-for="filtro.FechaFinal">
                                     </div>
                                 </div>
-                            <div class="col-sm-2 pr-1">
-                                <div class="form-group">
-                                    <label>Usuarios</label>
-                                      <select class="form-control select2  " asp-for="filtro.Codigo1">
-                                                        <option value="0"> Seleccione</option>
+                                <div class="col-sm-2 pr-1">
+                                    <div class="form-group">
+                                        <label>Usuarios</label>
+                                        <select class="form-control select2  " asp-for="filtro.Codigo1">
+                                            <option value="0"> Seleccione</option>
 
-                                                    @foreach(var item in Model.Users)
-                                                    {
-                                                        <option value="@item.id"> @item.Nombre</option>
-                                                    }
+                                            @foreach (var item in Model.Users)
+                                        {
+                                            <option value="@item.id"> @item.Nombre</option>
+                                        }
 
 
-                                                </select>
+                                    </select>
                                 </div>
 
 
@@ -73,50 +205,50 @@
                             <div class="col-sm-2 pr-1">
                                 <div class="form-group">
                                     <label>Cajas</label>
-                                      <select class="form-control select2  " asp-for="filtro.Codigo2">
-                                                        <option value="0"> Seleccione</option>
+                                    <select class="form-control select2  " asp-for="filtro.Codigo2">
+                                        <option value="0"> Seleccione</option>
 
-                                                    @foreach(var item in Model.Cajas)
-                                                    {
-                                                        <option value="@item.id"> @item.Nombre</option>
-                                                    }
+                                        @foreach (var item in Model.Cajas)
+                                        {
+                                            <option value="@item.id"> @item.Nombre</option>
+                                        }
 
 
-                                                </select>
+                                    </select>
                                 </div>
                             </div>
-                             <div class="col-sm-2  pl-1"  style="text-align: center; padding-top: 2%;">
-                            <input type="checkbox" id="md_checkbox_1" class="chk-col-red"  asp-for="filtro.Activo"   onclick="this.form.submit()"/>
-					            <label for="md_checkbox_1">Activo</label>
+                            <div class="col-sm-2  pl-1" style="text-align: center; padding-top: 2%;">
+                                <input type="checkbox" id="md_checkbox_1" class="chk-col-red" asp-for="filtro.Activo" onclick="this.form.submit()" />
+                                <label for="md_checkbox_1">Activo</label>
                             </div>
-                            
-                            
+
+
                             <div class="col-sm-2 pl-1" style="text-align: center; padding-top: 1%;">
-                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary" > <i class="fa fa-search"></i></button>
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary"> <i class="fa fa-search"></i></button>
                             </div>
- 
 
 
-                            
+
+
                         </div>
 
                     </form>
                 </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box">
+            </div>
+            <!-- /.box-header -->
+            <div class="box">
                 <div class="box-body">
                     <div class="table-responsive">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    
+
                                     <th>Caja</th>
                                     <th>Usuario</th>
                                     <th>Fecha</th>
                                     <th>Última Actualización</th>
-                                    <th>Total Vendido Colones</th> 
-                                     <th>Total Vendido Dolares</th> 
+                                    <th>Total Vendido Colones</th>
+                                    <th>Total Vendido Dolares</th>
                                     <th>Total Vendido</th>
                                     <th>Hora de Cierre</th>
                                     <th>Activo</th>
@@ -127,55 +259,58 @@
                             <tbody>
                                 @foreach (var item in Model.Cierre)
                                 {
-                                <tr>
-                                    
-                                     <td>  @( Model.Cajas.Where(a => a.id == item.idCaja).FirstOrDefault() == null ? "Caja Inexistente" :  Model.Cajas.Where(a => a.id == item.idCaja).FirstOrDefault().Nombre) </td>  
-                                   
-                                     <td>  @( Model.Users.Where(a => a.id == item.idUsuario).FirstOrDefault() == null ? "Usuario Inexistente" :  Model.Users.Where(a => a.id == item.idUsuario).FirstOrDefault().Nombre) </td>  
-                                     <td>
-                                        @item.FechaCaja.ToString("dd/MM/yyyy")
-                                    </td>
+                                    <tr>
 
-                                     <td>
-                                        @item.FecUltAct.ToString("dd/MM/yyyy")
-                                    </td>
+                                        <td>  @( Model.Cajas.Where(a => a.id == item.idCaja).FirstOrDefault() == null ? "Caja Inexistente" :  Model.Cajas.Where(a => a.id == item.idCaja).FirstOrDefault().Nombre) </td>
 
-                                     <td>
-                                        ₡@Math.Round(@item.TotalVendidoColones, 2).ToString("C",formato)
-                                    </td>
+                                        <td>  @( Model.Users.Where(a => a.id == item.idUsuario).FirstOrDefault() == null ? "Usuario Inexistente" :  Model.Users.Where(a => a.id == item.idUsuario).FirstOrDefault().Nombre) </td>
+                                        <td>
+                                            @item.FechaCaja.ToString("dd/MM/yyyy")
+                                        </td>
 
-                                     <td>
-                                        $@Math.Round(@item.TotalVendidoFC, 2).ToString("C",formato)
-                                    </td>
-                                    <td>
-                                       ₡@Math.Round(item.TotalizadoMonedas, 2).ToString("C",formato)
-                                    </td>
-                                    <td>
-                                        @item.HoraCierre.ToString("HH:MM tt")
-                                    </td>
-                                       
-                                     <td>
-                                         @if(item.Activo)
+                                        <td>
+                                            @item.FecUltAct.ToString("dd/MM/yyyy")
+                                        </td>
+
+                                        <td>
+                                            ₡@Math.Round(@item.TotalVendidoColones, 2).ToString("C",formato)
+                                        </td>
+
+                                        <td>
+                                            $@Math.Round(@item.TotalVendidoFC, 2).ToString("C",formato)
+                                        </td>
+                                        <td>
+                                            ₡@Math.Round(item.TotalizadoMonedas, 2).ToString("C",formato)
+                                        </td>
+                                        <td>
+                                            @item.HoraCierre.ToString("HH:MM tt")
+                                        </td>
+
+                                        <td>
+                                            @if (item.Activo)
                                             {
                                                 <span class="badge badge-pill badge-success">Activo</span>
 
-                                            }else
+                                            }
+                                            else
                                             {
                                                 <span class="badge badge-pill badge-danger">Cerrado</span>
                                             }
 
-                                    </td>
+                                        </td>
 
-                                    
-                                 <td align="center" style="padding-top:15px;">
-                                            <a asp-page="./Observar" asp-route-id="@item.idCaja" asp-route-Fecha="@item.FechaCaja.ToString("MM-dd-yyyy")" asp-route-idUsuario="@item.idUsuario" class="fa fa-info-circle icono"> </a> 
+
+                                        <td align="center" style="padding-top:15px;">
+                                            <a asp-page="./Observar" asp-route-id="@item.idCaja" asp-route-Fecha="@item.FechaCaja.ToString("MM-dd-yyyy")" asp-route-idUsuario="@item.idUsuario" class="fa fa-info-circle icono"> </a>
                                             &nbsp;
-                                         
-                                            
-                                     </td>
+                                            <a onclick="javascript: onClickModal('@item.idCaja', '@item.FechaCaja', '@item.idUsuario')" class="fa fa-trash icono"></a>
+                                            &nbsp;
 
 
-                                </tr>
+                                        </td>
+
+
+                                    </tr>
 
                                 }
 
@@ -187,8 +322,8 @@
                                     <th>Usuario</th>
                                     <th>Fecha</th>
                                     <th>Última Actualización</th>
-                                    <th>Total Vendido ₡</th> 
-                                     <th>Total Vendido $</th> 
+                                    <th>Total Vendido ₡</th>
+                                    <th>Total Vendido $</th>
                                     <th>Total Vendido</th>
                                     <th>Hora de Cierre</th>
                                     <th>Activo</th>

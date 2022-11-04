@@ -95,6 +95,19 @@ namespace NOVAAPP.Pages.CierreCajas
                 return Page();
             }
         }
+        public async Task<IActionResult> OnGetEliminarCierre(int idCaja, string FechaCaja, int idUsuario)
+        {
+            try
+            {
+                var FechaL = Convert.ToDateTime(FechaCaja);
+                await service.EliminarCierre(idCaja, FechaL, idUsuario);
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+        }
 
     }
 }
