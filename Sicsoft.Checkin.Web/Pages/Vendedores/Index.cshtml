@@ -119,6 +119,7 @@
                                     <th>Nombre</th> 
 
                                     <th>Sucursal</th>
+                                     <th>Estado</th>
                                     <th>Acción</th>
 
 
@@ -135,6 +136,18 @@
                                      <td>  @item.CodSAP </td> 
                                     <td>  @item.Nombre </td> 
                                      <td>  @( Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" :  Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre) </td>  
+
+                                       <td>
+                                         @if(item.Activo)
+                                            {
+                                                <span class="badge badge-pill badge-success">Activo</span>
+
+                                            }else
+                                            {
+                                                <span class="badge badge-pill badge-danger">Inactivo</span>
+                                            }
+
+                                    </td>
 
                                       <td align="center" style="padding-top:15px;">  
                                                 <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> </td>
@@ -153,6 +166,7 @@
                                      <th>CodSAP</th>
                                     <th>Nombre</th> 
                                     <th>Sucursal</th>
+                                     <th>Estado</th>
                                      <th>Acción</th>
 
                                 </tr>
