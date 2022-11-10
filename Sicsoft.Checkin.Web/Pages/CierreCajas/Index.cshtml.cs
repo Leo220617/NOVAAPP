@@ -73,8 +73,11 @@ namespace NOVAAPP.Pages.CierreCajas
 
 
                 }
+                 
                 filtro.Externo = true;
+               
                 Cierre = await service.ObtenerLista(filtro);
+                Cierre = Cierre.Where(a => a.TotalVendidoColones > 0 || a.TotalAperturaColones > 0).ToArray();
                 Users = await users.ObtenerLista("");
                 Cajas = await cajas.ObtenerLista("");
                 var RolesC = await roles.ObtenerLista("");
