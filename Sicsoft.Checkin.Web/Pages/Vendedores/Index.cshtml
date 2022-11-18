@@ -115,12 +115,13 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Acción</th>
                                     <th>CodSAP</th>
                                     <th>Nombre</th> 
 
                                     <th>Sucursal</th>
                                      <th>Estado</th>
-                                    <th>Acción</th>
+                                    
 
 
                                 </tr>
@@ -133,6 +134,8 @@
                                     <td>
                                         @item.id
                                     </td>
+                                      <td align="center" style="padding-top:15px;">  
+                                                <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> </td>
                                      <td>  @item.CodSAP </td> 
                                     <td>  @item.Nombre </td> 
                                      <td>  @( Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" :  Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre) </td>  
@@ -149,8 +152,7 @@
 
                                     </td>
 
-                                      <td align="center" style="padding-top:15px;">  
-                                                <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> </td>
+                                    
                                            
 
 
@@ -163,11 +165,12 @@
                             <tfoot>
                                 <tr>
                                     <th>ID</th>
+                                      <th>Acción</th>
                                      <th>CodSAP</th>
                                     <th>Nombre</th> 
                                     <th>Sucursal</th>
                                      <th>Estado</th>
-                                     <th>Acción</th>
+                                   
 
                                 </tr>
                             </tfoot>

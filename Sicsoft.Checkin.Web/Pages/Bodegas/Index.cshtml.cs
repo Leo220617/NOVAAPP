@@ -66,5 +66,18 @@ namespace NOVAAPP.Pages.Bodegas
                 return new JsonResult(false);
             }
         }
+        public async Task<IActionResult> OnGetInsertarSAPByProduct(int id)
+        {
+            try
+            {
+
+                await service.InsertarSAPByProduct(id);
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+        }
     }
 }

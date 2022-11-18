@@ -28,6 +28,9 @@ namespace Sicsoft.Checkin.Web.Servicios
         [Get("/InsertarSAPByClient")]
         Task InsertarSAPByClient(int id);
 
+        [Get("/InsertarSAPByProduct")]
+        Task InsertarSAPByProduct(int id);
+
 
         [Get("")]
         Task<TEntity[]> ObtenerLista<TQuery>(TQuery q);

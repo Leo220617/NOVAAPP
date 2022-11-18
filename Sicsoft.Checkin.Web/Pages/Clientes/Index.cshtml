@@ -372,7 +372,7 @@ function onClickModalByClient(id) {
                                 <tr>
                                 
                                     <th>Código</th>
-                                   
+                                    <th>Acción</th>
 
                                     <th>Nombre</th>
                                      <th>Cédula</th>
@@ -383,7 +383,7 @@ function onClickModalByClient(id) {
                                        <th>Grupo</th>
                                       <th>Estado</th>
                                       <th>Procesado a SAP</th>
-                                      <th>Acción</th>
+                                     
 
 
                                 </tr>
@@ -398,7 +398,27 @@ function onClickModalByClient(id) {
                                     <td>
                                         @item.Codigo
                                     </td>
+                                      <td align="center">
 
+                                           @if(item.ProcesadoSAP)
+                                           {
+                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
+                                           
+                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"></a> 
+
+                                            <a onclick="javascript: onClickModalByClient('@item.id')"  title="Actualizar desde SAP" ><img src="/sapX.png"  /></a>
+                                                }else
+                                                {
+                                                     
+
+                                                     <a onclick="javascript: onClickModal('@item.id')" title="Insertar a SAP" ><img src="/sapX.png"  /></a>
+                                                     <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> 
+                                                     <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
+                                                      
+                                           
+                                                }
+
+                                    </td>
                                   
                                     <td>         @item.Nombre </td>
                                      <td>
@@ -439,27 +459,7 @@ function onClickModalByClient(id) {
                                             }
 
                                     </td>
-                                      <td align="center">
-
-                                           @if(item.ProcesadoSAP)
-                                           {
-                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
-                                           
-                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"></a> 
-
-                                            <a onclick="javascript: onClickModalByClient('@item.id')"  title="Actualizar desde SAP" ><img src="/sapX.png"  /></a>
-                                                }else
-                                                {
-                                                     
-
-                                                     <a onclick="javascript: onClickModal('@item.id')" title="Insertar a SAP" ><img src="/sapX.png"  /></a>
-                                                     <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> 
-                                                     <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
-                                                      
-                                           
-                                                }
-
-                                    </td>
+                                    
 
                                 </tr>
 
@@ -471,7 +471,7 @@ function onClickModalByClient(id) {
                                 <tr>
                               
                                    <th>Código</th>
-                                   
+                                    <th>Acción</th>
 
                                     <th>Nombre</th>
                                      <th>Cédula</th>
@@ -482,7 +482,7 @@ function onClickModalByClient(id) {
                                        <th>Grupo</th>
                                       <th>Estado</th>
                                        <th>Procesado a SAP</th>
-                                        <th>Acción</th>
+                                       
                                 </tr>
                             </tfoot>
                         </table>

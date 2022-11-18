@@ -159,6 +159,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                         <th>Acción</th>
                                         <th>Tipo de Documento</th>
 
                                         <th>Número de Documento</th>
@@ -168,7 +169,7 @@
                                         <th>Fecha de Vencimiento</th>
                                         <th>%Exoneración</th>
                                         <th>Estado</th>
-                                        <th>Acción</th>
+                                       
 
                                     </tr>
                                 </thead>
@@ -180,7 +181,14 @@
                                         <td>
                                             @item.id
                                         </td>
+                                          <td align="center" style="padding-top:15px;">
+                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a>
+                                            &nbsp;
+                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> &nbsp;
+                                            <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
+                                            &nbsp;
 
+                                        </td>
                                         <td>  @item.TipoDoc </td>
                                         <td>         @item.NumDoc </td>
                                         <td>         @item.NomInst </td>
@@ -200,14 +208,7 @@
                                                 }
                                             }
                                         </td>
-                                        <td align="center" style="padding-top:15px;">
-                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a>
-                                            &nbsp;
-                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> &nbsp;
-                                            <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
-                                            &nbsp;
-
-                                        </td>
+                                      
 
 
                                     </tr>
@@ -219,6 +220,7 @@
                             <tfoot>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Acción</th>
                                     <th>Tipo de Documento</th>
 
                                     <th>Número de Documento</th>
@@ -228,7 +230,7 @@
                                     <th>Fecha de Vencimiento</th>
                                     <th>%Exoneración</th>
                                     <th>Estado</th>
-                                    <th>Acción</th>
+                                    
                                 </tr>
                             </tfoot>
                         </table>

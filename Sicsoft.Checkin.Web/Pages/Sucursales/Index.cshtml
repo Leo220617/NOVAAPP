@@ -153,12 +153,13 @@
                             <thead>
                                 <tr>
                                     <th>Cod.Sucursal</th>
+                                      <th>Acción</th>
                                   <th>Nombre</th>
                                     <th>Cédula</th>
                                     <th>Provincia</th>
                                     <th>Teléfono</th>
                                     <th>Correo</th>
-                                   <th>Acción</th>
+                                 
                                 </tr>
                             </thead>
                             <tbody>
@@ -169,7 +170,13 @@
                                     <td>
                                         @item.CodSuc
                                     </td>
+                                     <td align="center" style="padding-top:15px;">  
+                                                <a asp-page="./Editar" asp-route-id="@item.CodSuc" class="fa fa-edit icono"> </a> 
+                                            &nbsp;
+                                           
 
+                                                <a asp-page="./UsuariosSucursales" asp-route-id="@item.CodSuc" title="Asignar usuarios" class="fa fa-exchange icono" style="color: #FFB700;"> </a>
+                                              </td>  
                                    
                                     <td>         @item.Nombre </td>
                                        
@@ -178,13 +185,7 @@
                                                     <td>         @item.Telefono </td>
                                                         <td>         @item.Correo </td>
                                                          
-                                            <td align="center" style="padding-top:15px;">  
-                                                <a asp-page="./Editar" asp-route-id="@item.CodSuc" class="fa fa-edit icono"> </a> 
-                                            &nbsp;
                                            
-
-                                                <a asp-page="./UsuariosSucursales" asp-route-id="@item.CodSuc" title="Asignar usuarios" class="fa fa-exchange icono" style="color: #FFB700;"> </a>
-                                              </td>  
                                 </tr>
 
                                 }
@@ -194,12 +195,13 @@
                             <tfoot>
                                 <tr>
                                           <th>Cod.Sucursal</th>
+                                           <th>Acción</th>
                                   <th>Nombre</th>
                                     <th>Cédula</th>
                                     <th>Provincia</th>
                                     <th>Teléfono</th>
                                     <th>Correo</th>
-                                    <th>Acción</th>
+                                   
                                 </tr>
                             </tfoot>
                         </table>

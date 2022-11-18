@@ -133,12 +133,13 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Acción</th>
                                     <th>Usuario</th>
                                     <th>Descripción</th> 
 
                                     <th>Fecha</th>
                                     <th>Método</th>
-                                    <th>Acción</th>
+                                    
 
 
                                 </tr>
@@ -151,6 +152,13 @@
                                     <td>
                                         @item.id
                                     </td>
+                                      <td align="center" style="padding-top:15px;">
+                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> 
+                                            &nbsp;
+                                         
+                                            
+                                     </td>
+
                                     
                                     <td>  @( Model.Users.Where(a => a.id == item.idUsuario).FirstOrDefault() == null ? "Usuario Inexistente" :  Model.Users.Where(a => a.id == item.idUsuario).FirstOrDefault().Nombre) </td> 
                                     
@@ -160,13 +168,7 @@
 
                                      <td>  @item.Metodo </td> 
                                      
-                                    <td align="center" style="padding-top:15px;">
-                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> 
-                                            &nbsp;
-                                         
-                                            
-                                     </td>
-
+                                  
 
                                 </tr>
 
@@ -178,12 +180,13 @@
                                 <tr>
                                     
                                     <th>ID</th>
+                                     <th>Acción</th>
                                     <th>Usuario</th>
                                     <th>Descripción</th> 
 
                                     <th>Fecha</th>
                                     <th>Método</th>
-                                    <th>Acción</th>
+                                   
 
                                 </tr>
                             </tfoot>

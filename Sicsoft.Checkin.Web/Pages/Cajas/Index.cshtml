@@ -144,11 +144,12 @@
                             <thead>
                                 <tr>
                                    <th>ID</th>
+                                    <th>Acción</th>
                                     <th>Sucursal</th> 
                                     <th>Nombre</th>
                                     <th>Apertura ₡ </th>
                                     <th>Apertura $ </th>
-                                     <th>Acción</th>
+                                    
 
                                 </tr>
                             </thead>
@@ -160,19 +161,19 @@
                                     <td>
                                         @item.id
                                     </td>
-
-                                     <td>  @( Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" :  Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre) </td>  
-                                    <td>         @item.Nombre </td>
-
-                                    <td> ₡@Math.Round(@item.MontoAperturaColones, 2).ToString("C",formato)</td>
-                                    <td>  $@Math.Round(@item.MontoAperturaDolares, 2).ToString("C",formato)</td>
-                                 <td align="center" style="padding-top:15px;">
+                                       <td align="center" style="padding-top:15px;">
                                             <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
                                             &nbsp;
                                             <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
                                             &nbsp;
                                             
                                      </td>
+                                     <td>  @( Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" :  Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre) </td>  
+                                    <td>         @item.Nombre </td>
+
+                                    <td> ₡@Math.Round(@item.MontoAperturaColones, 2).ToString("C",formato)</td>
+                                    <td>  $@Math.Round(@item.MontoAperturaDolares, 2).ToString("C",formato)</td>
+                              
 
 
                                 </tr>
@@ -184,11 +185,12 @@
                             <tfoot>
                                 <tr>
                                     <th>ID</th>
+                                     <th>Acción</th>
                                     <th>Sucursal</th> 
                                     <th>Nombre</th>
                                     <th>Apertura ₡ </th>
                                     <th>Apertura $ </th>
-                                     <th>Acción</th>
+                                    
                                 </tr>
                             </tfoot>
                         </table>

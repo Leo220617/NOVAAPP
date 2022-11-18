@@ -244,6 +244,7 @@
                                 <tr>
 
                                     <th>Caja</th>
+                                     <th>Acción</th>
                                     <th>Usuario</th>
                                     <th>Fecha</th>
                                     <th>Última Actualización</th>
@@ -252,7 +253,7 @@
                                     <th>Total Vendido</th>
                                     <th>Hora de Cierre</th>
                                     <th>Activo</th>
-                                    <th>Acción</th>
+                                   
 
                                 </tr>
                             </thead>
@@ -262,6 +263,14 @@
                                     <tr>
 
                                         <td>  @( Model.Cajas.Where(a => a.id == item.idCaja).FirstOrDefault() == null ? "Caja Inexistente" :  Model.Cajas.Where(a => a.id == item.idCaja).FirstOrDefault().Nombre) </td>
+                                             <td align="center" style="padding-top:15px;">
+                                            <a asp-page="./Observar" asp-route-id="@item.idCaja" asp-route-Fecha="@item.FechaCaja.ToString("MM-dd-yyyy")" asp-route-idUsuario="@item.idUsuario" class="fa fa-info-circle icono"> </a>
+                                            &nbsp;
+                                            <a onclick="javascript: onClickModal('@item.idCaja', '@item.FechaCaja', '@item.idUsuario')" class="fa fa-trash icono"></a>
+                                            &nbsp;
+
+
+                                        </td>
 
                                         <td>  @( Model.Users.Where(a => a.id == item.idUsuario).FirstOrDefault() == null ? "Usuario Inexistente" :  Model.Users.Where(a => a.id == item.idUsuario).FirstOrDefault().Nombre) </td>
                                         <td>
@@ -300,14 +309,7 @@
                                         </td>
 
 
-                                        <td align="center" style="padding-top:15px;">
-                                            <a asp-page="./Observar" asp-route-id="@item.idCaja" asp-route-Fecha="@item.FechaCaja.ToString("MM-dd-yyyy")" asp-route-idUsuario="@item.idUsuario" class="fa fa-info-circle icono"> </a>
-                                            &nbsp;
-                                            <a onclick="javascript: onClickModal('@item.idCaja', '@item.FechaCaja', '@item.idUsuario')" class="fa fa-trash icono"></a>
-                                            &nbsp;
-
-
-                                        </td>
+                                   
 
 
                                     </tr>
@@ -319,6 +321,7 @@
                             <tfoot>
                                 <tr>
                                     <th>Caja</th>
+                                    <th>Acción</th>
                                     <th>Usuario</th>
                                     <th>Fecha</th>
                                     <th>Última Actualización</th>
@@ -327,7 +330,7 @@
                                     <th>Total Vendido</th>
                                     <th>Hora de Cierre</th>
                                     <th>Activo</th>
-                                    <th>Acción</th>
+                                    
                                 </tr>
                             </tfoot>
                         </table>

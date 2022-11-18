@@ -76,7 +76,95 @@
                      })
         }
 
+        function onClickModalByProduct(id) {
+    try {
+        ids = id;
+        Swal.fire({
+            title: '¿Desea sincronizar inventarios?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: `Aceptar`,
+            denyButtonText: `Cancelar`,
+            customClass: {
+                confirmButton: 'swalBtnColor',
+                denyButton: 'swalDeny'
+            },
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
 
+                InsertarSAPByProduct();
+
+            }
+        })
+    } catch (e) {
+         console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+    }
+
+
+
+
+}
+
+ function InsertarSAPByProduct() {
+                try {
+
+                     $.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        url: '@Url.Page("Index", "InsertarSAPByProduct")',
+                        data: {id: ids},
+                        success: function (result) {
+                                $("#divProcesando").modal("hide");
+                              
+                             if (result == false) {
+                                 
+                                 Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar sincronizar a SAP'
+
+                                 })
+
+                             } else {
+                                 Swal.fire({
+                                     title: "Ha sido sincronizado a SAP con éxito",
+
+                                     icon: 'success',
+                                     showCancelButton: false,
+                                     customClass: {
+                                         confirmButton: 'swalBtnColor',
+
+                                     },
+                                     confirmButtonText: 'OK'
+                                 }).then((result) => {
+                                     if (result.isConfirmed) {
+                                         location.reload();
+                                     }
+                                 })
+                             }
+             },
+             beforeSend: function () {
+                 $("#divProcesando").modal("show");
+             }
+                     })
+                } catch (e) {
+                    console.log(e);
+                Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                                 })
+                }
+
+            }
 
     </script>
 
@@ -115,10 +203,11 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                     <th>Acción</th>
                                     <th>Nombre</th> 
 
                                     <th>Código Sucursal</th>
-                                    <th>Acción</th>
+                                   
 
 
                                 </tr>
@@ -131,11 +220,15 @@
                                     <td>
                                         @item.id
                                     </td>
+                                      <td align="center" style="padding-top:15px;">  
+                                           <a onclick="javascript: onClickModalByProduct('@item.id')" title="Sincronizar Inventario" ><img src="/sapX.png"  /></a>
+                                                <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
+                                                 
+                                                </td>
 
                                     <td>  @item.Nombre </td> 
                                     <td>         @item.CodSuc </td>
-                                      <td align="center" style="padding-top:15px;">  
-                                                <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> </td>
+                                    
                                            
 
 
@@ -148,9 +241,10 @@
                             <tfoot>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Acción</th>
                                     <th>Nombre</th> 
                                     <th>Código Sucursal</th>
-                                     <th>Acción</th>
+                                     
 
                                 </tr>
                             </tfoot>
