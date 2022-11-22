@@ -194,17 +194,17 @@ try {
                             <thead>
                                 <tr>
                                      <th>ID</th>
-                                    <th>Código</th>
+                                    <th>Producto</th>
                                   <th>Impuesto</th>
-                                    <th>Nombre</th>
+                                    
                                      <th>Bodega</th>
                                       <th>Lista de Precio</th>
                                     <th>Precio Unitario</th>
-                                    <th>Unidad de Medida</th>
-                                    <th>Cabys</th>
+                                
                                 
                                       <th>Costo</th>
                                       <th>Stock</th>
+                                      <th>Fecha Actualización</th>
                                     
                                        
                                 </tr>
@@ -217,21 +217,23 @@ try {
                                         @item.id
                                     </td>
                                     <td>
-                                        @item.Codigo
+                                        @item.Codigo - @item.Nombre 
                                     </td>
 
                                    
                                     <td>  @( Model.Impuestos.Where(a => a.id == item.idImpuesto).FirstOrDefault() == null ? "Impuesto Inexistente" :  Model.Impuestos.Where(a => a.id == item.idImpuesto).FirstOrDefault().Codigo) </td> 
                                        
-                                            <td>         @item.Nombre </td>
+                                           
                                               <td>  @( Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault() == null ? "Bodega Inexistente" :  Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault().Nombre) </td> 
                                                  <td>  @( Model.Listas.Where(a => a.id == item.idListaPrecios).FirstOrDefault() == null ? "Lista de Precio Inexistente" :  Model.Listas.Where(a => a.id == item.idListaPrecios).FirstOrDefault().Nombre) </td> 
                                                 <td>         @item.PrecioUnitario </td>
-                                                    <td>         @item.UnidadMedida </td>
-                                                        <td>         @item.Cabys </td>
+                                                   
                                                             
                                                                     <td>         @item.Costo </td>
                                                                         <td>         @item.Stock </td>
+                                                                          <td>       @item.FechaActualizacion.ToString("dd/MM/yyyy")  </td>
+                                   
+                                   
 
                                                                            
                                 </tr>
@@ -243,19 +245,19 @@ try {
                             <tfoot>
                                 <tr>
                                      <th>ID</th>
-                                           <th>Código</th>
+                                           <th>Producto</th>
                                     <th>Impuesto</th> 
 
                                    
-                                    <th>Nombre</th>
+                                   
                                         <th>Bodega</th>
                                       <th>Lista de Precio</th>
                                     <th>Precio Unitario</th>
-                                    <th>Unidad de Medida</th>
-                                    <th>Cabys</th>
+                                   
                                
                                       <th>Costo</th>
                                       <th>Stock</th>
+                                         <th>Fecha Actualización</th>
                                      
 
                                         

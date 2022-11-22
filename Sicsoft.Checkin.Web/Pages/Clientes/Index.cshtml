@@ -383,6 +383,7 @@ function onClickModalByClient(id) {
                                        <th>Grupo</th>
                                       <th>Estado</th>
                                       <th>Procesado a SAP</th>
+                                      <th> Fecha Actualización</th>
                                      
 
 
@@ -459,6 +460,9 @@ function onClickModalByClient(id) {
                                             }
 
                                     </td>
+                                       <td>
+                                        @item.FechaActualizacion.ToString("dd/MM/yyyy") 
+                                    </td>
                                     
 
                                 </tr>
@@ -482,6 +486,7 @@ function onClickModalByClient(id) {
                                        <th>Grupo</th>
                                       <th>Estado</th>
                                        <th>Procesado a SAP</th>
+                                          <th> Fecha Actualización</th>
                                        
                                 </tr>
                             </tfoot>

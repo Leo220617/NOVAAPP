@@ -1,4 +1,5 @@
 ﻿using Castle.MicroKernel.SubSystems.Conversion;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -59,6 +60,9 @@ namespace NOVAAPP.Models
         public string CorreoPublicitario { get; set; }
 
         public int idGrupo { get; set; }
+
+        public DateTime FechaActualizacion { get; set; }
+
 
     }
 }

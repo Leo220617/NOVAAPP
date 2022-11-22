@@ -21,7 +21,9 @@ namespace NOVAAPP.Pages.CierreCajas
         private readonly ICrudApi<UsuariosViewModel, int> users;
         private readonly ICrudApi<TipoCambiosViewModel, int> tipoCambio;
         private readonly ICrudApi<CajasViewModel, int> cajo;
-
+        private readonly ICrudApi<DocumentosViewModel, int> documento;
+        private readonly ICrudApi<MetodosPagosViewModel, int> pagos;
+        private readonly ICrudApi<CuentasBancariasViewModel, int> cuenta;
 
 
         [BindProperty]
@@ -40,13 +42,26 @@ namespace NOVAAPP.Pages.CierreCajas
         [BindProperty]
         public TipoCambiosViewModel[] TC { get; set; }
 
-        public ObservarModel(ICrudApi<CierreCajasViewModel, int> service, ICrudApi<UsuariosViewModel, int> users, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<CajasViewModel, int> cajo)
+
+        [BindProperty]
+        public DocumentosViewModel[] Documento { get; set; }
+
+        [BindProperty]
+        public MetodosPagosViewModel[] Pagos { get; set; }
+
+        [BindProperty]
+        public CuentasBancariasViewModel[] CuentasBancarias { get; set; }
+
+        public ObservarModel(ICrudApi<CierreCajasViewModel, int> service, ICrudApi<UsuariosViewModel, int> users, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<CajasViewModel, int> cajo, ICrudApi<DocumentosViewModel, int> documento,  ICrudApi<MetodosPagosViewModel, int> pagos,ICrudApi<CuentasBancariasViewModel, int> cuenta)
         {
             this.service = service;
             this.users = users;
             this.tipoCambio = tipoCambio;
             this.cajo = cajo;
+            this.documento = documento;
            
+            this.pagos = pagos;
+            this.cuenta = cuenta;
         }
         public async Task<IActionResult> OnGetAsync(int id, string Fecha, int idUsuario)
         {
@@ -69,6 +84,21 @@ namespace NOVAAPP.Pages.CierreCajas
                 filtro.FechaInicial = DateTime.Now.Date;
                 TC = await tipoCambio.ObtenerLista(filtro);
 
+
+
+
+                Pagos = await pagos.ObtenerLista("");
+               
+
+
+
+
+                Documento = await documento.ObtenerLista("");
+                Documento = Documento.Where(a => a.idCaja == Cierres.idCaja).ToArray();
+                CuentasBancarias = await cuenta.ObtenerLista("");
+
+
+              
                 return Page();
             }
             catch (Exception ex)

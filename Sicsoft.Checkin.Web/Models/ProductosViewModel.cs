@@ -1,4 +1,5 @@
 ﻿using Castle.MicroKernel.SubSystems.Conversion;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -45,7 +46,8 @@ namespace NOVAAPP.Models
 
         public bool ProcesadoSAP { get; set; }
 
-       
+        public DateTime FechaActualizacion { get; set; }
+
 
     }
 }
