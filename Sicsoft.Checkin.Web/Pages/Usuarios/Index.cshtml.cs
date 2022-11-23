@@ -21,7 +21,7 @@ namespace NOVAAPP.Pages.Usuarios
         private readonly IConfiguration configuration;
         private readonly ICrudApi<UsuariosViewModel, int> service;
         private readonly ICrudApi<RolesViewModel, int> roles;
-
+        private readonly ICrudApi<VendedoresViewModel, int> vendedor;
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
@@ -31,10 +31,14 @@ namespace NOVAAPP.Pages.Usuarios
         [BindProperty]
         public RolesViewModel[] RolesLista { get; set; }
 
-        public IndexModel(ICrudApi<UsuariosViewModel, int> service, ICrudApi<RolesViewModel, int> roles)
+        [BindProperty]
+        public VendedoresViewModel[] Vendedor { get; set; }
+
+        public IndexModel(ICrudApi<UsuariosViewModel, int> service, ICrudApi<RolesViewModel, int> roles, ICrudApi<VendedoresViewModel, int> vendedor)
         {
             this.service = service;
             this.roles = roles;
+            this.vendedor = vendedor;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -47,6 +51,7 @@ namespace NOVAAPP.Pages.Usuarios
                 }
                 Objeto = await service.ObtenerLista(filtro);
                 RolesLista = await roles.ObtenerLista("");
+                Vendedor = await vendedor.ObtenerLista("");
 
                 return Page();
             }

@@ -81,20 +81,22 @@ namespace NOVAAPP.Pages.CierreCajas
                 Caja = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Caja").Select(s1 => s1.Value).FirstOrDefault();
 
                 ParametrosFiltros filtro = new ParametrosFiltros();
-                filtro.FechaInicial = DateTime.Now.Date;
+                filtro.FechaInicial = DateTime.Now;
                 TC = await tipoCambio.ObtenerLista(filtro);
 
+                filtro.FechaInicial = Cierres.FechaCaja;
+                filtro.FechaFinal = Cierres.FechaCaja;
+                filtro.Codigo3 = Cierres.idCaja;
+
+                Documento = await documento.ObtenerLista(filtro); //Documentos de la fecha de la caja y de la caja
 
 
+                filtro.Codigo1 = Cierres.idCaja;
+                Pagos = await pagos.ObtenerLista(filtro); //aqui nos traemos los pagos de la caja
 
-                Pagos = await pagos.ObtenerLista("");
-               
+                
+                
 
-
-
-
-                Documento = await documento.ObtenerLista("");
-                Documento = Documento.Where(a => a.idCaja == Cierres.idCaja).ToArray();
                 CuentasBancarias = await cuenta.ObtenerLista("");
 
 

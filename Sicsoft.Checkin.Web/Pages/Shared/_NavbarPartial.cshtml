@@ -33,241 +33,264 @@
 
                 <ul class="treeview-menu">
                     <li class="treeview">
-              <a href="#">Bitácoras
-                <span class="pull-right-container">
-              <i class="fa fa-angle-right pull-right"></i>
-            </span>
-              </a>
-              <ul class="treeview-menu">
-                
-                <li class="treeview">
-                  @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "6").FirstOrDefault()))
-                        {
+                        <a href="#">
+                            Bitácoras
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
 
-                            <li><a asp-page="/BitacoraErrores/Index"><i class="mdi mdi-alert-circle"></i>Bitácora Errores</a></li>
-                        }
+                            <li class="treeview">
+                                @{
+                                    if (!string.IsNullOrEmpty(Roles.Where(a => a == "6").FirstOrDefault()))
+                                    {
 
-                    }
-                    
-                    @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "38").FirstOrDefault()))
-                        {
+                                    <li><a asp-page="/BitacoraErrores/Index"><i class="mdi mdi-alert-circle"></i>Bitácora Errores</a></li>
+                                    }
 
-                            <li><a asp-page="/BitacoraMovimientos/Index"><i class="mdi mdi-book-open-page-variant"></i>Bitácora Movimientos</a></li>
-                        }
+                                }
 
-                    }
-               </ul>
-                </li>
-             
-            
+                                @{
+                                    if (!string.IsNullOrEmpty(Roles.Where(a => a == "38").FirstOrDefault()))
+                                    {
 
-              
-                    <li class="treeview">
-              <a href="#">Lugares
-                <span class="pull-right-container">
-              <i class="fa fa-angle-right pull-right"></i>
-            </span>
-              </a>
-              <ul class="treeview-menu">
-                
-                <li class="treeview">
-                  @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "16").FirstOrDefault()))
-                        {
+                                    <li><a asp-page="/BitacoraMovimientos/Index"><i class="mdi mdi-book-open-page-variant"></i>Bitácora Movimientos</a></li>
+                                    }
 
-                            <li><a asp-page="/Sucursales/Index"><i class="mdi mdi-home-outline"></i>Sucursales</a></li>
-                        }
+                                }
+                        </ul>
+                    </li>
 
-                        
-                            
-                        }
 
-                 
-                    @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "4").FirstOrDefault()))
-                        {
 
-                            <li><a asp-page="/Bodegas/Index"><i class="mdi mdi-garage"></i>Bodegas</a></li>
-                        }
-
-                    }
-                       @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "10").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/Cajas/Index"><i class="mdi mdi-cart-outline"></i>Cajas</a></li>
-                        }
-
-                    }
-              </ul>
-                </li>
-
-                <li class="treeview">
-              <a href="#">Socio de Negocios
-                <span class="pull-right-container">
-              <i class="fa fa-angle-right pull-right"></i>
-            </span>
-              </a>
-              <ul class="treeview-menu">
-                    @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "11").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/Clientes/Index"><i class="mdi mdi-account-multiple"></i>Clientes</a></li>
-                        }
-
-                    }
-                 
-
-                     @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "28").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/GruposClientes/Index"><i class="mdi mdi-account-multiple"></i>Grupos de Clientes</a></li>
-                        }
-
-                    }
-                     @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "47").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/Vendedores/Index"><i class="mdi mdi-account-multiple"></i>Vendedores</a></li>
-                        }
-
-                    }
-
-                @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "23").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/Exoneraciones/Index"><i class="mdi mdi-file-document"></i>Exoneraciones</a></li>
-                        }
-
-                    }
-                <li class="treeview">
-               
-
-              </ul>
-                </li>
-
-             <li class="treeview">
-              <a href="#">Inventario
-                <span class="pull-right-container">
-              <i class="fa fa-angle-right pull-right"></i>
-            </span>
-              </a>
-              <ul class="treeview-menu">
-                   @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "9").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/Productos/Index"><i class="mdi mdi-cube"></i>Productos</a></li>
-                        }
-
-                    }
-                <li class="treeview">
-               
-
-              </ul>
-                </li>
-                
-                    <li class="treeview">
-              <a href="#">Precios
-                <span class="pull-right-container">
-              <i class="fa fa-angle-right pull-right"></i>
-            </span>
-              </a>
-              <ul class="treeview-menu">
-               
-
-                        @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "7").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/ListaPrecios/Index"><i class="mdi mdi-currency-usd"></i>Lista de Precios</a></li>
-                        }
-
-                    }
-                       @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "22").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/CondicionesPagos/Index"><i class="mdi mdi-wallet-travel"></i>Condiciones De Pago</a></li>
-                        }
-
-                    }
-                         @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "30").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/TipoCambios/Index"><i class="mdi mdi-currency-usd"></i>Tipo de Cambio</a></li>
-                        }
-
-                    }
-                       @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "5").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/Impuestos/Index"><i class="mdi mdi-file"></i>Impuestos</a></li>
-                        }
-
-                    }
-
-                    @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "41").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/CuentasBancarias/Index"><i class="mdi mdi-file"></i>Cuentas Bancarias</a></li>
-                        }
-
-                    }
-                <li class="treeview">
-               
-
-              </ul>
-                </li>
-            
-
-                          
-
-                    
 
                     <li class="treeview">
-              <a href="#">Configuración
-                <span class="pull-right-container">
-              <i class="fa fa-angle-right pull-right"></i>
-            </span>
-              </a>
-              <ul class="treeview-menu">
-                    @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "8").FirstOrDefault()))
-                        {
+                        <a href="#">
+                            Lugares
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
 
-                            <li><a asp-page="/Usuarios/Index"><i class="mdi mdi-account-outline"></i>Usuarios</a></li>
-                        }
+                            <li class="treeview">
+                                @{
+                                    if (!string.IsNullOrEmpty(Roles.Where(a => a == "16").FirstOrDefault()))
+                                    {
 
-                    }
-
-                  
-                    
-
-                      @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "12").FirstOrDefault()))
-                        {
-
-                            <li><a asp-page="/CorreoEnvio/Index"><i class="mdi mdi-email-open-outline"></i>Correo Envio</a></li>
-                        }
-
-                    }
-                <li class="treeview">
-               
-
-              </ul>
-                </li>
+                                    <li><a asp-page="/Sucursales/Index"><i class="mdi mdi-home-outline"></i>Sucursales</a></li>
+                                    }
 
 
-                    
 
-                  
+                                }
 
-                    
-                    
-                      
-                    
+
+                                @{
+                                    if (!string.IsNullOrEmpty(Roles.Where(a => a == "4").FirstOrDefault()))
+                                    {
+
+                                    <li><a asp-page="/Bodegas/Index"><i class="mdi mdi-garage"></i>Bodegas</a></li>
+                                    }
+
+                                }
+                                @{
+                                    if (!string.IsNullOrEmpty(Roles.Where(a => a == "10").FirstOrDefault()))
+                                    {
+
+                                    <li><a asp-page="/Cajas/Index"><i class="mdi mdi-cart-outline"></i>Cajas</a></li>
+                                    }
+
+                                }
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            Socio de Negocios
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "11").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Clientes/Index"><i class="mdi mdi-account-multiple"></i>Clientes</a></li>
+                                }
+
+                            }
+
+
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "28").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/GruposClientes/Index"><i class="mdi mdi-account-multiple"></i>Grupos de Clientes</a></li>
+                                }
+
+                            }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "47").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Vendedores/Index"><i class="mdi mdi-account-multiple"></i>Vendedores</a></li>
+                                }
+
+                            }
+
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "23").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Exoneraciones/Index"><i class="mdi mdi-file-document"></i>Exoneraciones</a></li>
+                                }
+
+                            }
+                            <li class="treeview">
+
+
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            Inventario
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "9").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Productos/Index"><i class="mdi mdi-cube"></i>Productos</a></li>
+                                }
+
+                            }
+                            <li class="treeview">
+
+
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            Precios
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+
+
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "7").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/ListaPrecios/Index"><i class="mdi mdi-currency-usd"></i>Lista de Precios</a></li>
+                                }
+
+                            }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "22").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/CondicionesPagos/Index"><i class="mdi mdi-wallet-travel"></i>Condiciones De Pago</a></li>
+                                }
+
+                            }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "30").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/TipoCambios/Index"><i class="mdi mdi-currency-usd"></i>Tipo de Cambio</a></li>
+                                }
+
+                            }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "5").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Impuestos/Index"><i class="mdi mdi-file"></i>Impuestos</a></li>
+                                }
+
+                            }
+
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "41").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/CuentasBancarias/Index"><i class="mdi mdi-file"></i>Cuentas Bancarias</a></li>
+                                }
+
+                            }
+                            <li class="treeview">
+
+
+                        </ul>
+                    </li>
+
+
+
+
+
+
+                    <li class="treeview">
+                        <a href="#">
+                            Configuración
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "8").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Usuarios/Index"><i class="mdi mdi-account-outline"></i>Usuarios</a></li>
+                                }
+
+                            }
+
+
+
+
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "12").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/CorreoEnvio/Index"><i class="mdi mdi-email-open-outline"></i>Correo Envio</a></li>
+                                }
+
+                            }
+                            <li class="treeview">
+
+
+                        </ul>
+                    </li>
+
+
+
+
+
+
+
+
+
+
 
 
                 </ul>
             </li>
-            
 
 
 
-              <li class="treeview">
+
+            <li class="treeview">
                 <a href="#">
                     <i class="fa fa-money"></i> <span>Transaccional</span>
                     <span class="pull-right-container">
@@ -277,7 +300,8 @@
 
                 <ul class="treeview-menu">
 
-                                     @{if (!string.IsNullOrEmpty(Roles.Where(a => a == "36").FirstOrDefault()))
+                    @{
+                        if (!string.IsNullOrEmpty(Roles.Where(a => a == "36").FirstOrDefault()))
                         {
 
                             <li><a asp-page="/CierreCajas/Index"><i class="mdi mdi-fax"></i>Cierre de Cajas</a></li>
@@ -285,21 +309,38 @@
 
                     }
 
-                    
+
+                    @{
+                        if (!string.IsNullOrEmpty(Roles.Where(a => a == "49").FirstOrDefault()))
+                        {
+                            <li class="">
+
+                                <a asp-page="/Documentos/Index">
+                                    <i class="mdi mdi-file-document"></i> <span>Documentos</span>
+
+                                </a>
+
+                            </li>
+
+                        }
+
+                    }
+
+
 
 
                 </ul>
             </li>
-          
+
             <li class="nav-devider"></li>
-            
-             
-          
-                
+
+
+
+
         </ul>
     </section>
 </aside>
 
-                                
-        
-      
+
+
+

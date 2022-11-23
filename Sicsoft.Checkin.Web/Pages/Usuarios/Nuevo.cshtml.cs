@@ -19,7 +19,7 @@ namespace NOVAAPP.Pages.Usuarios
 {
     private readonly ICrudApi<UsuariosViewModel, int> service; //API
     private readonly ICrudApi<RolesViewModel, int> roles;
-
+    private readonly ICrudApi<VendedoresViewModel, int> vendedor;
 
 
         [BindProperty]
@@ -27,10 +27,15 @@ namespace NOVAAPP.Pages.Usuarios
         [BindProperty]
         public RolesViewModel[] RolesLista { get; set; }
 
-        public NuevoModel(ICrudApi<UsuariosViewModel, int> service, ICrudApi<RolesViewModel, int> roles) //CTOR 
+
+        [BindProperty]
+        public VendedoresViewModel[] Vendedor { get; set; }
+
+        public NuevoModel(ICrudApi<UsuariosViewModel, int> service, ICrudApi<RolesViewModel, int> roles, ICrudApi<VendedoresViewModel, int> vendedor) //CTOR 
         {
             this.service = service;
             this.roles = roles;
+            this.vendedor = vendedor;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -43,7 +48,8 @@ namespace NOVAAPP.Pages.Usuarios
                 return RedirectToPage("/NoPermiso");
             }
                 RolesLista = await roles.ObtenerLista("");
-            return Page();
+                Vendedor = await vendedor.ObtenerLista("");
+                return Page();
         }
         catch (Exception ex)
         {

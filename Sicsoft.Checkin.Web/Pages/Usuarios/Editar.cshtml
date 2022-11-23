@@ -63,25 +63,16 @@
 
                         </div>
 
-                         <br />
+                             <br />
                         <input type="checkbox" asp-for="Usuario.novapos" id="md_checkbox_10" class="chk-col-green" >
                         <label for="md_checkbox_10">NOVAPOS</label>
                         <br />
                         <br />
 
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <h5>Contraseña<span class="text-danger"> (Para este caso, si desea cambiar la contraseña, deben digitarla, sino, solamente se deja en blanco)</span></h5>
-                                    <div class="controls">
-                                        <input type="password" asp-for="Usuario.Clave" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                    </div>
+                           <div class="row">
 
-                                </div>
-
-
-                            </div>
-                            <div class="col-6">
+                            
+                                <div class="col-6">
                                 <div class="form-group">
                                     <h5>Rol<span class="text-danger">*</span></h5>
 
@@ -99,6 +90,43 @@
                                 </div>
 
                             </div>
+                               <div class="col-6">
+                                <div class="form-group">
+                                    <h5>Vendedor<span class="text-danger">*</span></h5>
+
+                                    <select class="form-control select2  " asp-for="Usuario.idVendedor">
+                                        @foreach (var item in Model.Vendedor)
+                                        {
+                                            <option value="@item.id">@item.Nombre</option>
+                                        }
+
+
+                                    </select>
+
+
+
+                                </div>
+
+                            </div>
+
+                           
+
+                               </div>
+
+                        <div class="row">
+                            
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <h5>Contraseña<span class="text-danger"> (Para este caso, si desea cambiar la contraseña, deben digitarla, sino, solamente se deja en blanco)</span></h5>
+                                    <div class="controls">
+                                        <input type="password" asp-for="Usuario.Clave" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                           
                         </div>
 
                         <div class="text-xs-right">

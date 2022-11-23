@@ -18,6 +18,7 @@ namespace NOVAAPP.Pages.Usuarios
     {
         private readonly ICrudApi<UsuariosViewModel, int> service; //API
         private readonly ICrudApi<RolesViewModel, int> roles;
+        private readonly ICrudApi<VendedoresViewModel, int> vendedor;
 
         [BindProperty]
         public UsuariosViewModel Usuario { get; set; }
@@ -25,10 +26,14 @@ namespace NOVAAPP.Pages.Usuarios
         [BindProperty]
         public RolesViewModel[] RolesLista { get; set; }
 
-        public EditarModel(ICrudApi<UsuariosViewModel, int> service, ICrudApi<RolesViewModel, int> roles) //CTOR 
+        [BindProperty]
+        public VendedoresViewModel[] Vendedor { get; set; }
+
+        public EditarModel(ICrudApi<UsuariosViewModel, int> service, ICrudApi<RolesViewModel, int> roles, ICrudApi<VendedoresViewModel, int> vendedor) //CTOR 
         {
             this.service = service;
             this.roles = roles;
+            this.vendedor = vendedor;
           
         }
         public async Task<IActionResult> OnGetAsync(int id)
@@ -42,6 +47,7 @@ namespace NOVAAPP.Pages.Usuarios
                 }
                 Usuario = await service.ObtenerPorId(id);
                 RolesLista = await roles.ObtenerLista("");
+                Vendedor = await vendedor.ObtenerLista("");
                 Usuario.Clave = "";
                 return Page();
             }

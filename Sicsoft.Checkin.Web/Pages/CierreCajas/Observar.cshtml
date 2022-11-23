@@ -550,12 +550,14 @@
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr class="bg-pale-info">
-                                            <th class="text-center">id</th>
+                                             <th class="text-center">Método </th>
                                             <th class="text-center">Factura</th>
-                                            <th class="text-center">Método </th>
-                                            <th class="text-center">Cuenta Bancaria</th>
-                                            <th class="text-center">Monto</th>
+                                            <th class="text-center">Pago</th>
+                                            <th class="text-center">Banco</th>
+                                            <th class="text-center">Cuenta</th>
+                                            <th class="text-center">Referencia</th>
                                             <th class="text-center">Moneda</th>
+                                            <th class="text-center">Total</th>
                                           
 
 
@@ -568,13 +570,20 @@
                                         @foreach (var item in Model.Pagos)
                                     {
                                         <tr>
-                                            <td>@item.id</td>
+                                            <td class="text-center">@item.Metodo</td>
 
                                             <td class="text-right">@item.idEncabezado</td>
 
-                                            <td class="text-center">@item.Metodo</td>
+                                            <td>@item.id</td>
 
-                                            <td class="text-center"> @( Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" :  Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Nombre)</td>
+                                             <td class="text-center"> @( Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" :  Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Banco)</td>
+                                            
+                                              <td class="text-center"> @( Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" :  Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Nombre)</td>
+
+                                            <td class="text-center">@item.NumReferencia</td>
+
+                                              <td class="text-center"> @( Model.Documento.Where(a => a.id == item.idEncabezado).FirstOrDefault() == null ? "" :  Model.Documento.Where(a => a.id == item.idEncabezado).FirstOrDefault().Moneda)</td>
+                                           
 
                                             <td class="text-right">@Math.Round(item.Monto).ToString("C",formato)</td>
 
@@ -583,7 +592,7 @@
 
 
 
-                                            <td class="text-center"> @( Model.Documento.Where(a => a.id == item.idEncabezado).FirstOrDefault() == null ? "CRC" :  Model.Documento.Where(a => a.id == item.idEncabezado).FirstOrDefault().Moneda)</td>
+                                          
 
                                          
 
