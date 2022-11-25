@@ -24,6 +24,7 @@ namespace NOVAAPP.Pages.CierreCajas
         private readonly ICrudApi<CajasViewModel, int> cajas;
         private readonly ICrudApi<RolesViewModel, int> roles;
 
+
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
