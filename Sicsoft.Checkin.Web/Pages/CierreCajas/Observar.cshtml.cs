@@ -82,10 +82,11 @@ namespace NOVAAPP.Pages.CierreCajas
 
                 ParametrosFiltros filtro = new ParametrosFiltros();
                 filtro.FechaInicial = DateTime.Now;
-                TC = await tipoCambio.ObtenerLista(filtro);
+              
 
                 filtro.FechaInicial = Cierres.FechaCaja;
                 filtro.FechaFinal = Cierres.FechaCaja;
+                TC = await tipoCambio.ObtenerLista(filtro);
                 filtro.Codigo3 = Cierres.idCaja;
 
                 Documento = await documento.ObtenerLista(filtro); //Documentos de la fecha de la caja y de la caja

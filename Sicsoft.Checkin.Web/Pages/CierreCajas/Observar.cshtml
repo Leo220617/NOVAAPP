@@ -129,7 +129,7 @@
                     <div class="box-body">
                         <!-- title row -->
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="page-header mt-0">
                                     <h2 class="d-inline"><span class="font-size-24">Cierre Caja</span></h2>
                                     <div class="text-left">
@@ -163,9 +163,9 @@
 
                             <div class="col-2">
                                 <div class="form-group">
-                                    <label>IP</label>
-                                    <h6>@( Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault() == null ? 0 :  Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault().TipoCambio) </h6>
-
+                                    <label>Tipo de Cambio</label>
+                                    <h6>₡@Math.Round( Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault() == null ? 0 :  Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault().TipoCambio, 2).ToString("C",formato)  </h6>
+                                    
 
                                 </div>
                             </div>
