@@ -24,6 +24,8 @@ namespace NOVAAPP.Pages.CierreCajas
         private readonly ICrudApi<DocumentosViewModel, int> documento;
         private readonly ICrudApi<MetodosPagosViewModel, int> pagos;
         private readonly ICrudApi<CuentasBancariasViewModel, int> cuenta;
+        private readonly ICrudApi<CondicionesPagosViewModel, int> cond;
+
 
 
         [BindProperty]
@@ -51,15 +53,18 @@ namespace NOVAAPP.Pages.CierreCajas
 
         [BindProperty]
         public CuentasBancariasViewModel[] CuentasBancarias { get; set; }
+        [BindProperty]
+        public CondicionesPagosViewModel Condicion { get; set; }
 
-        public ObservarModel(ICrudApi<CierreCajasViewModel, int> service, ICrudApi<UsuariosViewModel, int> users, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<CajasViewModel, int> cajo, ICrudApi<DocumentosViewModel, int> documento,  ICrudApi<MetodosPagosViewModel, int> pagos,ICrudApi<CuentasBancariasViewModel, int> cuenta)
+
+        public ObservarModel(ICrudApi<CierreCajasViewModel, int> service, ICrudApi<UsuariosViewModel, int> users, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<CajasViewModel, int> cajo, ICrudApi<DocumentosViewModel, int> documento,  ICrudApi<MetodosPagosViewModel, int> pagos,ICrudApi<CuentasBancariasViewModel, int> cuenta, ICrudApi<CondicionesPagosViewModel, int> cond)
         {
             this.service = service;
             this.users = users;
             this.tipoCambio = tipoCambio;
             this.cajo = cajo;
             this.documento = documento;
-           
+            this.cond = cond;
             this.pagos = pagos;
             this.cuenta = cuenta;
         }
@@ -100,6 +105,8 @@ namespace NOVAAPP.Pages.CierreCajas
 
                 CuentasBancarias = await cuenta.ObtenerLista("");
 
+                var Condiciones = await cond.ObtenerLista("");
+                Condicion = Condiciones.Where(a => a.Dias == 0).FirstOrDefault();
 
               
                 return Page();
