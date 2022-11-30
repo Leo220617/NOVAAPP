@@ -165,12 +165,12 @@
                                 <div class="form-group">
                                     <label>Tipo de Cambio</label>
                                     <h6>₡@Math.Round( Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault() == null ? 0 :  Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault().TipoCambio, 2).ToString("C",formato)  </h6>
-                                    
+
 
                                 </div>
                             </div>
 
-                            
+
                             <div class="col-2">
                                 <div class="form-group">
                                     <label>IP</label>
@@ -694,18 +694,19 @@
                             </table>
                         </div>
                         <!-- /.col -->
+
                         <div class="col-12  text-right">
-
-
                             <div>
-                                <p>Total Colones  : <span> @Math.Round(Model.Cierres.TotalRegistradoColones, 2).ToString("C",formato)</span> </p>
-                                <p>Total Dólares  : <span> @Math.Round(Model.Cierres.TotalRegistradoFC, 2).ToString("C",formato)</span></p>
+                                <p>Total Colones  : <span> ₡ @Math.Round(Model.Documento.Where(a => a.Moneda == "CRC").Sum(a => a.TotalCompra), 2).ToString("C",formato)</span> </p>
+                                <p>Total Dólares  : <span> $ @Math.Round(Model.Documento.Where(a => a.Moneda == "USD").Sum(a => a.TotalCompra), 2).ToString("C",formato)</span></p>
 
 
                             </div>
                             <div class="total-payment">
-                                <h3><b>Totalizado :</b>  <span>  @Math.Round(Model.Cierres.TotalizadoMonedas, 2).ToString("C",formato)</span></h3>
+                                <h3><b>Totalizado :</b>  <span> ₡ @((@Math.Round(Model.Documento.Where(a => a.Moneda == "CRC").Sum(a => a.TotalCompra), 2) + ( @Math.Round(Model.Documento.Where(a => a.Moneda == "USD").Sum(a => a.TotalCompra), 2)  * Model.TC.Where(a => a.Moneda == "USD").FirstOrDefault().TipoCambio ) ).ToString("C",formato)) </span></h3>
                             </div>
+
+                            
 
                         </div>
                         <div class="text-xs-right">
@@ -1212,7 +1213,7 @@
 
 
 
-                                
+
 
 
                                     </tbody>
