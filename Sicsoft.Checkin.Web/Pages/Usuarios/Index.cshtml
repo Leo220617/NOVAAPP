@@ -171,6 +171,7 @@
                                         <th>Nombre</th>
                                         <th>Usuario</th>
                                         <th>Vendedor</th>
+                                        <th>% Descuento</th>
 
 
                                         <th>Estado</th>
@@ -197,7 +198,7 @@
                                         <td>         @item.Nombre </td>
                                         <td>         @item.NombreUsuario </td>
                                         <td>        @( Model.Vendedor.Where(a => a.id == item.idVendedor).FirstOrDefault() == null ? "Vendedor Inexistente" :  Model.Vendedor.Where(a => a.id == item.idVendedor).FirstOrDefault().Nombre) </td>
-
+                                          <td>        @Math.Round(item.Descuento, 2)% </td>
 
                                         <td>
                                             @if (item.Activo)
@@ -227,6 +228,7 @@
                                     <th>Nombre</th>
                                     <th>Usuario</th>
                                     <th>Vendedor</th>
+                                    <th>% Descuento</th>
                                     <th>Estado</th>
 
                                 </tr>
