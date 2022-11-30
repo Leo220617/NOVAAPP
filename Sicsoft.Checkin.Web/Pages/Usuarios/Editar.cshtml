@@ -39,7 +39,7 @@
                         <input hidden asp-for="Usuario.id" />
                         <div class="row">
 
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="form-group">
                                     <h5>Nombre Completo<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -48,7 +48,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="form-group">
                                     <h5>Nombre de Usuario<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -57,6 +57,16 @@
 
                                 </div>
 
+                            </div>
+
+                             <div class="col-4">
+                                <div class="form-group">
+                                    <h5>Descuento Máximo<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="number" asp-for="Usuario.Descuento" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
                             </div>
 
 
