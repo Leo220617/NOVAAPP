@@ -1212,37 +1212,7 @@
 
 
 
-                                        @*@foreach (var item in Model.Pagos.OrderBy(a => a.Metodo))
-                                        {
-                                        <tr>
-                                        <td class="text-center">@item.Metodo</td>
-
-                                        <td class="text-right">@item.idEncabezado</td>
-
-                                        <td>@item.id</td>
-
-                                        <td class="text-center"> @( Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" :  Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Banco)</td>
-
-                                        <td class="text-center"> @( Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" :  Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Nombre)</td>
-
-                                        <td class="text-center">@item.NumReferencia</td>
-
-                                        <td class="text-center"> @( Model.Documento.Where(a => a.id == item.idEncabezado).FirstOrDefault() == null ? "" :  Model.Documento.Where(a => a.id == item.idEncabezado).FirstOrDefault().Moneda)</td>
-
-
-                                        <td class="text-right">@Math.Round(item.Monto).ToString("C",formato)</td>
-
-
-
-
-
-
-
-
-
-
-                                        </tr>
-                                        }*@
+                                
 
 
                                     </tbody>
@@ -1253,13 +1223,13 @@
 
 
                                 <div>
-                                    <p>Total Colones  : <span> @Math.Round(Model.Cierres.TotalRegistradoColones, 2).ToString("C",formato)</span> </p>
-                                    <p>Total Dólares  : <span> @Math.Round(Model.Cierres.TotalRegistradoFC, 2).ToString("C",formato)</span></p>
+                                    <p>Total Colones  : <span> ₡ @Math.Round(Model.Documento.Where(a => a.Moneda == "CRC").Sum(a => a.TotalCompra), 2).ToString("C",formato)</span> </p>
+                                    <p>Total Dólares  : <span> $ @Math.Round(Model.Documento.Where(a => a.Moneda == "USD").Sum(a => a.TotalCompra), 2).ToString("C",formato)</span></p>
 
 
                                 </div>
                                 <div class="total-payment">
-                                    <h3><b>Totalizado :</b>  <span>  @Math.Round(Model.Cierres.TotalizadoMonedas, 2).ToString("C",formato)</span></h3>
+                                    <h3><b>Totalizado :</b>  <span> ₡ @((@Math.Round(Model.Documento.Where(a => a.Moneda == "CRC").Sum(a => a.TotalCompra), 2) + ( @Math.Round(Model.Documento.Where(a => a.Moneda == "USD").Sum(a => a.TotalCompra), 2)  * Model.TC.Where(a => a.Moneda == "USD").FirstOrDefault().TipoCambio ) ).ToString("C",formato)) </span></h3>
                                 </div>
 
                             </div>
