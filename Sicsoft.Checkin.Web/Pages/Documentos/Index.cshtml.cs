@@ -87,8 +87,8 @@ namespace NOVAAPP.Pages.Documentos
                     filtro.Codigo5 = 0;
                     filtro.ItemCode = "0";
                     filtro.CardName = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "CodSuc").Select(s1 => s1.Value).FirstOrDefault();
-                    filtro.Activo = true;
                 }
+                filtro.Activo = true;
                 
                 Listas = await service.ObtenerLista(filtro);
                 var Roles = await roles.ObtenerLista("");
