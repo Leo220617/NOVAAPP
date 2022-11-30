@@ -73,7 +73,7 @@
                                 <div class="form-group">
                                     <h5>Descuento Máximo<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="number" asp-for="Usuario.Descuento" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="number" asp-for="Usuario.Descuento"  min="0" max="100" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
