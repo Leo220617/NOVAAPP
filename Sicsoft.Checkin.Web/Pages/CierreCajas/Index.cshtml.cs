@@ -72,6 +72,8 @@ namespace NOVAAPP.Pages.CierreCajas
 
                     filtro.FechaFinal = ultimoDia;
 
+                    filtro.FechaInicial = DateTime.Now.AddDays(-8);
+                    filtro.FechaFinal = filtro.FechaInicial.AddDays(9);
 
                 }
                  

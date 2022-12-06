@@ -25,7 +25,7 @@
     var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
 }
 @section styles{
-
+    
 
 }
     @section scripts{
@@ -709,7 +709,7 @@
                                 <h3><b>Totalizado :</b>  <span> ₡ @((@Math.Round(Model.Documento.Where(a => a.Moneda == "CRC"  && a.idCondPago == cond.id).Sum(a => a.TotalCompra), 2) + ( @Math.Round(Model.Documento.Where(a => a.Moneda == "USD").Sum(a => a.TotalCompra), 2)  * Model.TC.Where(a => a.Moneda == "USD").FirstOrDefault().TipoCambio ) ).ToString("C",formato)) </span></h3>
                             </div>
 
-                            
+
 
                         </div>
                         <div class="text-xs-right">
@@ -907,29 +907,29 @@
                     </div>
                     <!-- /.col -->
                 </div>
-                    <div class="row">
-                                <div class="col-6">
+                <div class="row">
+                    <div class="col-6">
 
-                                    <div class="form-group">
-                                        <label>Transferencias Colones</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.TransferenciasColones, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label>Transferencias Dólares</label>
-                                        <h6> $@Math.Round(Model.Cierres.TransferenciasDolares, 2).ToString("C",formato)  </h6>
+                        <div class="form-group">
+                            <label>Transferencias Colones</label>
+                            <h6> ₡@Math.Round(Model.Cierres.TransferenciasColones, 2).ToString("C",formato)  </h6>
 
 
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Transferencias Dólares</label>
+                            <h6> $@Math.Round(Model.Cierres.TransferenciasDolares, 2).ToString("C",formato)  </h6>
 
-                                <!-- /.col -->
-                                <!-- title row -->
 
-                            </div>
+                        </div>
+                    </div>
+
+                    <!-- /.col -->
+                    <!-- title row -->
+
+                </div>
                 <div class="row">
                     <div class="col-6">
 
@@ -1178,7 +1178,7 @@
                         <!-- Table row -->
                         <div class="row">
                             <div class="col-12 table-responsive">
-                                <table class="table table-bordered">
+                                <table class="table table-bordered print-friendly"  >
                                     <thead>
                                         <tr class="bg-pale-info">
                                             <th class="text-center">Método </th>
