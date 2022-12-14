@@ -48,6 +48,8 @@ namespace NOVAAPP.Models
 
         public DateTime FechaActualizacion { get; set; }
 
+        public bool MAG { get; set; }
+
 
     }
 }

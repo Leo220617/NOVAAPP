@@ -204,6 +204,7 @@ try {
                                 
                                       <th>Costo</th>
                                       <th>Stock</th>
+                                      <th>MAG</th>
                                       <th>Fecha Actualización</th>
                                     
                                        
@@ -231,6 +232,17 @@ try {
                                                             
                                                                     <td>         @item.Costo </td>
                                                                         <td>         @item.Stock </td>
+                                                                           <td>
+                                         @if(item.MAG)
+                                            {
+                                                <span class="badge badge-pill badge-success">SI</span>
+
+                                            }else
+                                            {
+                                                <span class="badge badge-pill badge-danger">NO</span>
+                                            }
+
+                                    </td>
                                                                           <td>       @item.FechaActualizacion.ToString("dd/MM/yyyy")  </td>
                                    
                                    
@@ -257,6 +269,7 @@ try {
                                
                                       <th>Costo</th>
                                       <th>Stock</th>
+                                       <th>MAG</th>
                                          <th>Fecha Actualización</th>
                                      
 
