@@ -382,6 +382,7 @@ function onClickModalByClient(id) {
                                       <th>Saldo</th>
                                        <th>Grupo</th>
                                       <th>Estado</th>
+                                       <th>MAG</th>
                                       <th>Procesado a SAP</th>
                                       <th> Fecha Actualización</th>
                                      
@@ -446,6 +447,17 @@ function onClickModalByClient(id) {
                                             }else
                                             {
                                                 <span class="badge badge-pill badge-danger">Inactivo</span>
+                                            }
+
+                                    </td>
+                                      <td>
+                                         @if(item.MAG)
+                                            {
+                                                <span class="badge badge-pill badge-success">SI</span>
+
+                                            }else
+                                            {
+                                                <span class="badge badge-pill badge-danger">NO</span>
                                             }
 
                                     </td>

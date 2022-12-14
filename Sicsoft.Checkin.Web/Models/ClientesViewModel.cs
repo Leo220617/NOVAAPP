@@ -61,6 +61,7 @@ namespace NOVAAPP.Models
 
         public int idGrupo { get; set; }
 
+        public bool MAG { get; set; }
         public DateTime FechaActualizacion { get; set; }
 
 
