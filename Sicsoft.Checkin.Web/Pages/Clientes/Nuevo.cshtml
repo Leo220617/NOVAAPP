@@ -232,7 +232,7 @@
                         <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="cyber">Tipo de Cédula:</label>
                                         <select id="selectTP" class="form-control" asp-for="Cliente.TipoCedula" onchange="javascript: maskCedula();" required>
@@ -245,7 +245,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <h5>Cédula<span class="text-danger">* (Sin guiones, sin espacios y con 0's)</span></h5>
                                         <div class="controls">
@@ -254,7 +254,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <h5>Nombre<span class="text-danger">*</span></h5>
                                         <div class="controls">
@@ -272,7 +272,7 @@
 
 
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <h5>Correo Factura<span class="text-danger">*</span></h5>
                                         <div class="controls">
@@ -283,7 +283,7 @@
 
 
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <h5>Correo Publicitario<span class="text-danger">*</span></h5>
                                         <div class="controls">
@@ -295,7 +295,7 @@
 
 
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <h5>Teléfono<span class="text-danger">*</span></h5>
                                         <div class="controls">
@@ -311,7 +311,7 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="nom">Provincia:</label>
                                         <select id="selectP" class="form-control" asp-for="Cliente.Provincia" onchange="javascript: ModificaSelects(1)" required>
@@ -333,7 +333,7 @@
 
 
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="nom">Cantón:</label>
                                         <select id="selectC" class="form-control" asp-for="Cliente.Canton" onchange="javascript: ModificaSelects(2)" required>
@@ -350,7 +350,7 @@
 
 
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="nom">Distrito:</label>
                                     <select id="selectD" class="form-control" asp-for="Cliente.Distrito" onchange="javascript: ModificaSelects(3)" required>
@@ -366,7 +366,7 @@
                                 </div>
 
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="nom">Barrio:</label>
                                     <select id="selectB" class="form-control" asp-for="Cliente.Barrio" required>
@@ -383,7 +383,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <h5>Dirección<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -394,7 +394,7 @@
 
 
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <h5>Lista de Precio<span class="text-danger">*</span></h5>
 
@@ -412,7 +412,7 @@
 
 
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <h5>Grupo<span class="text-danger">*</span></h5>
 

@@ -129,7 +129,7 @@
                     <div class="box-body">
                         <!-- title row -->
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-md-4">
                                 <div class="page-header mt-0">
                                     <h2 class="d-inline"><span class="font-size-24">Cierre Caja</span></h2>
                                     <div class="text-left">
@@ -141,7 +141,7 @@
                                 </div>
 
                             </div>
-                            <div class="col-2">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Usuario</label>
                                     <h6> @Model.Users.Nombre </h6>
@@ -149,7 +149,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Caja</label>
                                     <h6>@( Model.Cajos.Where(a => a.id == Model.Cierres.idCaja).FirstOrDefault() == null ? "Caja Inexistente" :  Model.Cajos.Where(a => a.id == Model.Cierres.idCaja).FirstOrDefault().Nombre) </h6>
@@ -161,7 +161,7 @@
 
 
 
-                            <div class="col-2">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Tipo de Cambio</label>
                                     <h6>₡@Math.Round( Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault() == null ? 0 :  Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault().TipoCambio, 2).ToString("C",formato)  </h6>
@@ -171,7 +171,7 @@
                             </div>
 
 
-                            <div class="col-2">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>IP</label>
                                     <h6>@Model.Cierres.IP </h6>
@@ -201,7 +201,7 @@
                             <input hidden asp-for="Cierres.idUsuario" />
                             <!-- title row -->
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-md-6">
 
                                     <div class="form-group">
                                         <label>Apertura Colones</label>
@@ -210,7 +210,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Apertura Dólares</label>
                                         <h6> $@Math.Round(Model.Cierres.TotalAperturaFC, 2).ToString("C",formato) </h6>
@@ -241,7 +241,7 @@
                             </div>
                             <!-- title row -->
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-md-3">
 
                                     <div class="form-group">
                                         <label>Efectivo Colones</label>
@@ -250,7 +250,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
 
                                     <div class="form-group">
                                         <label>Tarjetas Colones</label>
@@ -259,7 +259,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Efectivo Dólares</label>
                                         <h6> $@Math.Round(Model.Cierres.EfectivoFC, 2).ToString("C",formato)  </h6>
@@ -268,7 +268,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Tarjetas Dólares</label>
                                         <h6> $@Math.Round(Model.Cierres.TarjetasFC, 2).ToString("C",formato)  </h6>
@@ -282,7 +282,7 @@
 
                             <!-- title row -->
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-md-3">
 
                                     <div class="form-group">
                                         <label>Cheques Colones</label>
@@ -291,7 +291,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
 
                                     <div class="form-group">
                                         <label>Otros Colones</label>
@@ -300,7 +300,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Cheques Dólares</label>
                                         <h6> $@Math.Round(Model.Cierres.ChequesFC, 2).ToString("C",formato)  </h6>
@@ -309,7 +309,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Otros Dólares</label>
                                         <h6> $@Math.Round(Model.Cierres.OtrosMediosFC, 2).ToString("C",formato)  </h6>
@@ -321,7 +321,7 @@
                             </div>
                             <!-- title row -->
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-md-6">
 
                                     <div class="form-group">
                                         <label>Transferencias Colones</label>
@@ -330,7 +330,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Transferencias Dólares</label>
                                         <h6> $@Math.Round(Model.Cierres.TransferenciasDolares, 2).ToString("C",formato)  </h6>
@@ -345,7 +345,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-md-6">
 
                                     <div class="form-group">
                                         <label>Total Colones</label>
@@ -354,7 +354,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Total Dólares</label>
                                         <h6> $@Math.Round(Model.Cierres.TotalVendidoFC, 2).ToString("C",formato)  </h6>
@@ -386,7 +386,7 @@
                                 <!-- /.col -->
                             </div>
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-md-3">
 
                                     <div class="form-group">
                                         <label>Efectivo Colones Cajero</label>
@@ -395,7 +395,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Tarjetas Colones Cajero</label>
                                         <h6> ₡@Math.Round(Model.Cierres.TarjetasColonesC, 2).ToString("C",formato) </h6>
@@ -403,7 +403,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
 
                                     <div class="form-group">
                                         <label>Efectivo Dólares Cajero</label>
@@ -412,7 +412,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
 
                                     <div class="form-group">
                                         <label>Tarjetas Dólares Cajero</label>
@@ -426,7 +426,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-md-3">
 
                                     <div class="form-group">
                                         <label>Cheques Colones Cajero</label>
@@ -435,7 +435,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
 
                                     <div class="form-group">
                                         <label>Otros Colones Cajero</label>
@@ -444,7 +444,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Cheques Dólares Cajero</label>
                                         <h6> $@Math.Round(Model.Cierres.ChequesFCC, 2).ToString("C",formato)  </h6>
@@ -453,7 +453,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Otros Dólares Cajero</label>
                                         <h6> $@Math.Round(Model.Cierres.OtrosMediosFCC, 2).ToString("C",formato)  </h6>
@@ -465,7 +465,7 @@
                             </div>
                             <!-- title row -->
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-md-6">
 
                                     <div class="form-group">
                                         <label>Transferencias Colones Cajero</label>
@@ -474,7 +474,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Transferencias Dólares Cajero</label>
                                         <h6> $@Math.Round(Model.Cierres.TransferenciasDolaresC, 2).ToString("C",formato)  </h6>
@@ -509,7 +509,7 @@
                                 <!-- /.col -->
                             </div>
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-md-4">
 
                                     <div class="form-group">
                                         <label>Total Registrado Colones</label>
@@ -518,7 +518,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Total Registrado Dólares</label>
                                         <h6> $@Math.Round(Model.Cierres.TotalRegistradoFC, 2).ToString("C",formato)  </h6>
@@ -526,7 +526,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Totalizado</label>
                                         <h6> ₡@Math.Round(Model.Cierres.TotalizadoMonedas, 2).ToString("C",formato)  </h6>
@@ -539,7 +539,7 @@
 
 
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-md-6">
 
                                     <div class="form-group">
                                         <label>Diferencia Colones</label>
@@ -548,7 +548,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Diferencia Dólares</label>
                                         <h6> $@Math.Round(Model.Cierres.TotalVendidoFC - Model.Cierres.TotalRegistradoFC, 2).ToString("C",formato) </h6>
@@ -573,7 +573,7 @@
         </div>
 
         <div class="row">
-            <div class="col-12">
+            <div class="col-md-12">
 
                 <div class="box">
 
@@ -595,7 +595,7 @@
                         <!-- /.row -->
                         <!-- Table row -->
                         <div class="row">
-                            <div class="col-12 table-responsive">
+                            <div class="col-md-12 table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr class="bg-pale-info">
@@ -695,7 +695,7 @@
                         </div>
                         <!-- /.col -->
 
-                        <div class="col-12  text-right">
+                        <div class="col-md-12  text-right">
                             <div>
                                 @{
                                     var cond = Model.Condicion;

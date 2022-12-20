@@ -435,7 +435,7 @@
 
 
                         <div class="row">
-                            <div class="col-12" style="text-align: center;">
+                            <div class="col-md-12" style="text-align: center;">
                                 <div class="form-group">
                                     <center>
                                         <img id="imgPrincipalG" src="data:image/jpeg;base64,@Model.Exoneracion.Imagen" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
@@ -459,7 +459,7 @@
                         <div class="row">
 
 
-                            <div class="col-4">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="cyber">Tipo de Documento:</label>
                                     <select class="form-control" id="selectTD" required asp-for="Exoneracion.TipoDoc">
@@ -478,7 +478,7 @@
                             </div>
 
 
-                            <div class="col-4">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <h5>Número de documento<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -490,7 +490,7 @@
                             </div>
 
 
-                            <div class="col-4">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <h5>Nombre de Institución<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -504,17 +504,17 @@
                         </div>
                         <div class="row">
 
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <label for="cyber">Fecha de Emisión:</label>
                                 <input type="date" class="form-control" asp-for="Exoneracion.FechaEmision" id="FecEmi" required />
                             </div>
 
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <label for="cyber">Fecha de Vencimiento:</label>
                                 <input type="date" class="form-control" id="FecVen" asp-for="Exoneracion.FechaVencimiento" required />
                             </div>
 
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <h5>%Exoneración<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -525,7 +525,7 @@
 
                             </div>
 
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <h5>Cliente<span class="text-danger">*</span></h5>
 
@@ -554,7 +554,7 @@
             <div class="box">
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <h5>Cabys<span class="text-danger">*</span></h5>
 
@@ -584,7 +584,7 @@
                 <div class="box-body">
                     <!-- Table row -->
                     <div class="row">
-                        <div class="col-12 table-responsive">
+                        <div class="col-md-12 table-responsive">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -604,7 +604,7 @@
                     <!-- /.row -->
 
                     <div class="row no-print">
-                        <div class="col-12">
+                        <div class="col-md-12">
                             <button type="button" class="btn btn-info pull-right" onclick="javascript: Generar()" title="Guardar Cambios">Guardar Cambios</button>
 
 

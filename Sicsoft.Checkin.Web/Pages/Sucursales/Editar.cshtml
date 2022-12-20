@@ -253,15 +253,15 @@
 
     <section class="content">
         <div class="row">
-            <div class="col-12">
+            <div class="col-md-12">
                 <div class="box">
                     <div class="box-header with-border">
                         <div class="row">
-                            <div class="col-8">
+                            <div class="col-md-8">
                                 <h6 class="box-subtitle"> Editar Sucursal</h6>
 
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-4">
                                 <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
 
 
@@ -273,7 +273,7 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input hidden asp-for="Sucursales.CodSuc" />
                               <div class="row" >
-                                <div class="col-12" style="text-align: center;">
+                                <div class="col-md-12" style="text-align: center;">
                                  <div class="form-group">
                                         <center>
                                             <img id="imgPrincipalG" src="data:image/jpeg;base64,@Model.Sucursales.Imagen" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
@@ -294,7 +294,7 @@
                             </div>
                             </div>
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="cyber">Tipo de Cédula:</label>
                                         <select id="selectTP" class="form-control" asp-for="Sucursales.TipoCedula" onchange="    javascript: maskCedula();" required>
@@ -307,7 +307,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <h5>Cédula<span class="text-danger">*</span></h5>
                                         <div class="controls">
@@ -316,7 +316,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-xl-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <h5>Nombre Sucursal<span class="text-danger">*</span></h5>
                                         <div class="controls">
@@ -337,7 +337,7 @@
 
 
 
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <h5>Email<span class="text-danger">*</span></h5>
                                         <div class="controls">
@@ -349,7 +349,7 @@
 
                                 </div>
 
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <h5>Teléfono<span class="text-danger">*</span></h5>
                                         <div class="controls">
@@ -363,7 +363,7 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="nom">Provincia:</label>
                                         <select id="selectP" class="form-control" asp-for="Sucursales.Provincia" onchange="javascript: ModificaSelects(1)" required>
@@ -385,7 +385,7 @@
 
 
                                 </div>
-                                <div class="col-3">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="nom">Cantón:</label>
                                         <select id="selectC" class="form-control" asp-for="Sucursales.Canton" onchange="javascript: ModificaSelects(2)" required>
@@ -402,7 +402,7 @@
 
 
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="nom">Distrito:</label>
                                     <select id="selectD" class="form-control" asp-for="Sucursales.Distrito" onchange="javascript: ModificaSelects(3)" required>
@@ -418,7 +418,7 @@
                                 </div>
 
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="nom">Barrio:</label>
                                     <select id="selectB" class="form-control" asp-for="Sucursales.Barrio" required>
@@ -435,7 +435,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <h5>Dirección<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -446,7 +446,7 @@
 
 
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3">
                                  <div class="form-group">
                                     <h5>Serie Contado<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -459,7 +459,7 @@
 
                             </div>
 
-                             <div class="col-3">
+                             <div class="col-md-3">
                                  <div class="form-group">
                                     <h5>Serie Crédito<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -472,7 +472,7 @@
 
                             </div>
 
-                               <div class="col-3">
+                               <div class="col-md-3">
                                  <div class="form-group">
                                     <h5>Serie Nota de Crédito<span class="text-danger">*</span></h5>
                                     <div class="controls">

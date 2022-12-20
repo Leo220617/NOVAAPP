@@ -79,28 +79,28 @@
 
                         <div class="row">
 
-                            <div class="col-12">
+                            <div class="col-md-12">
                                 <div class="page-header mt-0">
 
                                     <br />
                                     <div class="text-left">
                                         <div class="row">
-                                            <div class="col-3">
+                                            <div class="col-md-3">
                                                 <h5> <b>Cédula:</b> @Model.Cliente.Cedula</h5>
 
                                             </div>
 
-                                            <div class="col-3">
+                                            <div class="col-md-3">
                                                 <h5> <b>Grupo:</b> @( Model.Grupos.Where(a => a.id == Model.Cliente.idGrupo).FirstOrDefault() == null ? "Grupo de Cliente Inexistente" :  Model.Grupos.Where(a => a.id == Model.Cliente.idGrupo).FirstOrDefault().Nombre)</h5>
 
                                             </div>
 
-                                            <div class="col-3">
+                                            <div class="col-md-3">
                                                 <h5> <b>Teléfono:</b> @Model.Cliente.Telefono</h5>
 
                                             </div>
 
-                                            <div class="col-3">
+                                            <div class="col-md-3">
                                                 <h5> <b>Lista de Precio:</b>  @( Model.PrecioLista.Where(a => a.id == Model.Cliente.idListaPrecios).FirstOrDefault() == null ? "Lista de Precio Inexistente" :  Model.PrecioLista.Where(a => a.id == Model.Cliente.idListaPrecios).FirstOrDefault().Nombre)</h5>
 
                                             </div>
@@ -120,7 +120,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12">
+                            <div class="col-md-12">
                                 <div class="page-header mt-0">
 
                                     <br />
@@ -128,12 +128,12 @@
                                         <div class="row">
 
 
-                                            <div class="col-4">
+                                            <div class="col-md-4">
                                                 <h5> <b>Correo Factura:</b> @Model.Cliente.Email</h5>
 
                                             </div>
 
-                                            <div class="col-4">
+                                            <div class="col-md-4">
                                                 <h5> <b>Corre Publicitario:</b> @Model.Cliente.CorreoPublicitario</h5>
 
                                             </div>
@@ -141,7 +141,7 @@
 
 
 
-                                            <div class="col-4">
+                                            <div class="col-md-4">
                                                 <h5> <b>Condición de Pago:</b>  @( Model.Condiciones.Where(a => a.id == Model.Cliente.idCondicionPago).FirstOrDefault() == null ? "Condición de Pago Inexistente" :  Model.Condiciones.Where(a => a.id == Model.Cliente.idCondicionPago).FirstOrDefault().Nombre)</h5>
 
                                             </div>
@@ -169,10 +169,10 @@
 
                                 </address>
                             </div>
-                            <div class="col-4">
+                            <div class="col-md-4">
                             </div>
 
-                            <div class="col-4">
+                            <div class="col-md-4">
                                 <h5>
                                     <b>MAG:</b>  
                                     @if (Model.Cliente.MAG)
@@ -195,7 +195,7 @@
                     <!-- /.row -->
                     <!-- Table row -->
                     <div class="row">
-                        <div class="col-12 table-responsive">
+                        <div class="col-md-12 table-responsive">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-pale-info">
