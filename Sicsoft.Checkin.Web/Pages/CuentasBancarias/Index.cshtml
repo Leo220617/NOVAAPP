@@ -173,6 +173,8 @@
                                         <th>Banco</th>
                                         <th>Cuenta</th>
                                         <th>Cuenta SAP</th>
+                                        <th>Tipo</th>
+                                        <th>Moneda</th>
                                         <th>Estado</th>
 
 
@@ -195,9 +197,12 @@
                                         </td>
 
                                         <td>  @( Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" :  Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre) </td>
+
                                         <td>@item.Banco</td>
                                         <td>         @item.Nombre </td>
                                         <td>         @item.CuentaSAP </td>
+                                        <td>@item.Tipo</td>
+                                        <td>         @item.Moneda </td>
 
                                         <td>
                                             @if (item.Estado)
@@ -228,6 +233,8 @@
                                     <th>Banco</th>
                                     <th>Cuenta</th>
                                     <th>Cuenta SAP</th>
+                                    <th>Tipo</th>
+                                    <th>Moneda</th>
                                     <th>Estado</th>
 
                                 </tr>

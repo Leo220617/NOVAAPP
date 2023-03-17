@@ -1,4 +1,4 @@
-﻿@page 
+﻿@page
 @model NOVAAPP.Pages.CuentasBancarias.NuevoModel
 @{
     ViewData["Title"] = "CuentasBancarias";
@@ -37,7 +37,7 @@
                 <div class="box-body">
                     <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                       
+
                         <div class="row">
 
 
@@ -45,7 +45,7 @@
                                 <div class="form-group">
                                     <h5>Nombre<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="text"  asp-for="Cuenta.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="text" asp-for="Cuenta.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
@@ -69,24 +69,56 @@
 
                                 </div>
 
+
                             </div>
 
                         </div>
-
                         <div class="row">
-                               <div class="col-md-6">
-                             <div class="form-group">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Moneda<span class="text-danger">*</span></h5>
+                                    <select class="form-control select2" asp-for="Cuenta.Moneda">
+                                        <option value="CRC" selected>CRC</option>
+                                        <option value="USD">USD</option>
+
+                                    </select>
+
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                  <div class="form-group">
+                                      <h5>Tipo<span class="text-danger">*</span></h5>
+                                <select class="form-control select2" asp-for="Cuenta.Tipo">
+                                    <option value="0">Seleccione</option>
+
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Tarjeta">Tarjeta</option>
+                                    <option value="Transferencia">Transferencia</option>
+                                    @*<option value="Cheque">Cheque</option>*@
+                                    <option value="Pago a Cuenta">Pago a Cuenta</option>
+                                    @* <option value="Otros">Otros</option>*@
+
+
+
+                                </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <h5>Banco<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="text"  asp-for="Cuenta.Banco" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="text" asp-for="Cuenta.Banco" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
-                                     </div>
+
                                 </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <h5>Cuenta SAP<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="text"  asp-for="Cuenta.CuentaSAP" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="text" asp-for="Cuenta.CuentaSAP" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
