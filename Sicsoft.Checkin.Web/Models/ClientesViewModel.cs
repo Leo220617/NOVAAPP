@@ -63,6 +63,7 @@ namespace NOVAAPP.Models
 
         public bool MAG { get; set; }
         public DateTime FechaActualizacion { get; set; }
+        public decimal LimiteCredito { get; set; }
 
 
     }

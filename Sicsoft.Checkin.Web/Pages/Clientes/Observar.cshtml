@@ -1,7 +1,12 @@
 ﻿@page "{id}"
+@using System.Globalization
 @model NOVAAPP.Pages.Clientes.ObservarModel
 @{
     ViewData["Title"] = "Clientes";
+       NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
 }
 @section scripts{
     <script>
@@ -170,6 +175,7 @@
                                 </address>
                             </div>
                             <div class="col-md-4">
+                                  <h5> <b>Límite Crédito:</b>   @Math.Round(@Model.Cliente.LimiteCredito, 2).ToString("C",formato)</h5>
                             </div>
 
                             <div class="col-md-4">
