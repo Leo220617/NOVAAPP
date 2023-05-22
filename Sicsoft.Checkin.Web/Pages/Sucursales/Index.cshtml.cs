@@ -15,44 +15,51 @@ using NOVAAPP.Models;
 using InversionGloblalWeb.Models;
 
 namespace NOVAAPP.Pages.Sucursales
-{ 
-public class IndexModel : PageModel
 {
-    private readonly IConfiguration configuration;
-    private readonly ICrudApi<SucursalesViewModel, string> service;
-
-    [BindProperty(SupportsGet = true)]
-    public ParametrosFiltros filtro { get; set; }
-
-    [BindProperty]
-    public SucursalesViewModel[] Objeto { get; set; }
-
-    public IndexModel(ICrudApi<SucursalesViewModel, string> service)
+    public class IndexModel : PageModel
     {
-        this.service = service;
-    }
-    public async Task<IActionResult> OnGetAsync()
-    {
-        try
+        private readonly IConfiguration configuration;
+        private readonly ICrudApi<SucursalesViewModel, string> service;
+        private readonly ICrudApi<ListaPreciosViewModel, int> precios;
+
+        [BindProperty(SupportsGet = true)]
+        public ParametrosFiltros filtro { get; set; }
+
+        [BindProperty]
+        public SucursalesViewModel[] Objeto { get; set; }
+
+
+        [BindProperty]
+        public ListaPreciosViewModel[] Precio { get; set; }
+
+        public IndexModel(ICrudApi<SucursalesViewModel, string> service, ICrudApi<ListaPreciosViewModel, int> precios)
         {
-            var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
-            if (string.IsNullOrEmpty(Roles.Where(a => a == "16").FirstOrDefault()))
+            this.service = service;
+            this.precios = precios;
+        }
+        public async Task<IActionResult> OnGetAsync()
+        {
+            try
             {
-                return RedirectToPage("/NoPermiso");
+                var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+                if (string.IsNullOrEmpty(Roles.Where(a => a == "16").FirstOrDefault()))
+                {
+                    return RedirectToPage("/NoPermiso");
+                }
+                Objeto = await service.ObtenerLista(filtro);
+                Precio = await precios.ObtenerLista("");
+
+
+                return Page();
             }
-            Objeto = await service.ObtenerLista(filtro);
+            catch (ApiException ex)
+            {
+                Errores error = JsonConvert.DeserializeObject<Errores>(ex.Content.ToString());
+                ModelState.AddModelError(string.Empty, error.Message);
 
-
-            return Page();
+                return Page();
+            }
         }
-        catch (ApiException ex)
-        {
-            Errores error = JsonConvert.DeserializeObject<Errores>(ex.Content.ToString());
-            ModelState.AddModelError(string.Empty, error.Message);
-
-            return Page();
-        }
-    }
         public async Task<IActionResult> OnGetEliminar(int id)
         {
             try
@@ -68,5 +75,5 @@ public class IndexModel : PageModel
         }
     }
 }
-    
+
 

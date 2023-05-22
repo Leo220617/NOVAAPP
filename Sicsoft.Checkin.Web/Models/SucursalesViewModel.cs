@@ -41,5 +41,6 @@
 
         public int SerieNC { get; set; }
         public int SeriePago { get; set; }
+        public int idListaPrecios { get; set; }
     }
 }

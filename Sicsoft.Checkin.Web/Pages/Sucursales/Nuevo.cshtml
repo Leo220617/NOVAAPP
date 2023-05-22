@@ -4,8 +4,8 @@
     ViewData["Title"] = "Agregar Sucursales";
 }
 @section styles{
-     <style>
-         
+    <style>
+
 
         .lab {
             font-weight: 400;
@@ -16,6 +16,7 @@
             font-weight: 400;
             font-size: 13px;
         }
+
         .label {
             color: #fff !important;
             background-color: #57b846 !important;
@@ -35,14 +36,13 @@
             padding: 8px 18px !important;
         }
         /*label
-        {
-            font-size: 15px;
-        }*/
+                {
+                    font-size: 15px;
+                }*/
 
         #imgGalerias {
             display: none;
         }
- 
     </style>
 
 }
@@ -67,86 +67,83 @@
 
         function Recuperar() {
 
-            try{
-            Cantones = JSON.parse($("#Cantones").val());
-            Distritos = JSON.parse($("#Distritos").val());
-            Barrios = JSON.parse($("#Barrios").val());  //Viene de input
+            try {
+                Cantones = JSON.parse($("#Cantones").val());
+                Distritos = JSON.parse($("#Distritos").val());
+                Barrios = JSON.parse($("#Barrios").val());  //Viene de input
 
-            ModificaSelects(0);
-            maskCedula();
-            }catch(e)
-            {
+                ModificaSelects(0);
+                maskCedula();
+            } catch (e) {
                 console.log(e);
                 Swal.fire({
-                                     icon: 'error',
-                                     title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
 
-                                 })
+                })
             }
         }
         function ModificaSelects(i) {
-            try { 
-            var codProvincia = parseInt($("#selectP").val());
-            var codCanton = parseInt($("#selectC").val());
-            var codDistrito = parseInt($("#selectD").val());
+            try {
+                var codProvincia = parseInt($("#selectP").val());
+                var codCanton = parseInt($("#selectC").val());
+                var codDistrito = parseInt($("#selectD").val());
 
-            if (i == 0) {
-                RellenaCantones(Cantones.filter(a => a.CodProvincia == codProvincia));
-                RellenaDistritos(Distritos.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton));
-                RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
+                if (i == 0) {
+                    RellenaCantones(Cantones.filter(a => a.CodProvincia == codProvincia));
+                    RellenaDistritos(Distritos.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton));
+                    RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
 
-            }
+                }
 
-            if (i == 1) {
-                RellenaCantones(Cantones.filter(a => a.CodProvincia == codProvincia));
-                RellenaDistritos(Distritos.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton));
-                RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
+                if (i == 1) {
+                    RellenaCantones(Cantones.filter(a => a.CodProvincia == codProvincia));
+                    RellenaDistritos(Distritos.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton));
+                    RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
 
-            }
-            if (i == 2) {
+                }
+                if (i == 2) {
 
-                RellenaDistritos(Distritos.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton));
-                RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
+                    RellenaDistritos(Distritos.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton));
+                    RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
 
-            }
+                }
 
-            if (i == 3) {
-                RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
-            }
-            }catch(e)
-            {
+                if (i == 3) {
+                    RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
+                }
+            } catch (e) {
                 console.log(e);
                 Swal.fire({
-                                     icon: 'error',
-                                     title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
 
-                                 })
+                })
             }
         }
 
         function RellenaCantones(ListCantones) {
-            try { 
-            var sOptions = '';
+            try {
+                var sOptions = '';
 
-            $("#selectC").html('');
+                $("#selectC").html('');
 
-            for (var i = 0; i < ListCantones.length; i++) {
+                for (var i = 0; i < ListCantones.length; i++) {
 
-                sOptions += '<option value="' + ListCantones[i].CodCanton + '">' + ListCantones[i].NomCanton + '</option>';
+                    sOptions += '<option value="' + ListCantones[i].CodCanton + '">' + ListCantones[i].NomCanton + '</option>';
 
-            }
-            $("#selectC").html(sOptions);
-            }catch(e)
-            {
+                }
+                $("#selectC").html(sOptions);
+            } catch (e) {
                 console.log(e);
                 Swal.fire({
-                                     icon: 'error',
-                                     title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
 
-                                 })
+                })
             }
         }
 
@@ -164,42 +161,41 @@
         }
 
         function RellenaBarrios(ListBarrios) {
-            try { 
-            var sOptions = '';
+            try {
+                var sOptions = '';
 
-            $("#selectB").html('');
+                $("#selectB").html('');
 
-            for (var i = 0; i < ListBarrios.length; i++) {
+                for (var i = 0; i < ListBarrios.length; i++) {
 
-                sOptions += '<option value="' + ListBarrios[i].CodBarrio + '">' + ListBarrios[i].NomBarrio + '</option>';
+                    sOptions += '<option value="' + ListBarrios[i].CodBarrio + '">' + ListBarrios[i].NomBarrio + '</option>';
 
-            }
-            $("#selectB").html(sOptions);
-            }catch(e)
-            {
+                }
+                $("#selectB").html(sOptions);
+            } catch (e) {
                 console.log(e);
                 Swal.fire({
-                                     icon: 'error',
-                                     title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
 
-                                 })
+                })
             }
         }
 
-       
+
 
     </script>
-     <script>
+    <script>
         var ImageBae64 = '';
 
         var fileUploadPrincipal = document.getElementById('imgPrincipalUploadG');
-        fileUploadPrincipal.onchange = async function (e) {
+        fileUploadPrincipal.onchange = async function(e) {
 
             await readFilePrincipalP(e.srcElement);
             // idF = setInterval(cancelar(e), 2000);
 
-            var idF = setInterval(async function () {
+            var idF = setInterval(async function() {
 
                 if (ImageBae64 != "data:," && $("#base64").val() != "data:,") {
                     //alert("Imagen agregada con éxito");
@@ -210,7 +206,7 @@
             }, 1500);
 
 
-             
+
         }
         async function readFilePrincipalP(input) {
 
@@ -226,7 +222,7 @@
                     var img = document.createElement("img");
                     var canvas = document.createElement('canvas');
 
-                    reader.onload = function (e) {
+                    reader.onload = function(e) {
                         img.src = e.target.result;
                         var ctx = canvas.getContext("2d");
                         ctx.drawImage(img, 0, 0);
@@ -256,7 +252,7 @@
 
                         ImageBae64 = dataurl;
                         $("#Imagen").val(ImageBae64);
-                    //    IMG2 = e.target.result;
+                        //    IMG2 = e.target.result;
 
                     }
 
@@ -305,29 +301,29 @@
                     <div class="box-body">
                         <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                           
-                            <div class="row" >
+
+                            <div class="row">
                                 <div class="col-md-12" style="text-align: center;">
-                                 <div class="form-group">
+                                    <div class="form-group">
                                         <center>
                                             <img id="imgPrincipalG" src="~/adjunto.png" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
                                             <br />
                                             <br />
 
                                             <label style="font-size: 13px;" class="label" for="imgPrincipalUploadG">Subir Imagen</label><input id="imgPrincipalUploadG" accept=".jpg, .png" style="opacity:0; display:none;" type="file" name="imgPrincipalUploadG" />
-                                            
-                                        <input type="text" id="Imagen" hidden asp-for="Sucursales.Imagen" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        
-                                        
+
+                                            <input type="text" id="Imagen" hidden asp-for="Sucursales.Imagen" class="form-control" required data-validation-required-message="Este campo es requerido">
+
+
                                         </center>
                                     </div>
 
-                                
 
 
+
+                                </div>
                             </div>
-                            </div>
-                            
+
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -346,7 +342,7 @@
                                     <div class="form-group">
                                         <h5>Cédula<span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input id="Cedula" type="text" asp-for="Sucursales.Cedula" maxlength="12" class="form-control" required data-validation-required-message="Este campo es requerido"    onblur="javascript: validarCedula()">
+                                            <input id="Cedula" type="text" asp-for="Sucursales.Cedula" maxlength="12" class="form-control" required data-validation-required-message="Este campo es requerido" onblur="javascript: validarCedula()">
                                         </div>
 
                                     </div>
@@ -397,44 +393,46 @@
                                     <div class="form-group">
                                         <h5>Teléfono<span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="text" asp-for="Sucursales.Telefono"  id="Telefono" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        
+                                            <input type="text" asp-for="Sucursales.Telefono" id="Telefono" class="form-control" required data-validation-required-message="Este campo es requerido">
+
                                         </div>
 
                                     </div>
 
 
                                 </div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="nom">Provincia:</label>
-                                        <select id="selectP" class="form-control" asp-for="Sucursales.Provincia" onchange="javascript: ModificaSelects(1)" required>
-
-                                            <option value="1" selected>San José</option>
-                                            <option value="2">Alajuela</option>
-                                            <option value="3">Cartago</option>
-                                            <option value="4">Heredia</option>
-                                            <option value="5">Guanacaste</option>
-                                            <option value="6">Puntarenas</option>
-                                            <option value="7">Limón</option>
+                           
+                        </div>
 
 
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="nom">Provincia:</label>
+                                    <select id="selectP" class="form-control" asp-for="Sucursales.Provincia" onchange="javascript: ModificaSelects(1)" required>
+
+                                        <option value="1" selected>San José</option>
+                                        <option value="2">Alajuela</option>
+                                        <option value="3">Cartago</option>
+                                        <option value="4">Heredia</option>
+                                        <option value="5">Guanacaste</option>
+                                        <option value="6">Puntarenas</option>
+                                        <option value="7">Limón</option>
 
 
-                                        </select>
 
-                                    </div>
 
+                                    </select>
 
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="nom">Cantón:</label>
-                                        <select id="selectC" class="form-control" asp-for="Sucursales.Canton" onchange="javascript: ModificaSelects(2)" required>
-                                            @foreach (var item in Model.Cantones)
+
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="nom">Cantón:</label>
+                                    <select id="selectC" class="form-control" asp-for="Sucursales.Canton" onchange="javascript: ModificaSelects(2)" required>
+                                        @foreach (var item in Model.Cantones)
                                         {
                                             <option value="@item.CodCanton">@item.NomCanton</option>
 
@@ -491,53 +489,74 @@
 
 
                             </div>
+                                 <div class="col-md-6">
+                                    <div class="form-group">
+                                        <h5>Lista de Precio<span class="text-danger">*</span></h5>
+
+                                        <select class="form-control select2  " asp-for="Sucursales.idListaPrecios">
+                                            <option value="0"> Seleccione </option>
+                                            @foreach (var item in Model.Precio)
+                                        {
+
+                                            <option value="@item.id">@item.Nombre</option>
+                                        }
+
+
+                                    </select>
+
+
+
+                                </div>
+
+                            </div>
                             <div class="col-md-3">
-                                 <div class="form-group">
+                                <div class="form-group">
                                     <h5>Serie Contado<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="number" asp-for="Sucursales.SerieFECO"  class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="number" asp-for="Sucursales.SerieFECO" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
-                                
+
 
 
                             </div>
 
-                             <div class="col-md-3">
-                                 <div class="form-group">
+                            <div class="col-md-3">
+                                <div class="form-group">
                                     <h5>Serie Crédito<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="number" asp-for="Sucursales.SerieFECR"  class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="number" asp-for="Sucursales.SerieFECR" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
-                                
+
 
 
                             </div>
 
-                              <div class="col-md-3">
-                                 <div class="form-group">
+                            <div class="col-md-3">
+                                <div class="form-group">
                                     <h5>Serie Nota de Crédito<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="number" asp-for="Sucursales.SerieNC"  class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="number" asp-for="Sucursales.SerieNC" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
-
-                                 <div class="col-md-3">
-                                 <div class="form-group">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
                                     <h5>Serie Pago<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="number" asp-for="Sucursales.SeriePago"  class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="number" asp-for="Sucursales.SeriePago" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
-                                
+
 
 
                             </div>
+
                         </div>
                         <div class="text-xs-right">
                             <button type="submit" class="btn btn-info" title="Guardar Cambios">Guardar Cambios</button>
@@ -573,55 +592,49 @@
 </section>
 
 <script>
-     function maskCedula()
-        {
-         $("#Telefono").mask("9999-9999");
-            var TC = $("#selectTP").val();
+    function maskCedula() {
+        $("#Telefono").mask("9999-9999");
+        var TC = $("#selectTP").val();
 
-            switch(TC)
-            {
-                case "01":
+        switch (TC) {
+            case "01":
                 {
-                        $("#Cedula").mask("999999999");
-                        break;
+                    $("#Cedula").mask("999999999");
+                    break;
                 }
-                 case "02":
+            case "02":
                 {
-                        $("#Cedula").mask("9999999999");
-                        break;
+                    $("#Cedula").mask("9999999999");
+                    break;
                 }
-            }
-
         }
 
-        function validarCedula()
-        {
-             var TC = $("#selectTP").val();
+    }
 
-            switch(TC)
-            {
-                case "01":
+    function validarCedula() {
+        var TC = $("#selectTP").val();
+
+        switch (TC) {
+            case "01":
                 {
-                    if($("#Cedula").val().length < 9)
-                    {
-                         
+                    if ($("#Cedula").val().length < 9) {
+
                         $("#Cedula").focus();
                         $("#Cedula").select();
                     }
-                         
-                        break;
+
+                    break;
                 }
-                 case "02":
+            case "02":
                 {
-                    if($("#Cedula").val().length < 10)
-                    {
-                         
+                    if ($("#Cedula").val().length < 10) {
+
                         $("#Cedula").focus();
                         $("#Cedula").select();
                     }
-                         
-                        break;
+
+                    break;
                 }
-            }
         }
+    }
 </script>

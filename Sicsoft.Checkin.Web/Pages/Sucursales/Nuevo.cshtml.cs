@@ -20,6 +20,7 @@ namespace NOVAAPP.Pages.Sucursales
         private readonly ICrudApi<CantonesViewModel, int> serviceC;
         private readonly ICrudApi<DistritosViewModel, int> serviceD;
         private readonly ICrudApi<BarriosViewModel, int> serviceB;
+        private readonly ICrudApi<ListaPreciosViewModel, int> precios;
 
 
         [BindProperty]
@@ -33,12 +34,16 @@ namespace NOVAAPP.Pages.Sucursales
 
         [BindProperty]
         public BarriosViewModel[] Barrios { get; set; }
-        public NuevoModel(ICrudApi<SucursalesViewModel, string> service, ICrudApi<CantonesViewModel, int> serviceC, ICrudApi<DistritosViewModel, int> serviceD, ICrudApi<BarriosViewModel, int> serviceB)
+
+        [BindProperty]
+        public ListaPreciosViewModel[] Precio { get; set; }
+        public NuevoModel(ICrudApi<SucursalesViewModel, string> service, ICrudApi<CantonesViewModel, int> serviceC, ICrudApi<DistritosViewModel, int> serviceD, ICrudApi<BarriosViewModel, int> serviceB, ICrudApi<ListaPreciosViewModel, int> precios)
         {
             this.service = service;
             this.serviceC = serviceC;
             this.serviceD = serviceD;
             this.serviceB = serviceB;
+            this.precios = precios;
          
         }
         public async Task<IActionResult> OnGetAsync()
@@ -54,6 +59,7 @@ namespace NOVAAPP.Pages.Sucursales
                 Cantones = await serviceC.ObtenerLista("");
                 Distritos = await serviceD.ObtenerLista("");
                 Barrios = await serviceB.ObtenerLista("");
+                Precio = await precios.ObtenerLista("");
                
 
                 return Page();
