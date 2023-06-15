@@ -56,6 +56,14 @@ namespace NOVAAPP.Pages.CierreCajas
         [BindProperty]
         public CondicionesPagosViewModel Condicion { get; set; }
 
+        [BindProperty]
+        public decimal TotalColones { get; set; }
+
+        [BindProperty]
+        public decimal TotalFC { get; set; }
+
+        [BindProperty]
+        public decimal Totalizado { get; set; }
 
         public ObservarModel(ICrudApi<CierreCajasViewModel, int> service, ICrudApi<UsuariosViewModel, int> users, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<CajasViewModel, int> cajo, ICrudApi<DocumentosViewModel, int> documento,  ICrudApi<MetodosPagosViewModel, int> pagos,ICrudApi<CuentasBancariasViewModel, int> cuenta, ICrudApi<CondicionesPagosViewModel, int> cond)
         {
@@ -63,7 +71,7 @@ namespace NOVAAPP.Pages.CierreCajas
             this.users = users;
             this.tipoCambio = tipoCambio;
             this.cajo = cajo;
-            this.documento = documento;
+            this.documento = documento; 
             this.cond = cond;
             this.pagos = pagos;
             this.cuenta = cuenta;
@@ -96,7 +104,7 @@ namespace NOVAAPP.Pages.CierreCajas
 
                 Documento = await documento.ObtenerLista(filtro); //Documentos de la fecha de la caja y de la caja
 
-
+                filtro.Codigo2 = Cierres.idUsuario;
                 filtro.Codigo1 = Cierres.idCaja;
                 Pagos = await pagos.ObtenerLista(filtro); //aqui nos traemos los pagos de la caja
 
@@ -108,7 +116,10 @@ namespace NOVAAPP.Pages.CierreCajas
                 var Condiciones = await cond.ObtenerLista("");
                 Condicion = Condiciones.Where(a => a.Dias == 0).FirstOrDefault();
 
-              
+
+                TotalColones = Documento.Where(a => a.Moneda == "CRC" && a.idCondPago == Condicion.id && a.TipoDocumento != "03").Sum(a => a.TotalCompra) - Documento.Where(a => a.Moneda == "CRC" && a.idCondPago == Condicion.id && a.TipoDocumento == "03").Sum(a => a.TotalCompra) + Pagos.Where(a => a.Metodo.ToLower().Contains("pago a cuenta") && a.Moneda == "CRC").Sum(a => a.Monto);
+                TotalFC = Documento.Where(a => a.Moneda == "USD" && a.idCondPago == Condicion.id && a.TipoDocumento != "03").Sum(a => a.TotalCompra) - Documento.Where(a => a.Moneda == "USD" && a.idCondPago == Condicion.id && a.TipoDocumento == "03").Sum(a => a.TotalCompra) + Pagos.Where(a => a.Metodo.ToLower().Contains("pago a cuenta") && a.Moneda == "USD").Sum(a => a.Monto);
+                Totalizado = TotalColones + (TotalFC * TC.Where(a => a.Moneda == "USD").FirstOrDefault().TipoCambio);
                 return Page();
             }
             catch (Exception ex)
