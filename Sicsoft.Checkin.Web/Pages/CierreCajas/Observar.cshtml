@@ -635,7 +635,7 @@
 
                                                 <td class="text-center">@item.NumReferencia</td>
 
-                                                <td class="text-center"> @( Model.Documento.Where(a => a.id == item.idEncabezado).FirstOrDefault() == null ? "" :  Model.Documento.Where(a => a.id == item.idEncabezado).FirstOrDefault().Moneda)</td>
+                                                <td class="text-center"> @item.Moneda </td>
 
 
                                                 <td class="text-right">@item.Monto.ToString("C",formato)</td>
@@ -1217,7 +1217,7 @@
 
                                                     <td class="text-center">@item.NumReferencia</td>
 
-                                                    <td class="text-center"> @( Model.Documento.Where(a => a.id == item.idEncabezado).FirstOrDefault() == null ? "" :  Model.Documento.Where(a => a.id == item.idEncabezado).FirstOrDefault().Moneda)</td>
+                                                    <td class="text-center"> @item.Moneda</td>
 
 
                                                     <td class="text-right">@item.Monto.ToString("C",formato)</td>
