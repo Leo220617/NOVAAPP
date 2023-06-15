@@ -7,5 +7,7 @@
         public int idEncDocumentoCredito { get; set; }
         public int NumLinea { get; set; }
         public decimal Total { get; set; }
+        public decimal Interes { get; set; }
+        public decimal Capital { get; set; }
     }
 }

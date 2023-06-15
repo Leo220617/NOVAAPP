@@ -16,6 +16,14 @@ namespace NOVAAPP.Models
         public decimal TotalPagado { get; set; }
         public bool ProcesadaSAP { get; set; }
         public string DocEntryPago { get; set; }
+        public decimal TotalInteres { get; set; }
+        public decimal TotalCapital { get; set; }
+
+        public bool IntProcesadaSAP { get; set; }
+
+        public string DocEntryInt { get; set; }
+        public int idCaja { get; set; }
+        public int idUsuarioCreador { get; set; }
 
         public DetPagosViewModel[] Detalle { get; set; }
 

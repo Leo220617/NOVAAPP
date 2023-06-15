@@ -166,7 +166,7 @@
                         </div>
                         <!-- info row -->
                         <div class="row invoice-info">
-                            <div class="col-md-4 invoice-col">
+                            <div class="col-md-3 invoice-col">
                                 <strong>Cliente</strong>
                                 <address>
                                     <strong class="text-blue font-size-24"> @Model.Cliente.Codigo- @Model.Cliente.Nombre </strong>
@@ -174,11 +174,15 @@
 
                                 </address>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                   <h5> <b>Límite Crédito:</b>   @Math.Round(@Model.Cliente.LimiteCredito, 2).ToString("C",formato)</h5>
                             </div>
 
-                            <div class="col-md-4">
+                                <div class="col-md-3">
+                                  <h5> <b>Saldo:</b>   @Math.Round(@Model.Cliente.Saldo, 2).ToString("C",formato)</h5>
+                            </div>
+
+                            <div class="col-md-3">
                                 <h5>
                                     <b>MAG:</b>  
                                     @if (Model.Cliente.MAG)
