@@ -27,6 +27,11 @@
 
 
 }
+ @{
+    var Ganancia = 0.00;
+ 
+}
+
     @section scripts{
     <script>
         $(document).ready(function() {
@@ -225,6 +230,10 @@
 
 
                                         <th class="text-center">Total</th>
+                                               @if (!string.IsNullOrEmpty(Roles.Where(a => a == "53").FirstOrDefault()))
+                                        {
+                                            <th class="text-center">% Ganancia</th>
+                                        }
 
                                     </tr>
                                 </thead>
@@ -247,7 +256,13 @@
                                             <td class="text-center">@Math.Round(@item.TotalImpuesto,2).ToString("C",formato)</td>
                                             <td class="text-center">@( Model.Exoneraciones.Where(a => a.id == @item.idExoneracion).FirstOrDefault() == null ? "0" :  Model.Exoneraciones.Where(a => a.id == @item.idExoneracion).FirstOrDefault().PorExon.ToString()) %</td>
                                             <td class="text-center">@Math.Round(@item.TotalLinea,2).ToString("C",formato)</td>
+                                              @if (!string.IsNullOrEmpty(Roles.Where(a => a == "53").FirstOrDefault()))
+                                            {
+                                                <td class="text-center">@Math.Round(((((@item.TotalLinea - @item.TotalImpuesto) - ( Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0: Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Costo)) / (@item.TotalLinea - @item.TotalImpuesto)) * 100) ,2).ToString("C",formato)%</td>
+                                               
+                                                Ganancia += Convert.ToDouble(@Math.Round(((((@item.TotalLinea - @item.TotalImpuesto) - (Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Costo)) / (@item.TotalLinea - @item.TotalImpuesto)) * 100), 2)) /Model.Documento.Detalle.Length;
 
+                                            }
                                         </tr>
                                     }
 
@@ -268,6 +283,12 @@
                             <div class="total-payment">
                                 <h3><b>Total :</b>  <span>  @Math.Round(Model.Documento.TotalCompra, 2).ToString("C",formato)</span></h3>
                             </div>
+                              @if (!string.IsNullOrEmpty(Roles.Where(a => a == "53").FirstOrDefault()))
+                            {
+                                <div class="total-payment">
+                                    <h3><b>Total Ganancia :</b>  <span>@Math.Round(Ganancia, 2).ToString("C",formato) </span>%</h3>
+                                </div>
+                            }
 
                         </div>
                     </div>
