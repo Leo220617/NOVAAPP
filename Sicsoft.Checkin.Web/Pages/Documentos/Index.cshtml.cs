@@ -83,7 +83,7 @@ namespace NOVAAPP.Pages.Documentos
 
                     filtro.FechaFinal = DateTime.Now; //ultimoDia;
 
-                    filtro.Codigo3 = 1;
+                    filtro.Codigo3 = 0;
                     filtro.Codigo5 = 0;
                     filtro.ItemCode = "0";
                     filtro.CardName = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "CodSuc").Select(s1 => s1.Value).FirstOrDefault();

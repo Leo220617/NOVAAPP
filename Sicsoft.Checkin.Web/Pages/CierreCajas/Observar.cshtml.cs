@@ -48,6 +48,8 @@ namespace NOVAAPP.Pages.CierreCajas
         [BindProperty]
         public DocumentosViewModel[] Documento { get; set; }
 
+
+
         [BindProperty]
         public MetodosPagosViewModel[] Pagos { get; set; }
 
@@ -65,13 +67,13 @@ namespace NOVAAPP.Pages.CierreCajas
         [BindProperty]
         public decimal Totalizado { get; set; }
 
-        public ObservarModel(ICrudApi<CierreCajasViewModel, int> service, ICrudApi<UsuariosViewModel, int> users, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<CajasViewModel, int> cajo, ICrudApi<DocumentosViewModel, int> documento,  ICrudApi<MetodosPagosViewModel, int> pagos,ICrudApi<CuentasBancariasViewModel, int> cuenta, ICrudApi<CondicionesPagosViewModel, int> cond)
+        public ObservarModel(ICrudApi<CierreCajasViewModel, int> service, ICrudApi<UsuariosViewModel, int> users, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<CajasViewModel, int> cajo, ICrudApi<DocumentosViewModel, int> documento, ICrudApi<MetodosPagosViewModel, int> pagos, ICrudApi<CuentasBancariasViewModel, int> cuenta, ICrudApi<CondicionesPagosViewModel, int> cond)
         {
             this.service = service;
             this.users = users;
             this.tipoCambio = tipoCambio;
             this.cajo = cajo;
-            this.documento = documento; 
+            this.documento = documento;
             this.cond = cond;
             this.pagos = pagos;
             this.cuenta = cuenta;
@@ -87,15 +89,15 @@ namespace NOVAAPP.Pages.CierreCajas
                 }
                 Cajos = await cajo.ObtenerLista("");
                 var FechaCierre = Convert.ToDateTime(Fecha);
-                Cierres = await service.ObtenerCierre(id,FechaCierre, idUsuario);
+                Cierres = await service.ObtenerCierre(id, FechaCierre, idUsuario);
                 var idCajero = Cierres.idUsuario;
-              
+
                 Users = await users.ObtenerPorId(idCajero);
                 Caja = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Caja").Select(s1 => s1.Value).FirstOrDefault();
 
                 ParametrosFiltros filtro = new ParametrosFiltros();
                 filtro.FechaInicial = DateTime.Now;
-              
+
 
                 filtro.FechaInicial = Cierres.FechaCaja;
                 filtro.FechaFinal = Cierres.FechaCaja;
@@ -108,8 +110,8 @@ namespace NOVAAPP.Pages.CierreCajas
                 filtro.Codigo1 = Cierres.idCaja;
                 Pagos = await pagos.ObtenerLista(filtro); //aqui nos traemos los pagos de la caja
 
-                
-                
+
+
 
                 CuentasBancarias = await cuenta.ObtenerLista("");
 
@@ -117,8 +119,12 @@ namespace NOVAAPP.Pages.CierreCajas
                 Condicion = Condiciones.Where(a => a.Dias == 0).FirstOrDefault();
 
 
-                TotalColones = Documento.Where(a => a.Moneda == "CRC" && a.idCondPago == Condicion.id && a.TipoDocumento != "03").Sum(a => a.TotalCompra) - Documento.Where(a => a.Moneda == "CRC" && a.idCondPago == Condicion.id && a.TipoDocumento == "03").Sum(a => a.TotalCompra) + Pagos.Where(a => a.Metodo.ToLower().Contains("pago a cuenta") && a.Moneda == "CRC").Sum(a => a.Monto);
-                TotalFC = Documento.Where(a => a.Moneda == "USD" && a.idCondPago == Condicion.id && a.TipoDocumento != "03").Sum(a => a.TotalCompra) - Documento.Where(a => a.Moneda == "USD" && a.idCondPago == Condicion.id && a.TipoDocumento == "03").Sum(a => a.TotalCompra) + Pagos.Where(a => a.Metodo.ToLower().Contains("pago a cuenta") && a.Moneda == "USD").Sum(a => a.Monto);
+                //TotalColones = Documento.Where(a => a.Moneda == "CRC" && a.idCondPago == Condicion.id && a.TipoDocumento != "03").Sum(a => a.TotalCompra) - Documento.Where(a => a.Moneda == "CRC" && a.idCondPago == Condicion.id && a.TipoDocumento == "03").Sum(a => a.TotalCompra) + Pagos.Where(a => a.Metodo.ToLower().Contains("pago a cuenta") && a.Moneda == "CRC").Sum(a => a.Monto);
+                //TotalFC = Documento.Where(a => a.Moneda == "USD" && a.idCondPago == Condicion.id && a.TipoDocumento != "03").Sum(a => a.TotalCompra) - Documento.Where(a => a.Moneda == "USD" && a.idCondPago == Condicion.id && a.TipoDocumento == "03").Sum(a => a.TotalCompra) + Pagos.Where(a => a.Metodo.ToLower().Contains("pago a cuenta") && a.Moneda == "USD").Sum(a => a.Monto);
+              
+                TotalColones = Pagos.Where(a => a.Moneda == "CRC" && a.idEncabezado == (Documento.Where(b => b.idCondPago == Condicion.id && b.TipoDocumento != "03").FirstOrDefault() == null ? 0 : Documento.Where(b => b.idCondPago == Condicion.id && b.TipoDocumento != "03").FirstOrDefault().id)).Sum(a => a.Monto) - Pagos.Where(a => a.Moneda == "CRC" && a.idEncabezado == (Documento.Where(b => b.idCondPago == Condicion.id && b.TipoDocumento == "03").FirstOrDefault() == null ? 0 : Documento.Where(b => b.idCondPago == Condicion.id && b.TipoDocumento == "03").FirstOrDefault().id)).Sum(a => a.Monto) + Pagos.Where(a => a.Metodo.ToLower().Contains("pago a cuenta") && a.Moneda == "CRC").Sum(a => a.Monto);
+                TotalFC = Pagos.Where(a => a.Moneda == "USD" && a.idEncabezado == (Documento.Where(b => b.idCondPago == Condicion.id && b.TipoDocumento != "03").FirstOrDefault() == null ? 0 : Documento.Where(b => b.idCondPago == Condicion.id && b.TipoDocumento != "03").FirstOrDefault().id)).Sum(a => a.Monto) - Pagos.Where(a => a.Moneda == "USD" && a.idEncabezado == (Documento.Where(b => b.idCondPago == Condicion.id && b.TipoDocumento == "03").FirstOrDefault() == null ? 0 : Documento.Where(b => b.idCondPago == Condicion.id && b.TipoDocumento == "03").FirstOrDefault().id)).Sum(a => a.Monto) + Pagos.Where(a => a.Metodo.ToLower().Contains("pago a cuenta") && a.Moneda == "USD").Sum(a => a.Monto);
+
                 Totalizado = TotalColones + (TotalFC * TC.Where(a => a.Moneda == "USD").FirstOrDefault().TipoCambio);
                 return Page();
             }
@@ -130,7 +136,7 @@ namespace NOVAAPP.Pages.CierreCajas
             }
         }
 
-       
+
 
     }
 }
