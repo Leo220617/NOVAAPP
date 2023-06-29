@@ -75,7 +75,7 @@ namespace NOVAAPP.Pages.Depositos
                 }
 
 
-
+                filtro.Activo = true;
                 Listas = await service.ObtenerLista(filtro);
 
 
