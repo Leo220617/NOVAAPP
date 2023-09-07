@@ -39,6 +39,7 @@ namespace NOVAAPP.Models
         public MetodosPagosViewModel[] MetodosPagos { get; set; }
 
         public DetDocumentoViewModel[] Detalle { get; set; }
+        public LotesViewModel[] Lotes { get; set; }
 
     }
 }
