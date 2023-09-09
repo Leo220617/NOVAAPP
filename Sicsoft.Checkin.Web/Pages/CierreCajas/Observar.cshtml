@@ -321,23 +321,41 @@
                             </div>
                             <!-- title row -->
                             <div class="row">
-                                <div class="col-md-6">
+                            <div class="col-md-3">
 
-                                    <div class="form-group">
-                                        <label>Transferencias Colones</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.TransferenciasColones, 2).ToString("C",formato)  </h6>
+                                <div class="form-group">
+                                    <label>Transferencias Colones</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.TransferenciasColones, 2).ToString("C",formato)  </h6>
 
 
-                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Transferencias Dólares</label>
-                                        <h6> $@Math.Round(Model.Cierres.TransferenciasDolares, 2).ToString("C",formato)  </h6>
+                            </div>
+
+                            <div class="col-md-3">
+
+                                <div class="form-group">
+                                    <label>Notas Crédito Colones</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.NotasCreditoColones, 2).ToString("C",formato)  </h6>
 
 
-                                    </div>
                                 </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Transferencias Dólares</label>
+                                    <h6> $@Math.Round(Model.Cierres.TransferenciasDolares, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Notas Crédito Dólares</label>
+                                    <h6> $@Math.Round(Model.Cierres.NotasCreditoFC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
 
                                 <!-- /.col -->
                                 <!-- title row -->
@@ -1413,7 +1431,7 @@
                     <!-- /.col -->
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-md-3">
 
                         <div class="form-group">
                             <label>Transferencias Colones</label>
@@ -1422,10 +1440,28 @@
 
                         </div>
                     </div>
-                    <div class="col-6">
+
+                    <div class="col-md-3">
+
+                        <div class="form-group">
+                            <label>Notas Crédito Colones</label>
+                            <h6> ₡@Math.Round(Model.Cierres.NotasCreditoColones, 2).ToString("C",formato)  </h6>
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Transferencias Dólares</label>
                             <h6> $@Math.Round(Model.Cierres.TransferenciasDolares, 2).ToString("C",formato)  </h6>
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Notas Crédito Dólares</label>
+                            <h6> $@Math.Round(Model.Cierres.NotasCreditoFC, 2).ToString("C",formato)  </h6>
 
 
                         </div>

@@ -134,7 +134,7 @@ namespace NOVAAPP.Pages.CierreCajas
                 CuentasBancarias = await cuenta.ObtenerLista("");
 
                 var Condiciones = await cond.ObtenerLista("");
-                Condicion = Condiciones.Where(a => a.Dias == 0).FirstOrDefault();
+                Condicion = Condiciones.Where(a => a.Dias == 0 && a.Nombre == "Contado").FirstOrDefault();
 
                 CondicionC = await cond.ObtenerLista("");
 
