@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +23,7 @@ namespace NOVAAPP.Pages.Documentos
         private readonly ICrudApi<ExoneracionesViewModel, int> exoneracion;
         private readonly ICrudApi<CondicionesPagosViewModel, int> condiconesPago;
         private readonly ICrudApi<VendedoresViewModel, int> vendedor;
+        private readonly ICrudApi<ParametrosViewModel, int> parametro;
 
 
         [BindProperty]
@@ -43,8 +43,12 @@ namespace NOVAAPP.Pages.Documentos
 
         [BindProperty]
         public VendedoresViewModel Vendedor { get; set; }
+        [BindProperty]
+        public ParametrosViewModel[] Parametro { get; set; }
 
-        public ObservarModel(ICrudApi<DocumentosViewModel, int> service, ICrudApi<ClientesViewModel, string> serviceE, ICrudApi<ProductosViewModel, string> serviceP, ICrudApi<ExoneracionesViewModel, int> exoneracion, ICrudApi<CondicionesPagosViewModel, int> condiconesPago, ICrudApi<VendedoresViewModel, int> vendedor)
+
+
+        public ObservarModel(ICrudApi<DocumentosViewModel, int> service, ICrudApi<ClientesViewModel, string> serviceE, ICrudApi<ProductosViewModel, string> serviceP, ICrudApi<ExoneracionesViewModel, int> exoneracion, ICrudApi<CondicionesPagosViewModel, int> condiconesPago, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<ParametrosViewModel, int> parametro)
         {
             this.service = service;
             this.serviceE = serviceE;
@@ -52,6 +56,7 @@ namespace NOVAAPP.Pages.Documentos
             this.exoneracion = exoneracion;
             this.condiconesPago = condiconesPago;
             this.vendedor = vendedor;
+            this.parametro = parametro;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -65,6 +70,8 @@ namespace NOVAAPP.Pages.Documentos
 
                 var CondPago = await condiconesPago.ObtenerLista("");
                 var Vendedores = await vendedor.ObtenerLista("");
+                Parametro = await parametro.ObtenerLista("");
+                
 
                 ParametrosFiltros filtro = new ParametrosFiltros();
                 filtro.Externo = true;
@@ -74,7 +81,7 @@ namespace NOVAAPP.Pages.Documentos
                 Vendedor = Vendedores.Where(a => a.id == Documento.idVendedor).FirstOrDefault();
 
                 Clientes = await serviceE.ObtenerLista(filtro);
-
+         
 
 
                 Productos = await serviceP.ObtenerLista("");
