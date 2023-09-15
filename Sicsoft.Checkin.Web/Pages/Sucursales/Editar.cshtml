@@ -4,8 +4,8 @@
     ViewData["Title"] = "Editar Sucursales";
 }
 @section styles{
-      <style>
-         
+    <style>
+
 
         .lab {
             font-weight: 400;
@@ -16,6 +16,7 @@
             font-weight: 400;
             font-size: 13px;
         }
+
         .label {
             color: #fff !important;
             background-color: #57b846 !important;
@@ -35,27 +36,26 @@
             padding: 8px 18px !important;
         }
         /*label
-        {
-            font-size: 15px;
-        }*/
+                {
+                    font-size: 15px;
+                }*/
 
         #imgGalerias {
             display: none;
         }
- 
     </style>
 
 }
 
-    @section scripts{
+@section scripts{
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
-            jQuery(document).ready(function($) {
-                $(document).ready(function() {
+            jQuery(document).ready(function ($) {
+                $(document).ready(function () {
                 });
             });
 
@@ -67,22 +67,21 @@
 
         function Recuperar() {
 
-            try { 
-            Cantones = JSON.parse($("#Cantones").val());
-            Distritos = JSON.parse($("#Distritos").val());
-            Barrios = JSON.parse($("#Barrios").val());  //Viene de input
+            try {
+                Cantones = JSON.parse($("#Cantones").val());
+                Distritos = JSON.parse($("#Distritos").val());
+                Barrios = JSON.parse($("#Barrios").val());  //Viene de input
 
-            ModificaSelects(0);
-            maskCedula();
-            }catch(e)
-            {
+                ModificaSelects(0);
+                maskCedula();
+            } catch (e) {
                 console.log(e);
                 Swal.fire({
-                                     icon: 'error',
-                                     title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
 
-                                 })
+                })
             }
         }
         function ModificaSelects(i) {
@@ -176,7 +175,7 @@
             }, 1500);
 
 
-             
+
         }
         async function readFilePrincipalP(input) {
 
@@ -222,7 +221,7 @@
 
                         ImageBae64 = dataurl;
                         $("#Imagen").val(ImageBae64);
-                    //    IMG2 = e.target.result;
+                        //    IMG2 = e.target.result;
 
                     }
 
@@ -238,161 +237,161 @@
     </script>
 
 }<!-- Content Header (Page header) -->
-    @using Newtonsoft.Json;
-    <section class="content-header">
-        <h1>
-            Sucursales
-        </h1>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-            <li class="breadcrumb-item active">Editar Sucursal</li>
-        </ol>
-    </section>
+@using Newtonsoft.Json;
+<section class="content-header">
+    <h1>
+        Sucursales
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Editar Sucursal</li>
+    </ol>
+</section>
 
 
 
-    <section class="content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box">
-                    <div class="box-header with-border">
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6 class="box-subtitle"> Editar Sucursal</h6>
+
+                        </div>
+                        <div class="col-md-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input hidden asp-for="Sucursales.CodSuc" />
                         <div class="row">
-                            <div class="col-md-8">
-                                <h6 class="box-subtitle"> Editar Sucursal</h6>
+                            <div class="col-md-12" style="text-align: center;">
+                                <div class="form-group">
+                                    <center>
+                                        <img id="imgPrincipalG" src="data:image/jpeg;base64,@Model.Sucursales.Imagen" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
+                                        <br />
+                                        <br />
 
-                            </div>
-                            <div class="col-md-4">
-                                <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+                                        <label style="font-size: 13px;" class="label" for="imgPrincipalUploadG">Subir Imagen</label><input id="imgPrincipalUploadG" accept=".jpg, .png" style="opacity:0; display:none;" type="file" name="imgPrincipalUploadG" />
+
+                                        <input type="text" id="Imagen" hidden asp-for="Sucursales.Imagen" class="form-control" required data-validation-required-message="Este campo es requerido">
+
+
+                                    </center>
+                                </div>
+
+
 
 
                             </div>
                         </div>
-                    </div>
-                    <div class="box-body">
-                        <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <input hidden asp-for="Sucursales.CodSuc" />
-                              <div class="row" >
-                                <div class="col-md-12" style="text-align: center;">
-                                 <div class="form-group">
-                                        <center>
-                                            <img id="imgPrincipalG" src="data:image/jpeg;base64,@Model.Sucursales.Imagen" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
-                                            <br />
-                                            <br />
-
-                                            <label style="font-size: 13px;" class="label" for="imgPrincipalUploadG">Subir Imagen</label><input id="imgPrincipalUploadG" accept=".jpg, .png" style="opacity:0; display:none;" type="file" name="imgPrincipalUploadG" />
-                                            
-                                        <input type="text" id="Imagen" hidden asp-for="Sucursales.Imagen" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        
-                                        
-                                        </center>
-                                    </div>
-
-                                
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="cyber">Tipo de Cédula:</label>
+                                    <select id="selectTP" class="form-control" asp-for="Sucursales.TipoCedula" onchange="    javascript: maskCedula();" required>
+                                        <option value="01">Nacional</option>
+                                        <option value="02">Jurídica</option>
+                                        <option value="03">DIMEX</option>
+                                        <option value="04">NITE</option>
 
 
+                                    </select>
+                                </div>
                             </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Cédula<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input id="Cedula" type="text" asp-for="Sucursales.Cedula" maxlength="12" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="12" onchange="javascript: BuscarCliente()">
+                                    </div>
+
+                                </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="cyber">Tipo de Cédula:</label>
-                                        <select id="selectTP" class="form-control" asp-for="Sucursales.TipoCedula" onchange="    javascript: maskCedula();" required>
-                                            <option value="01">Nacional</option>
-                                            <option value="02">Jurídica</option>
-                                            <option value="03">DIMEX</option>
-                                            <option value="04">NITE</option>
-
-
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <h5>Cédula<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input id="Cedula" type="text" asp-for="Sucursales.Cedula" maxlength="12" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="12" onchange="javascript: BuscarCliente()">
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <h5>Nombre Sucursal<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" asp-for="Sucursales.Nombre" maxlength="100" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        </div>
-
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Nombre Sucursal<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Sucursales.Nombre" maxlength="100" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
-
-
 
                             </div>
 
 
 
-                            <div class="row">
+                        </div>
 
 
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <h5>Email<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" asp-for="Sucursales.Correo" maxlength="100" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        </div>
+                        <div class="row">
 
+
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Email<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Sucursales.Correo" maxlength="100" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
-
 
                                 </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <h5>Teléfono<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" asp-for="Sucursales.Telefono" id="Telefono" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        </div>
-
-                                    </div>
-
-
-                                </div>
-
-                                
-                           
 
                             </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="nom">Provincia:</label>
-                                        <select id="selectP" class="form-control" asp-for="Sucursales.Provincia" onchange="javascript: ModificaSelects(1)" required>
 
-                                            <option value="1" selected>San José</option>
-                                            <option value="2">Alajuela</option>
-                                            <option value="3">Cartago</option>
-                                            <option value="4">Heredia</option>
-                                            <option value="5">Guanacaste</option>
-                                            <option value="6">Puntarenas</option>
-                                            <option value="7">Limón</option>
-
-
-
-
-                                        </select>
-
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Teléfono<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Sucursales.Telefono" id="Telefono" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
+                                </div>
+
+
+                            </div>
+
+
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="nom">Provincia:</label>
+                                    <select id="selectP" class="form-control" asp-for="Sucursales.Provincia" onchange="javascript: ModificaSelects(1)" required>
+
+                                        <option value="1" selected>San José</option>
+                                        <option value="2">Alajuela</option>
+                                        <option value="3">Cartago</option>
+                                        <option value="4">Heredia</option>
+                                        <option value="5">Guanacaste</option>
+                                        <option value="6">Puntarenas</option>
+                                        <option value="7">Limón</option>
+
+
+
+
+                                    </select>
 
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="nom">Cantón:</label>
-                                        <select id="selectC" class="form-control" asp-for="Sucursales.Canton" onchange="javascript: ModificaSelects(2)" required>
-                                            @foreach (var item in Model.Cantones)
+
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="nom">Cantón:</label>
+                                    <select id="selectC" class="form-control" asp-for="Sucursales.Canton" onchange="javascript: ModificaSelects(2)" required>
+                                        @foreach (var item in Model.Cantones)
                                         {
                                             <option value="@item.CodCanton">@item.NomCanton</option>
 
@@ -449,12 +448,12 @@
 
 
                             </div>
-                                <div class="col-md-6">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <h5>Lista de Precio<span class="text-danger">*</span></h5>
 
                                     <select class="form-control select2  " asp-for="Sucursales.idListaPrecios">
-                                       <option value="0"> Seleccione </option>
+                                        <option value="0"> Seleccione </option>
                                         @foreach (var item in Model.Precio)
                                         {
 
@@ -470,61 +469,96 @@
 
                             </div>
                             <div class="col-md-3">
-                                 <div class="form-group">
+                                <div class="form-group">
                                     <h5>Serie Contado<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="number" asp-for="Sucursales.SerieFECO"  class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="number" asp-for="Sucursales.SerieFECO" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
-                                
+
 
 
                             </div>
 
-                             <div class="col-md-2">
-                                 <div class="form-group">
+                            <div class="col-md-3">
+                                <div class="form-group">
                                     <h5>Serie Crédito<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="number" asp-for="Sucursales.SerieFECR"  class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="number" asp-for="Sucursales.SerieFECR" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
-                                
+
 
 
                             </div>
 
-                               <div class="col-md-2">
-                                 <div class="form-group">
+                            <div class="col-md-3">
+                                <div class="form-group">
                                     <h5>Serie Nota de Crédito<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="number" asp-for="Sucursales.SerieNC"  class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="number" asp-for="Sucursales.SerieNC" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
-                                
+
 
 
                             </div>
 
-                                <div class="col-md-3">
-                                 <div class="form-group">
+                            <div class="col-md-3">
+                                <div class="form-group">
                                     <h5>Serie Pago<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="number" asp-for="Sucursales.SeriePago"  class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        <input type="number" asp-for="Sucursales.SeriePago" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
-                                
+
 
 
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <h5>Serie Depósito<span class="text-danger">*</span></h5>
                                     <div class="controls">
                                         <input type="number" asp-for="Sucursales.SerieDeposito" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="nom">Dimensión:</label>
+                                    <select class="form-control" asp-for="Sucursales.Dimension" required>
+
+                                        <option value=1 selected>1</option>
+                                        <option value=2>2</option>
+                                        <option value=3>3</option>
+                                        <option value=4>4</option>
+                                        <option value=5>5</option>
+
+
+
+
+
+                                    </select>
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Norma de Reparto<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="number" asp-for="Sucursales.NormaReparto" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
@@ -567,56 +601,50 @@
 
 </section>
 <script>
-     function maskCedula()
-        {
-         $("#Telefono").mask("9999-9999");
-            var TC = $("#selectTP").val();
+    function maskCedula() {
+        $("#Telefono").mask("9999-9999");
+        var TC = $("#selectTP").val();
 
-            switch(TC)
-            {
-                case "01":
+        switch (TC) {
+            case "01":
                 {
-                        $("#Cedula").mask("999999999");
-                        break;
+                    $("#Cedula").mask("999999999");
+                    break;
                 }
-                 case "02":
+            case "02":
                 {
-                        $("#Cedula").mask("9999999999");
-                        break;
+                    $("#Cedula").mask("9999999999");
+                    break;
                 }
-            }
-
         }
 
-        function validarCedula()
-        {
-             var TC = $("#selectTP").val();
+    }
 
-            switch(TC)
-            {
-                case "01":
+    function validarCedula() {
+        var TC = $("#selectTP").val();
+
+        switch (TC) {
+            case "01":
                 {
-                    if($("#Cedula").val().length < 9)
-                    {
-                         
+                    if ($("#Cedula").val().length < 9) {
+
                         $("#Cedula").focus();
                         $("#Cedula").select();
                     }
-                         
-                        break;
+
+                    break;
                 }
-                 case "02":
+            case "02":
                 {
-                    if($("#Cedula").val().length < 10)
-                    {
-                         
+                    if ($("#Cedula").val().length < 10) {
+
                         $("#Cedula").focus();
                         $("#Cedula").select();
                     }
-                         
-                        break;
+
+                    break;
                 }
-            }
         }
+    }
 </script>
 

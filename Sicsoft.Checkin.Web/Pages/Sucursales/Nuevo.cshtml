@@ -522,7 +522,7 @@
 
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <h5>Serie Crédito<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -535,7 +535,7 @@
 
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <h5>Serie Nota de Crédito<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -556,11 +556,46 @@
 
 
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <h5>Serie Depósito<span class="text-danger">*</span></h5>
                                     <div class="controls">
                                         <input type="number" asp-for="Sucursales.SerieDeposito" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="nom">Dimensión:</label>
+                                    <select  class="form-control" asp-for="Sucursales.Dimension"  required>
+
+                                        <option value=1 selected>1</option>
+                                        <option value=2>2</option>
+                                        <option value=3>3</option>
+                                        <option value=4>4</option>
+                                        <option value=5>5</option>
+                                        
+
+
+
+
+                                    </select>
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Norma de Reparto<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="number" asp-for="Sucursales.NormaReparto" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
