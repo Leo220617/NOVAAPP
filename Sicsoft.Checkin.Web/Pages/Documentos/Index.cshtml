@@ -392,13 +392,7 @@
                                         </td>
                                         <td align="center" style="padding-top:15px;">
 
-                                            @if (!string.IsNullOrEmpty(Roles.Where(a => a == "34").FirstOrDefault()))
-                                            {
-                                                <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a>
-                                            }
-
-
-                                            &nbsp;
+                                         
                                             <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> &nbsp;
                                          
                                             @if (item.ProcesadaSAP == false)
@@ -458,7 +452,7 @@
                                             @Math.Round(@item.TotalImpuestos, 2).ToString("C",formato)
                                         </td>
                                         <td>
-                                            @Math.Round(@item.TotalCompra, 2).ToString("C",formato)
+                                            @Math.Round(@item.TotalCompra - item.Redondeo, 2).ToString("C",formato)
                                         </td>
 
                                         <td>
