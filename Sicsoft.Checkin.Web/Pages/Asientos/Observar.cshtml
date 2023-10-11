@@ -1,0 +1,470 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.Asientos.ObservarModel
+@{
+    ViewData["Title"] = "Asientos";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+}
+@using Microsoft.AspNetCore.Http
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using System.Linq;
+@using System.Security.Claims;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.Extensions.Configuration;
+@using Refit;
+@using Sicsoft.Checkin.Web.Models;
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+}
+@section styles{
+
+
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
+
+            });
+
+
+
+            $(document).ready(function () {
+
+            });
+
+
+        });
+
+        function ImprimirPantalla() {
+            try {
+                // window.print();
+                var margins = {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    width: 595
+                };
+
+
+                html = $(".html").html();
+                html2pdf(html, {
+                    margin: 1,
+                    padding: 0,
+                    filename: 'Asiento.pdf',
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: { scale: 2, logging: true },
+                    jsPDF: { unit: 'in', format: 'A2', orientation: 'P' },
+                    class: ImprimirPantalla
+                });
+
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
+
+    </script>
+}
+
+
+@using Newtonsoft.Json;
+@using System.Globalization
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Asientos
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Observar Asiento</li>
+    </ol>
+</section>
+
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Observar Asiento</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+                            &nbsp;
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Asiento No: @Model.Listas.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <h5> <b>Fecha: </b> @Model.Listas.Fecha.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+
+
+
+                                   
+
+
+                                        <br />
+
+
+                                        <div class="col-3">
+                                            <h5> <b>Sucursal: </b> @Model.Listas.CodSuc</h5>
+
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h5> <b>Moneda: </b> USD</h5>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h5> <b>Doc Entry: </b> @Model.Listas.DocEntry</h5>
+                                        </div>
+
+
+                                        <br />
+
+                                       
+
+                                        <div class="col-md-6">
+                                            <h5> <b>Usuario: </b> @(Model.Users.Where(a => a.id == Model.Listas.idUsuario).FirstOrDefault() == null ? "Usuario Inexistente" : @Model.Users.Where(a => a.id == Model.Listas.idUsuario).FirstOrDefault().Nombre)</h5>
+
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-8 invoice-col">
+                           
+                            <address>
+                                <strong class="text-blue font-size-24"> Asiento # @Model.Listas.id   </strong>
+
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">Cuenta Contable</th>
+                                        <th class="text-center">Norma de Reparto</th>
+                                        
+                                        <th class="text-center">Debito</th>
+                                        <th class="text-center">Crédito</th>
+                                   
+
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                  
+                                        <tr>
+                                            <td>1</td>
+                                          
+                                        <td>  @(Model.Cuentas.Where(a => a.id == Model.Listas.idCuentaCredito).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.Cuentas.Where(a => a.id == Model.Listas.idCuentaCredito).FirstOrDefault().CuentaSAP + " - " + Model.Cuentas.Where(a => a.id == Model.Listas.idCuentaCredito).FirstOrDefault().Nombre)   </td>
+                                        <td class="text-center">@(Model.Sucursales.Where(a => a.CodSuc == Model.Listas.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" : @Model.Sucursales.Where(a => a.CodSuc == Model.Listas.CodSuc).FirstOrDefault().NormaReparto)</td>
+
+
+
+                                        <td class="text-center">0</td>
+                                        <td class="text-center">@Math.Round(Model.Listas.Credito,2).ToString("C",formato)</td>
+                                      
+
+
+
+
+                                    </tr>
+
+
+                                    <tr>
+                                        <td>2</td>
+
+                                        <td>  @(Model.Cuentas.Where(a => a.id == Model.Listas.idCuentaDebito).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.Cuentas.Where(a => a.id == Model.Listas.idCuentaDebito).FirstOrDefault().CuentaSAP + " - " + Model.Cuentas.Where(a => a.id == Model.Listas.idCuentaDebito).FirstOrDefault().Nombre)   </td>
+                                        <td class="text-center">@(Model.Sucursales.Where(a => a.CodSuc == Model.Listas.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" : @Model.Sucursales.Where(a => a.CodSuc == Model.Listas.CodSuc).FirstOrDefault().NormaReparto)</td>
+
+
+                                        <td class="text-center">@Math.Round(Model.Listas.Debito,2).ToString("C",formato)</td>
+                                        <td class="text-center">0</td>
+
+                                  
+
+
+
+
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-12  text-right">
+
+
+                            @*   <div>
+                            <p>Total Debito  : <span> @Math.Round(Model.Asientos.TotalDebito, 2).ToString("C",formato)</span> </p>
+                            <p>Total Crédito  : <span> @Math.Round(Model.Asientos.TotalCredito, 2).ToString("C",formato)</span></p>
+
+
+                            </div>*@
+                            <div class="total-payment">
+                                <h3><b>Total Crédito:</b>  <span>  @Math.Round(Model.Listas.Credito, 2).ToString("C",formato)</span></h3>
+                            </div>
+                            <div class="total-payment">
+                                <h3><b>Total Debito:</b>  <span>  @Math.Round(Model.Listas.Debito, 2).ToString("C",formato)</span></h3>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+
+            <!-- Default box -->
+            <div class="col-md-6 box">
+                <div class="col-6 box-header with-border">
+                    <h4 class="box-title">Referencia</h4>
+                </div>
+                <div class="box-body">
+                    <p>@Model.Listas.Referencia</p>
+
+                    <!-- /.box-body -->
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row no-print">
+
+        <div class="col-8">
+
+            <button type="button" class="btn btn-warning" onclick="    javascript:  ImprimirPantalla()">
+                <i class="fa fa-print"></i> Imprimir
+            </button>
+
+        </div>
+    
+
+    </div>
+
+
+</section>
+
+
+<div class="html" hidden>
+    <div class="box-body">
+        <!-- title row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header mt-0">
+                    <h2 class="d-inline"><span class="font-size-24">Asiento No: @Model.Listas.id</span></h2>
+                    <br />
+                    <div class="text-left">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h5> <b>Fecha: </b> @Model.Listas.Fecha.ToString("dd/MM/yyyy")</h5>
+
+                            </div>
+
+
+
+
+
+
+
+                            <br />
+
+
+                            <div class="col-3">
+                                <h5> <b>Sucursal: </b> @Model.Listas.CodSuc</h5>
+
+                            </div>
+                            <div class="col-md-3">
+                                <h5> <b>Moneda: </b> USD</h5>
+                            </div>
+                            <div class="col-md-3">
+                                <h5> <b>Doc Entry: </b> @Model.Listas.DocEntry</h5>
+                            </div>
+
+
+                            <br />
+
+
+
+                            <div class="col-md-6">
+                                <h5> <b>Usuario: </b> @(Model.Users.Where(a => a.id == Model.Listas.idUsuario).FirstOrDefault() == null ? "Usuario Inexistente" : @Model.Users.Where(a => a.id == Model.Listas.idUsuario).FirstOrDefault().Nombre)</h5>
+
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info">
+            <div class="col-md-8 invoice-col">
+
+                <address>
+                    <strong class="text-blue font-size-24"> Asiento # @Model.Listas.id   </strong>
+
+
+                </address>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- Table row -->
+        <div class="row">
+            <div class="col-md-12 table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="bg-pale-info">
+                            <th class="text-center">#</th>
+                            <th class="text-center">Cuenta Contable</th>
+                            <th class="text-center">Norma de Reparto</th>
+
+                            <th class="text-center">Debito</th>
+                            <th class="text-center">Crédito</th>
+
+
+
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        <tr>
+                            <td>1</td>
+
+                            <td>  @(Model.Cuentas.Where(a => a.id == Model.Listas.idCuentaCredito).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.Cuentas.Where(a => a.id == Model.Listas.idCuentaCredito).FirstOrDefault().CuentaSAP + " - " + Model.Cuentas.Where(a => a.id == Model.Listas.idCuentaCredito).FirstOrDefault().Nombre)   </td>
+                            <td class="text-center">@(Model.Sucursales.Where(a => a.CodSuc == Model.Listas.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" : @Model.Sucursales.Where(a => a.CodSuc == Model.Listas.CodSuc).FirstOrDefault().NormaReparto)</td>
+
+
+
+                            <td class="text-center">0</td>
+                            <td class="text-center">@Math.Round(Model.Listas.Credito,2).ToString("C",formato)</td>
+
+
+
+
+
+                        </tr>
+
+
+                        <tr>
+                            <td>2</td>
+
+                            <td>  @(Model.Cuentas.Where(a => a.id == Model.Listas.idCuentaDebito).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.Cuentas.Where(a => a.id == Model.Listas.idCuentaDebito).FirstOrDefault().CuentaSAP + " - " + Model.Cuentas.Where(a => a.id == Model.Listas.idCuentaDebito).FirstOrDefault().Nombre)   </td>
+                            <td class="text-center">@(Model.Sucursales.Where(a => a.CodSuc == Model.Listas.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" : @Model.Sucursales.Where(a => a.CodSuc == Model.Listas.CodSuc).FirstOrDefault().NormaReparto)</td>
+
+
+                            <td class="text-center">@Math.Round(Model.Listas.Debito,2).ToString("C",formato)</td>
+                            <td class="text-center">0</td>
+
+
+
+
+
+
+                        </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-12  text-right">
+
+
+                @*   <div>
+                <p>Total Debito  : <span> @Math.Round(Model.Asientos.TotalDebito, 2).ToString("C",formato)</span> </p>
+                <p>Total Crédito  : <span> @Math.Round(Model.Asientos.TotalCredito, 2).ToString("C",formato)</span></p>
+
+
+                </div>*@
+                <div class="total-payment">
+                    <h3><b>Total Crédito:</b>  <span>  @Math.Round(Model.Listas.Credito, 2).ToString("C",formato)</span></h3>
+                </div>
+                <div class="total-payment">
+                    <h3><b>Total Debito:</b>  <span>  @Math.Round(Model.Listas.Debito, 2).ToString("C",formato)</span></h3>
+                </div>
+
+            </div>
+        </div>
+        <!-- /.row -->
+        <!-- /.row -->
+
+    </div>
+    <div class="col-md-6 box">
+        <div class="col-6 box-header with-border">
+            <h4 class="box-title">Referencia</h4>
+        </div>
+        <div class="box-body">
+            <p>@Model.Listas.Referencia</p>
+
+            <!-- /.box-body -->
+        </div>
+
+
+
+
+    </div>
+</div>
