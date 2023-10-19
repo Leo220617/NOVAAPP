@@ -137,6 +137,7 @@ try {
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                      <th>Acción</th>
                                     <th>Código SAP</th> 
 
                                     <th>Nombre</th>
@@ -153,6 +154,8 @@ try {
                                         @item.id
                                     </td>
 
+                                     <td><a asp-page="./PrecioXLista" asp-route-id="@item.id" title="Mantenimiento Precios" class="fa fa-exchange icono" style="color: #FFB700;"> </a> </td>
+
                                     <td>  @item.CodSAP </td> 
                                     <td>         @item.Nombre </td>
 
@@ -167,6 +170,7 @@ try {
                             <tfoot>
                                 <tr>
                                     <th>ID</th>
+                                      <th>Acción</th>
                                     <th>Código SAP</th> 
                                     <th>Nombre</th>
 

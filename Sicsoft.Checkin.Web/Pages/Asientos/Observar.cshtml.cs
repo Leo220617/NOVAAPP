@@ -49,7 +49,7 @@ namespace NOVAAPP.Pages.Asientos
             try
             {
                 var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
-                if (string.IsNullOrEmpty(Roles.Where(a => a == "32").FirstOrDefault()))
+                if (string.IsNullOrEmpty(Roles.Where(a => a == "60").FirstOrDefault()))
                 {
                     return RedirectToPage("/NoPermiso");
                 }

@@ -276,6 +276,9 @@ namespace Sicsoft.Checkin.Web
 .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Asientos"))
 .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
+            services.AddRefitClient<ICrudApi<PrecioXListaViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/PrecioXLista"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
             return services;
         }
     }
