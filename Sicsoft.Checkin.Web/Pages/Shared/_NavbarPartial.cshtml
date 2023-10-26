@@ -171,6 +171,15 @@
                                 }
 
                             }
+
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "61").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Categorias/Index"><i class="mdi mdi-cube"></i>Categorias</a></li>
+                                }
+
+                            }
                             <li class="treeview">
 
 
