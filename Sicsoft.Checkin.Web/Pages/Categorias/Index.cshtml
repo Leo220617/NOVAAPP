@@ -136,7 +136,7 @@ try {
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Acción</th>
+                                 
                                     <th>Código</th> 
 
                                     <th>Nombre</th>
@@ -153,14 +153,7 @@ try {
 
                                     <td>
                                         @item.id
-                                    </td>
-                                          <td align="center" style="padding-top:15px;">
-                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
-                                            &nbsp;
-                                            <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
-                                            &nbsp;
-                                            
-                                     </td>
+                                 
 
                                     <td>  @item.CodSAP </td> 
                                     <td>  @item.Nombre </td> 
@@ -177,7 +170,7 @@ try {
                             <tfoot>
                                 <tr>
                                       <th>ID</th>
-                                    <th>Acción</th>
+                                 
                                     <th>Código</th> 
 
                                     <th>Nombre</th>

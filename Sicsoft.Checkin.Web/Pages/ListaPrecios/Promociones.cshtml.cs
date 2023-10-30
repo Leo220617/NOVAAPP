@@ -11,26 +11,26 @@ using Refit;
 
 namespace NOVAAPP.Pages.ListaPrecios
 {
-    public class PrecioXListaModel : PageModel
+    public class PromocionesModel : PageModel
     {
 
-        private readonly ICrudApi<PrecioXListaViewModel, int> service; //API
+        private readonly ICrudApi<PromocionesViewModel, int> service; //API
         private readonly ICrudApi<ProductosViewModel, string> productos;
         private readonly ICrudApi<ListaPreciosViewModel, int> precios;
+        private readonly ICrudApi<CategoriasViewModel, int> categorias;
         private readonly ICrudApi<TipoCambiosViewModel, int> tipoCambio;
-        private readonly ICrudApi<BodegasViewModel, int> bodegas;
 
         [BindProperty]
-        public PrecioXListaViewModel[] Lista { get; set; }
+        public PromocionesViewModel[] Lista { get; set; }
 
         [BindProperty]
-        public PrecioXListaViewModel ListaX { get; set; }
+        public PromocionesViewModel ListaX { get; set; }
 
         [BindProperty]
         public ProductosViewModel[] Productos { get; set; }
 
         [BindProperty]
-        public BodegasViewModel[] Bodega { get; set; }
+        public CategoriasViewModel[] Categoria { get; set; }
 
         [BindProperty]
         public ListaPreciosViewModel Precios { get; set; }
@@ -38,13 +38,14 @@ namespace NOVAAPP.Pages.ListaPrecios
         [BindProperty]
         public TipoCambiosViewModel[] TP { get; set; }
 
-        public PrecioXListaModel(ICrudApi<PrecioXListaViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
+        public PromocionesModel(ICrudApi<PromocionesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias,   ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
         {
             this.service = service;
             this.productos = productos;
             this.precios = precios;
-            this.bodegas = bodegas;
+            this.categorias = categorias;
             this.tipoCambio = tipoCambio;
+
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -55,11 +56,14 @@ namespace NOVAAPP.Pages.ListaPrecios
                 {
                     return RedirectToPage("/NoPermiso");
                 }
-                Precios =  await precios.ObtenerPorId(id);
+                Precios = await precios.ObtenerPorId(id);
+               
+                Categoria = await categorias.ObtenerLista("");
                 ParametrosFiltros filtro = new ParametrosFiltros();
                 filtro.Codigo2 = Precios.id;
+              
                 Productos = await productos.ObtenerLista(filtro);
-                Bodega = await bodegas.ObtenerLista("");
+              
                 ParametrosFiltros filtro2 = new ParametrosFiltros();
                 filtro2.Codigo1 = Precios.id;
                 Lista = await service.ObtenerLista(filtro2);
