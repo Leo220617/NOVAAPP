@@ -39,9 +39,9 @@ function Recuperar() {
         Categorias = JSON.parse($("#Categorias").val());
         TipoCambio = JSON.parse($("#TipoCambio").val());
 
-
+        RellenaListaPrecios()
         RellenaCategorias()
-    
+
 
 
 
@@ -63,7 +63,7 @@ function RellenaCategorias() {
         html += "<option value='0' > Seleccione Categoria </option>";
 
         for (var i = 0; i < Categorias.length; i++) {
-            html += "<option value='" + Categorias[i].id + "' > " + Categorias[i].CodSAP + " - " +  Categorias[i].Nombre + " </option>";
+            html += "<option value='" + Categorias[i].id + "' > " + Categorias[i].CodSAP + " - " + Categorias[i].Nombre + " </option>";
         }
 
 
@@ -79,19 +79,45 @@ function RellenaCategorias() {
     }
 
 }
-function onChangeCategoria() {
+
+function RellenaListaPrecios() {
+    try {
+        var html = "";
+        $("#ListaSeleccionado").html(html);
+        html += "<option value='0' > Seleccione Lista de Precio </option>";
+
+        for (var i = 0; i < ListaPrecios.length; i++) {
+            html += "<option value='" + ListaPrecios[i].id + "' > " + ListaPrecios[i].CodSAP + " - " + ListaPrecios[i].Nombre + " </option>";
+        }
+
+
+
+        $("#ListaSeleccionado").html(html);
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error ' + e
+
+        })
+    }
+
+}
+function onChangeListaPrecio() {
     try {
         var idCategoria = $("#CategoriaSeleccionado").val();
 
         var idListaPrecio = $("#ListaSeleccionado").val();
 
-        var Categoria = Categorias.find(a => a.id == idCategoria);
+        var Lista = ListaPrecios.find(a => a.id == idListaPrecio);
 
 
+        if (idCategoria != 0) {
+            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio);
 
-        ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio);
-        
-        RellenaProductos();
+            RellenaProductos();
+        }
+       
     } catch (e) {
         Swal.fire({
             icon: 'error',
@@ -100,9 +126,34 @@ function onChangeCategoria() {
 
         })
     }
-
-
 }
+
+
+
+    function onChangeCategoria() {
+        try {
+            var idCategoria = $("#CategoriaSeleccionado").val();
+
+            var idListaPrecio = $("#ListaSeleccionado").val();
+
+            var Categoria = Categorias.find(a => a.id == idCategoria);
+
+
+
+            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio);
+
+            RellenaProductos();
+        } catch (e) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ha ocurrido un error al intentar recuperar cliente ' + e
+
+            })
+        }
+
+
+    }
 function RellenaProductos() {
     try {
         var html = "";
@@ -111,9 +162,9 @@ function RellenaProductos() {
         html += "<option value='0' > Seleccione Producto </option>";
 
         for (var i = 0; i < ProdClientes.length; i++) {
-            
 
-            html += "<option value='" + ProdClientes[i].id + "' > " + ProdClientes[i].Codigo + " - " + ProdClientes[i].Nombre + " -  Precio: " + formatoDecimal(parseFloat(ProdClientes[i].PrecioUnitario).toFixed(2)) + " -  Stock: " + formatoDecimal(parseFloat(ProdClientes[i].Stock).toFixed(2)) + " </option>";
+
+            html += "<option value='" + ProdClientes[i].Codigo + "' > " + ProdClientes[i].Codigo + " - " + ProdClientes[i].Nombre + " -  Precio: " + formatoDecimal(parseFloat(ProdClientes[i].PrecioUnitario).toFixed(2))  + " </option>";
         }
 
 
@@ -134,13 +185,13 @@ function onChangeProducto() {
     try {
         var idProducto = $("#ProductoSeleccionado").val();
 
-        var Producto = ProdClientes.find(a => a.id == idProducto);
+        var Producto = ProdClientes.find(a => a.Codigo == idProducto);
 
         var idCategoria = $("#CategoriaSeleccionado").val();
-   
-           
 
-      
+
+
+
         var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
 
 
@@ -157,12 +208,12 @@ function onChangeProducto() {
             if (Producto.Moneda == "CRC") {
                 var Ganancia = retornaMargenGanancia(Producto.PrecioUnitario, Producto.Costo);
                 $("#inputGanancia").val(Ganancia);
-               
+
             } else {
                 var Costo = Producto.Costo / TipodeCambio.TipoCambio;
                 var Ganancia = retornaMargenGanancia(Producto.PrecioUnitario, Costo);
                 $("#inputGanancia").val(Ganancia);
-          
+
             }
 
 
@@ -179,7 +230,7 @@ function onChangeProducto() {
             $("#inputNomCat").val("");
             $("#impuesto").val(0);
             $("#MonedaProducto").val("");
-        
+
         }
     } catch (e) {
         Swal.fire({
@@ -201,11 +252,11 @@ function onChangePrecio() {
         var idProducto = $("#ProductoSeleccionado").val();
         var PrecioFinal = parseFloat($("#inputFinal").val());
 
-        var Producto = ProdClientes.find(a => a.id == idProducto);
+        var Producto = ProdClientes.find(a => a.Codigo == idProducto);
 
         var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
 
-   
+
         if (Producto.PrecioUnitario < PrecioFinal) {
             Swal.fire({
                 icon: 'error',
@@ -227,11 +278,11 @@ function onChangePrecio() {
             }
         }
 
-           
-           
 
-        
-     
+
+
+
+
 
 
 
@@ -251,10 +302,10 @@ function onChangePrecio() {
 
 function AgregarProductoTabla() {
     try {
-     
-     
+
+
         var id = $("#ProductoSeleccionado").val();
-        var PE = ProdClientes.find(a => a.id == id);
+        var PE = ProdClientes.find(a => a.Codigo == id);
         Duplicado = false;
 
 
@@ -262,29 +313,29 @@ function AgregarProductoTabla() {
         {
             idEncabezado: 0,
             Descripcion: PE.Codigo + " - " + PE.Nombre,
-            idProducto: PE.id,
+            idProducto: PE.Codigo,
             Moneda: PE.Moneda,
-          
-          
-           
+
+
+
             PrecioUnitario: parseFloat($("#inputPrecio").val()),
             PrecioFinal: parseFloat($("#inputFinal").val()),
             Ganancia: parseFloat($("#inputGanancia").val()),
-          
+
             FechaVen: $("#FechaVen").val()
         };
 
-       
+
 
 
         for (var i = 0; i < ProdCadena.length; i++) {
 
 
-            if (PE.id == ProdCadena[i].idProducto) {
+            if (PE.Codigo == ProdCadena[i].idProducto) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Ya se ingreso el mismo producto en otra línea ' 
+                    text: 'Ya se ingreso el mismo producto en otra línea '
 
                 })
                 Duplicado = true;
@@ -294,9 +345,9 @@ function AgregarProductoTabla() {
             }
         }
 
-  
 
-        if ( Producto.PrecioFinal < 0) {
+
+        if (Producto.PrecioFinal < 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -306,27 +357,27 @@ function AgregarProductoTabla() {
 
 
 
-        
 
 
-       
-      
-
-        } else if (Duplicado == false ) {
-
-           
 
 
-            
-
-              
-             
 
 
-                ProdCadena.push(Producto);
+        } else if (Duplicado == false) {
 
-                RellenaTabla();
-          
+
+
+
+
+
+
+
+
+
+            ProdCadena.push(Producto);
+
+            RellenaTabla();
+
             $("#ProductoSeleccionado").val("0").trigger('change.select2');
         }
     } catch (e) {
@@ -351,15 +402,15 @@ function RellenaTabla() {
     try {
         var html = "";
         $("#tbody").html(html);
-     
-      
+
+
         var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
 
         var PrecioFinal = $("#inputFinal").val();
 
         for (var i = 0; i < ProdCadena.length; i++) {
-            var PE = Productos.find(a => a.id == ProdCadena[i].idProducto);
-            if ((PE.PrecioUnitario - PE.Costo ) < PrecioFinal) {
+            var PE = Productos.find(a => a.Codigo == ProdCadena[i].idProducto);
+            if ((PE.PrecioUnitario - PE.Costo) < PrecioFinal) {
 
 
                 var TotalGanancia = (ProdCadena[i].TotalLinea - ProdCadena[i].TotalImpuesto);
@@ -370,38 +421,38 @@ function RellenaTabla() {
                 html += "<td > " + ProdCadena[i].Descripcion + " </td>";
                 html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdCadena[i].PrecioUnitario).toFixed(2)) + " </td>";
                 html += "<td class='text-center'> <input onchange='javascript: onChangePrecioProducto(" + i + ")' type='number' id='" + i + "_Prod3' class='form-control'   value= '" + parseFloat(ProdCadena[i].PrecioFinal).toFixed(2) + "' min='1'/> </td>";
-     
-              
+
+
                 html += "<td class='text-right'> " + ProdCadena[i].FechaVen + " </td>";
-            
-              
-              
-                        if (ProdCadena[i].Moneda == "CRC") {
-                            var Costo = PE.Costo;
-                            if (retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo) > 0) {
-                                html += "<td class='text-right' style='background-color:  #EFFFE9' id='" + i + "_ProdG'> " + formatoDecimal(retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo).toFixed(2)) + "%" + " </td>";
-                            }
-                            else {
-                                html += "<td class='text-right' style='background-color:#FFE9E9' id='" + i + "_ProdG'> " + formatoDecimal(retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo).toFixed(2)) + "%" + " </td>";
-                            }
 
-                        } else {
-                            var Costo = (PE.Costo / TipodeCambio.TipoCambio);
-                            if (retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo) > 0) {
-                                html += "<td class='text-right' style='background-color:  #EFFFE9' id='" + i + "_ProdG'> " + formatoDecimal(retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo).toFixed(2)) + "%" + " </td>";
-                            } else {
-                                html += "<td class='text-right' style='background-color:#FFE9E9' id='" + i + "_ProdG'> " + formatoDecimal(retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo).toFixed(2)) + "%" + " </td>";
-                            }
-                        }
 
-                    
-              
-                
+
+                if (ProdCadena[i].Moneda == "CRC") {
+                    var Costo = PE.Costo;
+                    if (retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo) > 0) {
+                        html += "<td class='text-right' style='background-color:  #EFFFE9' id='" + i + "_ProdG'> " + formatoDecimal(retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo).toFixed(2)) + "%" + " </td>";
+                    }
+                    else {
+                        html += "<td class='text-right' style='background-color:#FFE9E9' id='" + i + "_ProdG'> " + formatoDecimal(retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo).toFixed(2)) + "%" + " </td>";
+                    }
+
+                } else {
+                    var Costo = (PE.Costo / TipodeCambio.TipoCambio);
+                    if (retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo) > 0) {
+                        html += "<td class='text-right' style='background-color:  #EFFFE9' id='" + i + "_ProdG'> " + formatoDecimal(retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo).toFixed(2)) + "%" + " </td>";
+                    } else {
+                        html += "<td class='text-right' style='background-color:#FFE9E9' id='" + i + "_ProdG'> " + formatoDecimal(retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo).toFixed(2)) + "%" + " </td>";
+                    }
+                }
+
+
+
+
                 html += "<td class='text-center'> <a class='fa fa-trash' onclick='javascript:EliminarProducto(" + i + ") '> </a> </td>";
 
 
 
-            
+
 
                 html += "</tr>";
 
@@ -432,16 +483,16 @@ function RellenaTabla() {
 function onChangePrecioProducto(i) {
     try {
 
-        var PE = ProdClientes.find(a => a.id == ProdCadena[i].idProducto);
+        var PE = ProdClientes.find(a => a.Codigo == ProdCadena[i].idProducto);
 
         ProdCadena[i].PrecioFinal = parseFloat($("#" + i + "_Prod3").val()).toFixed(2);
 
         var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
 
-        if (PE.PrecioUnitario > PrecioFinal && PrecioFinal > 0) {
-          
-        
-     
+        if (PE.PrecioUnitario > ProdCadena[i].PrecioFinal && ProdCadena[i].PrecioFinal > 0) {
+
+
+
 
 
 
@@ -462,16 +513,16 @@ function onChangePrecioProducto(i) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Precio invalido, el precio tiene que ser mayor a 0' 
+                text: 'Precio invalido, el precio tiene que ser mayor a 0'
 
             })
             ProdCadena[i].PrecioFinal = PE.PrecioUnitario;
 
 
-      
+            parseFloat($("#" + i + "_Prod3").val(PE.PrecioUnitario)).toFixed(2);
 
         }
-        else if (PE.PrecioUnitario < PrecioFinal) {
+        else if (PE.PrecioUnitario < ProdCadena[i].PrecioFinal) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -480,7 +531,7 @@ function onChangePrecioProducto(i) {
             })
             ProdCadena[i].PrecioFinal = PE.PrecioUnitario;
 
-
+            parseFloat($("#" + i + "_Prod3").val(PE.PrecioUnitario)).toFixed(2);
 
 
         }
@@ -502,13 +553,13 @@ function onChangePrecioProducto(i) {
 function EliminarProducto(i) {
     try {
         var Producto = ProdCadena[i];
-        var PE = ProdClientes.find(a => a.id == ProdCadena[i].idProducto);
+        var PE = ProdClientes.find(a => a.Codigo == ProdCadena[i].idProducto);
 
 
-        
+
         ProdCadena.splice(i, 1);
 
-       
+
 
         RellenaTabla();
     } catch (e) {
@@ -614,4 +665,3 @@ function RellenaCampos(i) {
         })
     }
 }
-

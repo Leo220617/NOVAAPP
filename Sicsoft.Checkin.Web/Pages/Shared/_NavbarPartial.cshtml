@@ -204,6 +204,15 @@
                                 }
 
                             }
+
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "7").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Promociones/Index"><i class="mdi mdi-currency-usd"></i>Promociones</a></li>
+                                }
+
+                            }
                             @{
                                 if (!string.IsNullOrEmpty(Roles.Where(a => a == "22").FirstOrDefault()))
                                 {

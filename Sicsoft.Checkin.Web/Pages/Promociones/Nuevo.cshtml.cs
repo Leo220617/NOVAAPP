@@ -9,9 +9,9 @@ using System.Linq;
 using InversionGloblalWeb.Models;
 using Refit;
 
-namespace NOVAAPP.Pages.ListaPrecios
+namespace NOVAAPP.Pages.Promociones
 {
-    public class PromocionesModel : PageModel
+    public class NuevoModel : PageModel
     {
 
         private readonly ICrudApi<PromocionesViewModel, int> service; //API
@@ -33,12 +33,12 @@ namespace NOVAAPP.Pages.ListaPrecios
         public CategoriasViewModel[] Categoria { get; set; }
 
         [BindProperty]
-        public ListaPreciosViewModel Precios { get; set; }
+        public ListaPreciosViewModel[] Precios { get; set; }
 
         [BindProperty]
         public TipoCambiosViewModel[] TP { get; set; }
 
-        public PromocionesModel(ICrudApi<PromocionesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
+        public NuevoModel(ICrudApi<PromocionesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
         {
             this.service = service;
             this.productos = productos;
@@ -47,7 +47,7 @@ namespace NOVAAPP.Pages.ListaPrecios
             this.tipoCambio = tipoCambio;
 
         }
-        public async Task<IActionResult> OnGetAsync(int id)
+        public async Task<IActionResult> OnGetAsync()
         {
             try
             {
@@ -56,16 +56,16 @@ namespace NOVAAPP.Pages.ListaPrecios
                 {
                     return RedirectToPage("/NoPermiso");
                 }
-                Precios = await precios.ObtenerPorId(id);
+                Precios = await precios.ObtenerLista("");
 
                 Categoria = await categorias.ObtenerLista("");
                 ParametrosFiltros filtro = new ParametrosFiltros();
-                filtro.Codigo2 = Precios.id;
+                
 
                 var Productos1 = await productos.ObtenerLista(filtro);
 
                 Productos = Productos1.Select(a => new
-                { 
+                {
                     a.Codigo,
                     a.idCategoria,
                     a.idImpuesto,
@@ -83,7 +83,7 @@ namespace NOVAAPP.Pages.ListaPrecios
                 }).Distinct().ToList();
 
                 ParametrosFiltros filtro2 = new ParametrosFiltros();
-                filtro2.Codigo1 = Precios.id;
+               
                 Lista = await service.ObtenerLista(filtro2);
                 filtro.FechaInicial = DateTime.Now.Date;
                 TP = await tipoCambio.ObtenerLista(filtro);
@@ -112,23 +112,23 @@ namespace NOVAAPP.Pages.ListaPrecios
 
                     var objeto = objetos.Select(a => new
                     {
-                        a.id, 
-                        a.Codigo,  
+                        a.id,
+                        a.Codigo,
                         a.idCategoria,
-                        a.idImpuesto, 
-                        a.idListaPrecios, 
-                        a.Nombre, 
-                        a.Moneda, 
-                        a.PrecioUnitario, 
-                        a.UnidadMedida, 
-                        a.Cabys, 
-                        a.TipoCod, 
-                        a.CodBarras, 
-                        a.Costo, 
-                        a.Stock, 
-                        a.Activo, 
-                        a.ProcesadoSAP, 
-                        a.FechaActualizacion, 
+                        a.idImpuesto,
+                        a.idListaPrecios,
+                        a.Nombre,
+                        a.Moneda,
+                        a.PrecioUnitario,
+                        a.UnidadMedida,
+                        a.Cabys,
+                        a.TipoCod,
+                        a.CodBarras,
+                        a.Costo,
+                        a.Stock,
+                        a.Activo,
+                        a.ProcesadoSAP,
+                        a.FechaActualizacion,
                         a.MAG,
                         a.Serie
 

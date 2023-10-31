@@ -1,0 +1,310 @@
+﻿@page
+@using System.Globalization
+@model NOVAAPP.Pages.Promociones.IndexModel
+@{
+    ViewData["Title"] = "Promociones";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+
+}
+
+
+
+@section styles{
+
+
+}
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
+                $(document).ready(function () {
+                    $('.mi-selector').select2();
+                });
+            });
+            $(".js-example-responsive").select2({
+                width: 'resolve',// need to override the changed default
+                height: 'resolve'
+            });
+
+
+
+
+
+        });
+
+        var ids = 0;
+        function onClickModal(id) {
+            ids = id;
+            Swal.fire({
+                title: '¿Desea eliminar esta Promoción?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    Eliminar();
+
+                }
+            })
+
+        }
+        function Eliminar() {
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Page("Index", "Eliminar")',
+                data: { id: ids },
+                success: function (result) {
+
+                    if (result == false) {
+                        ids = 0;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error al intentar eliminar'
+
+                        })
+
+                    } else {
+                        Swal.fire({
+                            title: "Ha sido eliminado con éxito",
+
+                            icon: 'success',
+                            showCancelButton: false,
+                            customClass: {
+                                confirmButton: 'swalBtnColor',
+
+                            },
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                beforeSend: function () {
+
+                }
+            })
+        }
+
+
+
+    </script>
+
+}
+
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Promociones
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Listado Promociones</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Promociones</h4></div>
+                        <div class="col-sm-4"> <a asp-page="Nuevo" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Promoción</a></div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="box-body">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-sm-2 pr-1">
+                                <div class="form-group">
+                                    <label>Fecha Inicial</label>
+                                    <input class="form-control " id="FecInicial" type="date" asp-for="filtro.FechaInicial">
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-sm-2 pl-1">
+                                <div class="form-group">
+                                    <label>Fecha Final</label>
+                                    <input class="form-control" id="FecFinal" type="date" asp-for="filtro.FechaFinal">
+                                </div>
+                            </div>
+
+                           
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="cyber">Categoría:</label>
+                                    <select class="form-control select2" id="Categoria" asp-for="filtro.Codigo1" required>
+                                        <option value="0"> Seleccione</option>
+
+                                        @foreach (var item in Model.Categorias)
+                                        {
+                                            <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
+                                        }
+
+
+                                    </select>
+
+
+
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="cyber">Lista de Precio:</label>
+                                    <select class="form-control select2" id="Lista" asp-for="filtro.Codigo2" required>
+                                        <option value="0"> Seleccione</option>
+
+                                        @foreach (var item in Model.ListaPrecio)
+                                        {
+                                            <option value="@item.id">@item.Nombre</option>
+                                        }
+
+
+                                    </select>
+
+
+
+
+
+
+                                </div>
+                            </div>
+
+                  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <div class="col-sm-12 pl-1" style="text-align: right; padding-top: 2%;">
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary"> <i class="fa fa-search"></i></button>
+                            </div>
+
+
+
+
+                        </div>
+
+                    </form>
+                </div>
+                </div>
+                <!-- /.box-header -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Promociones</h4></div>
+                        
+
+
+                    </div>
+
+
+                </div>
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                               
+                                    <th>Acción</th>
+                                    <th>Producto</th>
+                                    <th>Categoria</th>
+                                    <th>Lista de Precio </th>
+                                    <th>Precio Final </th>
+                                    <th>Fecha Vencimiento </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Objeto)
+                                {
+                                    <tr>
+
+                                     
+                                        <td align="center" style="padding-top:15px;">
+                                            <a asp-page="./Editar" asp-route-id="@item.idCategoria, @item.idListaPrecio, @item.ItemCode" class="fa fa-edit icono"> </a>
+                                            &nbsp;
+                                            <a onclick="javascript: onClickModal('@item.idCategoria, @item.idListaPrecio, @item.ItemCode')" class="fa fa-trash icono"></a>
+                                            &nbsp;
+
+                                        </td>
+                                        <td>  @(Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault().CodSAP + "-" + Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault().Nombre) </td>
+                                        @*<td>  @(Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? "Producto Inexistente" : item.ItemCode + "-" + Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Nombre) </td>*@
+                                        <td>  @(Model.ListaPrecio.Where(a => a.id == item.idListaPrecio).FirstOrDefault() == null ? "Categoria Inexistente" : Model.ListaPrecio.Where(a => a.id == item.idListaPrecio).FirstOrDefault().CodSAP + "-" + Model.ListaPrecio.Where(a => a.id == item.idListaPrecio).FirstOrDefault().Nombre) </td>
+
+                                        <td>@item.Moneda</td>
+                                        <td> @Math.Round(@item.PrecioFinal, 2).ToString("C",formato)</td>
+                                        <td>         @item.FechaVen.ToString("dd/MM/yyyy")</td>
+
+
+
+                                    </tr>
+
+                                }
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Acción</th>
+                                    <th>Producto</th>
+                                    <th>Categoria</th>
+                                    <th>Lista de Precio </th>
+                                    <th>Precio Final </th>
+                                    <th>Fecha Vencimiento </th>
+
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+              
+                <!-- /.box-body -->
+            </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
