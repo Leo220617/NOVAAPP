@@ -8,23 +8,24 @@ using System;
 using System.Linq;
 using InversionGloblalWeb.Models;
 using Refit;
+using Newtonsoft.Json;
 
 namespace NOVAAPP.Pages.Promociones
 {
     public class NuevoModel : PageModel
     {
 
-        private readonly ICrudApi<PromocionesViewModel, int> service; //API
+        private readonly ICrudApi<EncPromocionesViewModel, int> service; //API
         private readonly ICrudApi<ProductosViewModel, string> productos;
         private readonly ICrudApi<ListaPreciosViewModel, int> precios;
         private readonly ICrudApi<CategoriasViewModel, int> categorias;
         private readonly ICrudApi<TipoCambiosViewModel, int> tipoCambio;
 
         [BindProperty]
-        public PromocionesViewModel[] Lista { get; set; }
+        public EncPromocionesViewModel[] Lista { get; set; }
 
         [BindProperty]
-        public PromocionesViewModel ListaX { get; set; }
+        public EncPromocionesViewModel ListaX { get; set; }
 
         [BindProperty]
         public object Productos { get; set; }
@@ -38,7 +39,7 @@ namespace NOVAAPP.Pages.Promociones
         [BindProperty]
         public TipoCambiosViewModel[] TP { get; set; }
 
-        public NuevoModel(ICrudApi<PromocionesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
+        public NuevoModel(ICrudApi<EncPromocionesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
         {
             this.service = service;
             this.productos = productos;
@@ -56,6 +57,9 @@ namespace NOVAAPP.Pages.Promociones
                 {
                     return RedirectToPage("/NoPermiso");
                 }
+
+
+
                 Precios = await precios.ObtenerLista("");
 
                 Categoria = await categorias.ObtenerLista("");
@@ -161,6 +165,47 @@ namespace NOVAAPP.Pages.Promociones
 
 
                 return new JsonResult(ex.Message.ToString());
+            }
+        }
+
+        public async Task<IActionResult> OnPostAgregarPromocion(EncPromocionesViewModel recibidos)
+        {
+            string error = "";
+
+
+            try
+            {
+              
+                var resp = await service.Agregar(recibidos);
+
+                var resp2 = new
+                {
+                    success = true,
+                    Promocion = resp
+                };
+                return new JsonResult(resp2);
+            }
+            catch (ApiException ex)
+            {
+                BitacoraErroresViewModel be = JsonConvert.DeserializeObject<BitacoraErroresViewModel>(ex.Content.ToString());
+                var resp2 = new
+                {
+                    success = false,
+                    Promocion = be.Descripcion
+                };
+                return new JsonResult(resp2);
+
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError(string.Empty, ex.Message);
+                var resp2 = new
+                {
+                    success = false,
+                    Promocion = ex.Message
+                };
+                return new JsonResult(resp2);
             }
         }
     }

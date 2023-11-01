@@ -1,50 +1,40 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using NOVAAPP.Models;
+using InversionGloblalWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using NOVAAPP.Models;
 using Refit;
 using Sicsoft.Checkin.Web.Servicios;
-
-using NOVAAPP.Models;
-using InversionGloblalWeb.Models;
-using System.Text.RegularExpressions;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace NOVAAPP.Pages.Promociones
 {
     public class IndexModel : PageModel
     {
         private readonly IConfiguration configuration;
-        private readonly ICrudApi<PromocionesViewModel, int> service;
+        private readonly ICrudApi<EncPromocionesViewModel, int> service;
         private readonly ICrudApi<ListaPreciosViewModel, int> listas;
-        private readonly ICrudApi<ProductosViewModel, string> productos;
-        private readonly ICrudApi<CategoriasViewModel, int> categorias;
+      
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
         [BindProperty]
-        public PromocionesViewModel[] Objeto { get; set; }
+        public EncPromocionesViewModel[] Objeto { get; set; }
 
 
         [BindProperty]
         public ListaPreciosViewModel[] ListaPrecio { get; set; }
 
-        [BindProperty]
-        public ProductosViewModel[] Productos { get; set; }
 
-        [BindProperty]
-        public CategoriasViewModel[] Categorias { get; set; }
-        public IndexModel(ICrudApi<PromocionesViewModel, int> service, ICrudApi<ListaPreciosViewModel, int> listas, ICrudApi<ProductosViewModel, string> productos, ICrudApi<CategoriasViewModel, int> categorias)
+        public IndexModel(ICrudApi<EncPromocionesViewModel, int> service, ICrudApi<ListaPreciosViewModel, int> listas )
         {
             this.service = service;
             this.listas = listas;
-            this.productos = productos;
-            this.categorias = categorias;
+    
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -78,24 +68,8 @@ namespace NOVAAPP.Pages.Promociones
                 }
                 Objeto = await service.ObtenerLista(filtro);
                 ListaPrecio = await listas.ObtenerLista("");
-                Categorias = await categorias.ObtenerLista("");
+              
 
-           
-
-
-                if ((filtro.Codigo2 == 0 || filtro.Codigo2 == null) && (filtro.Codigo3 == 0 || filtro.Codigo3 == null))
-                {
-                    filtro.Codigo2 = 0;
-                    filtro.Codigo3 = 0;
-                }
-
-                if (filtro.Procesado && filtro.Codigo1 == 0 && filtro.Codigo2 == 0)
-                {
-                    filtro.Codigo2 = ListaPrecio.FirstOrDefault().id;
-                    filtro.Codigo3 = Categorias.FirstOrDefault().id;
-
-                    return new RedirectToPageResult("Index", filtro);
-                }
                // Productos = await productos.ObtenerLista(filtro);
                 return Page();
             }
@@ -107,18 +81,6 @@ namespace NOVAAPP.Pages.Promociones
                 return Page();
             }
         }
-        public async Task<IActionResult> OnGetEliminar(int id)
-        {
-            try
-            {
-
-                await service.Eliminar(id);
-                return new JsonResult(true);
-            }
-            catch (ApiException ex)
-            {
-                return new JsonResult(false);
-            }
-        }
+    
     }
 }

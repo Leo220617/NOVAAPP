@@ -6,6 +6,9 @@ namespace NOVAAPP.Models
 {
     public class PromocionesViewModel
     {
+
+        public int id { get; set; }
+        public int idEncabezado { get; set; }
         public string ItemCode { get; set; }
       
         public int idCategoria { get; set; }

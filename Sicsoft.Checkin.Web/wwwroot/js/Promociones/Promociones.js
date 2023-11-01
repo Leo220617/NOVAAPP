@@ -19,6 +19,7 @@ var ListaPrecios = [];
 var Categorias = [];
 var Duplicado = false;
 var TipoCambio = [];
+var Fechabool = false;
 
 function retornaMargenGanancia(PrecioVenta, Costo) {
     try {
@@ -43,7 +44,25 @@ function Recuperar() {
         RellenaCategorias()
 
 
+        for (var i = 0; i < PrecioXLista.length; i++) {
+            var objeto = {
+                Descripcion: PE.Codigo + " - " + PE.Nombre,
+                idProducto: PE.Codigo,
+                Ganancia: parseFloat($("#inputGanancia").val()),
 
+
+                ItemCode: PE.Codigo,
+                idCategoria: PE.idCategoria,
+                FechaVen: $("#FechaVen").val(),
+                PrecioFinal: parseFloat($("#inputFinal").val()),
+                Moneda: PE.Moneda,
+                PrecioUnitario: parseFloat($("#inputPrecio").val())
+
+            }
+            ProdCadena.push(objeto);
+        }
+
+        RellenaTabla();
 
     } catch (e) {
         Swal.fire({
@@ -112,9 +131,12 @@ function onChangeListaPrecio() {
         var Lista = ListaPrecios.find(a => a.id == idListaPrecio);
 
 
-        if (idCategoria != 0) {
+        if (idCategoria != 0 && idListaPrecio != 0) {
             ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio);
 
+            RellenaProductos();
+        } else {
+            ProdClientes = Productos.filter(a => a.idCategoria == 0 && a.idListaPrecios == 0);
             RellenaProductos();
         }
        
@@ -139,10 +161,14 @@ function onChangeListaPrecio() {
             var Categoria = Categorias.find(a => a.id == idCategoria);
 
 
-
-            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio);
-
-            RellenaProductos();
+            if (idCategoria != 0 && idListaPrecio != 0) {
+                ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio);
+                RellenaProductos();
+            } else {
+                ProdClientes = Productos.filter(a => a.idCategoria == 0 && a.idListaPrecios == 0);
+                RellenaProductos();
+            }
+          
         } catch (e) {
             Swal.fire({
                 icon: 'error',
@@ -193,7 +219,7 @@ function onChangeProducto() {
 
 
         var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
-
+        var fechaHoyX = $.datepicker.formatDate('yy-mm-dd', new Date());
 
         if (Producto != undefined) {
             var Categoria = Categorias.find(a => a.id == Producto.idCategoria);
@@ -228,7 +254,7 @@ function onChangeProducto() {
             $("#inputFinal").val(0);
             $("#inputNomPro").val("");
             $("#inputNomCat").val("");
-            $("#impuesto").val(0);
+            $("#FechaVen").val(fechaHoyX);
             $("#MonedaProducto").val("");
 
         }
@@ -255,6 +281,7 @@ function onChangePrecio() {
         var Producto = ProdClientes.find(a => a.Codigo == idProducto);
 
         var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
+
 
 
         if (Producto.PrecioUnitario < PrecioFinal) {
@@ -305,24 +332,34 @@ function AgregarProductoTabla() {
 
 
         var id = $("#ProductoSeleccionado").val();
+        var fechaHoy = $.datepicker.formatDate('dd/mm/yy', new Date());
+        var fechaHoyX = $.datepicker.formatDate('yy-mm-dd', new Date());
+        var idCategoria = $("#CategoriaSeleccionado").val();
+        var idListaPrecio = $("#ListaSeleccionado").val();
         var PE = ProdClientes.find(a => a.Codigo == id);
+        var Promociones = PrecioXLista.find(a => a.ItemCode == id && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio);
         Duplicado = false;
+        Fechabool = false;
 
 
         var Producto =
         {
-            idEncabezado: 0,
+           
             Descripcion: PE.Codigo + " - " + PE.Nombre,
             idProducto: PE.Codigo,
-            Moneda: PE.Moneda,
-
-
-
-            PrecioUnitario: parseFloat($("#inputPrecio").val()),
-            PrecioFinal: parseFloat($("#inputFinal").val()),
             Ganancia: parseFloat($("#inputGanancia").val()),
 
-            FechaVen: $("#FechaVen").val()
+
+            ItemCode: PE.Codigo,
+            idCategoria: PE.idCategoria,
+            FechaVen: $("#FechaVen").val(),
+            PrecioFinal: parseFloat($("#inputFinal").val()),
+            Moneda: PE.Moneda,
+            PrecioUnitario: parseFloat($("#inputPrecio").val())
+          
+          
+
+            
         };
 
 
@@ -346,24 +383,51 @@ function AgregarProductoTabla() {
         }
 
 
+        if (Promociones != undefined && Promociones.FechaVen > fechaHoy) {
+            var PromoFecha = Promociones.FechaVen;
+            var PromoFechaHora = new Date(PromoFecha).toLocaleDateString();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ya existe una promoción para el producto ' + PE.Codigo + '-' + PE.Nombre + ' por  ' + ' ' + Promociones.PrecioFinal + ' ' + ' la promoción vence el ' + PromoFechaHora + ' ' + ' si ocupaba aplicar cambios favor buscar la promoción en el listado y editarla'
+
+            })
+            Fechabool = true;
+        }
 
         if (Producto.PrecioFinal < 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Precio invalido, el precio tiene que ser mayor o igual a ' + ' ' + PE.PrecioUnitario - PE.Costo
+                text: 'Precio invalido, el precio tiene que ser mayor a 0'
 
             })
+        }
+        if (Producto.PrecioFinal == PE.PrecioUnitario) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Precio invalido, el precio tiene que ser menor que el Precio Unitario' + ' ' + PE.PrecioUnitario
+
+            })
+        }
+                if (Producto.FechaVen < fechaHoyX) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Fecha invalida, la fecha de vencimiento tiene que ser menor a la de hoy '
+
+                    })
+
+                
+            
 
 
 
 
 
 
-
-
-
-        } else if (Duplicado == false) {
+                } else if (Duplicado == false && Fechabool == false && Producto.PrecioFinal > 0 && Producto.PrecioFinal != PE.PrecioUnitario && Producto.FechaVen > fechaHoy) {
 
 
 
@@ -408,9 +472,15 @@ function RellenaTabla() {
 
         var PrecioFinal = $("#inputFinal").val();
 
+        if (ProdCadena.length > 0) {
+            $("#ListaSeleccionado").prop("disabled", true);
+        } else {
+            $("#ListaSeleccionado").prop("disabled", false);
+        }
+
         for (var i = 0; i < ProdCadena.length; i++) {
             var PE = Productos.find(a => a.Codigo == ProdCadena[i].idProducto);
-            if ((PE.PrecioUnitario - PE.Costo) < PrecioFinal) {
+            if ((PE.PrecioUnitario - PE.Costo) < ProdCadena[i].PrecioFinal) {
 
 
                 var TotalGanancia = (ProdCadena[i].TotalLinea - ProdCadena[i].TotalImpuesto);
@@ -423,7 +493,9 @@ function RellenaTabla() {
                 html += "<td class='text-center'> <input onchange='javascript: onChangePrecioProducto(" + i + ")' type='number' id='" + i + "_Prod3' class='form-control'   value= '" + parseFloat(ProdCadena[i].PrecioFinal).toFixed(2) + "' min='1'/> </td>";
 
 
-                html += "<td class='text-right'> " + ProdCadena[i].FechaVen + " </td>";
+
+                html += "<td class='text-center'> <input onchange='javascript: onChangeFechaProducto(" + i + ")' type='date' id='" + i + "_Prod4' class='form-control'   value= '" +ProdCadena[i].FechaVen + "' min='1'/> </td>";
+
 
 
 
@@ -550,6 +622,50 @@ function onChangePrecioProducto(i) {
         })
     }
 }
+
+function onChangeFechaProducto(i) {
+    try {
+
+        var PE = ProdClientes.find(a => a.Codigo == ProdCadena[i].idProducto);
+
+        ProdCadena[i].FechaVen = $("#" + i + "_Prod4").val();
+        var fechaHoy = $.datepicker.formatDate('yy-mm-dd', new Date());
+
+
+        if (ProdCadena[i].FechaVen < fechaHoy) {
+         
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Fecha invalida, la fecha de vencimiento tiene que ser menor a la de hoy '
+
+            })
+            ProdCadena[i].FechaVen = fechaHoy;
+
+
+            $("#" + i + "_Prod4").val(fechaHoy);
+
+
+
+
+        }
+       
+
+
+
+
+
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error en: ' + e
+
+        })
+    }
+}
 function EliminarProducto(i) {
     try {
         var Producto = ProdCadena[i];
@@ -615,7 +731,135 @@ function EliminarProducto(i) {
 //    }
 
 //}
+function Generar() {
 
+    try {
+
+
+        var EncOferta = {
+            id: 0,
+            idCliente: $("#ClienteSeleccionado").val(),
+            idUsuarioCreador: 0,
+            idCondPago: $("#selectCondPago").val(),
+            idVendedor: $("#selectVendedor").val(),
+            Fecha: $("#Fecha").val(),
+            FechaVencimiento: $("#fechaVencimiento").val(),
+            Comentarios: $("#inputComentarios").val(),
+            Subtotal: parseFloat(ReplaceLetra($("#subG").text())),
+            TotalImpuestos: parseFloat(ReplaceLetra($("#impG").text())),
+            TotalDescuento: parseFloat(ReplaceLetra($("#descG").text())),
+            TotalCompra: parseFloat(ReplaceLetra($("#totGX").text())),
+            Redondeo: parseFloat(ReplaceLetra($("#redondeo").text())),
+            PorDescto: parseFloat(ReplaceLetra($("#descuento").val())),
+            CodSuc: "",
+            Moneda: $("#selectMoneda").val(),
+            TipoDocumento: $("#selectTD").val(),
+            BaseEntry: $("#BaseEntry").val(),
+            Detalle: ProdCadena,
+            Lotes: LotesCadena
+        }
+
+        if (validarOferta(EncOferta)) {
+            Swal.fire({
+                title: '¿Desea guardar la proforma?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+
+                    $.ajax({
+                        type: 'POST',
+
+                        url: $("#urlGenerar").val(),
+                        dataType: 'json',
+                        data: { recibidos: EncOferta },
+                        headers: {
+                            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function (json) {
+
+
+                            console.log("resultado " + json.oferta);
+                            if (json.success == true) {
+                                $("#divProcesando").modal("hide");
+                                Swal.fire({
+                                    title: "Ha sido generado con éxito",
+
+                                    icon: 'success',
+                                    showCancelButton: false,
+
+                                    confirmButtonText: 'OK',
+                                    customClass: {
+                                        confirmButton: 'swalBtnColor',
+
+                                    },
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        //Despues de insertar, ocupariamos el id del cliente en la bd 
+                                        //para entonces setearlo en el array de clientes
+
+                                        window.location.href = window.location.href.split("/Nuevo")[0];
+
+
+                                    }
+                                })
+
+                            } else {
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Ha ocurrido un error al intentar guardar ' + json.oferta
+
+                                })
+                            }
+                        },
+
+                        beforeSend: function () {
+                            $("#divProcesando").modal("show");
+
+                        },
+                        complete: function () {
+                            $("#divProcesando").modal("hide");
+
+                        },
+                        error: function (error) {
+                            $("#divProcesando").modal("hide");
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar guardar ' + error
+
+                            })
+                        }
+                    });
+                }
+            })
+        } else {
+            $("#divProcesando").modal("hide");
+
+        }
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar agregar ' + e
+
+        })
+    }
+
+
+
+}
 function RellenaCampos(i) {
     try {
         var item = $("#spanItem_" + i).text();
