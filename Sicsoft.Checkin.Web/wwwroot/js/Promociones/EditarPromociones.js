@@ -20,6 +20,7 @@ var Categorias = [];
 var Duplicado = false;
 var TipoCambio = [];
 var Fechabool = false;
+var Promocion = [];
 
 function retornaMargenGanancia(PrecioVenta, Costo) {
     try {
@@ -33,7 +34,7 @@ function retornaMargenGanancia(PrecioVenta, Costo) {
 function Recuperar() {
     try {
 
-
+        Promocion = JSON.parse($("#Promocion").val());
         PrecioXLista = JSON.parse($("#PrecioXLista").val());
         ListaPrecios = JSON.parse($("#ListaPrecios").val());
         Productos = JSON.parse($("#Productos").val());
@@ -44,25 +45,8 @@ function Recuperar() {
         RellenaCategorias()
 
 
-        //for (var i = 0; i < PrecioXLista.length; i++) {
-        //    var objeto = {
-        //        Descripcion: PE.Codigo + " - " + PE.Nombre,
-        //        idProducto: PE.Codigo,
-        //        Ganancia: parseFloat($("#inputGanancia").val()),
 
-
-        //        ItemCode: PE.Codigo,
-        //        idCategoria: PE.idCategoria,
-        //        FechaVen: $("#FechaVen").val(),
-        //        PrecioFinal: parseFloat($("#inputFinal").val()),
-        //        Moneda: PE.Moneda,
-        //        PrecioUnitario: parseFloat($("#inputPrecio").val())
-
-        //    }
-        //    ProdCadena.push(objeto);
-        //}
-
-        RellenaTabla();
+        RecuperarInformacion() 
 
     } catch (e) {
         Swal.fire({
@@ -75,6 +59,67 @@ function Recuperar() {
 
 }
 
+function RecuperarInformacion() {
+    try {
+    
+        $("#ListaSeleccionado").val(Promocion.idListaPrecio);
+        $("#inputNombre").val(Promocion.Nombre);
+
+        var FechaVig = new Date(Promocion.Fecha);
+        var FechaVen = new Date(Promocion.FechaVencimiento);
+        var FechaVigX = $.datepicker.formatDate('yy-mm-dd', FechaVig);
+        var FechaVenX = $.datepicker.formatDate('yy-mm-dd', FechaVen);
+ 
+
+        $("#FechaVig").val(FechaVigX);
+        $("#FechaVen").val(FechaVenX);
+    
+     
+
+    
+
+        for (var i = 0; i < Promocion.Detalle.length; i++) {
+
+            var PE = Productos.find(a => a.Codigo == Promocion.Detalle[i].ItemCode);
+            var Categoria = Categorias.find(a => a.id == PE.idCategoria);
+            var Producto =
+            {
+               
+                Descripcion: PE.Codigo + " - " + PE.Nombre,
+                Categoria: Categoria.CodSAP + " - " + Categoria.Nombre,
+                idProducto: PE.Codigo,
+              /*  Ganancia: parseFloat($("#inputGanancia").val()),*/
+                PrecioUnitario: parseFloat(PE.PrecioUnitario.toFixed(2)),
+
+                ItemCode: Promocion.Detalle[i].ItemCode,
+                idCategoria: PE.idCategoria,
+                idListaPrecio: Promocion.Detalle[i].idListaPrecio,
+                FechaVen: Promocion.Detalle[i].FechaVen,
+                Fecha: Promocion.Detalle[i].Fecha,
+                PrecioFinal: parseFloat(Promocion.Detalle[i].PrecioFinal.toFixed(2)),
+                PrecioAnterior: parseFloat(Promocion.Detalle[i].PrecioAnterior.toFixed(2)),
+                Moneda: Promocion.Detalle[i].Moneda
+             
+
+            };
+            ProdCadena.push(Producto);
+        }
+
+
+        RellenaTabla();
+        onChangeListaPrecio();
+    
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+        })
+    }
+}
 function RellenaCategorias() {
     try {
         var html = "";
@@ -139,7 +184,7 @@ function onChangeListaPrecio() {
             ProdClientes = Productos.filter(a => a.idCategoria == 0 && a.idListaPrecios == 0);
             RellenaProductos();
         }
-       
+
     } catch (e) {
         Swal.fire({
             icon: 'error',
@@ -152,34 +197,34 @@ function onChangeListaPrecio() {
 
 
 
-    function onChangeCategoria() {
-        try {
-            var idCategoria = $("#CategoriaSeleccionado").val();
+function onChangeCategoria() {
+    try {
+        var idCategoria = $("#CategoriaSeleccionado").val();
 
-            var idListaPrecio = $("#ListaSeleccionado").val();
+        var idListaPrecio = $("#ListaSeleccionado").val();
 
-            var Categoria = Categorias.find(a => a.id == idCategoria);
+        var Categoria = Categorias.find(a => a.id == idCategoria);
 
 
-            if (idCategoria != 0 && idListaPrecio != 0) {
-                ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio);
-                RellenaProductos();
-            } else {
-                ProdClientes = Productos.filter(a => a.idCategoria == 0 && a.idListaPrecios == 0);
-                RellenaProductos();
-            }
-          
-        } catch (e) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Ha ocurrido un error al intentar recuperar cliente ' + e
-
-            })
+        if (idCategoria != 0 && idListaPrecio != 0) {
+            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio);
+            RellenaProductos();
+        } else {
+            ProdClientes = Productos.filter(a => a.idCategoria == 0 && a.idListaPrecios == 0);
+            RellenaProductos();
         }
 
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar recuperar cliente ' + e
 
+        })
     }
+
+
+}
 function RellenaProductos() {
     try {
         var html = "";
@@ -190,7 +235,7 @@ function RellenaProductos() {
         for (var i = 0; i < ProdClientes.length; i++) {
 
 
-            html += "<option value='" + ProdClientes[i].Codigo + "' > " + ProdClientes[i].Codigo + " - " + ProdClientes[i].Nombre + " -  Precio: " + formatoDecimal(parseFloat(ProdClientes[i].PrecioUnitario).toFixed(2))  + " </option>";
+            html += "<option value='" + ProdClientes[i].Codigo + "' > " + ProdClientes[i].Codigo + " - " + ProdClientes[i].Nombre + " -  Precio: " + formatoDecimal(parseFloat(ProdClientes[i].PrecioUnitario).toFixed(2)) + " </option>";
         }
 
 
@@ -254,7 +299,7 @@ function onChangeProducto() {
             $("#inputFinal").val(0);
             $("#inputNomPro").val("");
             $("#inputNomCat").val("");
-           
+          
             $("#MonedaProducto").val("");
 
         }
@@ -345,7 +390,7 @@ function AgregarProductoTabla() {
 
         var Producto =
         {
-           
+
             Descripcion: PE.Codigo + " - " + PE.Nombre,
             Categoria: Categoria.CodSAP + " - " + Categoria.Nombre,
             idProducto: PE.Codigo,
@@ -360,12 +405,11 @@ function AgregarProductoTabla() {
             PrecioFinal: parseFloat($("#inputFinal").val()),
             PrecioAnterior: parseFloat($("#inputPrecio").val()),
             Moneda: PE.Moneda,
-
             PrecioUnitario: parseFloat($("#inputPrecio").val())
-          
-          
 
-            
+
+
+
         };
 
 
@@ -389,7 +433,17 @@ function AgregarProductoTabla() {
         }
 
 
-     
+        if (Promociones != undefined && Promociones.FechaVen > fechaHoy) {
+            var PromoFecha = Promociones.FechaVen;
+            var PromoFechaHora = new Date(PromoFecha).toLocaleDateString();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ya existe una promoción para el producto ' + PE.Codigo + '-' + PE.Nombre + ' por  ' + ' ' + Promociones.PrecioFinal + ' ' + ' la promoción vence el ' + PromoFechaHora + ' ' + ' si ocupaba aplicar cambios favor buscar la promoción en el listado y editarla'
+
+            })
+            Fechabool = true;
+        }
 
         if (Producto.PrecioFinal < 0) {
             Swal.fire({
@@ -416,23 +470,24 @@ function AgregarProductoTabla() {
 
             })
         }
-                if (Producto.FechaVen < fechaHoyX) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Fecha invalida, la fecha de vencimiento tiene que ser menor a la de hoy '
 
-                    })
+        if (Producto.FechaVen < fechaHoyX) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Fecha invalida, la fecha de vencimiento tiene que ser menor a la de hoy '
 
-                
-            
+            })
 
 
 
 
 
 
-                } else if (Duplicado == false && Fechabool == false && Producto.PrecioFinal > 0 && (Producto.PrecioFinal != PE.PrecioUnitario || Producto.PrecioFinal != Producto.PrecioAnterior) && Producto.FechaVen > fechaHoy) {
+
+
+
+        } else if (Duplicado == false && Fechabool == false && Producto.PrecioFinal > 0 && (Producto.PrecioFinal != PE.PrecioUnitario || Producto.PrecioFinal != Producto.PrecioAnterior) && Producto.FechaVen > fechaHoy) {
 
 
 
@@ -499,7 +554,7 @@ function RellenaTabla() {
 
 
                 html += "<td > " + ProdCadena[i].Categoria + " </td>";
-            /*    html += "<td class='text-center'> <input onchange='javascript: onChangeFechaProducto(" + i + ")' type='date' id='" + i + "_Prod4' class='form-control'   value= '" +ProdCadena[i].FechaVen + "' min='1'/> </td>";*/
+                /*    html += "<td class='text-center'> <input onchange='javascript: onChangeFechaProducto(" + i + ")' type='date' id='" + i + "_Prod4' class='form-control'   value= '" +ProdCadena[i].FechaVen + "' min='1'/> </td>";*/
 
 
 
@@ -648,7 +703,7 @@ function onChangeFechaProducto(i) {
 
 
         if (ProdCadena[i].FechaVen < fechaHoy) {
-         
+
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -664,7 +719,7 @@ function onChangeFechaProducto(i) {
 
 
         }
-       
+
 
 
 
@@ -685,7 +740,7 @@ function onChangeFechaProducto(i) {
 function onChangeFecha() {
     try {
 
-     
+
 
         var FechaVen = $("#FechaVen").val();
         var fechaHoy = $.datepicker.formatDate('yy-mm-dd', new Date());
@@ -840,7 +895,7 @@ function Generar() {
     try {
 
         var EncPromociones = {
-            id: 0,
+            id: $("#id").val(),
             idListaPrecio: $("#ListaSeleccionado").val(),
             Nombre: $("#inputNombre").val(),
             Fecha: $("#FechaVig").val(),
@@ -896,7 +951,7 @@ function Generar() {
                                         //Despues de insertar, ocupariamos el id del cliente en la bd 
                                         //para entonces setearlo en el array de clientes
 
-                                        window.location.href = window.location.href.split("/Nuevo")[0];
+                                        window.location.href = window.location.href.split("/Editar")[0];
 
 
                                     }
@@ -907,7 +962,7 @@ function Generar() {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Oops...',
-                                    text: 'Ha ocurrido un error al intentar guardar ' + json.listaX
+                                    text: 'Ha ocurrido un error al intentar guardar ' + json.promocion
 
                                 })
                             }
@@ -954,21 +1009,21 @@ function Generar() {
 
 function validarPromocion(e) {
     try {
-      
 
-       
+
+
         if (e.Nombre == "" || e.Nombre == null) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Ha ocurrido un error al intentar agregar, falta el nombre' 
+                text: 'Ha ocurrido un error al intentar agregar, falta el nombre'
 
             })
-                return false;
-            }
-            else if (e.FechaVencimiento == "" || e.FechaVencimiento == null) {
-                return false;
-            }
+            return false;
+        }
+        else if (e.FechaVencimiento == "" || e.FechaVencimiento == null) {
+            return false;
+        }
         else if (e.Detalle.length == 0 || e.Detalle == null) {
             Swal.fire({
                 icon: 'error',
@@ -976,7 +1031,7 @@ function validarPromocion(e) {
                 text: 'Ha ocurrido un error al intentar agregar, por favor agregue lineas a la promoción'
 
             })
-                return false;
+            return false;
         }
         else if (e.Fecha > e.FechaVencimiento) {
             Swal.fire({
@@ -987,13 +1042,13 @@ function validarPromocion(e) {
             })
             return false;
         }
-          
 
 
-            else {
-                return true;
-            }
-         
+
+        else {
+            return true;
+        }
+
     } catch (e) {
         Swal.fire({
             icon: 'error',

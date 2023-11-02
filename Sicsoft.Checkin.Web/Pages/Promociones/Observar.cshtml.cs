@@ -54,7 +54,7 @@ namespace NOVAAPP.Pages.Promociones
             try
             {
                 var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
-                if (string.IsNullOrEmpty(Roles.Where(a => a == "14").FirstOrDefault()))
+                if (string.IsNullOrEmpty(Roles.Where(a => a == "63").FirstOrDefault()))
                 {
                     return RedirectToPage("/NoPermiso");
                 }

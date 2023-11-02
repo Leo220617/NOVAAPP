@@ -210,7 +210,7 @@
                                            
                                            <td>  @(Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? "Producto Inexistente" :  Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Codigo + " - " + Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Nombre)   </td>
 
-                                            <td class="text-right">@(Math.Round(Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().PrecioUnitario, 2).ToString("C", formato))</td>
+                                            <td class="text-right">@(Math.Round(item.PrecioAnterior, 2).ToString("C", formato))</td>
                                             <td class="text-right">@(Math.Round(item.PrecioFinal, 2).ToString("C", formato))</td>
                                             <td>  @(Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault().CodSAP + " - " + Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault().Nombre)   </td>
                                             <td>@(Math.Round(((item.PrecioFinal - (Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Costo)) / item.PrecioFinal) * 100).ToString("C", formato))%</td>
@@ -348,7 +348,7 @@
 
                                 <td>  @(Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Codigo + " - " + Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Nombre)   </td>
 
-                                <td class="text-right">@(Math.Round(Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().PrecioUnitario, 2).ToString("C", formato))</td>
+                                <td class="text-right">@(Math.Round(item.PrecioAnterior, 2).ToString("C", formato))</td>
                                 <td class="text-right">@(Math.Round(item.PrecioFinal, 2).ToString("C", formato))</td>
                                 <td>  @(Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault().CodSAP + " - " + Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault().Nombre)   </td>
                                 <td>@(Math.Round(((item.PrecioFinal - (Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Costo)) / item.PrecioFinal) * 100).ToString("C", formato))%</td>

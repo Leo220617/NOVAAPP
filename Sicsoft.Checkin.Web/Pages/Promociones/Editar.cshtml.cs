@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace NOVAAPP.Pages.Promociones
 {
-    public class NuevoModel : PageModel
+    public class EditarModel : PageModel
     {
 
         private readonly ICrudApi<EncPromocionesViewModel, int> service; //API
@@ -39,7 +39,7 @@ namespace NOVAAPP.Pages.Promociones
         [BindProperty]
         public TipoCambiosViewModel[] TP { get; set; }
 
-        public NuevoModel(ICrudApi<EncPromocionesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
+        public EditarModel(ICrudApi<EncPromocionesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
         {
             this.service = service;
             this.productos = productos;
@@ -48,7 +48,7 @@ namespace NOVAAPP.Pages.Promociones
             this.tipoCambio = tipoCambio;
 
         }
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             try
             {
@@ -59,12 +59,12 @@ namespace NOVAAPP.Pages.Promociones
                 }
 
 
-
+                ListaX = await service.ObtenerPorId(id);
                 Precios = await precios.ObtenerLista("");
 
                 Categoria = await categorias.ObtenerLista("");
                 ParametrosFiltros filtro = new ParametrosFiltros();
-                
+
 
                 var Productos1 = await productos.ObtenerLista(filtro);
 
@@ -87,7 +87,7 @@ namespace NOVAAPP.Pages.Promociones
                 }).Distinct().ToList();
 
                 ParametrosFiltros filtro2 = new ParametrosFiltros();
-               
+
                 Lista = await service.ObtenerLista(filtro2);
                 filtro.FechaInicial = DateTime.Now.Date;
                 TP = await tipoCambio.ObtenerLista(filtro);
@@ -101,72 +101,7 @@ namespace NOVAAPP.Pages.Promociones
                 return Page();
             }
         }
-        public async Task<IActionResult> OnGetProductos(int idLista)
-        {
-            try
-            {
-
-
-                if (idLista > 0)
-                {
-                    ParametrosFiltros filtros = new ParametrosFiltros();
-                    filtros.Codigo2 = idLista;
-
-                    var objetos = await productos.ObtenerLista(filtros);
-
-                    var objeto = objetos.Select(a => new
-                    {
-                        a.id,
-                        a.Codigo,
-                        a.idCategoria,
-                        a.idImpuesto,
-                        a.idListaPrecios,
-                        a.Nombre,
-                        a.Moneda,
-                        a.PrecioUnitario,
-                        a.UnidadMedida,
-                        a.Cabys,
-                        a.TipoCod,
-                        a.CodBarras,
-                        a.Costo,
-                        a.Stock,
-                        a.Activo,
-                        a.ProcesadoSAP,
-                        a.FechaActualizacion,
-                        a.MAG,
-                        a.Serie
-
-                    }).Distinct().ToList();
-
-
-
-                    return new JsonResult(objeto);
-                }
-                else
-                {
-                    var objeto = new ProductosViewModel[0];
-
-
-
-                    return new JsonResult(objeto);
-                }
-
-            }
-            catch (ApiException ex)
-            {
-
-
-
-                return new JsonResult(ex.Content.ToString());
-            }
-            catch (Exception ex)
-            {
-
-
-
-                return new JsonResult(ex.Message.ToString());
-            }
-        }
+     
 
         public async Task<IActionResult> OnPostAgregarPromocion(EncPromocionesViewModel recibidos)
         {
@@ -176,12 +111,12 @@ namespace NOVAAPP.Pages.Promociones
             try
             {
                 recibidos.idUsuarioCreador = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == ClaimTypes.Actor).Select(s1 => s1.Value).FirstOrDefault().ToString());
-                var resp = await service.Agregar(recibidos);
+                await service.Editar(recibidos);
 
                 var resp2 = new
                 {
                     success = true,
-                    ListaX = resp
+                    ListaX = ""
                 };
                 return new JsonResult(resp2);
             }

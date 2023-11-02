@@ -1,0 +1,397 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.Promociones.EditarModel
+@{
+    ViewData["Title"] = "Promociones";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+}
+@using Microsoft.AspNetCore.Http
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using System.Linq;
+@using System.Security.Claims;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.Extensions.Configuration;
+@using Refit;
+@using Sicsoft.Checkin.Web.Models;
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+}
+@section styles{
+
+
+}
+@section scripts{
+
+
+    <script src="/js/Promociones/EditarPromociones.js"></script>
+
+
+}
+
+
+@using Newtonsoft.Json;
+@using System.Globalization
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Promociones
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Promociones</li>
+    </ol>
+</section>
+
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
+
+            <input hidden asp-for="ListaX.id" id="id" />
+            <input hidden id="Productos" value="@JsonConvert.SerializeObject(Model.Productos)" />
+            <input hidden id="Promocion" value="@JsonConvert.SerializeObject(Model.ListaX)" />
+            <input hidden id="PrecioXLista" value="@JsonConvert.SerializeObject(Model.Lista)" />
+            <input hidden id="ListaPrecios" value="@JsonConvert.SerializeObject(Model.Precios)" />
+            <input hidden id="Categorias" value="@JsonConvert.SerializeObject(Model.Categoria)" />
+            <input hidden id="TipoCambio" value="@JsonConvert.SerializeObject(Model.TP)" />
+
+            <input hidden id="urlGenerar" value="@Url.Page("Editar", "AgregarPromocion")" />
+            <input hidden id="urlProductos" value="@Url.Page("Editar", "Productos")" />
+
+
+
+
+            <!-- Content Header (Page header) -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Promociones</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Promociones</span></h2>
+                                <div class="text-left">
+                                    <h5>Fecha <span class="font-size-18">@DateTime.Now.ToString("dd MMM yyy")</span></h5>
+                                    <input hidden id="Fecha" type="datetime" value="@DateTime.Now" />
+
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+
+                    <div class="row invoice-info">
+                        <div class="col-md-4 pr-1">
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <input id="inputNombre" type="text" class="form-control" placeholder="Nombre">
+
+
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Fecha de Vigencia</label>
+                                <input type="date" class="form-control" id="FechaVig" value="@DateTime.Now.Date.ToString("yyyy-MM-dd")" onchange="javascript: onChangeFechaVig()">
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Fecha de Vencimiento</label>
+                                <input type="date" class="form-control" id="FechaVen" value="@DateTime.Now.Date.ToString("yyyy-MM-dd")" onchange="javascript: onChangeFecha()">
+
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Lista de Precio</label>
+                                <select id="ListaSeleccionado" class="form-control select2" onchange="javascript: onChangeListaPrecio()">
+                                    <option value="0"> Seleccione Lista de Precio</option>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Categoria</label>
+                                <select id="CategoriaSeleccionado" class="form-control select2" onchange="javascript: onChangeCategoria()">
+                                    <option value="0"> Seleccione Categoria</option>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-4">
+                            <br><br>
+                            <br><br>
+
+
+
+                        </div>
+
+
+
+
+
+                    </div>
+                    <!-- /.col -->
+                    <!-- /.row -->
+
+                </div>
+
+            </div>
+
+
+
+
+
+            <div class="box">
+                <div class="box-body">
+                    <div class="row">
+
+
+                        <div class="col-md-12  ">
+                            <div class="x_panel">
+                                <div class="x_content">
+
+
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h3>Productos</h3>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="x_content">
+
+
+
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <select id="ProductoSeleccionado" class="form-control select2" onchange="javascript: onChangeProducto()">
+                                                <option value="0"> Seleccione Productos</option>
+
+
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <br />
+                                    <div class="row">
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Nombre Producto</label>
+                                                <input id="inputNomPro" disabled type="text" class="form-control" placeholder="Nombre Producto">
+
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Nombre Categoria</label>
+                                                <input id="inputNomCat" disabled type="text" class="form-control" placeholder="Nombre Categoria">
+
+
+                                            </div>
+
+
+                                        </div>
+
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Moneda</label>
+                                                <input type="text" class="form-control" id="MonedaProducto" readonly placeholder="Moneda">
+
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-md-4 pr-1">
+                                            <div class="form-group">
+                                                <label>Precio de Venta</label>
+                                                <input id="inputPrecio" type="number" disabled class="form-control" placeholder="Precio Unitario" value="0">
+
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-md-4 pr-1">
+                                            <div class="form-group">
+                                                <label>Costo</label>
+                                                <input id="inputCosto" type="number" disabled class="form-control" placeholder="Costo" value="0">
+
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                    <br />
+
+                                    <div class="row">
+
+
+
+                                        <div class="col-md-6 pr-1">
+                                            <div class="form-group">
+                                                <label>Precio Final</label>
+                                                <input id="inputFinal" type="number" class="form-control" placeholder="Precio Final" onchange="javascript: onChangePrecio()" value="0">
+
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>% Ganancia</label>
+                                                <input id="inputGanancia" type="number" disabled class="form-control" placeholder="Ganancia" value="0">
+
+
+                                            </div>
+
+
+                                        </div>
+
+
+
+                                        <div class="col-sm-12 pl-1" style="text-align: right;">
+
+                                            <a id="agregar" onclick="javascript: AgregarProductoTabla();" class="btn btn-primary" style="color: white !important;">+ Agregar </a>
+                                        </div>
+
+
+
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-body">
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+
+                                        <th>Descripción</th>
+
+                                        <th class="text-right">Precio Anterior</th>
+
+                                        <th class="text-right">Precio Final</th>
+                                        <th class="text-right">Categoría</th>
+
+
+                                        <th class="text-right"> % Ganancia</th>
+                                        <th class="text-right">Eliminar</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+
+                    <div class="row">
+                        <!-- accepted payments column -->
+                        <div class="col-12 col-sm-6">
+                        </div>
+                        <!-- /.col -->
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+            <div class="row no-print">
+                <div class="col-12">
+                    @*<button id="print" class="btn btn-warning" type="button"> <span><i class="fa fa-print"></i> Imprimir</span> </button>*@
+                    <button type="button" id="botonG" class="btn btn-success pull-right" onclick="    javascript: Generar()">
+                        <i class="fa fa-credit-card"></i> Generar
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+
+
+

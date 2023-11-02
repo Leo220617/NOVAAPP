@@ -20,6 +20,9 @@ namespace NOVAAPP.Models
 
         public decimal PrecioFinal { get; set; }
 
+        public decimal PrecioAnterior { get; set; }
+
         public DateTime FechaVen { get; set; }
+        public DateTime Fecha { get; set; }
     }
 }
