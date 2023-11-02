@@ -1,0 +1,381 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.Promociones.ObservarModel
+@{
+    ViewData["Title"] = "Promociones";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+}
+@using Microsoft.AspNetCore.Http
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using System.Linq;
+@using System.Security.Claims;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.Extensions.Configuration;
+@using Refit;
+@using Sicsoft.Checkin.Web.Models;
+@inject IHttpContextAccessor httpContextAccessor
+
+@section styles{
+
+
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
+
+            });
+
+
+
+            $(document).ready(function () {
+
+            });
+
+
+        });
+
+        function ImprimirPantalla() {
+            try {
+                // window.print();
+                var margins = {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    width: 595
+                };
+
+
+                html = $(".html").html();
+                html2pdf(html, {
+                    margin: 1,
+                    padding: 0,
+                    filename: 'Promocion.pdf',
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: { scale: 2, logging: true },
+                    jsPDF: { unit: 'in', format: 'A2', orientation: 'P' },
+                    class: ImprimirPantalla
+                });
+
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
+
+
+
+
+    </script>
+}
+
+
+@using Newtonsoft.Json;
+@using System.Globalization
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Promociones
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Observar Promoción</li>
+    </ol>
+</section>
+
+<section class="content ">
+    <div class="row">
+
+        <div class="col-12">
+
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Observar Promoción</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+                            &nbsp;
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+
+                    <!-- title row -->
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Promoción No: @Model.ListaX.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h5> <b>Fecha</b> @Model.ListaX.Fecha.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <h5> <b>Fecha de Vencimiento</b> @Model.ListaX.FechaVencimiento.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+
+
+
+
+
+
+
+
+                                        <div class="col-md-3">
+                                            <h5> <b>Lista de Precio: </b> @(Model.Precios.Where(a => a.id == Model.ListaX.idListaPrecio).FirstOrDefault() == null ? "Lista Precio Inexistente" : Model.Precios.Where(a => a.id == Model.ListaX.idListaPrecio).FirstOrDefault().CodSAP + " - " + Model.Precios.Where(a => a.id == Model.ListaX.idListaPrecio).FirstOrDefault().Nombre) </h5>
+
+                                        </div>
+
+
+
+
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-8 invoice-col">
+                            <strong>Nombre</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @Model.ListaX.Nombre   </strong>
+
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th>#</th>
+
+                                        <th>Descripción</th>
+
+                                        <th class="text-right">Precio Anterior</th>
+                                        <th class="text-right">Precio Final</th>
+                                        <th class="text-right">Categoría</th>
+                                        <th class="text-right"> % Ganancia</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var i = 1;
+                                    }
+                                    @foreach (var item in Model.ListaX.Detalle)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                           
+                                           <td>  @(Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? "Producto Inexistente" :  Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Codigo + " - " + Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Nombre)   </td>
+
+                                            <td class="text-right">@(Math.Round(Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().PrecioUnitario, 2).ToString("C", formato))</td>
+                                            <td class="text-right">@(Math.Round(item.PrecioFinal, 2).ToString("C", formato))</td>
+                                            <td>  @(Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault().CodSAP + " - " + Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault().Nombre)   </td>
+                                            <td>@(Math.Round(((item.PrecioFinal - (Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Costo)) / item.PrecioFinal) * 100).ToString("C", formato))%</td>
+
+
+                                           
+                                           
+                                        </tr>
+                                        i++;
+
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+
+            <!-- Default box -->
+
+
+        </div>
+
+
+    </div>
+
+
+    <button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
+    &nbsp
+    &nbsp
+
+
+</section>
+
+
+
+<div class="html" hidden>
+    <div class="box-body">
+
+        <!-- title row -->
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="page-header mt-0">
+                    <h2 class="d-inline"><span class="font-size-24">Promoción No: @Model.ListaX.id</span></h2>
+                    <br />
+                    <div class="text-left">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h5> <b>Fecha</b> @Model.ListaX.Fecha.ToString("dd/MM/yyyy")</h5>
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <h5> <b>Fecha de Vencimiento</b> @Model.ListaX.FechaVencimiento.ToString("dd/MM/yyyy")</h5>
+
+                            </div>
+
+
+
+
+
+
+
+
+
+                            <div class="col-md-3">
+                                <h5> <b>Lista de Precio: </b> @(Model.Precios.Where(a => a.id == Model.ListaX.idListaPrecio).FirstOrDefault() == null ? "Lista Precio Inexistente" : Model.Precios.Where(a => a.id == Model.ListaX.idListaPrecio).FirstOrDefault().CodSAP + " - " + Model.Precios.Where(a => a.id == Model.ListaX.idListaPrecio).FirstOrDefault().Nombre) </h5>
+
+                            </div>
+
+
+
+
+
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+
+
+        <!-- info row -->
+        <div class="row invoice-info">
+            <div class="col-md-8 invoice-col">
+                <strong>Nombre</strong>
+                <address>
+                    <strong class="text-blue font-size-24"> @Model.ListaX.Nombre   </strong>
+
+
+                </address>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- Table row -->
+        <div class="row">
+            <div class="col-12 table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="bg-pale-info">
+                            <th>#</th>
+
+                            <th>Descripción</th>
+
+                            <th class="text-right">Precio Anterior</th>
+                            <th class="text-right">Precio Final</th>
+                            <th class="text-right">Categoría</th>
+                            <th class="text-right"> % Ganancia</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var i2 = 1;
+                        }
+                        @foreach (var item in Model.ListaX.Detalle)
+                        {
+                            <tr>
+                                <td>@i</td>
+
+                                <td>  @(Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Codigo + " - " + Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Nombre)   </td>
+
+                                <td class="text-right">@(Math.Round(Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().PrecioUnitario, 2).ToString("C", formato))</td>
+                                <td class="text-right">@(Math.Round(item.PrecioFinal, 2).ToString("C", formato))</td>
+                                <td>  @(Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault().CodSAP + " - " + Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault().Nombre)   </td>
+                                <td>@(Math.Round(((item.PrecioFinal - (Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.Codigo == item.ItemCode).FirstOrDefault().Costo)) / item.PrecioFinal) * 100).ToString("C", formato))%</td>
+
+
+
+
+                            </tr>
+                            i2++;
+
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.col -->
+
+        </div>
+        <!-- /.row -->
+        <!-- /.row -->
+
+    </div>
+</div>
+
+
+
+
+
+

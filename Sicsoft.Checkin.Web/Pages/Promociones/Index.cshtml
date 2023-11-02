@@ -230,8 +230,10 @@
                                     <th>Acción</th>
                                     <th>Nombre </th>
                                     <th>Lista de Precio </th>
+                                    <th>Fecha Vigencia </th>
                                     <th>Fecha Vencimiento </th>
-                                    <th>Fecha Creación </th>
+                                    <th>Cant Lineas </th>
+                                    
 
                                 </tr>
                             </thead>
@@ -244,16 +246,15 @@
                                         <td align="center" style="padding-top:15px;">
                                             <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a>
                                             &nbsp;
-                                            <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
-                                            &nbsp;
+                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> &nbsp;
 
                                         </td>
                                         <td>@item.Nombre</td>
                                         <td>  @(Model.ListaPrecio.Where(a => a.id == item.idListaPrecio).FirstOrDefault() == null ? "Lista Precio Inexistente" : Model.ListaPrecio.Where(a => a.id == item.idListaPrecio).FirstOrDefault().CodSAP + "-" + Model.ListaPrecio.Where(a => a.id == item.idListaPrecio).FirstOrDefault().Nombre) </td>
-                                      
-                                        <td>         @item.FechaVencimiento.ToString("dd/MM/yyyy")</td>
-                                        <td>         @item.Fecha.ToString("dd/MM/yyyy")</td>
 
+                                        <td>         @item.Fecha.ToString("dd/MM/yyyy")</td>
+                                        <td>         @item.FechaVencimiento.ToString("dd/MM/yyyy")</td>
+                                        <td>@(Model.Objeto.Length + 1)</td>
 
 
                                     </tr>
@@ -268,8 +269,10 @@
                                     <th>Acción</th>
                                     <th>Nombre </th>
                                     <th>Lista de Precio </th>
+                                    <th>Fecha Vigencia </th>
                                     <th>Fecha Vencimiento </th>
-                                    <th>Fecha Creación </th>
+                                    <th>Cant Lineas </th>
+                                    
 
                                 </tr>
                             </tfoot>

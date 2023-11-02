@@ -44,23 +44,23 @@ function Recuperar() {
         RellenaCategorias()
 
 
-        for (var i = 0; i < PrecioXLista.length; i++) {
-            var objeto = {
-                Descripcion: PE.Codigo + " - " + PE.Nombre,
-                idProducto: PE.Codigo,
-                Ganancia: parseFloat($("#inputGanancia").val()),
+        //for (var i = 0; i < PrecioXLista.length; i++) {
+        //    var objeto = {
+        //        Descripcion: PE.Codigo + " - " + PE.Nombre,
+        //        idProducto: PE.Codigo,
+        //        Ganancia: parseFloat($("#inputGanancia").val()),
 
 
-                ItemCode: PE.Codigo,
-                idCategoria: PE.idCategoria,
-                FechaVen: $("#FechaVen").val(),
-                PrecioFinal: parseFloat($("#inputFinal").val()),
-                Moneda: PE.Moneda,
-                PrecioUnitario: parseFloat($("#inputPrecio").val())
+        //        ItemCode: PE.Codigo,
+        //        idCategoria: PE.idCategoria,
+        //        FechaVen: $("#FechaVen").val(),
+        //        PrecioFinal: parseFloat($("#inputFinal").val()),
+        //        Moneda: PE.Moneda,
+        //        PrecioUnitario: parseFloat($("#inputPrecio").val())
 
-            }
-            ProdCadena.push(objeto);
-        }
+        //    }
+        //    ProdCadena.push(objeto);
+        //}
 
         RellenaTabla();
 
@@ -337,6 +337,7 @@ function AgregarProductoTabla() {
         var idCategoria = $("#CategoriaSeleccionado").val();
         var idListaPrecio = $("#ListaSeleccionado").val();
         var PE = ProdClientes.find(a => a.Codigo == id);
+        var Categoria = Categorias.find(a => a.id == PE.idCategoria);
         var Promociones = PrecioXLista.find(a => a.ItemCode == id && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio);
         Duplicado = false;
         Fechabool = false;
@@ -346,12 +347,14 @@ function AgregarProductoTabla() {
         {
            
             Descripcion: PE.Codigo + " - " + PE.Nombre,
+            Categoria: Categoria.CodSAP + " - " + Categoria.Nombre,
             idProducto: PE.Codigo,
             Ganancia: parseFloat($("#inputGanancia").val()),
 
 
             ItemCode: PE.Codigo,
             idCategoria: PE.idCategoria,
+            idListaPrecio: parseFloat($("#ListaSeleccionado").val()),
             FechaVen: $("#FechaVen").val(),
             PrecioFinal: parseFloat($("#inputFinal").val()),
             Moneda: PE.Moneda,
@@ -493,8 +496,8 @@ function RellenaTabla() {
                 html += "<td class='text-center'> <input onchange='javascript: onChangePrecioProducto(" + i + ")' type='number' id='" + i + "_Prod3' class='form-control'   value= '" + parseFloat(ProdCadena[i].PrecioFinal).toFixed(2) + "' min='1'/> </td>";
 
 
-
-                html += "<td class='text-center'> <input onchange='javascript: onChangeFechaProducto(" + i + ")' type='date' id='" + i + "_Prod4' class='form-control'   value= '" +ProdCadena[i].FechaVen + "' min='1'/> </td>";
+                html += "<td > " + ProdCadena[i].Categoria + " </td>";
+            /*    html += "<td class='text-center'> <input onchange='javascript: onChangeFechaProducto(" + i + ")' type='date' id='" + i + "_Prod4' class='form-control'   value= '" +ProdCadena[i].FechaVen + "' min='1'/> </td>";*/
 
 
 
@@ -562,7 +565,7 @@ function onChangePrecioProducto(i) {
         var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
 
         if (PE.PrecioUnitario > ProdCadena[i].PrecioFinal && ProdCadena[i].PrecioFinal > 0) {
-
+            var input = $("#" + i + "_ProdG");
 
 
 
@@ -570,15 +573,25 @@ function onChangePrecioProducto(i) {
 
             if (PE.Moneda == "CRC") {
                 var Ganancia = retornaMargenGanancia(ProdCadena[i].PrecioFinal, PE.Costo);
+              
                 $("#" + i + "_ProdG").val(Ganancia.toFixed(2));
                 $("#" + i + "_ProdG").text(Ganancia.toFixed(2));
+                if (Ganancia > 0) {
+                    input.css('background-color', '#EFFFE9')
+                } else {
+                    input.css('background-color', '#FFE9E9')
+                }
             } else {
                 var Costo = PE.Costo / TipodeCambio.TipoCambio;
                 var Ganancia = retornaMargenGanancia(ProdCadena[i].PrecioFinal, PE.Costo);
                 $("#" + i + "_ProdG").val(Ganancia.toFixed(2));
 
                 $("#" + i + "_ProdG").text(Ganancia.toFixed(2));
-
+                if (Ganancia > 0) {
+                    input.css('background-color', '#EFFFE9')
+                } else {
+                    input.css('background-color', '#FFE9E9')
+                }
             }
         }
         else if (ProdCadena[i].PrecioFinal <= 0) {
@@ -622,7 +635,7 @@ function onChangePrecioProducto(i) {
         })
     }
 }
-
+//Metodo Viejo
 function onChangeFechaProducto(i) {
     try {
 
@@ -666,6 +679,95 @@ function onChangeFechaProducto(i) {
         })
     }
 }
+//
+function onChangeFecha() {
+    try {
+
+     
+
+        var FechaVen = $("#FechaVen").val();
+        var fechaHoy = $.datepicker.formatDate('yy-mm-dd', new Date());
+
+
+        if (FechaVen < fechaHoy) {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Fecha invalida, la fecha de vencimiento tiene que ser mayor o igual a la de hoy '
+
+            })
+            FechaVen = fechaHoy;
+
+
+            $("#FechaVen").val(fechaHoy);
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error en: ' + e
+
+        })
+    }
+}
+
+function onChangeFechaVig() {
+    try {
+
+
+
+        var FechaVig = $("#FechaVig").val();
+        var fechaHoy = $.datepicker.formatDate('yy-mm-dd', new Date());
+
+
+        if (FechaVig < fechaHoy) {
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Fecha invalida, la fecha de vigencia tiene que ser mayor a la de hoy '
+
+            })
+            FechaVig = fechaHoy;
+
+
+            $("#FechaVig").val(fechaHoy);
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error en: ' + e
+
+        })
+    }
+}
+
 function EliminarProducto(i) {
     try {
         var Producto = ProdCadena[i];
@@ -735,33 +837,18 @@ function Generar() {
 
     try {
 
-
-        var EncOferta = {
+        var EncPromociones = {
             id: 0,
-            idCliente: $("#ClienteSeleccionado").val(),
-            idUsuarioCreador: 0,
-            idCondPago: $("#selectCondPago").val(),
-            idVendedor: $("#selectVendedor").val(),
-            Fecha: $("#Fecha").val(),
-            FechaVencimiento: $("#fechaVencimiento").val(),
-            Comentarios: $("#inputComentarios").val(),
-            Subtotal: parseFloat(ReplaceLetra($("#subG").text())),
-            TotalImpuestos: parseFloat(ReplaceLetra($("#impG").text())),
-            TotalDescuento: parseFloat(ReplaceLetra($("#descG").text())),
-            TotalCompra: parseFloat(ReplaceLetra($("#totGX").text())),
-            Redondeo: parseFloat(ReplaceLetra($("#redondeo").text())),
-            PorDescto: parseFloat(ReplaceLetra($("#descuento").val())),
-            CodSuc: "",
-            Moneda: $("#selectMoneda").val(),
-            TipoDocumento: $("#selectTD").val(),
-            BaseEntry: $("#BaseEntry").val(),
-            Detalle: ProdCadena,
-            Lotes: LotesCadena
+            idListaPrecio: $("#ListaSeleccionado").val(),
+            Nombre: $("#inputNombre").val(),
+            Fecha: $("#FechaVig").val(),
+            FechaVencimiento: $("#FechaVen").val(),
+            Detalle: ProdCadena
         }
 
-        if (validarOferta(EncOferta)) {
+        if (validarPromocion(EncPromociones)) {
             Swal.fire({
-                title: '¿Desea guardar la proforma?',
+                title: '¿Desea guardar la promoción?',
                 showDenyButton: true,
                 showCancelButton: false,
                 confirmButtonText: `Aceptar`,
@@ -779,14 +866,14 @@ function Generar() {
 
                         url: $("#urlGenerar").val(),
                         dataType: 'json',
-                        data: { recibidos: EncOferta },
+                        data: { recibidos: EncPromociones },
                         headers: {
                             RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
                         },
                         success: function (json) {
 
 
-                            console.log("resultado " + json.oferta);
+                            console.log("resultado " + json.promocion);
                             if (json.success == true) {
                                 $("#divProcesando").modal("hide");
                                 Swal.fire({
@@ -816,7 +903,7 @@ function Generar() {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Oops...',
-                                    text: 'Ha ocurrido un error al intentar guardar ' + json.oferta
+                                    text: 'Ha ocurrido un error al intentar guardar ' + json.promocion
 
                                 })
                             }
@@ -848,6 +935,61 @@ function Generar() {
 
         }
 
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar agregar ' + e
+
+        })
+    }
+
+
+
+}
+
+function validarPromocion(e) {
+    try {
+      
+
+       
+        if (e.Nombre == "" || e.Nombre == null) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ha ocurrido un error al intentar agregar, falta el nombre' 
+
+            })
+                return false;
+            }
+            else if (e.FechaVencimiento == "" || e.FechaVencimiento == null) {
+                return false;
+            }
+        else if (e.Detalle.length == 0 || e.Detalle == null) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ha ocurrido un error al intentar agregar, por favor agregue lineas a la promoción'
+
+            })
+                return false;
+        }
+        else if (e.Fecha > e.FechaVencimiento) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ha ocurrido un error al intentar agregar, la fecha de vigencia no puede ser mayor a la de vencimiento'
+
+            })
+            return false;
+        }
+          
+
+
+            else {
+                return true;
+            }
+         
     } catch (e) {
         Swal.fire({
             icon: 'error',

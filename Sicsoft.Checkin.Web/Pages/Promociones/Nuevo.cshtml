@@ -61,7 +61,7 @@
             <input hidden id="Categorias" value="@JsonConvert.SerializeObject(Model.Categoria)" />
             <input hidden id="TipoCambio" value="@JsonConvert.SerializeObject(Model.TP)" />
 
-            <input hidden id="urlGenerar" value="@Url.Page("Nuevo", "AgregarPago")" />
+            <input hidden id="urlGenerar" value="@Url.Page("Nuevo", "AgregarPromocion")" />
             <input hidden id="urlProductos" value="@Url.Page("Nuevo", "Productos")" />
 
 
@@ -109,11 +109,37 @@
                     <!-- info row -->
 
                     <div class="row invoice-info">
+                        <div class="col-md-4 pr-1">
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <input id="inputNombre" type="text" class="form-control" placeholder="Nombre" >
 
+
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Fecha de Vigencia</label>
+                                <input type="date" class="form-control" id="FechaVig" value="@DateTime.Now.Date.ToString("yyyy-MM-dd")" onchange="javascript: onChangeFechaVig()">
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Fecha de Vencimiento</label>
+                                <input type="date" class="form-control" id="FechaVen" value="@DateTime.Now.Date.ToString("yyyy-MM-dd")" onchange="javascript: onChangeFecha()">
+
+
+                            </div>
+                        </div>
+                        
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Lista de Precio</label>
-                                <select id="ListaSeleccionado" asp-for="ListaX.idListaPrecio" class="form-control select2" onchange="javascript: onChangeListaPrecio()">
+                                <select id="ListaSeleccionado"  class="form-control select2" onchange="javascript: onChangeListaPrecio()">
                                     <option value="0"> Seleccione Lista de Precio</option>
 
 
@@ -134,6 +160,8 @@
                             </div>
                         </div>
 
+                       
+                      
                         <div class="col-md-4">
                             <br><br>
                             <br><br>
@@ -253,16 +281,9 @@
 
                                     <div class="row">
 
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Fecha de Vencimiento</label>
-                                                <input type="date" class="form-control" id="FechaVen" value="@DateTime.Now.Date.ToString("yyyy-MM-dd")">
+                                      
 
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-4 pr-1">
+                                        <div class="col-md-6 pr-1">
                                             <div class="form-group">
                                                 <label>Precio Final</label>
                                                 <input id="inputFinal" type="number" class="form-control" placeholder="Precio Final" onchange="javascript: onChangePrecio()" value="0">
@@ -272,7 +293,7 @@
 
 
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>% Ganancia</label>
                                                 <input id="inputGanancia" type="number" disabled class="form-control" placeholder="Ganancia" value="0">
@@ -327,7 +348,7 @@
                                         <th class="text-right">Precio Anterior</th>
 
                                         <th class="text-right">Precio Final</th>
-                                        <th class="text-right">Fecha Vencimiento</th>
+                                        <th class="text-right">Categoría</th>
 
 
                                         <th class="text-right"> % Ganancia</th>

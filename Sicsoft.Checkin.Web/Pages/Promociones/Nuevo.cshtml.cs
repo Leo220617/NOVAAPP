@@ -181,7 +181,7 @@ namespace NOVAAPP.Pages.Promociones
                 var resp2 = new
                 {
                     success = true,
-                    Promocion = resp
+                    ListaX = resp
                 };
                 return new JsonResult(resp2);
             }
@@ -191,7 +191,7 @@ namespace NOVAAPP.Pages.Promociones
                 var resp2 = new
                 {
                     success = false,
-                    Promocion = be.Descripcion
+                    ListaX = be.Descripcion
                 };
                 return new JsonResult(resp2);
 
