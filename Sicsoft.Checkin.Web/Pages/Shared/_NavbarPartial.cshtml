@@ -214,6 +214,14 @@
 
                             }
                             @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "63").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Margenes/Index"><i class="mdi mdi-currency-usd"></i>Margenes</a></li>
+                                }
+
+                            }
+                            @{
                                 if (!string.IsNullOrEmpty(Roles.Where(a => a == "22").FirstOrDefault()))
                                 {
 

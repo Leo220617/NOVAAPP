@@ -46,7 +46,7 @@ function RellenaProductos() {
     try {
 
 
-        ProdCadena = Productos;
+        ProdCadena = ProdClientes;
 
     
 

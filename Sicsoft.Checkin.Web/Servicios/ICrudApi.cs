@@ -56,6 +56,10 @@ namespace Sicsoft.Checkin.Web.Servicios
         Task<TEntity> ObtenerCierre(int id, DateTime Fecha, int idUsuario);
 
         [Get("/Consultar")]
+        Task<TEntity> ObtenerMargen(int idListaPrecio, int idCategoria, string Moneda);
+
+
+        [Get("/Consultar")]
         Task<TEntity> ObtenerPorIdString(string id);
 
         [Put("/Actualizar")]
