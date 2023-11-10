@@ -23,5 +23,6 @@
         public decimal PrecioFinal { get; set; }
 
         public decimal PrecioMin { get; set; }
+        public decimal PrecioCob { get; set; }
     }
 }

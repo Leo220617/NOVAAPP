@@ -121,7 +121,7 @@
                         </div>
                         <div class="col-md-2">
                         </div>
-                       
+
                         <div class="col-md-2">
                             <div class="form-group">
                                 <h5>Cobertura %<span class="text-danger">*</span></h5>
@@ -137,7 +137,7 @@
                             <div class="form-group">
                                 <h5>Margen %<span class="text-danger">*</span></h5>
                                 <div class="controls">
-                                    <input type="number" id="Cobertura" value="0" class="form-control">
+                                    <input type="number" id="Margen" value="0" class="form-control">
                                 </div>
 
                             </div>
@@ -148,7 +148,7 @@
                             <div class="form-group">
                                 <h5>Margen Minimo %<span class="text-danger">*</span></h5>
                                 <div class="controls">
-                                    <input type="number" id="Cobertura" value="0" class="form-control">
+                                    <input type="number" id="MargenMin" value="0" class="form-control">
                                 </div>
 
                             </div>
@@ -166,7 +166,13 @@
                             </div>
                         </div>
                         <div class="col-md-8">
-                          
+
+
+                            <button type="button" id="botonG" class="btn btn-info pull-right" onclick="    javascript: Setear()">
+                                Setear
+                            </button>
+
+
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
@@ -223,44 +229,31 @@
                         </div>
                     </div>
                     <div class="box-body">
-                        <div class="table-responsive">
-                            <table id="example3" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Descripción</th>
-                                        <th>Precio SAP</th>
-                                        <th>Moneda</th>
-                                        <th>Cobertura %</th>
-                                        <th>Margen %</th>
-
-                                        <th>Margen Min %</th>
-                                        <th>Precio Final</th>
-                                        <th>Precio Min</th>
-
-
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody">
-                                   
-                              
+                        <div class="row">
+                            <div class="col-12 table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Descripción</th>
+                                            <th>Precio SAP</th>
+                                            <th>Moneda</th>
+                                            <th>Cobertura %</th>
+                                            <th>Precio Cobertura</th>
+                                            <th>Margen Min %</th>
+                                            <th>Precio Min</th>
+                                            <th>Margen %</th>
+                                            <th>Precio Final</th>
+                                           
+                                            
 
 
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>Descripción</th>
-                                        <th>Precio SAP</th>
-                                        <th>Moneda</th>
-                                        <th>Cobertura %</th>
-                                        <th>Margen %</th>
-
-                                        <th>Margen Min %</th>
-                                        <th>Precio Final</th>
-                                        <th>Precio Min</th>
-
-                                    </tr>
-                                </tfoot>
-                            </table>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                    </tbody>
+                             
+                                </table>
+                            </div>
                         </div>
                     </div>
 
