@@ -1,0 +1,514 @@
+﻿@page "{idListaPrecio}/{idCategoria}/{Moneda}"
+@model NOVAAPP.Pages.Margenes.ObservarModel
+@{
+    ViewData["Title"] = "Margenes";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+}
+@using Microsoft.AspNetCore.Http
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using System.Linq;
+@using System.Security.Claims;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.Extensions.Configuration;
+@using Refit;
+@using Sicsoft.Checkin.Web.Models;
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+}
+@section styles{
+
+
+}
+@section scripts{
+
+
+    <script src="/js/Margenes/ObservarMargenes.js"></script>
+
+
+}
+
+
+@using Newtonsoft.Json;
+@using System.Globalization
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Margenes
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Margenes</li>
+    </ol>
+</section>
+
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
+            <input hidden asp-for="ListaX.idListaPrecio" id="idListaPrecio" />
+            <input hidden asp-for="ListaX.idCategoria" id="idCategoria" />
+            <input hidden asp-for="ListaX.Moneda" id="idMoneda" />
+            <input hidden id="Margenes" value="@JsonConvert.SerializeObject(Model.ListaX)" />
+            <input hidden id="Productos" value="@JsonConvert.SerializeObject(Model.Productos)" />
+
+            <input hidden id="PrecioXLista" value="@JsonConvert.SerializeObject(Model.Lista)" />
+            <input hidden id="ListaPrecios" value="@JsonConvert.SerializeObject(Model.Precios)" />
+            <input hidden id="Categorias" value="@JsonConvert.SerializeObject(Model.Categoria)" />
+            <input hidden id="TipoCambio" value="@JsonConvert.SerializeObject(Model.TP)" />
+
+
+
+
+
+
+            <!-- Content Header (Page header) -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Margenes</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Margenes</span></h2>
+                                <div class="text-left">
+                                    <h5>Fecha Actualización <span class="font-size-18">@Model.ListaX.FechaCreacion.ToString("dd MMM yyy")</span></h5>
+                                    <input hidden id="Fecha" type="datetime" value="@DateTime.Now" />
+
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+
+                    <div class="row invoice-info">
+                        <div class="col-md-4" hidden>
+                            <div class="form-group">
+                                <label>Lista de Precio</label>
+                                <select id="ListaSeleccionado" class="form-control select2" onchange="javascript: onChangeListaPrecio()">
+                                    <option value="0"> Seleccione Lista de Precio</option>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h5> <b>Lista de Precio: </b> @(Model.Precios.Where(a => a.id == Model.ListaX.idListaPrecio).FirstOrDefault() == null ? "Lista Precio Inexistente" : Model.Precios.Where(a => a.id == Model.ListaX.idListaPrecio).FirstOrDefault().CodSAP + " - " + Model.Precios.Where(a => a.id == Model.ListaX.idListaPrecio).FirstOrDefault().Nombre) </h5>
+
+                        </div>
+
+
+                        <div class="col-md-2">
+                        </div>
+
+                        <div class="col-md-2" hidden>
+                            <div class="form-group">
+                                <h5>Cobertura %<span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="number" id="Cobertura" value="0" class="form-control" disabled>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <h5><b>Cobertura %</b><span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <h5> @(Math.Round(Model.ListaX.Cobertura, 2).ToString("C", formato))</h5>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-2" hidden>
+                            <div class="form-group">
+                                <h5>Margen %<span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="number" id="Margen" value="0" class="form-control" disabled>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <h5><b>Margen %</b><span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <h5> @(Math.Round(Model.ListaX.Margen, 2).ToString("C", formato))</h5>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-2" hidden>
+                            <div class="form-group">
+                                <h5>Margen Minimo %<span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="number" id="MargenMin" value="0" class="form-control" disabled>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <h5><b>Margen Minimo%</b><span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <h5> @(Math.Round(Model.ListaX.MargenMin, 2).ToString("C", formato))</h5>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-4" hidden>
+                            <div class="form-group">
+                                <label>Categoria</label>
+                                <select id="CategoriaSeleccionado" class="form-control select2" onchange="javascript: onChangeCategoria()" disabled>
+                                    <option value="0"> Seleccione Categoria</option>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h5> <b>Categoria: </b> @(Model.Categoria.Where(a => a.id == Model.ListaX.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categoria.Where(a => a.id == Model.ListaX.idCategoria).FirstOrDefault().CodSAP + " - " + Model.Categoria.Where(a => a.id == Model.ListaX.idCategoria).FirstOrDefault().Nombre) </h5>
+                        </div>
+                        <div class="col-md-8">
+                        </div>
+                        <div class="col-md-4" hidden>
+                            <div class="form-group">
+                                <label>Moneda</label>
+                                <select class="form-control" id="MonedaSeleccionado" onchange="javascript: onChangeMoneda()" disabled>
+                                    <option value="CRC" selected>CRC</option>
+                                    <option value="USD">USD</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="col-md-4">
+                            <h5> <b>Moneda</b> @Model.ListaX.Moneda</h5>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-10">
+                        </div>
+                        <div class="col-2">
+                            <button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()">> <span><i class="fa fa-print"></i> Imprimir</span> </button>
+
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                    <!-- /.col -->
+                    <!-- /.row -->
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="box">
+            <div class="box-body">
+                <!-- Table row -->
+                <div class="row">
+                    <div class="col-md-12  ">
+                        <div class="x_panel">
+                            <div class="x_content">
+
+
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h3>Productos</h3>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-12 table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Descripción</th>
+                                            <th>Precio SAP</th>
+                                            <th>Moneda</th>
+                                            <th>Cobertura %</th>
+                                            <th>Precio Cobertura</th>
+                                            <th>Margen Min %</th>
+                                            <th>Precio Min</th>
+                                            <th>Margen %</th>
+                                            <th>Precio Final</th>
+                                            <th>% Ganancia</th>
+
+
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                <!-- /.row -->
+
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+</section>
+
+
+
+
+<div class="html" hidden>
+    <div class="row">
+        <div class="col-12">
+
+
+
+
+
+
+            <!-- Content Header (Page header) -->
+            <div class="box">
+
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Margenes</span></h2>
+                                <div class="text-left">
+                                    <h5>Fecha Actualización <span class="font-size-18">@Model.ListaX.FechaCreacion.ToString("dd MMM yyy")</span></h5>
+                                    <input hidden id="Fecha" type="datetime" value="@DateTime.Now" />
+
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+
+                    <div class="row invoice-info">
+
+
+                        <div class="col-md-4">
+                            <h5> <b>Lista de Precio: </b> @(Model.Precios.Where(a => a.id == Model.ListaX.idListaPrecio).FirstOrDefault() == null ? "Lista Precio Inexistente" : Model.Precios.Where(a => a.id == Model.ListaX.idListaPrecio).FirstOrDefault().CodSAP + " - " + Model.Precios.Where(a => a.id == Model.ListaX.idListaPrecio).FirstOrDefault().Nombre) </h5>
+
+                        </div>
+
+
+                        <div class="col-md-2">
+                        </div>
+
+
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <h5><b>Cobertura %</b><span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <h5> @(Math.Round(Model.ListaX.Cobertura, 2).ToString("C", formato))</h5>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <h5><b>Margen %</b><span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <h5> @(Math.Round(Model.ListaX.Margen, 2).ToString("C", formato))</h5>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <h5><b>Margen Minimo%</b><span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <h5> @(Math.Round(Model.ListaX.MargenMin, 2).ToString("C", formato))</h5>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-md-4">
+                            <h5> <b>Categoria: </b> @(Model.Categoria.Where(a => a.id == Model.ListaX.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categoria.Where(a => a.id == Model.ListaX.idCategoria).FirstOrDefault().CodSAP + " - " + Model.Categoria.Where(a => a.id == Model.ListaX.idCategoria).FirstOrDefault().Nombre) </h5>
+                        </div>
+                        <div class="col-md-8">
+                        </div>
+
+                        <br />
+                        <div class="col-md-4">
+                            <h5> <b>Moneda</b> @Model.ListaX.Moneda</h5>
+                        </div>
+                    </div>
+
+                 
+
+
+
+
+
+
+
+                    <!-- /.col -->
+                    <!-- /.row -->
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="box">
+            <div class="box-body">
+                <!-- Table row -->
+                <div class="row">
+                    <div class="col-md-12  ">
+                        <div class="x_panel">
+                            <div class="x_content">
+
+
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h3>Productos</h3>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-12 table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Descripción</th>
+                                            <th>Precio SAP</th>
+                                            <th>Moneda</th>
+                                            <th>Cobertura %</th>
+                                            <th>Precio Cobertura</th>
+                                            <th>Margen Min %</th>
+                                            <th>Precio Min</th>
+                                            <th>Margen %</th>
+                                            <th>Precio Final</th>
+                                            <th>% Ganancia</th>
+
+
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody2">
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                <!-- /.row -->
+
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+</div>

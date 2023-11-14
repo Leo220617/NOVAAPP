@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace NOVAAPP.Pages.Margenes
 {
-    public class NuevoModel : PageModel
+    public class EditarModel : PageModel
     {
 
         private readonly ICrudApi<EncMargenesViewModel, int> service; //API
@@ -39,7 +39,7 @@ namespace NOVAAPP.Pages.Margenes
         [BindProperty]
         public TipoCambiosViewModel[] TP { get; set; }
 
-        public NuevoModel(ICrudApi<EncMargenesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
+        public EditarModel(ICrudApi<EncMargenesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
         {
             this.service = service;
             this.productos = productos;
@@ -48,7 +48,7 @@ namespace NOVAAPP.Pages.Margenes
             this.tipoCambio = tipoCambio;
 
         }
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int idListaPrecio, int idCategoria, string Moneda)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace NOVAAPP.Pages.Margenes
                 }
 
 
-
+                ListaX = await service.ObtenerMargen(idListaPrecio, idCategoria, Moneda);
                 Precios = await precios.ObtenerLista("");
 
                 Categoria = await categorias.ObtenerLista("");
@@ -176,7 +176,7 @@ namespace NOVAAPP.Pages.Margenes
             try
             {
                 recibidos.idUsuarioCreador = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == ClaimTypes.Actor).Select(s1 => s1.Value).FirstOrDefault().ToString());
-                var resp = await service.Agregar(recibidos);
+                var resp =  service.Editar(recibidos);
 
                 var resp2 = new
                 {

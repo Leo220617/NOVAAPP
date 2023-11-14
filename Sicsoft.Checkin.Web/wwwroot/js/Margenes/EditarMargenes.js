@@ -21,11 +21,12 @@ var Categorias = [];
 var Duplicado = false;
 var TipoCambio = [];
 var Fechabool = false;
+var Margenes = [];
 
 function Recuperar() {
     try {
 
-
+        Margenes = JSON.parse($("#Margenes").val());
         PrecioXLista = JSON.parse($("#PrecioXLista").val());
         ListaPrecios = JSON.parse($("#ListaPrecios").val());
         Productos = JSON.parse($("#Productos").val());
@@ -34,7 +35,9 @@ function Recuperar() {
 
         RellenaListaPrecios()
         RellenaCategorias()
-
+       
+        RecuperarInformacion() 
+        Setear()
 
 
 
@@ -49,6 +52,101 @@ function Recuperar() {
     }
 
 }
+function RecuperarInformacion() {
+    try {
+
+        $("#ListaSeleccionado").val(Margenes.idListaPrecio);
+        $("#CategoriaSeleccionado").val(Margenes.idCategoria);
+        $("#MonedaSeleccionado").val(Margenes.Moneda);
+        $("#Margen").val(Margenes.Margen);
+        $("#MargenMin").val(Margenes.MargenMin);
+        $("#Cobertura").val(Margenes.Cobertura);
+       
+
+        var FechaX = new Date(Margenes.FechaCreacion);
+    
+        var Fecha = $.datepicker.formatDate('yy-mm-dd', FechaX);
+      
+
+
+        $("#Fecha").val(Fecha);
+  
+
+
+        onChangeListaPrecio();
+
+
+        for (var i = 0; i < Margenes.Detalle.length; i++) {
+
+          
+   
+            var Producto =
+            {
+
+
+                ItemCode: Margenes.Detalle[i].ItemCode,
+                idListaPrecio: Margenes.Detalle[i].idListaPrecio,
+                idCategoria: Margenes.Detalle[i].idCategoria,
+                Moneda: Margenes.Detalle[i].Moneda,
+                PrecioSAP: parseFloat(Margenes.Detalle[i].PrecioSAP.toFixed(2)),
+                Cobertura: parseFloat(Margenes.Detalle[i].Cobertura.toFixed(2)),
+                Margen: parseFloat(Margenes.Detalle[i].Margen.toFixed(2)),
+                MargenMin: parseFloat(Margenes.Detalle[i].MargenMin.toFixed(2)),
+                PrecioFinal: parseFloat(Margenes.Detalle[i].PrecioFinal.toFixed(2)),
+                PrecioMin: parseFloat(Margenes.Detalle[i].PrecioMin.toFixed(2)),
+                PrecioCob: parseFloat(Margenes.Detalle[i].PrecioCob.toFixed(2))
+                
+
+               
+
+
+            };
+            ProdCadena.push(Producto);
+            var PE = ProdClientes.find(a => a.Codigo == Producto.ItemCode && a.idCategoria == Producto.idCategoria && a.idListaPrecios == Producto.idListaPrecio && a.Moneda == Producto.Moneda);
+            var x = ProdClientes.findIndex(a => a.Codigo == Producto.ItemCode && a.idCategoria == Producto.idCategoria && a.idListaPrecios == Producto.idListaPrecio && a.Moneda == Producto.Moneda);
+            $("#" + x + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal).toFixed(2)));
+            $("#" + x + "_PrecioCob").text(formatoDecimal(parseFloat(Producto.PrecioCob).toFixed(2)));
+            $("#" + x + "_PrecioMin").text(formatoDecimal(parseFloat(Producto.PrecioMin).toFixed(2)));
+            $("#" + x + "_Cobertura").val(Producto.Cobertura);
+            $("#" + x + "_Margen").val(Producto.Margen);
+            $("#" + x + "_MargenMin").val(Producto.MargenMin);
+            var Ganancia = 0;
+            var input = $("#" + x + "_Ganancia");
+            var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
+            var Moneda = $("#MonedaSeleccionado").val();
+
+            if (Moneda == "CRC") {
+                Ganancia = retornaMargenGanancia(Producto.PrecioFinal, PE.Costo);
+                $("#" + x + "_Ganancia").text(formatoDecimal(parseFloat(Ganancia).toFixed(2)));
+            } else {
+                var Costo = PE.Costo / TipodeCambio.TipoCambio;
+                Ganancia = retornaMargenGanancia(Producto.PrecioFinal, Costo);
+                $("#" + x + "_Ganancia").text(formatoDecimal(parseFloat(Ganancia).toFixed(2)));
+            }
+
+
+            if (Ganancia > 0) {
+                input.css('background-color', '#EFFFE9')
+            } else {
+                input.css('background-color', '#FFE9E9')
+            }
+        }
+
+
+  
+       
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+        })
+    }
+}
+
 
 function RellenaCategorias() {
     try {
@@ -197,6 +295,7 @@ function retornaMargenGanancia(PrecioVenta, Costo) {
         return 0;
     }
 }
+
 function onChangeCobertura(i) {
     try {
         var idCategoria = $("#CategoriaSeleccionado").val();
@@ -479,7 +578,9 @@ function Generar() {
     try {
 
         var EncMargenes = {
-           
+            idListaPrecio: $("#idListaPrecio").val(),
+            idCategoria: $("#idCategoria").val(),
+            Moneda: $("#idMoneda").val(),
             idListaPrecio: $("#ListaSeleccionado").val(),
             idCategoria: $("#CategoriaSeleccionado").val(),
             Moneda: $("#MonedaSeleccionado").val(),
@@ -488,7 +589,7 @@ function Generar() {
             MargenMin: parseFloat($("#MargenMin").val()),
             idUsuarioCreador: 0,
             FechaCreacion: $("#Fecha").val(),
-            
+
             Detalle: ProdCadena
         }
 
@@ -538,7 +639,7 @@ function Generar() {
                                         //Despues de insertar, ocupariamos el id del cliente en la bd 
                                         //para entonces setearlo en el array de clientes
 
-                                        window.location.href = window.location.href.split("/Nuevo")[0];
+                                        window.location.href = window.location.href.split("/Editar")[0];
 
 
                                     }
@@ -656,7 +757,7 @@ function validarMargen(e) {
             return false;
         }
 
-   
+
 
 
 
