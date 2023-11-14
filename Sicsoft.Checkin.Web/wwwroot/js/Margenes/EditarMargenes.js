@@ -35,8 +35,8 @@ function Recuperar() {
 
         RellenaListaPrecios()
         RellenaCategorias()
-       
-        RecuperarInformacion() 
+
+        RecuperarInformacion()
         Setear()
 
 
@@ -61,16 +61,16 @@ function RecuperarInformacion() {
         $("#Margen").val(Margenes.Margen);
         $("#MargenMin").val(Margenes.MargenMin);
         $("#Cobertura").val(Margenes.Cobertura);
-       
+
 
         var FechaX = new Date(Margenes.FechaCreacion);
-    
+
         var Fecha = $.datepicker.formatDate('yy-mm-dd', FechaX);
-      
+
 
 
         $("#Fecha").val(Fecha);
-  
+
 
 
         onChangeListaPrecio();
@@ -78,8 +78,8 @@ function RecuperarInformacion() {
 
         for (var i = 0; i < Margenes.Detalle.length; i++) {
 
-          
-   
+
+
             var Producto =
             {
 
@@ -95,9 +95,9 @@ function RecuperarInformacion() {
                 PrecioFinal: parseFloat(Margenes.Detalle[i].PrecioFinal.toFixed(2)),
                 PrecioMin: parseFloat(Margenes.Detalle[i].PrecioMin.toFixed(2)),
                 PrecioCob: parseFloat(Margenes.Detalle[i].PrecioCob.toFixed(2))
-                
 
-               
+
+
 
 
             };
@@ -133,8 +133,8 @@ function RecuperarInformacion() {
         }
 
 
-  
-       
+
+
 
 
     } catch (e) {
@@ -776,4 +776,20 @@ function validarMargen(e) {
 
 
 
+}
+
+function filtrarTabla() {
+    var busqueda = $("#busqueda").val().toLowerCase();
+    var filas = $("#tbody tr");
+
+    filas.each(function () {
+        var descripcion = $(this).find("td:first").text().toLowerCase();
+
+
+        if (descripcion.includes(busqueda)) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
 }

@@ -676,3 +676,20 @@ function validarMargen(e) {
 
 
 }
+
+
+function filtrarTabla() {
+    var busqueda = $("#busqueda").val().toLowerCase();
+    var filas = $("#tbody tr");
+
+    filas.each(function () {
+        var descripcion = $(this).find("td:first").text().toLowerCase();
+
+     
+        if (descripcion.includes(busqueda)) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}

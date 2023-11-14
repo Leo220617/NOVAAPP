@@ -509,38 +509,32 @@ function Setear() {
 
 function ImprimirPantalla() {
     try {
-        // window.print();
-        var margins = {
-            top: 10,
-            bottom: 10,
-            left: 10,
-            width: 595
-        };
-
-
-        html = $(".html").html();
-        html2pdf(html, {
-            margin: 1,
-            padding: 0,
-            filename: 'Margenes.pdf',
-            image: { type: 'jpeg', quality: 1 },
-            html2canvas: { scale: 2, logging: true },
-            jsPDF: { unit: 'in', format: 'A2', orientation: 'P' },
-            class: ImprimirPantalla
-        });
-
+        window.print();
     } catch (e) {
         console.log(e);
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: 'Ha ocurrido un error al intentar imprimir ' + e
-
-        })
+        });
     }
 }
 
+function filtrarTabla() {
+    var busqueda = $("#busqueda").val().toLowerCase();
+    var filas = $("#tbody tr");
 
+    filas.each(function () {
+        var descripcion = $(this).find("td:first").text().toLowerCase();
+
+
+        if (descripcion.includes(busqueda)) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
 
 
 

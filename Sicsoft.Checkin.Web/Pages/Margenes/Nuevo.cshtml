@@ -24,7 +24,13 @@
     var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
 }
 @section styles{
-
+    <style>
+        .tableFixHead th {
+            position: sticky;
+            top: 0;
+            background: white;
+        }
+    </style>
 
 }
 @section scripts{
@@ -198,16 +204,25 @@
 
 
 
+
                     </div>
-                    <!-- /.col -->
-                    <!-- /.row -->
+
+
+
+
+
+
 
                 </div>
+                <!-- /.col -->
+                <!-- /.row -->
 
             </div>
 
-
         </div>
+
+
+
 
 
         <div class="box">
@@ -221,8 +236,15 @@
 
 
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-9">
                                         <h3>Productos</h3>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="busqueda">Buscador:</label>
+                                            <input type="text" class="form-control" id="busqueda" placeholder="Ingrese la descripción" oninput="filtrarTabla()">
+                                        </div>
                                     </div>
                                 </div>
 
@@ -232,29 +254,29 @@
                     </div>
                     <div class="box-body">
                         <div class="row">
-                            <div class="col-12 table-responsive">
+                            <div class="col-12 table-responsive tableFixHead" style=" overflow-y:scroll; z-index: 5; height: 500px;">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Descripción</th>
-                                            <th>Precio SAP</th>
-                                            <th>Moneda</th>
-                                            <th>Cobertura %</th>
-                                            <th>Precio Cobertura</th>
-                                            <th>Margen Min %</th>
-                                            <th>Precio Min</th>
-                                            <th>Margen %</th>
-                                            <th>Precio Final</th>
-                                            <th>% Ganancia</th>
-                                           
-                                            
+                                            <th class="bg-info">Descripción</th>
+                                            <th class="bg-info">Precio SAP</th>
+                                            <th class="bg-info">Moneda</th>
+                                            <th class="bg-info">Cobertura %</th>
+                                            <th class="bg-info">Precio Cobertura</th>
+                                            <th class="bg-info">Margen Min %</th>
+                                            <th class="bg-info">Precio Min</th>
+                                            <th class="bg-info">Margen %</th>
+                                            <th class="bg-info">Precio Final</th>
+                                            <th class="bg-info">% Ganancia</th>
+
+
 
 
                                         </tr>
                                     </thead>
                                     <tbody id="tbody">
                                     </tbody>
-                             
+
                                 </table>
                             </div>
                         </div>
@@ -269,10 +291,10 @@
         </div>
 
 
-      
-       
-      
 
+
+
+    </div>
     </div>
 
 </section>
