@@ -200,7 +200,7 @@
                             </button>
 
                         </div>
-                      
+
 
 
 
@@ -233,15 +233,73 @@
                                             <h3>Productos</h3>
                                         </div>
 
+
+                                    </div>
+
+                                    <div class="row invoice-info">
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="busqueda">Buscador:</label>
                                                 <input type="text" class="form-control" id="busqueda" placeholder="Ingrese la descripción" oninput="filtrarTabla()">
                                             </div>
                                         </div>
+                                        <div class="col-md-4">
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <h5>Cobertura %<span class="text-danger">*</span></h5>
+                                                <div class="controls">
+                                                    <input type="number" id="CoberturaT" value="0" class="form-control">
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <h5>Margen %<span class="text-danger">*</span></h5>
+                                                <div class="controls">
+                                                    <input type="number" id="MargenT" value="0" class="form-control">
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <h5>Margen Minimo %<span class="text-danger">*</span></h5>
+                                                <div class="controls">
+                                                    <input type="number" id="MargenMinT" value="0" class="form-control">
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-4">
+                                        </div>
+                                        <div class="col-md-8">
+
+
+                                            <button disabled type="button" id="botonGT" class="btn btn-info pull-right" onclick="    javascript: SetearT()">
+                                                Setear
+                                            </button>
+
+
+                                        </div>
+
+
+
+
+
+
+
+
+
+
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -253,13 +311,14 @@
                                             <tr>
                                                 <th class="bg-info">Descripción</th>
                                                 <th class="bg-info">Precio SAP</th>
-                                                <th class="bg-info">Moneda</th>
+
                                                 <th class="bg-info">Cobertura %</th>
                                                 <th class="bg-info">Precio Cobertura</th>
                                                 <th class="bg-info">Margen Min %</th>
                                                 <th class="bg-info">Precio Min</th>
                                                 <th class="bg-info">Margen %</th>
                                                 <th class="bg-info">Precio Final</th>
+                                                <th class="bg-info">Precio Final Impuesto</th>
                                                 <th class="bg-info">% Ganancia</th>
 
 

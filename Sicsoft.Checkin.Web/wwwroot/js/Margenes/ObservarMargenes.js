@@ -353,13 +353,14 @@ function RellenaTabla() {
 
 
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].PrecioUnitario).toFixed(2)) + " </td>";
-            html += "<td > " + ProdClientes[i].Moneda + " </td>";
+           
             html += "<td class='text-center' id='" + i + "_Cobertura'> 0 </td>";
             html += "<td class='text-center' id='" + i + "_PrecioCob'> 0 </td>";
             html += "<td class='text-center' id='" + i + "_MargenMin'> 0 </td>";
             html += "<td class='text-center' id='" + i + "_PrecioMin'> 0 </td>";
             html += "<td class='text-center' id='" + i + "_Margen'> 0 </td>";
             html += "<td class='text-center' id='" + i + "_PrecioFinal'> 0 </td>";
+            html += "<td class='text-center' id='" + i + "_PrecioImp'> 0 </td>";
             html += "<td class='text-center' id='" + i + "_Ganancia'> 0 </td>";
 
 
@@ -457,11 +458,18 @@ function Setear() {
                 $("#" + i + "_CoberturaX").text(formatoDecimal(parseFloat(Cobertura).toFixed(2)));
                 $("#" + i + "_MargenX").text(formatoDecimal(parseFloat(Margen).toFixed(2)));
                 $("#" + i + "_MargenMinX").text(formatoDecimal(parseFloat(MargenMin).toFixed(2)));
-                var PrecioFinal = PE.PrecioUnitario * Margen;
-                var PrecioMin = PE.PrecioUnitario * MargenMin;
-                var PrecioCob = PE.PrecioUnitario * Cobertura;
+
+                var PrecioCob = PE.Costo / (1 - (Cobertura / 100));
+                var PrecioFinal = PrecioCob / (1 - (Margen / 100));
+                var PrecioMin = PE.Costo / (1 - (MargenMin / 100));
+
+                var PrecioImp = PrecioFinal * 1.13;
+              
+
+
                 var Ganancia = 0;
                 $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(PrecioFinal).toFixed(2)));
+                $("#" + i + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
                 $("#" + i + "_PrecioMin").text(formatoDecimal(parseFloat(PrecioMin).toFixed(2)));
                 $("#" + i + "_PrecioCob").text(formatoDecimal(parseFloat(PrecioCob).toFixed(2)));
 
