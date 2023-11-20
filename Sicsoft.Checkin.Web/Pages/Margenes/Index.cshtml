@@ -20,6 +20,103 @@
 @section scripts{
 
 
+    <script>
+            $(document).ready(function() {
+
+
+
+
+        });
+        var idListaPrecioX = 0;
+        var idCategoriaX = 0;
+        var MonedaX = "";
+        function onClickModal(idListaPrecio, idCategoria, Moneda) {
+            try {
+                idListaPrecioX = idListaPrecio;
+                idCategoriaX = idCategoria;
+                MonedaX = Moneda;
+                Swal.fire({
+                    title: '¿Desea sincronizar los Margenes?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: `Aceptar`,
+                    denyButtonText: `Cancelar`,
+                    customClass: {
+                        confirmButton: 'swalBtnColor',
+                        denyButton: 'swalDeny'
+                    },
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        InsertarMargenes();
+
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+
+        }
+
+        function InsertarMargenes() {
+            try {
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Page("Index", "InsertarMargenes")',
+                    data: { idListaPrecio: idListaPrecioX, idCategoria: idCategoriaX, Moneda: MonedaX },
+                    success: function(result) {
+                        $("#divProcesando").modal("hide");
+                        console.log(result);
+                        if (result == false) {
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar sincronizar los Margenes'
+
+                            })
+
+                        } else {
+                            Swal.fire({
+                                title: "Ha sido sincronizado  con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    beforeSend: function() {
+                        $("#divProcesando").modal("show");
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar sincronizar  ' + e
+
+                })
+            }
+        }
+    </script>
 
 }
 
@@ -203,6 +300,7 @@
                                             &nbsp;
                                             <a asp-page="./Observar" asp-route-idListaPrecio="@item.idListaPrecio" asp-route-idCategoria="@item.idCategoria" asp-route-Moneda="@item.Moneda" class="fa fa-info-circle icono"> </a> &nbsp;
 
+                                            <a onclick="javascript: onClickModal('@item.idListaPrecio', '@item.idCategoria', '@item.Moneda')" title="Insertar Margenes" class="fa fa-refresh icono" ></a>
                                         </td>
 
                                         <td>  @(Model.ListaPrecio.Where(a => a.id == item.idListaPrecio).FirstOrDefault() == null ? "Lista Precio Inexistente" : Model.ListaPrecio.Where(a => a.id == item.idListaPrecio).FirstOrDefault().CodSAP + "-" + Model.ListaPrecio.Where(a => a.id == item.idListaPrecio).FirstOrDefault().Nombre) </td>

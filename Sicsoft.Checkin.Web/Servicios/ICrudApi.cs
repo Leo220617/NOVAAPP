@@ -31,6 +31,10 @@ namespace Sicsoft.Checkin.Web.Servicios
         [Get("/InsertarSAPByProduct")]
         Task InsertarSAPByProduct(int id);
 
+        [Get("/MargenesProductos")]
+        Task InsertarMargenes(int idListaPrecio, int idCategoria, string Moneda);
+
+
 
         [Get("")]
         Task<TEntity[]> ObtenerLista<TQuery>(TQuery q);

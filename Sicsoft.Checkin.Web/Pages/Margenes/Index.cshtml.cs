@@ -85,5 +85,18 @@ namespace NOVAAPP.Pages.Margenes
             }
         }
 
+        public async Task<IActionResult> OnGetInsertarMargenes(int idListaPrecio, int idCategoria, string Moneda)
+        {
+            try
+            {
+
+                await service.InsertarMargenes(idListaPrecio, idCategoria, Moneda);
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+        }
     }
 }
