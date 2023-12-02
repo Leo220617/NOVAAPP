@@ -629,7 +629,7 @@ function onChangeRevisado(i) {
                 ProdCadena[x].PrecioCob = PE.Costo / (1 - (ProdCadena[x].Cobertura / 100));
                 ProdCadena[x].PrecioFinal = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].Margen / 100));
                 ProdCadena[x].PrecioMin = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].MargenMin / 100));
-
+                ProdCadena[x].Seteable = $("#" + x + "_mdcheckbox").prop('checked');
                 var PrecioImp = ProdCadena[x].PrecioFinal * 1.13;
 
 
