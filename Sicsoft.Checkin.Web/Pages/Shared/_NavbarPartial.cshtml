@@ -149,6 +149,15 @@
                                 }
 
                             }
+
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "47").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/AprobacionesCredito/Index"><i class="mdi mdi-currency-usd"></i>Aprobaciones de Crédito</a></li>
+                                }
+
+                            }
                             <li class="treeview">
 
 

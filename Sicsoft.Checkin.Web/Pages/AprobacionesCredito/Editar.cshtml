@@ -1,0 +1,121 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.AprobacionesCredito.EditarModel
+@{
+    ViewData["Title"] = "Cajas";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Aprobación de Crédito
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Editar Aprobación de Crédito</li>
+    </ol>
+</section>
+
+
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle"> Editar Aprobación de Crédito</h6>
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input hidden asp-for="Aprobacion.id" />
+                        <div class="row">
+
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Fecha Creación<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="date" disabled asp-for="Aprobacion.FechaCreacion" class="form-control" required data-validation-required-message="Este campo es requerido" >
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Clientes<span class="text-danger">*</span></h5>
+
+                                    <select class="form-control select2  " asp-for="Aprobacion.idCliente" disabled>
+                                        @foreach (var item in Model.ClientesLista)
+                                        {
+                                            <option value="@item.id">@item.Codigo - @item.Nombre</option>
+                                        }
+
+
+                                    </select>
+
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Total<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="number" asp-for="Aprobacion.Total" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <select class="form-control select2" asp-for="Aprobacion.Status">
+                                   
+                              
+
+                                        <option value="A">Aprobado</option>
+                                        <option value="R">Rechazado</option>
+
+                                    </select>
+
+
+                                </div>
+                            </div>
+
+                       
+
+                        </div>
+
+                        <br />
+
+
+
+
+                        <div class="text-xs-right">
+                            <button type="submit" class="btn btn-info" title="Guardar Cambios">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</section>
