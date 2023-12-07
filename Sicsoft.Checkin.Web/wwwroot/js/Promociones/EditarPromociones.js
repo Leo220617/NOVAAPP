@@ -417,18 +417,6 @@ function AgregarProductoTabla() {
 
         for (var i = 0; i < ProdCadena.length; i++) {
 
-            var PromoFechaX = Producto.FechaVen;
-            var fecha = new Date(PromoFechaX + 'T00:00:00'); 
-            var dia = fecha.getDate();
-            var mes = fecha.getMonth() + 1; 
-            var anio = fecha.getFullYear();
-
-         
-            dia = dia < 10 ? '0' + dia : dia;
-            mes = mes < 10 ? '0' + mes : mes;
-
-            var fechaFormateada = dia + '/' + mes + '/' + anio;
-            var PromoFechaHoraX = fechaFormateada;
 
 
             if (PE.Codigo == ProdCadena[i].idProducto) {
@@ -445,6 +433,18 @@ function AgregarProductoTabla() {
             }
         }
 
+        var PromoFechaX = Producto.FechaVen;
+        var fecha = new Date(PromoFechaX + 'T00:00:00');
+        var dia = fecha.getDate();
+        var mes = fecha.getMonth() + 1;
+        var anio = fecha.getFullYear();
+
+
+        dia = dia < 10 ? '0' + dia : dia;
+        mes = mes < 10 ? '0' + mes : mes;
+
+        var fechaFormateada = dia + '/' + mes + '/' + anio;
+        var PromoFechaHoraX = fechaFormateada;
 
         if (Promociones != undefined && Promociones.FechaVen > fechaHoy) {
             var PromoFecha = Promociones.FechaVen;
@@ -500,7 +500,7 @@ function AgregarProductoTabla() {
 
 
 
-        } else if (Duplicado == false && Fechabool == false && Producto.PrecioFinal > 0 && (Producto.PrecioFinal != PE.PrecioUnitario || Producto.PrecioFinal != Producto.PrecioAnterior) && PromoFechaHoraX > fechaHoy) {
+        } else if (Duplicado == false && Fechabool == false && Producto.PrecioFinal > 0 && (Producto.PrecioFinal != PE.PrecioUnitario || Producto.PrecioFinal != Producto.PrecioAnterior) && PromoFechaHoraX >= fechaHoy) {
 
 
 

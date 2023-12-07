@@ -34,7 +34,7 @@ namespace NOVAAPP.Pages.AprobacionesCredito
             try
             {
                 var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
-                if (string.IsNullOrEmpty(Roles.Where(a => a == "13").FirstOrDefault()))
+                if (string.IsNullOrEmpty(Roles.Where(a => a == "68").FirstOrDefault()))
                 {
                     return RedirectToPage("/NoPermiso");
                 }
@@ -57,6 +57,7 @@ namespace NOVAAPP.Pages.AprobacionesCredito
         {
             try
             {
+                Aprobacion.idUsuarioAceptador = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == ClaimTypes.Actor).Select(s1 => s1.Value).FirstOrDefault().ToString());
                 await service.Editar(Aprobacion);
                 return RedirectToPage("./Index");
             }

@@ -19,7 +19,121 @@
 
 @section scripts{
 
+    <script>
+        try {
+            $(document).ready(function () {
+                jQuery(document).ready(function ($) {
+                    $(document).ready(function () {
+                        $('.mi-selector').select2();
+                    });
+                });
+                $(".js-example-responsive").select2({
+                    width: 'resolve',// need to override the changed default
+                    height: 'resolve'
+                });
 
+
+
+
+
+            });
+        } catch (e) {
+            console.log(e);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+            })
+        }
+
+        var ids = 0;
+        function onClickModal(id) {
+            try {
+                ids = id;
+                Swal.fire({
+                    title: '¿Desea desactivar esta aprobación de crédito?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: `Aceptar`,
+                    denyButtonText: `Cancelar`,
+                    customClass: {
+                        confirmButton: 'swalBtnColor',
+                        denyButton: 'swalDeny'
+                    },
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        Eliminar();
+
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+
+        }
+        function Eliminar() {
+            try {
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Page("Index", "Eliminar")',
+                    data: { id: ids },
+                    success: function (result) {
+
+                        if (result == false) {
+                            ids = 0;
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar desactivar'
+
+                            })
+
+                        } else {
+                            Swal.fire({
+                                title: "Ha sido desactivado con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    beforeSend: function () {
+
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
+
+
+
+    </script>
 
 
 }
@@ -137,7 +251,8 @@
 
                                     <th>Cliente </th>
                                     <th>Fecha</th>
-                                    <th>Total </th>
+                                    <th>Total Aprobado </th>
+                                    <th>Total Restante </th>
                                     <th>Status </th>
                                     <th>Activo </th>
 
@@ -154,9 +269,15 @@
 
                                         <td>@item.id</td>
                                         <td align="center" style="padding-top:15px;">
-                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a>
+                                            @if(item.Status == "P")
+                                            {
+                                                <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a>
+                                            }
+
                                             &nbsp;
                                             
+                                            <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
+                                            &nbsp;
 
 
                                         </td>
@@ -167,6 +288,9 @@
                                         </td>
 
 
+                                        <td>
+                                            @Math.Round(@item.TotalAprobado, 2).ToString("C",formato)
+                                        </td>
 
                                         <td>
                                             @Math.Round(@item.Total, 2).ToString("C",formato)
@@ -229,6 +353,7 @@
                                     <th>Cliente </th>
                                     <th>Fecha</th>
                                     <th>Total </th>
+                                    <th>Total Restante </th>
                                     <th>Status </th>
                                     <th>Activo </th>
 
