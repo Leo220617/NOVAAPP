@@ -29,7 +29,7 @@ namespace Sicsoft.Checkin.Web.Servicios
         Task InsertarSAPByClient(int id);
 
         [Get("/InsertarSAPByProduct")]
-        Task InsertarSAPByProduct(int id);
+        Task InsertarSAPByProduct(int idBod);
 
         [Get("/MargenesProductos")]
         Task InsertarMargenes(int idListaPrecio, int idCategoria, string Moneda);
