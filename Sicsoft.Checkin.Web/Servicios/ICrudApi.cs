@@ -28,6 +28,9 @@ namespace Sicsoft.Checkin.Web.Servicios
         [Get("/InsertarSAPByClient")]
         Task InsertarSAPByClient(int id);
 
+        [Get("/InsertarSAPByCardCode")]
+        Task InsertarSAPByCardCode(string code);
+
         [Get("/InsertarSAPByProduct")]
         Task InsertarSAPByProduct(int idBod);
 
