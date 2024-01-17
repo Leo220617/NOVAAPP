@@ -499,7 +499,7 @@ function RellenaTabla() {
 
         for (var i = 0; i < ProdCadena.length; i++) {
             var PE = Productos.find(a => a.Codigo == ProdCadena[i].idProducto);
-            if ((ProdCadena[i].PrecioAnterior - PE.Costo) < ProdCadena[i].PrecioFinal) {
+            
 
 
                 var TotalGanancia = (ProdCadena[i].TotalLinea - ProdCadena[i].TotalImpuesto);
@@ -547,12 +547,7 @@ function RellenaTabla() {
 
                 html += "</tr>";
 
-            } else {
-
-
-
-
-            }
+            
 
         }
 
