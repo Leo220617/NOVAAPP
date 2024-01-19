@@ -378,7 +378,99 @@ function onClickModalByClient(id) {
 
 }  
 
-  
+     function onClickModal2(code, correos) {
+        codes = code;
+        correo = correos;
+
+
+        Swal.fire({
+            title: "¿Desea reenviar este correo?",
+            input: "text",
+            inputValue: correo,
+                showCancelButton: true,
+                confirmButtonText: "Enviar",
+                cancelButtonText: "Cancelar",
+                inputValidator: nombre => {
+                    // Si el valor es válido, debes regresar undefined. Si no, una cadena
+                    if (!nombre) {
+                        return "Por favor escribe el correo";
+                    } else {
+                        return undefined;
+                    }
+                }
+            })
+            .then(resultado => {
+                if (resultado.value) {
+                    let nombre = resultado.value;
+                    correo = nombre;
+                    Eliminar();
+                }
+            });
+
+
+
+        //Swal.fire({
+        //    title: '¿Desea reenviar este correo?',
+        //    showDenyButton: true,
+        //    showCancelButton: false,
+        //    confirmButtonText: `Aceptar`,
+        //    denyButtonText: `Cancelar`,
+        //    customClass: {
+        //        confirmButton: 'swalBtnColor',
+        //        denyButton: 'swalDeny'
+        //    },
+        //}).then((result) => {
+        //    /* Read more about isConfirmed, isDenied below */
+        //    if (result.isConfirmed) {
+
+        //        Eliminar();
+
+        //    }
+        //})
+
+    }
+        function  Eliminar() {
+
+         $.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+             url: '@Url.Page("Index", "Reenviar")',
+             data: { code: codes, correos: correo },
+             success: function (result) {
+                 console.log(result);
+                             if (result == false) {
+                                 
+                                 Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar reenviar'
+
+                                 })
+
+                             } else {
+                                 Swal.fire({
+                                     title: "Ha sido reenviado con éxito",
+
+                                     icon: 'success',
+                                     showCancelButton: false,
+                                     customClass: {
+                                         confirmButton: 'swalBtnColor',
+
+                                     },
+                                     confirmButtonText: 'OK'
+                                 }).then((result) => {
+                                     if (result.isConfirmed) {
+
+                                     }
+                                 })
+                             }
+             },
+             beforeSend: function () {
+
+             }
+                     })
+        }
+
 
     </script>
 
@@ -516,21 +608,25 @@ function onClickModalByClient(id) {
 
                                            @if(item.ProcesadoSAP)
                                            {
-                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
-                                           
-                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"></a> 
+                                            
 
                                             <a onclick="javascript: onClickModalByClient('@item.id')"  title="Actualizar desde SAP" ><img src="/sapX.png"  /></a>
+                                             
                                                 }else
                                                 {
                                                      
+                                                     
 
                                                      <a onclick="javascript: onClickModal('@item.id')" title="Insertar a SAP" ><img src="/sapX.png"  /></a>
-                                                     <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> 
-                                                     <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
+                                                    
                                                       
                                            
                                                 }
+                                                 <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> 
+                                                     <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
+                                                   
+                                                <a onclick="javascript: onClickModal2('@item.Codigo', '@(string.IsNullOrEmpty(item.CorreoEC) ? item.Email : item.CorreoEC)')" title="Reenviar" class="fa fa-send icono"></a>
+
 
                                     </td>
                                   

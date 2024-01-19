@@ -66,6 +66,8 @@ namespace NOVAAPP.Models
         public DateTime FechaActualizacion { get; set; }
         public decimal LimiteCredito { get; set; }
 
+        public string CorreoEC { get; set; }
+
 
     }
 }

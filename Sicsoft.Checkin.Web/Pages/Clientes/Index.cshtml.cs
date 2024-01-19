@@ -136,5 +136,18 @@ namespace NOVAAPP.Pages.Clientes
                 return new JsonResult(false);
             }
         }
+        public async Task<IActionResult> OnGetReenviar(string code, string correos)
+        {
+            try
+            {
+
+                await service.Reenvio(code, correos);
+                return new JsonResult(true);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(false);
+            }
+        }
     }
 }
