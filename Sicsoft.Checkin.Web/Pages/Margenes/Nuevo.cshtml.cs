@@ -9,6 +9,8 @@ using System.Linq;
 using InversionGloblalWeb.Models;
 using Refit;
 using Newtonsoft.Json;
+using System.IO.Compression;
+using System.IO;
 
 namespace NOVAAPP.Pages.Margenes
 {
@@ -167,21 +169,42 @@ namespace NOVAAPP.Pages.Margenes
                 return new JsonResult(ex.Message.ToString());
             }
         }
-
-        public async Task<IActionResult> OnPostAgregarMargen(EncMargenesViewModel recibidos)
+        [HttpPost]
+        public async Task<IActionResult> OnPostAgregarMargen()
         {
             string error = "";
 
-
+            EncMargenesViewModel recibidos = new EncMargenesViewModel();
             try
             {
+                var ms = new MemoryStream();
+                await Request.Body.CopyToAsync(ms);
+
+                byte[] compressedData = ms.ToArray();
+
+                // Descomprimir los datos utilizando GZip
+                using (var compressedStream = new MemoryStream(compressedData))
+                using (var decompressedStream = new MemoryStream())
+                {
+                    using (var decompressionStream = new GZipStream(compressedStream, CompressionMode.Decompress))
+                    {
+                        decompressionStream.CopyTo(decompressedStream);
+                    }
+
+                    // Convertir los datos descomprimidos a una cadena JSON
+                    var jsonString = System.Text.Encoding.UTF8.GetString(decompressedStream.ToArray());
+
+                    // Procesar la cadena JSON como desees
+                    // Por ejemplo, puedes deserializarla a un objeto C# utilizando Newtonsoft.Json
+                    recibidos = Newtonsoft.Json.JsonConvert.DeserializeObject<EncMargenesViewModel>(jsonString);
+                }
                 recibidos.idUsuarioCreador = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == ClaimTypes.Actor).Select(s1 => s1.Value).FirstOrDefault().ToString());
-                var resp = await service.Agregar(recibidos);
+                await service.Agregar(recibidos);
 
                 var resp2 = new
                 {
                     success = true,
-                    ListaX = resp
+
                 };
                 return new JsonResult(resp2);
             }
