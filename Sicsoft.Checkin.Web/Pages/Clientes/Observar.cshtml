@@ -174,15 +174,15 @@
 
                                 </address>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                   <h5> <b>Límite Crédito:</b>   @Math.Round(@Model.Cliente.LimiteCredito, 2).ToString("C",formato)</h5>
                             </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                   <h5> <b>Saldo:</b>   @Math.Round(@Model.Cliente.Saldo, 2).ToString("C",formato)</h5>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <h5>
                                     <b>MAG:</b>  
                                     @if (Model.Cliente.MAG)
@@ -196,7 +196,34 @@
                                 }
                             </h5>
                         </div>
+                        <div class="col-md-1">
+                            <h5>
+                                <b>CxC:</b>
+                                @if (Model.Cliente.CxC)
+                                {
+                                    <span class="badge badge-pill badge-success">SI</span>
 
+                                }
+                                else
+                                {
+                                    <span class="badge badge-pill badge-danger">NO</span>
+                                }
+                            </h5>
+                        </div>
+                        <div class="col-md-2">
+                            <h5>
+                                <b>Transitorio:</b>
+                                @if (Model.Cliente.Transitorio)
+                                {
+                                    <span class="badge badge-pill badge-success">SI</span>
+
+                                }
+                                else
+                                {
+                                    <span class="badge badge-pill badge-danger">NO</span>
+                                }
+                            </h5>
+                        </div>
 
 
 
@@ -384,7 +411,7 @@
                         </div>
 
                         <div class="col-4">
-                            <h5> <b>Corre Publicitario:</b> @Model.Cliente.CorreoPublicitario</h5>
+                            <h5> <b>Correo Publicitario:</b> @Model.Cliente.CorreoPublicitario</h5>
 
                         </div>
 

@@ -68,6 +68,10 @@ namespace NOVAAPP.Models
 
         public string CorreoEC { get; set; }
 
+        public bool CxC { get; set; }
+
+        public bool Transitorio { get; set; }
+
 
     }
 }

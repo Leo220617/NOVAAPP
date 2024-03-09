@@ -24,6 +24,7 @@ namespace NOVAAPP.Pages.Documentos
         private readonly ICrudApi<CondicionesPagosViewModel, int> condiconesPago;
         private readonly ICrudApi<VendedoresViewModel, int> vendedor;
         private readonly ICrudApi<ParametrosViewModel, int> parametro;
+        private readonly ICrudApi<BodegasViewModel, int> bodegas;
 
 
         [BindProperty]
@@ -46,9 +47,11 @@ namespace NOVAAPP.Pages.Documentos
         [BindProperty]
         public ParametrosViewModel[] Parametro { get; set; }
 
+        [BindProperty]
+        public BodegasViewModel[] Bodegas { get; set; }
 
 
-        public ObservarModel(ICrudApi<DocumentosViewModel, int> service, ICrudApi<ClientesViewModel, string> serviceE, ICrudApi<ProductosViewModel, string> serviceP, ICrudApi<ExoneracionesViewModel, int> exoneracion, ICrudApi<CondicionesPagosViewModel, int> condiconesPago, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<ParametrosViewModel, int> parametro)
+        public ObservarModel(ICrudApi<DocumentosViewModel, int> service, ICrudApi<ClientesViewModel, string> serviceE, ICrudApi<ProductosViewModel, string> serviceP, ICrudApi<ExoneracionesViewModel, int> exoneracion, ICrudApi<CondicionesPagosViewModel, int> condiconesPago, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<ParametrosViewModel, int> parametro, ICrudApi<BodegasViewModel, int> bodegas)
         {
             this.service = service;
             this.serviceE = serviceE;
@@ -57,6 +60,7 @@ namespace NOVAAPP.Pages.Documentos
             this.condiconesPago = condiconesPago;
             this.vendedor = vendedor;
             this.parametro = parametro;
+            this.bodegas = bodegas;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -86,7 +90,7 @@ namespace NOVAAPP.Pages.Documentos
 
                 Productos = await serviceP.ObtenerLista("");
                 Exoneraciones = await exoneracion.ObtenerLista("");
-
+                Bodegas = await bodegas.ObtenerLista("");
                 return Page();
             }
             catch (Exception ex)

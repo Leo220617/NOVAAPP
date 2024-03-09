@@ -28,18 +28,18 @@
 
 
 }
-    @section scripts{
+@section scripts{
 
 
     <script>
-        $(document).ready(function() {
-            jQuery(document).ready(function($) {
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
 
             });
 
 
 
-            $(document).ready(function() {
+            $(document).ready(function () {
 
             });
 
@@ -85,96 +85,193 @@
 }
 
 
-    @using Newtonsoft.Json;
-    @using System.Globalization
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>
-            Cierre Caja
-        </h1>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-            <li class="breadcrumb-item active">Observar Cierre de Caja</li>
-        </ol>
-    </section>
+@using Newtonsoft.Json;
+@using System.Globalization
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Cierre Caja
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Observar Cierre de Caja</li>
+    </ol>
+</section>
 
-    <section class="content ">
-        <div class="row">
-            <div class="col-12">
-
-
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
 
 
 
 
-                <!-- Content Header (Page header) -->
-                <div class="box">
-                    <div class="box-header with-border">
-                        <div class="row">
-                            <div class="col-8">
-                                <h6 class="box-subtitle">Observar Cierre de Caja</h6>
 
+
+            <!-- Content Header (Page header) -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Observar Cierre de Caja</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+                            &nbsp;
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Cierre Caja</span></h2>
+                                <div class="text-left">
+                                    <h5>Fecha <span class="font-size-18">@Model.Cierres.FechaCaja.ToString("dd MMM yyy")</span></h5>
+
+
+                                </div>
 
                             </div>
-                            <div class="col-4">
-                                <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
 
-
-                                &nbsp;
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Usuario</label>
+                                <h6> @Model.Users.Nombre </h6>
 
 
                             </div>
                         </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Caja</label>
+                                <h6>@(Model.Cajos.Where(a => a.id == Model.Cierres.idCaja).FirstOrDefault() == null ? "Caja Inexistente" : Model.Cajos.Where(a => a.id == Model.Cierres.idCaja).FirstOrDefault().Nombre) </h6>
+
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Tipo de Cambio</label>
+                                <h6>₡@Math.Round( Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault() == null ? 0 :  Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault().TipoCambio, 2).ToString("C",formato)  </h6>
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>IP</label>
+                                <h6>@Model.Cierres.IP </h6>
+
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
                     </div>
-                    <div class="box-body">
+
+
+                </div>
+
+            </div>
+
+
+
+            <div class="box">
+
+                <div class="box-body">
+                    <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                        <input hidden asp-for="Cierres.idCaja" />
+                        <input hidden asp-for="Cierres.FechaCaja" />
+                        <input hidden asp-for="Cierres.idUsuario" />
                         <!-- title row -->
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="page-header mt-0">
-                                    <h2 class="d-inline"><span class="font-size-24">Cierre Caja</span></h2>
-                                    <div class="text-left">
-                                        <h5>Fecha <span class="font-size-18">@Model.Cierres.FechaCaja.ToString("dd MMM yyy")</span></h5>
+                            <div class="col-md-6">
 
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <div class="col-md-2">
                                 <div class="form-group">
-                                    <label>Usuario</label>
-                                    <h6> @Model.Users.Nombre </h6>
+                                    <label>Apertura Colones</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.TotalAperturaColones, 2).ToString("C",formato) </h6>
 
 
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Caja</label>
-                                    <h6>@( Model.Cajos.Where(a => a.id == Model.Cierres.idCaja).FirstOrDefault() == null ? "Caja Inexistente" :  Model.Cajos.Where(a => a.id == Model.Cierres.idCaja).FirstOrDefault().Nombre) </h6>
+                                    <label>Apertura Dólares</label>
+                                    <h6> $@Math.Round(Model.Cierres.TotalAperturaFC, 2).ToString("C",formato) </h6>
 
 
                                 </div>
                             </div>
 
+                            <!-- /.col -->
+                        </div>
+                        <hr />
+                        <div class="row invoice-info">
+                            <div class="col-md-4 invoice-col">
+
+                                <address>
+                                    <strong class="text-blue font-size-24">Totalizados Sistema </strong>
+
+
+                                </address>
+                            </div>
 
 
 
-                            <div class="col-md-2">
+
+
+
+                            <!-- /.col -->
+                        </div>
+                        <!-- title row -->
+                        <div class="row">
+                            <div class="col-md-3">
+
                                 <div class="form-group">
-                                    <label>Tipo de Cambio</label>
-                                    <h6>₡@Math.Round( Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault() == null ? 0 :  Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault().TipoCambio, 2).ToString("C",formato)  </h6>
+                                    <label>Efectivo Colones</label>
+                                    <h6>  ₡@Math.Round(Model.Cierres.EfectivoColones, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+
+                                <div class="form-group">
+                                    <label>Tarjetas Colones</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.TarjetasColones, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Efectivo Dólares</label>
+                                    <h6> $@Math.Round(Model.Cierres.EfectivoFC, 2).ToString("C",formato)  </h6>
 
 
                                 </div>
                             </div>
 
-
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>IP</label>
-                                    <h6>@Model.Cierres.IP </h6>
+                                    <label>Tarjetas Dólares</label>
+                                    <h6> $@Math.Round(Model.Cierres.TarjetasFC, 2).ToString("C",formato)  </h6>
 
 
                                 </div>
@@ -183,144 +280,47 @@
                         </div>
 
 
-                    </div>
+                        <!-- title row -->
+                        <div class="row">
+                            <div class="col-md-3">
 
-                </div>
-
-
-
-                <div class="box">
-
-                    <div class="box-body">
-                        <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label>Cheques Colones</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.ChequesColones, 2).ToString("C",formato)  </h6>
 
 
-                            <input hidden asp-for="Cierres.idCaja" />
-                            <input hidden asp-for="Cierres.FechaCaja" />
-                            <input hidden asp-for="Cierres.idUsuario" />
-                            <!-- title row -->
-                            <div class="row">
-                                <div class="col-md-6">
-
-                                    <div class="form-group">
-                                        <label>Apertura Colones</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.TotalAperturaColones, 2).ToString("C",formato) </h6>
-
-
-                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Apertura Dólares</label>
-                                        <h6> $@Math.Round(Model.Cierres.TotalAperturaFC, 2).ToString("C",formato) </h6>
-
-
-                                    </div>
-                                </div>
-
-                                <!-- /.col -->
                             </div>
-                            <hr />
-                            <div class="row invoice-info">
-                                <div class="col-md-4 invoice-col">
+                            <div class="col-md-3">
 
-                                    <address>
-                                        <strong class="text-blue font-size-24">Totalizados Sistema </strong>
+                                <div class="form-group">
+                                    <label>Otros Colones</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColones, 2).ToString("C",formato)  </h6>
 
 
-                                    </address>
                                 </div>
-
-
-
-
-
-
-                                <!-- /.col -->
                             </div>
-                            <!-- title row -->
-                            <div class="row">
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-                                        <label>Efectivo Colones</label>
-                                        <h6>  ₡@Math.Round(Model.Cierres.EfectivoColones, 2).ToString("C",formato)  </h6>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Cheques Dólares</label>
+                                    <h6> $@Math.Round(Model.Cierres.ChequesFC, 2).ToString("C",formato)  </h6>
 
 
-                                    </div>
                                 </div>
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-                                        <label>Tarjetas Colones</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.TarjetasColones, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Efectivo Dólares</label>
-                                        <h6> $@Math.Round(Model.Cierres.EfectivoFC, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Tarjetas Dólares</label>
-                                        <h6> $@Math.Round(Model.Cierres.TarjetasFC, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-                                <!-- /.col -->
                             </div>
 
-
-                            <!-- title row -->
-                            <div class="row">
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-                                        <label>Cheques Colones</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.ChequesColones, 2).ToString("C",formato)  </h6>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Otros Dólares</label>
+                                    <h6> $@Math.Round(Model.Cierres.OtrosMediosFC, 2).ToString("C",formato)  </h6>
 
 
-                                    </div>
                                 </div>
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-                                        <label>Otros Colones</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColones, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Cheques Dólares</label>
-                                        <h6> $@Math.Round(Model.Cierres.ChequesFC, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Otros Dólares</label>
-                                        <h6> $@Math.Round(Model.Cierres.OtrosMediosFC, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-                                <!-- /.col -->
                             </div>
-                            <!-- title row -->
-                            <div class="row">
+                            <!-- /.col -->
+                        </div>
+                        <!-- title row -->
+                        <div class="row">
                             <div class="col-md-3">
 
                                 <div class="form-group">
@@ -357,285 +357,286 @@
                                 </div>
                             </div>
 
-                                <!-- /.col -->
-                                <!-- title row -->
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-
-                                    <div class="form-group">
-                                        <label>Total Colones</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Total Dólares</label>
-                                        <h6> $@Math.Round(Model.Cierres.TotalVendidoFC, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-
-                                <!-- /.col -->
-                                <!-- title row -->
-
-                            </div>
-                            <hr />
-                            <div class="row invoice-info">
-                                <div class="col-md-4 invoice-col">
-
-                                    <address>
-                                        <strong class="text-blue font-size-24">Totalizados Cajero </strong>
-
-
-                                    </address>
-                                </div>
-
-
-
-
-
-
-                                <!-- /.col -->
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-                                        <label>Efectivo Colones Cajero</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.EfectivoColonesC, 2).ToString("C",formato) </h6>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Tarjetas Colones Cajero</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.TarjetasColonesC, 2).ToString("C",formato) </h6>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-                                        <label>Efectivo Dólares Cajero</label>
-                                        <h6> $@Math.Round(Model.Cierres.EfectivoFCC, 2).ToString("C",formato) </h6>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-                                        <label>Tarjetas Dólares Cajero</label>
-                                        <h6> $@Math.Round(Model.Cierres.TarjetasFCC, 2).ToString("C",formato) </h6>
-
-
-                                    </div>
-                                </div>
-
-                                <!-- /.col -->
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-                                        <label>Cheques Colones Cajero</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.ChequesColonesC, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-
-                                    <div class="form-group">
-                                        <label>Otros Colones Cajero</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColonesC, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Cheques Dólares Cajero</label>
-                                        <h6> $@Math.Round(Model.Cierres.ChequesFCC, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Otros Dólares Cajero</label>
-                                        <h6> $@Math.Round(Model.Cierres.OtrosMediosFCC, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-                                <!-- /.col -->
-                            </div>
+                            <!-- /.col -->
                             <!-- title row -->
-                            <div class="row">
-                                <div class="col-md-6">
 
-                                    <div class="form-group">
-                                        <label>Transferencias Colones Cajero</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.TransferenciasColonesC, 2).ToString("C",formato)  </h6>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label>Total Colones</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones, 2).ToString("C",formato)  </h6>
 
 
-                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Transferencias Dólares Cajero</label>
-                                        <h6> $@Math.Round(Model.Cierres.TransferenciasDolaresC, 2).ToString("C",formato)  </h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Total Dólares</label>
+                                    <h6> $@Math.Round(Model.Cierres.TotalVendidoFC, 2).ToString("C",formato)  </h6>
 
 
-                                    </div>
                                 </div>
-
-                                <!-- /.col -->
-                                <!-- title row -->
-
                             </div>
 
+                            <!-- /.col -->
+                            <!-- title row -->
 
-
-                            <hr />
-                            <div class="row invoice-info">
-                                <div class="col-md-4 invoice-col">
-
-                                    <address>
-                                        <strong class="text-blue font-size-24">Totales </strong>
-
-
-                                    </address>
-                                </div>
-
-
-
-
-
-
-                                <!-- /.col -->
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-
-                                    <div class="form-group">
-                                        <label>Total Registrado Colones</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.TotalRegistradoColones, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Total Registrado Dólares</label>
-                                        <h6> $@Math.Round(Model.Cierres.TotalRegistradoFC, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Totalizado</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.TotalizadoMonedas, 2).ToString("C",formato)  </h6>
-
-
-                                    </div>
-                                </div>
-                                <!-- /.col -->
-                            </div>
-
-
-                            <div class="row">
-                                <div class="col-md-6">
-
-                                    <div class="form-group">
-                                        <label>Diferencia Colones</label>
-                                        <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.TotalRegistradoColones).ToString("C",formato) </h6>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Diferencia Dólares</label>
-                                        <h6> $@Math.Round(Model.Cierres.TotalVendidoFC - Model.Cierres.TotalRegistradoFC, 2).ToString("C",formato) </h6>
-
-
-                                    </div>
-                                </div>
-
-                                <!-- /.col -->
-                            </div>
-
-
-
-
-
-
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-
-                <div class="box">
-
-                    <div class="box-body">
-                        <!-- title row -->
-                        <!-- info row -->
+                        </div>
+                        <hr />
                         <div class="row invoice-info">
                             <div class="col-md-4 invoice-col">
 
                                 <address>
-                                    <strong class="text-blue font-size-24">Métodos Pagos </strong>
+                                    <strong class="text-blue font-size-24">Totalizados Cajero </strong>
 
 
                                 </address>
                             </div>
 
+
+
+
+
+
                             <!-- /.col -->
                         </div>
-                        <!-- /.row -->
-                        <!-- Table row -->
                         <div class="row">
-                            <div class="col-md-12 table-responsive">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr class="bg-pale-info">
-                                            <th class="text-center">Método </th>
-                                            <th class="text-center">Factura</th>
-                                            <th class="text-center">Pago</th>
-                                            <th class="text-center">Banco</th>
-                                            <th class="text-center">Cuenta</th>
-                                            <th class="text-center">Referencia</th>
-                                            <th class="text-center">Moneda</th>
-                                            <th class="text-center">Total</th>
+                            <div class="col-md-3">
+
+                                <div class="form-group">
+                                    <label>Efectivo Colones Cajero</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.EfectivoColonesC, 2).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Tarjetas Colones Cajero</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.TarjetasColonesC, 2).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+
+                                <div class="form-group">
+                                    <label>Efectivo Dólares Cajero</label>
+                                    <h6> $@Math.Round(Model.Cierres.EfectivoFCC, 2).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+
+                                <div class="form-group">
+                                    <label>Tarjetas Dólares Cajero</label>
+                                    <h6> $@Math.Round(Model.Cierres.TarjetasFCC, 2).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+
+                            <!-- /.col -->
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+
+                                <div class="form-group">
+                                    <label>Cheques Colones Cajero</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.ChequesColonesC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+
+                                <div class="form-group">
+                                    <label>Otros Colones Cajero</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColonesC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Cheques Dólares Cajero</label>
+                                    <h6> $@Math.Round(Model.Cierres.ChequesFCC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Otros Dólares Cajero</label>
+                                    <h6> $@Math.Round(Model.Cierres.OtrosMediosFCC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- title row -->
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label>Transferencias Colones Cajero</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.TransferenciasColonesC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Transferencias Dólares Cajero</label>
+                                    <h6> $@Math.Round(Model.Cierres.TransferenciasDolaresC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+
+                            <!-- /.col -->
+                            <!-- title row -->
+
+                        </div>
+
+
+
+                        <hr />
+                        <div class="row invoice-info">
+                            <div class="col-md-4 invoice-col">
+
+                                <address>
+                                    <strong class="text-blue font-size-24">Totales </strong>
+
+
+                                </address>
+                            </div>
 
 
 
 
 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+
+                            <!-- /.col -->
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+
+                                <div class="form-group">
+                                    <label>Total Registrado Colones</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.TotalRegistradoColones, 2).ToString("C",formato)  </h6>
 
 
-                                        @foreach (var item2 in Model.Pagos.GroupBy(a => a.Metodo))
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Total Registrado Dólares</label>
+                                    <h6> $@Math.Round(Model.Cierres.TotalRegistradoFC, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Totalizado</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.TotalizadoMonedas, 2).ToString("C",formato)  </h6>
+
+
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label>Diferencia Colones</label>
+                                    <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.TotalRegistradoColones).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Diferencia Dólares</label>
+                                    <h6> $@Math.Round(Model.Cierres.TotalVendidoFC - Model.Cierres.TotalRegistradoFC, 2).ToString("C",formato) </h6>
+
+
+                                </div>
+                            </div>
+
+                            <!-- /.col -->
+                        </div>
+
+
+
+
+
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box">
+
+                <div class="box-body">
+                    <!-- title row -->
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-4 invoice-col">
+
+                            <address>
+                                <strong class="text-blue font-size-24">Métodos Pagos </strong>
+
+
+                            </address>
+                        </div>
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th class="text-center">Método </th>
+                                        <th class="text-center">Factura</th>
+                                        <th class="text-center">Pago</th>
+                                        <th class="text-center">Banco</th>
+                                        <th class="text-center">Cuenta</th>
+                                        <th class="text-center">Referencia</th>
+                                        <th class="text-center">Moneda</th>
+                                        <th class="text-center">Tipo</th>
+                                        <th class="text-center">Total</th>
+
+
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+                                    @foreach (var item2 in Model.Pagos.GroupBy(a => a.Metodo))
                                     {
 
                                         @foreach (var item in item2)
@@ -647,13 +648,82 @@
 
                                                 <td>@item.id</td>
 
-                                                <td class="text-center"> @( Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" :  Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Banco)</td>
+                                                <td class="text-center"> @(Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Banco)</td>
 
-                                                <td class="text-center"> @( Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" :  Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Nombre)</td>
+                                                <td class="text-center"> @(Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Nombre)</td>
 
                                                 <td class="text-center">@item.NumReferencia</td>
 
                                                 <td class="text-center"> @item.Moneda </td>
+                                                <td class="text-center"> Facturación </td>
+
+                                                <td class="text-right">@item.Monto.ToString("C",formato)</td>
+
+
+                                            </tr>
+                                        }
+
+                                    }
+
+
+                                    @foreach (var item2 in Model.MetodoAbono.GroupBy(a => a.Metodo))
+                                    {
+
+                                        @foreach (var item in item2)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@item.Metodo</td>
+
+                                                <td class="text-right">@item.idEncabezado</td>
+
+                                                <td>@item.id</td>
+
+                                                <td class="text-center"> @(Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Banco)</td>
+
+                                                <td class="text-center"> @(Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Nombre)</td>
+
+                                                <td class="text-center">@item.NumReferencia</td>
+
+                                                <td class="text-center"> @item.Moneda </td>
+                                                <td class="text-center"> Abono </td>
+
+
+                                                <td class="text-right">@item.Monto.ToString("C",formato)</td>
+
+
+
+
+
+
+
+
+
+
+                                            </tr>
+                                        }
+
+                                    }
+
+                                    @foreach (var item2 in Model.MetodoCuenta.GroupBy(a => a.Metodo))
+                                    {
+
+                                        @foreach (var item in item2)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@item.Metodo</td>
+
+                                                <td class="text-right">@item.idEncabezado</td>
+
+                                                <td>@item.id</td>
+
+                                                <td class="text-center"> @(Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Banco)</td>
+
+                                                <td class="text-center"> @(Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Nombre)</td>
+
+                                                <td class="text-center">@item.NumReferencia</td>
+
+                                                <td class="text-center"> @item.Moneda </td>
+                                                <td class="text-center"> Pagos a Cuenta </td>
 
 
                                                 <td class="text-right">@item.Monto.ToString("C",formato)</td>
@@ -673,41 +743,6 @@
                                     }
 
 
-
-
-                                    @*@foreach (var item in Model.Pagos.OrderBy(a => a.Metodo))
-                                    {
-                                    <tr>
-                                    <td class="text-center">@item.Metodo</td>
-
-                                    <td class="text-right">@item.idEncabezado</td>
-
-                                    <td>@item.id</td>
-
-                                    <td class="text-center"> @( Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" :  Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Banco)</td>
-
-                                    <td class="text-center"> @( Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" :  Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Nombre)</td>
-
-                                    <td class="text-center">@item.NumReferencia</td>
-
-                                    <td class="text-center"> @( Model.Documento.Where(a => a.id == item.idEncabezado).FirstOrDefault() == null ? "" :  Model.Documento.Where(a => a.id == item.idEncabezado).FirstOrDefault().Moneda)</td>
-
-
-                                    <td class="text-right">@Math.Round(item.Monto).ToString("C",formato)</td>
-
-
-
-
-
-
-
-
-
-
-                                    </tr>
-                                    }*@
-
-
                                 </tbody>
                             </table>
                         </div>
@@ -724,13 +759,13 @@
 
                             </div>
                             <div class="total-payment">
-                                <h3><b>Totalizado :</b>  <span> ₡ @((@Math.Round( Model.Totalizado,2).ToString("C",formato))) </span></h3>
+                                <h3><b>Totalizado :</b>  <span> ₡ @((@Math.Round(Model.Totalizado, 2).ToString("C", formato))) </span></h3>
                             </div>
 
 
 
                         </div>
-                      
+
                     </div>
                     <!-- /.row -->
                     <!-- /.row -->
@@ -789,15 +824,15 @@
                                     @{
                                         var TotalC = 0.00;
                                         var TotalD = 0.00;
-                                     
+
 
                                     }
                                     @foreach (var item2 in Model.Documento.Where(a => a.idCondPago != cond.id && a.Status == "0"))
                                     {
 
-                                    
-                                            <tr>
-                                                <td class="text-center">@item2.id</td>
+
+                                        <tr>
+                                            <td class="text-center">@item2.id</td>
 
                                             <td> @(Model.Clientes.Where(a => a.id == item2.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" : Model.Clientes.Where(a => a.id == item2.idCliente).FirstOrDefault().Codigo + " - " + Model.Clientes.Where(a => a.id == item2.idCliente).FirstOrDefault().Nombre)</td>
 
@@ -806,10 +841,10 @@
                                             <td class="text-center"> @item2.Moneda </td>
 
 
-                                         
 
 
-                                                <td class="text-right"> @Math.Round( Convert.ToDecimal(item2.TotalCompra + item2.Redondeo), 2).ToString("C",formato)</td>
+
+                                            <td class="text-right"> @Math.Round( Convert.ToDecimal(item2.TotalCompra + item2.Redondeo), 2).ToString("C",formato)</td>
 
 
 
@@ -824,13 +859,13 @@
                                                 }
 
 
-                                           }
+                                            }
 
 
 
 
-                                            </tr>
-                                        
+                                        </tr>
+
 
                                     }
 
@@ -847,18 +882,18 @@
                         <div class="col-md-12  text-right">
                             <div>
                                 @{
-                                  
+
                                 }
                                 <p>Total Colones  : <span> ₡ @Math.Round( Convert.ToDecimal(TotalC), 2).ToString("C",formato)</span> </p>
                                 <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalD), 2).ToString("C",formato)</span></p>
 
 
                             </div>
-                         
+
 
 
                         </div>
-                     
+
                     </div>
                     <!-- /.row -->
                     <!-- /.row -->
@@ -1041,8 +1076,8 @@
                                 <tbody>
 
                                     @{
-                                        var TotalPC= 0.00;
-                                        var TotalPD= 0.00;
+                                        var TotalPC = 0.00;
+                                        var TotalPD = 0.00;
 
 
                                     }
@@ -1056,7 +1091,7 @@
                                             <td> @(Model.Clientes.Where(a => a.id == item2.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" : Model.Clientes.Where(a => a.id == item2.idCliente).FirstOrDefault().Codigo + " - " + Model.Clientes.Where(a => a.id == item2.idCliente).FirstOrDefault().Nombre)</td>
 
 
-                                           
+
                                             <td class="text-center"> @item2.Moneda </td>
 
 
@@ -1232,7 +1267,7 @@
 
                             </div>
 
-                          
+
 
                         </div>
                         <div class="text-xs-right">
@@ -1280,7 +1315,7 @@
             <div class="col-2">
                 <div class="form-group">
                     <label>Caja</label>
-                    <h6>@( Model.Cajos.Where(a => a.id == Model.Cierres.idCaja).FirstOrDefault() == null ? "Caja Inexistente" :  Model.Cajos.Where(a => a.id == Model.Cierres.idCaja).FirstOrDefault().Nombre) </h6>
+                    <h6>@(Model.Cajos.Where(a => a.id == Model.Cierres.idCaja).FirstOrDefault() == null ? "Caja Inexistente" : Model.Cajos.Where(a => a.id == Model.Cierres.idCaja).FirstOrDefault().Nombre) </h6>
 
 
                 </div>
@@ -1752,9 +1787,9 @@
 
                                                     <td>@item.id</td>
 
-                                                    <td class="text-center"> @( Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" :  Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Banco)</td>
+                                                    <td class="text-center"> @(Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Banco)</td>
 
-                                                    <td class="text-center"> @( Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" :  Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Nombre)</td>
+                                                    <td class="text-center"> @(Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.CuentasBancarias.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Nombre)</td>
 
                                                     <td class="text-center">@item.NumReferencia</td>
 
@@ -1798,7 +1833,7 @@
 
                                 </div>
                                 <div class="total-payment">
-                                    <h3><b>Totalizado :</b>  <span> ₡ @((@Math.Round( Model.Totalizado,2).ToString("C",formato))) </span></h3>
+                                    <h3><b>Totalizado :</b>  <span> ₡ @((@Math.Round(Model.Totalizado, 2).ToString("C", formato))) </span></h3>
                                 </div>
 
 
@@ -1985,8 +2020,8 @@
                                     <tbody>
 
                                         @{
-                                             TotalNC = 0.00;
-                                             TotalND = 0.00;
+                                            TotalNC = 0.00;
+                                            TotalND = 0.00;
 
 
                                         }
@@ -2111,8 +2146,8 @@
                                     <tbody>
 
                                         @{
-                                             TotalPC = 0.00;
-                                             TotalPD = 0.00;
+                                            TotalPC = 0.00;
+                                            TotalPD = 0.00;
 
 
                                         }
@@ -2237,8 +2272,8 @@
                                     <tbody>
 
                                         @{
-                                             TotalDC = 0.00;
-                                             TotalDD = 0.00;
+                                            TotalDC = 0.00;
+                                            TotalDD = 0.00;
 
 
                                         }
@@ -2302,7 +2337,7 @@
 
                                 </div>
 
-                                
+
 
                             </div>
 

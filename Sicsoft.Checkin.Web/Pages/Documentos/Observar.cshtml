@@ -319,7 +319,10 @@
                                             <td>@item.NumLinea</td>
 
 
-                                            <td>  @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Codigo + " - " + Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Nombre)   </td>
+                                            <td>
+                                                @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Codigo + " - " + Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Nombre + " - BOD: " +
+                                                    (Model.Bodegas.Where(a => a.id == (Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega)).FirstOrDefault() == null ? "0" : Model.Bodegas.Where(a => a.id == (Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega)).FirstOrDefault().CodSAP))
+                                            </td>
 
                                             <td class="text-right">@(Math.Round(item.Cantidad))</td>
 

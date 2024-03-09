@@ -14,90 +14,197 @@
 
 @section scripts{
 
-      <script>
-try { 
-        $(document).ready(function () {
-            jQuery(document).ready(function ($) {
-                $(document).ready(function () {
-                    $('.mi-selector').select2();
+    <script>
+        try {
+            $(document).ready(function () {
+                jQuery(document).ready(function ($) {
+                    $(document).ready(function () {
+                        $('.mi-selector').select2();
+                    });
                 });
+                $(".js-example-responsive").select2({
+                    width: 'resolve',// need to override the changed default
+                    height: 'resolve'
+                });
+
+
+
+
+
             });
-            $(".js-example-responsive").select2({
-                width: 'resolve',// need to override the changed default
-                height: 'resolve'
-            });
+        } catch (e) {
+            console.log(e);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ha ocurrido un error al intentar imprimir ' + e
 
-          
+            })
+        }
 
+        function InsertarSAP() {
+            try {
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Page("Index", "InsertarSAP")',
+                    data: {},
+                    success: function (result) {
+                        $("#divProcesando").modal("hide");
 
+                        if (result == false) {
 
-        });
-        }catch(e)
-            {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar insertar a SAP'
+
+                            })
+
+                        } else {
+                            Swal.fire({
+                                title: "Ha sido insertado a SAP con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    beforeSend: function () {
+                        $("#divProcesando").modal("show");
+                    }
+                })
+            } catch (e) {
                 console.log(e);
                 Swal.fire({
-                                     icon: 'error',
-                                     title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
 
-                                 })
-            }
-     
-        function  InsertarSAP() {
-            try { 
-         $.ajax({
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '@Url.Page("Index", "InsertarSAP")',
-                        data: { },
-                        success: function (result) {
-                 $("#divProcesando").modal("hide");
-                              
-                             if (result == false) {
-                                 
-                                 Swal.fire({
-                                     icon: 'error',
-                                     title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar insertar a SAP'
-
-                                 })
-
-                             } else {
-                                 Swal.fire({
-                                     title: "Ha sido insertado a SAP con éxito",
-
-                                     icon: 'success',
-                                     showCancelButton: false,
-                                     customClass: {
-                                         confirmButton: 'swalBtnColor',
-
-                                     },
-                                     confirmButtonText: 'OK'
-                                 }).then((result) => {
-                                     if (result.isConfirmed) {
-                                         location.reload();
-                                     }
-                                 })
-                             }
-             },
-             beforeSend: function () {
-                 $("#divProcesando").modal("show");
-             }
-                     })
-                     }catch(e)
-            {
-                console.log(e);
-                Swal.fire({
-                                     icon: 'error',
-                                     title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
-
-                                 })
+                })
             }
         }
 
 
+        var ids = 0;
+        function onClickModalByCardCode() {
+            try {
+                var id = document.getElementById("CardCode").value;
+                ids = id;
+                Swal.fire({
+                    title: '¿Desea activar/desactivar este producto?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: `Aceptar`,
+                    denyButtonText: `Cancelar`,
+                    customClass: {
+                        confirmButton: 'swalBtnColor',
+                        denyButton: 'swalDeny'
+                    },
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
 
+                        InsertarSAPByCardCode();
+
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+
+
+
+
+        }
+
+
+
+        function InsertarSAPByCardCode() {
+            try {
+
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Page("Index", "InsertarSAPByCardCode")',
+                    data: { id: ids },
+                    success: function (result) {
+                        $("#divProcesando").modal("hide");
+
+                        if (result == false) {
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar Desactivar/Activar este producto'
+
+                            })
+
+                        } else {
+                            Swal.fire({
+                                title: "Ha sido guardado con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    beforeSend: function () {
+                        $("#divProcesando").modal("show");
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+
+        }
+
+        function AbrirModalAgregarCliente() {
+
+            try {
+                $("#ModalAgregarCliente").modal("show");
+
+
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Error ' + e
+
+                })
+            }
+
+        }
     </script>
 
 }
@@ -117,7 +224,7 @@ try {
     <div class="row">
         <div class="col-12">
 
-               <div class="box">
+            <div class="box">
                 <div class="box-header with-border">
                     <div class="row">
                         <div class="col-sm-8"> <h4 class="box-title">Filtro</h4></div>
@@ -133,14 +240,14 @@ try {
                             <div class="col-sm-3 pr-1">
                                 <div class="form-group">
                                     <label>Bodega</label>
-                                      <select class="form-control select2  " asp-for="filtro.Codigo1">
-                                                    @foreach(var item in Model.Bodegas)
-                                                    {
-                                                        <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
-                                                    }
+                                    <select class="form-control select2  " asp-for="filtro.Codigo1">
+                                        @foreach (var item in Model.Bodegas)
+                                        {
+                                            <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
+                                        }
 
 
-                                                </select>
+                                    </select>
                                 </div>
 
 
@@ -149,26 +256,38 @@ try {
                             <div class="col-sm-3 pr-1">
                                 <div class="form-group">
                                     <label>Lista de Precio</label>
-                                      <select class="form-control select2  " asp-for="filtro.Codigo2">
-                                                    @foreach(var item in Model.Listas)
-                                                    {
-                                                        <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
-                                                    }
+                                    <select class="form-control select2  " asp-for="filtro.Codigo2">
+                                        @foreach (var item in Model.Listas)
+                                        {
+                                            <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
+                                        }
 
 
-                                                </select>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 pr-1">
+                                <div class="form-group">
+                                    <label>Categoría</label>
+                                    <select class="form-control select2  " asp-for="filtro.Codigo3">
+                                        @foreach (var item in Model.Categorias)
+                                        {
+                                            <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
+                                        }
+
+
+                                    </select>
                                 </div>
                             </div>
 
-                            
-                            
+
                             <div class="col-sm-3 pl-1" style="text-align: center; padding-top: 1%;">
-                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary" > <i class="fa fa-search"></i></button>
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary"> <i class="fa fa-search"></i></button>
                             </div>
- 
 
 
-                            
+
+
                         </div>
 
                     </form>
@@ -180,8 +299,10 @@ try {
             <div class="box">
                 <div class="box-header with-border">
                     <div class="row">
+
                         <div class="col-sm-8"> <h4 class="box-title">Productos</h4></div>
-                     @* <div class="col-sm-2"> <button onclick="javascript: InsertarSAP()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Sincronizar a SAP"> Sincronizar a SAP</button></div>*@
+                        <div class="col-sm-2"> <button onclick="javascript: AbrirModalAgregarCliente()" class="btn btn-rounded btn-info"> Desactivar Producto</button></div>
+                        @* <div class="col-sm-2"> <button onclick="javascript: InsertarSAP()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Sincronizar a SAP"> Sincronizar a SAP</button></div>*@
 
                     </div>
 
@@ -193,62 +314,77 @@ try {
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                     <th>ID</th>
+                                    <th>ID</th>
                                     <th>Producto</th>
-                                  <th>Impuesto</th>
-                                    
-                                     <th>Bodega</th>
-                                      <th>Lista de Precio</th>
+                                    <th>Impuesto</th>
+
+                                    <th>Bodega</th>
+                                    <th>Lista de Precio</th>
                                     <th>Precio Unitario</th>
-                                
-                                
-                                      <th>Costo</th>
-                                      <th>Stock</th>
-                                      <th>MAG</th>
-                                      <th>Fecha Actualización</th>
-                                    
-                                       
+
+
+                                    <th>Costo</th>
+                                    <th>Stock</th>
+                                    <th>MAG</th>
+                                    <th>Fecha Actualización</th>
+                                    <th>Estado</th>
+
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.Objeto)
                                 {
-                                <tr>
-                                      <td>
-                                        @item.id
-                                    </td>
-                                    <td>
-                                        @item.Codigo - @item.Nombre 
-                                    </td>
+                                    <tr>
+                                        <td>
+                                            @item.id
+                                        </td>
+                                        <td>
+                                            @item.Codigo - @item.Nombre
+                                        </td>
 
-                                   
-                                    <td>  @( Model.Impuestos.Where(a => a.id == item.idImpuesto).FirstOrDefault() == null ? "Impuesto Inexistente" :  Model.Impuestos.Where(a => a.id == item.idImpuesto).FirstOrDefault().Codigo) </td> 
-                                       
-                                           
-                                              <td>  @( Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault() == null ? "Bodega Inexistente" :  Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault().Nombre) </td> 
-                                                 <td>  @( Model.Listas.Where(a => a.id == item.idListaPrecios).FirstOrDefault() == null ? "Lista de Precio Inexistente" :  Model.Listas.Where(a => a.id == item.idListaPrecios).FirstOrDefault().Nombre) </td> 
-                                                <td>         @item.PrecioUnitario </td>
-                                                   
-                                                            
-                                                                    <td>         @item.Costo </td>
-                                                                        <td>         @item.Stock </td>
-                                                                           <td>
-                                         @if(item.MAG)
+
+                                        <td>  @(Model.Impuestos.Where(a => a.id == item.idImpuesto).FirstOrDefault() == null ? "Impuesto Inexistente" : Model.Impuestos.Where(a => a.id == item.idImpuesto).FirstOrDefault().Codigo) </td>
+
+
+                                        <td>  @(Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault().Nombre) </td>
+                                        <td>  @(Model.Listas.Where(a => a.id == item.idListaPrecios).FirstOrDefault() == null ? "Lista de Precio Inexistente" : Model.Listas.Where(a => a.id == item.idListaPrecios).FirstOrDefault().Nombre) </td>
+                                        <td>         @item.PrecioUnitario </td>
+
+
+                                        <td>         @item.Costo </td>
+                                        <td>         @item.Stock </td>
+                                        <td>
+                                            @if (item.MAG)
                                             {
                                                 <span class="badge badge-pill badge-success">SI</span>
 
-                                            }else
+                                            }
+                                            else
                                             {
                                                 <span class="badge badge-pill badge-danger">NO</span>
                                             }
 
-                                    </td>
-                                                                          <td>       @item.FechaActualizacion.ToString("dd/MM/yyyy")  </td>
-                                   
-                                   
+                                        </td>
+                                        <td>       @item.FechaActualizacion.ToString("dd/MM/yyyy")  </td>
 
-                                                                           
-                                </tr>
+                                        <td>
+                                            @if (item.Activo)
+                                            {
+                                                <span class="badge badge-pill badge-success">Activo</span>
+
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-pill badge-danger">Inactivo</span>
+                                            }
+
+                                        </td>
+
+
+
+
+
+                                    </tr>
 
                                 }
 
@@ -256,24 +392,24 @@ try {
                             </tbody>
                             <tfoot>
                                 <tr>
-                                     <th>ID</th>
-                                           <th>Producto</th>
-                                    <th>Impuesto</th> 
+                                    <th>ID</th>
+                                    <th>Producto</th>
+                                    <th>Impuesto</th>
 
-                                   
-                                   
-                                        <th>Bodega</th>
-                                      <th>Lista de Precio</th>
+
+
+                                    <th>Bodega</th>
+                                    <th>Lista de Precio</th>
                                     <th>Precio Unitario</th>
-                                   
-                               
-                                      <th>Costo</th>
-                                      <th>Stock</th>
-                                       <th>MAG</th>
-                                         <th>Fecha Actualización</th>
-                                     
 
-                                        
+
+                                    <th>Costo</th>
+                                    <th>Stock</th>
+                                    <th>MAG</th>
+                                    <th>Fecha Actualización</th>
+                                    <th>Estado</th>
+
+
 
                                 </tr>
                             </tfoot>
@@ -289,3 +425,45 @@ try {
     <!-- /.row -->
 </section>
 <!-- /.content -->
+<div class="modal fade bs-example-modal-lg" id="ModalAgregarCliente" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Desactivar/Activar Productos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+
+
+
+
+
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <h5>Ingrese el Código del Producto<span class="text-danger">*</span></h5>
+                            <div class="controls">
+                                <input type="text" id="CardCode" class="form-control" required data-validation-required-message="Este campo es requerido">
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Cancelar</button> &nbsp;
+                <button type="button" class="btn btn-primary waves-effect text-left" onclick="javascript: onClickModalByCardCode();">Guardar</button> &nbsp;
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
