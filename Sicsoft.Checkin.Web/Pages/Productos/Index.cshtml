@@ -1,4 +1,5 @@
 ﻿@page
+@using Newtonsoft.Json;
 @model NOVAAPP.Pages.Productos.IndexModel
 @{
     ViewData["Title"] = "Productos";
@@ -14,198 +15,7 @@
 
 @section scripts{
 
-    <script>
-        try {
-            $(document).ready(function () {
-                jQuery(document).ready(function ($) {
-                    $(document).ready(function () {
-                        $('.mi-selector').select2();
-                    });
-                });
-                $(".js-example-responsive").select2({
-                    width: 'resolve',// need to override the changed default
-                    height: 'resolve'
-                });
-
-
-
-
-
-            });
-        } catch (e) {
-            console.log(e);
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Ha ocurrido un error al intentar imprimir ' + e
-
-            })
-        }
-
-        function InsertarSAP() {
-            try {
-                $.ajax({
-                    type: 'GET',
-                    dataType: 'json',
-                    url: '@Url.Page("Index", "InsertarSAP")',
-                    data: {},
-                    success: function (result) {
-                        $("#divProcesando").modal("hide");
-
-                        if (result == false) {
-
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Ha ocurrido un error al intentar insertar a SAP'
-
-                            })
-
-                        } else {
-                            Swal.fire({
-                                title: "Ha sido insertado a SAP con éxito",
-
-                                icon: 'success',
-                                showCancelButton: false,
-                                customClass: {
-                                    confirmButton: 'swalBtnColor',
-
-                                },
-                                confirmButtonText: 'OK'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    location.reload();
-                                }
-                            })
-                        }
-                    },
-                    beforeSend: function () {
-                        $("#divProcesando").modal("show");
-                    }
-                })
-            } catch (e) {
-                console.log(e);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Ha ocurrido un error al intentar imprimir ' + e
-
-                })
-            }
-        }
-
-
-        var ids = 0;
-        function onClickModalByCardCode() {
-            try {
-                var id = document.getElementById("CardCode").value;
-                ids = id;
-                Swal.fire({
-                    title: '¿Desea activar/desactivar este producto?',
-                    showDenyButton: true,
-                    showCancelButton: false,
-                    confirmButtonText: `Aceptar`,
-                    denyButtonText: `Cancelar`,
-                    customClass: {
-                        confirmButton: 'swalBtnColor',
-                        denyButton: 'swalDeny'
-                    },
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-
-                        InsertarSAPByCardCode();
-
-                    }
-                })
-            } catch (e) {
-                console.log(e);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Ha ocurrido un error al intentar imprimir ' + e
-
-                })
-            }
-
-
-
-
-        }
-
-
-
-        function InsertarSAPByCardCode() {
-            try {
-
-                $.ajax({
-                    type: 'GET',
-                    dataType: 'json',
-                    url: '@Url.Page("Index", "InsertarSAPByCardCode")',
-                    data: { id: ids },
-                    success: function (result) {
-                        $("#divProcesando").modal("hide");
-
-                        if (result == false) {
-
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Ha ocurrido un error al intentar Desactivar/Activar este producto'
-
-                            })
-
-                        } else {
-                            Swal.fire({
-                                title: "Ha sido guardado con éxito",
-
-                                icon: 'success',
-                                showCancelButton: false,
-                                customClass: {
-                                    confirmButton: 'swalBtnColor',
-
-                                },
-                                confirmButtonText: 'OK'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    location.reload();
-                                }
-                            })
-                        }
-                    },
-                    beforeSend: function () {
-                        $("#divProcesando").modal("show");
-                    }
-                })
-            } catch (e) {
-                console.log(e);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Ha ocurrido un error al intentar imprimir ' + e
-
-                })
-            }
-
-        }
-
-        function AbrirModalAgregarCliente() {
-
-            try {
-                $("#ModalAgregarCliente").modal("show");
-
-
-            } catch (e) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Error ' + e
-
-                })
-            }
-
-        }
-    </script>
+    <script src="/js/Productos/Productos.js"></script>
 
 }
 
@@ -223,7 +33,7 @@
 <section class="content">
     <div class="row">
         <div class="col-12">
-
+            <input hidden id="Productos" value="@JsonConvert.SerializeObject(Model.Objeto)" />
             <div class="box">
                 <div class="box-header with-border">
                     <div class="row">
@@ -315,6 +125,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Acción</th>
                                     <th>Producto</th>
                                     <th>Impuesto</th>
 
@@ -337,6 +148,9 @@
                                     <tr>
                                         <td>
                                             @item.id
+                                        </td>
+                                        <td>
+                                            <a id="print" class="fa fa-print icono" onclick="javascript: ImprimirEtiqueta(@item.id)"> </a>
                                         </td>
                                         <td>
                                             @item.Codigo - @item.Nombre
@@ -393,6 +207,7 @@
                             <tfoot>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Acción</th>
                                     <th>Producto</th>
                                     <th>Impuesto</th>
 
