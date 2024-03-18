@@ -101,7 +101,7 @@ namespace NOVAAPP.Pages.Productos
                 return new JsonResult(false);
             }
         }
-        public async Task<IActionResult> OnGetInsertarSAPByCardCode(string id)
+        public async Task<IActionResult> OnGetDesactivarProducto(string id)
         {
             try
             {

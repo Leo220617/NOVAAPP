@@ -2,14 +2,17 @@
 
 $(document).ready(function () {
     jQuery(document).ready(function ($) {
-
+        $(document).ready(function () {
+            Recuperar();
+        });
+    });
+    $(".js-example-responsive").select2({
+        width: 'resolve',// need to override the changed default
+        height: 'resolve'
     });
 
 
 
-    $(document).ready(function () {
-        Recuperar();
-    });
 
 
 });
@@ -131,7 +134,7 @@ function InsertarSAPByCardCode() {
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            url: '@Url.Page("Index", "InsertarSAPByCardCode")',
+            url: '@Url.Page("Index", "DesactivarProducto")',
             data: { id: ids },
             success: function (result) {
                 $("#divProcesando").modal("hide");
@@ -205,16 +208,17 @@ function formatoDecimal(numero) {
 function ImprimirEtiqueta(id) {
     try {
         var MiProducto = Productos.find(a => a.id == id);
-        const htmlEtiqueta = "<!DOCTYPE html> <html lang='es'> <head> <meta charset='UTF-8'> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <title>Etiquetas de Productos</title> <style> .product-description { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-size: 16px; } </style> </head> <body style='font-family: Arial, sans-serif; text-align: center; margin: 20px;'> <center> <!-- Etiqueta 1 --> <div style='border: 2px solid #333; padding: 20px; display: inline-block; width: 50%; height: 220px; margin: 10px; box-sizing: border-box; position: relative; font-size: 20px;'> <!-- Espacio para el logo --> <div> <!-- Aquí puedes incluir la etiqueta <img> con la ruta de tu logo --> <img style='width: 120px; height: auto; float: left; margin-right: 20px;' src='img/Novagro.png' alt='Logo del producto 1'> </div> <!-- Información del producto --> <div style='text-align: left; margin-top: 10px;'> <!-- Código del producto --> <div style='margin-top: 6px; text-align: left;'> <p style='font-size: 18px;'><b>Código:</b> @Codigo</p> </div> <!-- Nombre del producto --> <div style='margin-top: 10px; text-align: left;'> <p class='product-description'><b>Art:</b>  @Descripcion</p> </div> <!-- Precio del producto --> <div style='margin-top: 10px; text-align: left;'> <p style='font-size: 18px;'><b> @PrecioUnitario</b></p> </div> <div> <!-- Aquí puedes incluir la etiqueta <img> con la ruta de tu logo --> <img style='width: 60px; height: auto; float: right; margin-left: 20px; margin-top: -35px;' src='img/logopeque.png' alt='Logo del producto 1'> </div> </div> <!-- Barra verde en la parte inferior --> <div style='background-color: #74BA3E; height: 10px; position: absolute; bottom: 0; left: 0; width: 100%;'></div> </div> </center> </body> </html>";
+        const htmlEtiqueta = "<!DOCTYPE html> <html lang='es'> <head> <meta charset='UTF-8'> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <title>Etiquetas de Productos</title> <style> .product-description { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; } </style> </head> <body style='font-family: Arial, sans-serif; text-align: center; margin: 20px;'> <center> <!-- Etiqueta 1 --> <div style='border: 2px solid #333; padding: 10px; display: inline-block; width: 100%; height: 330px; margin: 10px; box-sizing: border-box; position: relative; font-size: 20px;'> <!-- Espacio para el logo --> <div hidden> <!-- Aquí puedes incluir la etiqueta <img> con la ruta de tu logo --> <img style='width: 120px; height: auto; float: left; margin-right: 20px;' src='img/Novagro.png' alt='Logo del producto 1'> </div> <!-- Información del producto --> <div style='text-align: left; margin-top: 10px;'> <!-- Código del producto --> <div style='margin-top: 6px; text-align: left;  height: 8px;'> <p ><b>Código:</b> @Codigo</p> </div> <!-- Nombre del producto --> <div style='margin-top: 10px; text-align: left;'> <p class='product-description'><b>Art:</b> @Descripcion</p> </div> <!-- Precio del producto --> <div style='margin-top: 20px; text-align: center;'> <p style='font-size: 30px;'><b> @PrecioUnitario</b></p> </div> <div hidden> <!-- Aquí puedes incluir la etiqueta <img> con la ruta de tu logo --> <img style='width: 60px; height: auto; float: right; margin-left: 20px; margin-top: -35px;' src='img/logopeque.png' alt='Logo del producto 1'> </div> </div> <!-- Barra verde en la parte inferior --> <div style='background-color: #74BA3E; height: 10px; position: absolute; bottom: 0; left: 0; width: 100%;'> </div> </div> </center> </body> </html>";
 
         var ventana = window.open('', 'PRINT', 'height=400,width=600');
         var texto = htmlEtiqueta;
         texto = texto.replace("@Codigo", MiProducto.Codigo);
         texto = texto.replace("@Descripcion", MiProducto.Nombre);
+       
         if (MiProducto.Moneda == "CRC") {
-            texto = texto.replace("@PrecioUnitario", "₡" + formatoDecimal(MiProducto.PrecioUnitario));
+            texto = texto.replace("@PrecioUnitario", "₡" + formatoDecimal(Math.round(MiProducto.PrecioUnitario * 1.13)));
         } else {
-            texto = texto.replace("@PrecioUnitario", "$" + formatoDecimal(MiProducto.PrecioUnitario));
+            texto = texto.replace("@PrecioUnitario", "$" + formatoDecimal(Math.round(MiProducto.PrecioUnitario * 1.13)));
         }
      
 
