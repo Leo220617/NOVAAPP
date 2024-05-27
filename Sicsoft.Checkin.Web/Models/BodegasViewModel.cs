@@ -18,5 +18,9 @@ namespace NOVAAPP.Models
 
         
         public string Nombre { get; set; }
+
+        public string NormaReparto { get; set; }
+
+        public int Dimension { get; set; }
     }
 }

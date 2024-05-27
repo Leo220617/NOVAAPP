@@ -70,8 +70,25 @@
                                         </div>
 
                                     </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Usuario Asignado<span class="text-danger">*</span></h5>
 
-                                    <div class="col-md-6">
+                                    <select class="form-control select2  " asp-for="Caja.idUsuario">
+                                        @foreach (var item in Model.UsuariosLista)
+                                        {
+                                            <option value="@item.id">@item.Nombre</option>
+                                        }
+
+
+                                    </select>
+
+
+
+                                </div>
+                            </div>
+
+                                    <div class="col-md-4">
                                            <div class="form-group">
                                             <h5>Apertura Colones<span class="text-danger">*</span></h5>
                                             <div class="controls">
@@ -82,7 +99,7 @@
                                          
                                     </div>
 
-                                      <div class="col-md-6">
+                                      <div class="col-md-4">
                                            <div class="form-group">
                                             <h5>Apertura Dolares<span class="text-danger">*</span></h5>
                                             <div class="controls">

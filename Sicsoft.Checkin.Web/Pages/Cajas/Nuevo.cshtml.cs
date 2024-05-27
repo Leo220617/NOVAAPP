@@ -18,6 +18,7 @@ namespace NOVAAPP.Pages.Cajas
     {
         private readonly ICrudApi<CajasViewModel, int> service; //API
         private readonly ICrudApi<SucursalesViewModel, string> sucursales;
+        private readonly ICrudApi<UsuariosViewModel, int> usuarios;
 
         [BindProperty]
         public CajasViewModel Caja { get; set; }
@@ -25,10 +26,14 @@ namespace NOVAAPP.Pages.Cajas
         [BindProperty]
         public SucursalesViewModel[] SucursalesLista { get; set; }
 
-        public NuevoModel(ICrudApi<CajasViewModel, int> service, ICrudApi<SucursalesViewModel, string> sucursales) //CTOR 
+        [BindProperty]
+        public UsuariosViewModel[] UsuariosLista { get; set; }
+
+        public NuevoModel(ICrudApi<CajasViewModel, int> service, ICrudApi<SucursalesViewModel, string> sucursales, ICrudApi<UsuariosViewModel, int> usuarios) //CTOR 
         {
             this.service = service;
             this.sucursales = sucursales;
+            this.usuarios = usuarios;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -41,6 +46,7 @@ namespace NOVAAPP.Pages.Cajas
                     return RedirectToPage("/NoPermiso");
                 }
                 SucursalesLista = await sucursales.ObtenerLista("");
+                UsuariosLista = await usuarios.ObtenerLista("");
                 return Page();
             }
             catch (Exception ex)

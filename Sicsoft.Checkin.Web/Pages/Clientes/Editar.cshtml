@@ -110,31 +110,134 @@
 
     <script>
         function BuscarCliente() {
-            $.ajax({
-                type: 'GET',
-                dataType: 'json',
-                url: 'https://api.hacienda.go.cr/fe/ae?identificacion=' + $("#CedulaCliente").val() + '&fbclid=IwAR02XHHfB7dQycQ1XGVVo8bhyuRZ_jkNgWCZBW5GscL7S18lnG3jQfgeaS8', //Nombre del metodo
-                data: {},
-                success: function(result) {
-
-                    console.log(result);
-
-                    if(result.nombre != undefined)
-                    {
-                         $("#NombreCliente").val(result.nombre);
-                        $("#selectTP").val(result.tipoIdentificacion);
-                    }
+            try {
+                $("#NombreCliente").val("");
+                BuscarClienteRegistro();
+                console.log($("#NombreCliente").val());
 
 
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'ha ocurrido un error  ' + e
 
-                },
-                beforeSend: function() {
+                })
+            }
+        }
+        function BuscarClienteRegistro() {
+            try {
 
-                },
-                complete: function() {
+                fetch('https://apis.gometa.org/cedulas/' + $("#Cedula").val() + '&fbclid=IwAR02XHHfB7dQycQ1XGVVo8bhyuRZ_jkNgWCZBW5GscL7S18lnG3jQfgeaS8')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json(); // Parsea la respuesta como JSON
+                    })
+                    .then(data => {
+                        // Maneja los datos obtenidos
+                        console.log(data);
 
-                }
-            });
+                        if (data.nombre != undefined) {
+
+                            $("#NombreCliente").val(data.nombre.toString());
+                            $("#selectTP").val(data.tipoIdentificacion.toString());
+                            $("#NombreCliente").attr("readonly", "readonly");
+
+
+                            console.log($("#NombreCliente").val());
+                        }
+
+                        if ($("#NombreCliente").val().toString() == "" || $("#NombreCliente").val().toString() == undefined || $("#NombreCliente").val().toString() == '' || $("#NombreCliente").val().toString() == null) {
+
+                            BuscarClienteHacienda();
+                        }
+
+                    })
+                    .catch(error => {
+                        // Maneja errores
+                        console.error('Fetch error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error  ' + error
+
+                        })
+
+                        if ($("#NombreCliente").val().toString() == "" || $("#NombreCliente").val().toString() == undefined || $("#NombreCliente").val().toString() == '' || $("#NombreCliente").val().toString() == null) {
+
+                            BuscarClienteHacienda();
+                        }
+                    });
+
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error ' + e
+
+                })
+            }
+
+
+
+        }
+        function BuscarClienteHacienda() {
+            try {
+                fetch('https://api.hacienda.go.cr/fe/ae?identificacion=' + $("#Cedula").val() + '&fbclid=IwAR02XHHfB7dQycQ1XGVVo8bhyuRZ_jkNgWCZBW5GscL7S18lnG3jQfgeaS8')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json(); // Parsea la respuesta como JSON
+                    })
+                    .then(data => {
+                        // Maneja los datos obtenidos
+                        console.log(data);
+
+                        if (data.nombre != undefined) {
+
+                            $("#NombreCliente").val(data.nombre.toString());
+                            $("#selectTP").val(data.tipoIdentificacion.toString());
+                            $("#NombreCliente").attr("readonly", "readonly");
+
+
+
+                        }
+
+                        if ($("#NombreCliente").val().toString() == "" || $("#NombreCliente").val().toString() == undefined || $("#NombreCliente").val().toString() == '' || $("#NombreCliente").val().toString() == null) {
+                            console.log($("#NombreCliente").val());
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Cliente no encontrado en registros. Contactar a soporte!  '
+
+                            })
+                        }
+                    })
+                    .catch(error => {
+                        // Maneja errores
+                        console.error('Fetch error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error  ' + error
+
+                        })
+                    });
+
+
+
+
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'ha ocurrido un error  ' + e
+
+                })
+            }
         }
     </script>
 
