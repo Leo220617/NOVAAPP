@@ -312,7 +312,32 @@
 
 
 
+                     <li class="treeview">
+                        <a href="#">
+                            Reportes
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "69").FirstOrDefault()))
+                                {
 
+                                    <li><a asp-page="/ReporteVentas/Index"><i class="mdi mdi-account-outline"></i>Ventas</a></li>
+                                }
+
+                            }
+
+
+
+
+                          
+                            <li class="treeview">
+
+
+                        </ul>
+                    </li>
 
 
 
