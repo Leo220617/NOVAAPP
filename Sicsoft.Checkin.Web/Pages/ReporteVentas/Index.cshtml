@@ -232,12 +232,11 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th># Factura</th>
+                                    <th># Documento</th>
                                     <th>Fecha</th>
-                                    <th>CodigoCliente</th>
-                                    <th>NombreCliente</th>
-                                    <th>CodigoProducto</th>
-                                    <th>NombreProducto</th>
+                                    <th>Cliente</th>
+                                    <th>Producto</th>
+                                    <th>Tipo Documento</th>
                                     <th>Cantidad </th>
                                     
 
@@ -250,10 +249,29 @@
                                     <tr>
                                         <td>@item.idEncabezado</td>
                                         <td>@item.Fecha</td>
-                                        <td>@item.CodigoCliente</td>
-                                        <td>@item.NombreCliente</td>
-                                        <td>@item.CodigoProducto</td>
-                                        <td>@item.NombreProducto</td>
+                                        <td>@item.CodigoCliente - @item.NombreCliente </td>
+                                        <td>@item.CodigoProducto - @item.NombreProducto</td>
+                                        <td>
+                                            @switch (item.TipoDocumento)
+                                            {
+                                                case "01":
+                                                    {
+                                                        <p>Factura Electrónica</p>
+                                                        break;
+                                                    }
+                                                case "03":
+                                                    {
+                                                        <p>Nota de Crédito</p>
+                                                        break;
+                                                    }
+
+                                                case "04":
+                                                    {
+                                                        <p>Tiquete Electrónico</p>
+                                                        break;
+                                                    }
+                                            }
+                                        </td>
                                         <td>@item.Cantidad</td>
                                         
                                        
@@ -265,12 +283,11 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th># Factura</th>
+                                    <th># Documento</th>
                                     <th>Fecha</th>
-                                    <th>CodigoCliente</th>
-                                    <th>NombreCliente</th>
-                                    <th>CodigoProducto</th>
-                                    <th>NombreProducto</th>
+                                    <th>Cliente</th>
+                                    <th>Producto</th>
+                                    <th>Tipo Documento</th>
                                     <th>Cantidad </th>
                                     
 

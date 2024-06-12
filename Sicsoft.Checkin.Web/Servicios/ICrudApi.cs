@@ -25,6 +25,12 @@ namespace Sicsoft.Checkin.Web.Servicios
         [Get("/InsertarSAP")]
         Task InsertarSAP();
 
+
+        [Get("/ActualizarConsecutivos")]
+        Task ActualizarConsecutivos();
+
+       
+
         [Get("/InsertarSAPByClient")]
         Task InsertarSAPByClient(int id);
 

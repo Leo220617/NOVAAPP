@@ -169,5 +169,18 @@ namespace NOVAAPP.Pages.Documentos
 
             }
         }
+        public async Task<IActionResult> OnGetActualizarConsecutivos()
+        {
+            try
+            {
+
+                await service.ActualizarConsecutivos();
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+        }
     }
 }
