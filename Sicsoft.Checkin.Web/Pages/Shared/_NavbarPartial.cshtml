@@ -328,6 +328,14 @@
                                 }
 
                             }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "70").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/BitacoraMargenes/Index"><i class="mdi mdi-book-open-page-variant"></i>Bitácora Margenes</a></li>
+                                }
+
+                            }
 
 
 
