@@ -189,6 +189,16 @@
                                 }
 
                             }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "71").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Arqueos/Index"><i class="mdi mdi-cube"></i>Arqueos</a></li>
+                                
+
+                                }
+
+                            }
                             <li class="treeview">
 
 
