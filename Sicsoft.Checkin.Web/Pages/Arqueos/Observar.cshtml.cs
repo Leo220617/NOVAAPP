@@ -23,6 +23,7 @@ namespace NOVAAPP.Pages.Arqueos
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
         private readonly ICrudApi<ProductosViewModel, string> productos;
         private readonly ICrudApi<UsuariosViewModel, int> usuarios;
+        private readonly ICrudApi<SucursalesViewModel, string> sucursales;
 
 
 
@@ -46,20 +47,21 @@ namespace NOVAAPP.Pages.Arqueos
         public UsuariosViewModel[] Usuarios { get; set; }
 
 
-
+        [BindProperty]
+        public SucursalesViewModel[] Sucursal { get; set; }
 
 
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
-        public ObservarModel(ICrudApi<ArqueosViewModel, int> service, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<ProductosViewModel, string> productos, ICrudApi<UsuariosViewModel, int> usuarios)
+        public ObservarModel(ICrudApi<ArqueosViewModel, int> service, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<ProductosViewModel, string> productos, ICrudApi<UsuariosViewModel, int> usuarios, ICrudApi<SucursalesViewModel, string> sucursales)
         {
             this.service = service;
             this.categorias = categorias;
             this.bodegas = bodegas;
             this.productos = productos;
             this.usuarios = usuarios;
-
+            this.sucursales = sucursales;
         }
 
         public async Task<IActionResult> OnGetAsync(int id)
@@ -88,7 +90,7 @@ namespace NOVAAPP.Pages.Arqueos
                
                 Usuarios = await usuarios.ObtenerLista("");
 
-
+                Sucursal = await sucursales.ObtenerLista("");
 
 
                 return Page();
@@ -137,7 +139,7 @@ namespace NOVAAPP.Pages.Arqueos
                     recibidos = Newtonsoft.Json.JsonConvert.DeserializeObject<ArqueosViewModel>(jsonString);
                 }
 
-                recibidos.Status = "C";
+
 
 
 

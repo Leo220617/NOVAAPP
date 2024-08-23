@@ -12,7 +12,9 @@ namespace NOVAAPP.Models
         public int PorExon { get; set; }
         public int idCliente { get; set; }
         public DateTime FechaVencimiento { get; set; }
-        public string Imagen { get; set; }
+        public byte[] Imagen { get; set; }
+        public string ImagenBase64 { get; set; }
+
 
         public bool Activo { get; set; }
 

@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Exoneraciones";
 }
-@section styles{
+@section styles {
     <style>
 
 
@@ -36,9 +36,9 @@
             padding: 8px 18px !important;
         }
         /*label
-                        {
-                            font-size: 15px;
-                        }*/
+                                {
+                                    font-size: 15px;
+                                }*/
 
         #imgGalerias {
             display: none;
@@ -63,22 +63,64 @@
 @{
     var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
 }
-@section scripts{
+@section scripts {
     <script>
-        $(document).ready(function() {
-            jQuery(document).ready(function($) {
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
 
             });
 
 
 
-            $(document).ready(function() {
+            $(document).ready(function () {
 
             });
 
 
         });
+        function base64ToBlob(base64, mimeType) {
+            var byteCharacters = atob(base64);
+            var byteArrays = [];
 
+            for (var offset = 0; offset < byteCharacters.length; offset += 512) {
+                var slice = byteCharacters.slice(offset, offset + 512);
+                var byteNumbers = new Array(slice.length);
+                for (var i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                var byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+
+            return new Blob(byteArrays, { type: mimeType });
+        }
+        function DescargarPDF() {
+            try {
+                var base64PDF = '@Model.Exoneracion.ImagenBase64';
+                base64PDF = base64PDF.replaceAll(/&#x2B;/g, '+') // Reemplaza &#x2B; por +
+                    .replaceAll(/&#x2F;/g, '/') // Reemplaza &#x2F; por /
+                    .replaceAll(/&#x3D;/g, '=');
+                // Convierte la cadena Base64 a un Blob
+                // Crea una URL con el prefijo 'data:application/pdf;base64,'
+                var pdfDataUrl = 'data:application/pdf;base64,' + base64PDF;
+
+                // Crea un enlace temporal
+                var link = document.createElement('a');
+                link.href = pdfDataUrl;
+                link.target = '_blank';
+                link.download = 'documento_'+'@Model.Exoneracion.NumDoc'+'.pdf';
+
+                // Simula un clic en el enlace
+                link.click();
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
         function ImprimirPantalla() {
             try {
                 // window.print();
@@ -113,16 +155,16 @@
         }
 
     </script>
-    <script>
+  @*   <script>
         var ImageBae64 = '';
 
         var fileUploadPrincipal = document.getElementById('imgPrincipalUploadG');
-        fileUploadPrincipal.onchange = async function(e) {
+        fileUploadPrincipal.onchange = async function (e) {
 
             await readFilePrincipalP(e.srcElement);
             // idF = setInterval(cancelar(e), 2000);
 
-            var idF = setInterval(async function() {
+            var idF = setInterval(async function () {
 
                 if (ImageBae64 != "data:," && $("#base64").val() != "data:,") {
                     //alert("Imagen agregada con éxito");
@@ -149,7 +191,7 @@
                     var img = document.createElement("img");
                     var canvas = document.createElement('canvas');
 
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         img.src = e.target.result;
                         var ctx = canvas.getContext("2d");
                         ctx.drawImage(img, 0, 0);
@@ -192,127 +234,127 @@
 
         }
 
-    </script>
+    </script> *@
 }
 
     @using Newtonsoft.Json;
     @using System.Globalization
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>
-            Exoneraciones
-        </h1>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-            <li class="breadcrumb-item active">Observar Exoneración</li>
-        </ol>
-    </section>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Exoneraciones
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Observar Exoneración</li>
+    </ol>
+</section>
 
-    <section class="content ">
-        <div class="row">
-            <div class="col-12">
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
 
-                <div class="box">
-                    <div class="box-header with-border">
-                        <div class="row">
-                            <div class="col-8">
-                                <h6 class="box-subtitle">Observar Exoneración</h6>
-
-
-                            </div>
-                            <div class="col-4">
-                                <a asp-page="./Index" class="btn btn-outline-info" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
-
-                                &nbsp;
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Observar Exoneración</h6>
 
 
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="btn btn-outline-info" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
 
-                            </div>
+                            &nbsp;
+
+
+
                         </div>
                     </div>
-                    <div class="box-body">
-                        <!-- title row -->
-                        <div class="row">
-                            <div class="col-12" style="text-align: center;">
-                                <div class="form-group">
-                                    <center>
-                                        <img id="imgPrincipalG" disabled src="data:image/jpeg;base64,@Model.Exoneracion.Imagen" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
-                                        <br />
-                                        <br />
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    @*   <div class="row">
+                    <div class="col-12" style="text-align: center;">
+                    <div class="form-group">
+                    <center>
+                    <img id="imgPrincipalG" disabled src="data:image/jpeg;base64,@Model.Exoneracion.Imagen" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
+                    <br />
+                    <br />
 
 
 
-                                        <input type="text" id="Imagen" hidden class="form-control" required data-validation-required-message="Este campo es requerido">
+                    <input type="text" id="Imagen" hidden class="form-control" required data-validation-required-message="Este campo es requerido">
 
 
-                                    </center>
-                                </div>
-
-
-
-
-                            </div>
-                        </div>
-                        <div class="row">
-
-                            <div class="col-12">
-                                <div class="page-header mt-0">
-                                    <h2 class="d-inline"><span class="font-size-24">Exoneración No: @Model.Exoneracion.NumDoc</span></h2>
-                                    <br />
-                                    <div class="text-left">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <h5> <b>Fecha de Emisión:</b> @Model.Exoneracion.FechaEmision.ToString("dd/MM/yyyy")</h5>
-
-                                            </div>
-
-                                            <div class="col-4">
-                                                <h5> <b>Fecha de Vencimiento:</b> @Model.Exoneracion.FechaVencimiento.ToString("dd/MM/yyyy")</h5>
-
-                                            </div>
-
-                                            <div class="col-4">
-                                                <h5> <b>Porcentaje de Exoneración:</b> @Model.Exoneracion.PorExon%</h5>
-
-                                            </div>
+                    </center>
+                    </div>
 
 
 
 
+                    </div>
+                    </div> *@
+                    <div class="row">
 
-
+                        <div class="col-12">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Exoneración No: @Model.Exoneracion.NumDoc</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <h5> <b>Fecha de Emisión:</b> @Model.Exoneracion.FechaEmision.ToString("dd/MM/yyyy")</h5>
 
                                         </div>
+
+                                        <div class="col-4">
+                                            <h5> <b>Fecha de Vencimiento:</b> @Model.Exoneracion.FechaVencimiento.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+                                        <div class="col-4">
+                                            <h5> <b>Porcentaje de Exoneración:</b> @Model.Exoneracion.PorExon%</h5>
+
+                                        </div>
+
+
+
+
+
+
+
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.col -->
                         </div>
-                        <!-- info row -->
-                        <div class="row invoice-info">
-                            <div class="col-md-4 invoice-col">
-                                <strong>Cliente</strong>
-                                <address>
-                                    <strong class="text-blue font-size-24"> @( Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" : Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault().Codigo + " - "+ Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault().Nombre)  </strong>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-4 invoice-col">
+                            <strong>Cliente</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @(Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" : Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault().Codigo + " - " + Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault().Nombre)  </strong>
 
 
-                                </address>
-                            </div>
+                            </address>
+                        </div>
 
-                            <div class="col-md-4 invoice-col">
-                                <strong>Institución Emisora</strong>
-                                <address>
-                                    <strong class="text-blue font-size-24"> @Model.Exoneracion.NomInst </strong>
-
-
-                                </address>
-                            </div>
+                        <div class="col-md-4 invoice-col">
+                            <strong>Institución Emisora</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @Model.Exoneracion.NomInst </strong>
 
 
-                            <div class="col-md-4 invoice-col">
+                            </address>
+                        </div>
 
-                                <strong>
-                                    Tipo de Documento: @switch (Model.Exoneracion.TipoDoc)
+
+                        <div class="col-md-4 invoice-col">
+
+                            <strong>
+                                Tipo de Documento: @switch (Model.Exoneracion.TipoDoc)
                                 {
 
                                     case "01":
@@ -391,7 +433,7 @@
 
 
 
-                                            <td class="text-center">@( Model.Cabys.Where(a => a.CodCabys == item.CodCabys).FirstOrDefault() == null ? "Rol Inexistente" :  Model.Cabys.Where(a => a.CodCabys == item.CodCabys).FirstOrDefault().Descripcion) </td>
+                                            <td class="text-center">@(Model.Cabys.Where(a => a.CodCabys == item.CodCabys).FirstOrDefault() == null ? "Rol Inexistente" : Model.Cabys.Where(a => a.CodCabys == item.CodCabys).FirstOrDefault().Descripcion) </td>
 
 
 
@@ -418,6 +460,7 @@
 
 
     <button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
+    <button id="descargarPDF" class="btn btn-info" type="button" onclick="javascript: DescargarPDF()"> <span><i class="fa fa-print"></i> PDF Exoneración</span> </button>
 
 </section>
 
@@ -491,7 +534,7 @@
         <div class="col-md-4 invoice-col">
             <strong>Cliente</strong>
             <address>
-                <strong class="text-blue font-size-24"> @( Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" : Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault().Codigo + " - "+ Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault().Nombre)  </strong>
+                <strong class="text-blue font-size-24"> @(Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" : Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault().Codigo + " - " + Model.Cliente.Where(a => a.id == Model.Exoneracion.idCliente).FirstOrDefault().Nombre)  </strong>
 
 
             </address>
@@ -588,7 +631,7 @@
 
 
 
-                            <td class="text-center">@( Model.Cabys.Where(a => a.CodCabys == item.CodCabys).FirstOrDefault() == null ? "Rol Inexistente" :  Model.Cabys.Where(a => a.CodCabys == item.CodCabys).FirstOrDefault().Descripcion) </td>
+                            <td class="text-center">@(Model.Cabys.Where(a => a.CodCabys == item.CodCabys).FirstOrDefault() == null ? "Rol Inexistente" : Model.Cabys.Where(a => a.CodCabys == item.CodCabys).FirstOrDefault().Descripcion) </td>
 
 
 

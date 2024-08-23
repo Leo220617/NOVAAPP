@@ -55,30 +55,42 @@
     @section scripts{
 
     <script>
-try { 
-        $(document).ready(function() {
-            jQuery(document).ready(function($) {
-
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
+                Recuperar();
             });
 
 
 
-            $(document).ready(function() {
+            $(document).ready(function () {
+                $('#pdf-upload').on('change', function (event) {
+                    var fileInput = $(this)[0];
+                    if (fileInput.files.length === 0) {
+                        alert('Por favor, seleccione un archivo PDF.');
+                        return;
+                    }
 
+                    var file = fileInput.files[0];
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        var base64 = e.target.result.split(',')[1];
+                        PDFBASE = base64;
+                    };
+
+                    reader.onerror = function (e) {
+                        console.error('Error leyendo el archivo', e);
+                        alert('Hubo un error al leer el archivo.');
+                    };
+
+                    reader.readAsDataURL(file);
+                });
             });
 
 
-        }); 
-        }catch(e)
-            {
-                console.log(e);
-                Swal.fire({
-                                     icon: 'error',
-                                     title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar imprimir ' + e
+        });
 
-                                 })
-            }
+        var PDFBASE = "";
         var ProdCadena = [];
         function onClickAgregar() {
             try { 
@@ -151,7 +163,7 @@ try {
                     PorExon: $("#PorExon").val(),
                     idCliente: $("#Cliente").val(),
                     FechaVencimiento: $("#FecVen").val(),
-                    Imagen: $("#Imagen").val(),
+                    Imagen: PDFBASE,
 
                     Detalle: ProdCadena
                 };
@@ -401,9 +413,24 @@ try {
                         </div>
                     </div>
                     <div class="box-body">
+                    <div class="row">
+                        <div class="col-12" style="text-align: center;">
+                            <div class="form-group">
+                                <center>
+                                    <div class="container">
+                                        <label for="pdf-upload">Seleccione un archivo PDF:</label>
+                                        <input type="file" id="pdf-upload" name="pdf-upload" accept="application/pdf">
+                                    </div>
+                                </center>
+                            </div>
 
 
-                        <div class="row">
+
+
+                        </div>
+                    </div>
+
+                      @*   <div class="row">
                             <div class="col-md-12" style="text-align: center;">
                                 <div class="form-group">
                                     <center>
@@ -424,7 +451,7 @@ try {
 
                             </div>
                         </div>
-
+ *@
                         <div class="row">
 
 

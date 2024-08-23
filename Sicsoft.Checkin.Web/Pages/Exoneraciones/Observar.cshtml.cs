@@ -40,6 +40,9 @@ namespace NOVAAPP.Pages.Exoneraciones
                     return RedirectToPage("/NoPermiso");
                 }
                 Exoneracion = await service.ObtenerPorId(id);
+                Exoneracion.ImagenBase64 = Convert.ToBase64String(Exoneracion.Imagen)
+                            .Replace("&#x2B;", "")
+                            .Replace("#&;", "");
                 ParametrosFiltros filtro = new ParametrosFiltros();
                 filtro.Externo = true;
                 Cliente = await serviceC.ObtenerLista(filtro);

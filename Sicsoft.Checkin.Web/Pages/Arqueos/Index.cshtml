@@ -119,6 +119,90 @@
                 })
             }
         }
+
+        function onClickModal2(id) {
+            try {
+                ids = id;
+                Swal.fire({
+                    title: '¿Desea abrir la Toma Física',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: `Aceptar`,
+                    denyButtonText: `Cancelar`,
+                    customClass: {
+                        confirmButton: 'swalBtnColor',
+                        denyButton: 'swalDeny'
+                    },
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        Abrir();
+
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+
+        }
+
+        function Abrir() {
+            try {
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Page("Index", "Eliminar")',
+                    data: { id: ids },
+                    success: function (result) {
+
+                        if (result == false) {
+                            ids = 0;
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar abrir'
+
+                            })
+
+                        } else {
+                            Swal.fire({
+                                title: "Ha sido abierto con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    beforeSend: function () {
+
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
     </script>
 }
 <!-- Content Header (Page header) -->
@@ -211,13 +295,13 @@
 
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="cyber">Bodega:</label>
-                                    <select class="form-control select2" id="Condicion" asp-for="filtro.Codigo3" required>
+                                    <label for="cyber">Sucursal:</label>
+                                    <select class="form-control select2" id="Condicion" asp-for="filtro.Texto" required>
                                         <option value="0"> Seleccione</option>
 
-                                        @foreach (var item in Model.Bodegas)
+                                        @foreach (var item in Model.Sucursal)
                                         {
-                                            <option value="@item.id">@item.id - @item.Nombre</option>
+                                            <option value="@item.CodSuc">@item.CodSuc - @item.Nombre</option>
                                         }
 
 
@@ -252,6 +336,14 @@
                                 <input type="checkbox" id="md_checkbox_3" class="chk-col-red" asp-for="filtro.contabilizado" onclick="this.form.submit()" />
                                 <label for="md_checkbox_3">Contabilizado</label>
 
+
+                                &nbsp;
+                                &nbsp;
+
+                                <input type="checkbox" id="md_checkbox_4" class="chk-col-red" asp-for="filtro.rechazados" onclick="this.form.submit()" />
+                                <label for="md_checkbox_4">Rechazado</label>
+
+                             
 
 
 
@@ -304,7 +396,7 @@
                                     <th>ID</th>
                                     <th>Acción</th>
                                     <th>Categoría</th>
-                                    <th>Bodega</th>
+                                    <th>Palabra Clave</th>
                                     <th>Fecha Creado</th>
                                     <th>Generado Por</th>
                                     <th>Fecha Actualización</th>
@@ -329,18 +421,24 @@
                                           
                                             <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> &nbsp;
                                             &nbsp;
+                                            @if (!string.IsNullOrEmpty(Roles.Where(a => a == "75").FirstOrDefault()) && item.Status == "R")
+                                            {
 
-                                            @if (item.Status == "C")
+                                                <a onclick="javascript: onClickModal2('@item.id')" title="Abrir" class="fa fa-eraser  icono"></a>
+                                            }
+                                            &nbsp;
+
+                                        @*     @if (item.Status == "C")
                                         {
                                         <a onclick="javascript: onClickModal('@item.id')" title="Insertar a SAP"><img src="/sapX.png" /></a>
-                                        }
+                                        } *@
                                         </td>
                                         <td>
                                             @(Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault().id + " - " + Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault().Nombre)
                                         </td>
 
                                         <td>
-                                            @(Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault().CodSAP + " - " + Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault().Nombre)
+                                         @item.PalabraClave
 
                                         </td>
                                         <td>
@@ -381,7 +479,11 @@
                                                         <td align="center" style="padding-top:15px;"><span class="badge badge-success">Contabilizado</span></td>
                                                         break;
                                                     }
-
+                                                case "R":
+                                                    {
+                                                        <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Rechazado</span></td>
+                                                        break;
+                                                    }
                                             }
 
 
@@ -420,7 +522,7 @@
                                     <th>ID</th>
                                     <th>Acción</th>
                                     <th>Categoría</th>
-                                    <th>Bodega</th>
+                                    <th>Palabra Clave</th>
                                     <th>Fecha Creado</th>
                                     <th>Generado Por</th>
                                     <th>Fecha Actualización</th>

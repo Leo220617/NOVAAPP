@@ -22,6 +22,7 @@ namespace NOVAAPP.Pages.Arqueos
         private readonly ICrudApi<RolesViewModel, int> roles;
 
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
+        private readonly ICrudApi<SucursalesViewModel, string> sucursales;
 
 
 
@@ -41,13 +42,14 @@ namespace NOVAAPP.Pages.Arqueos
         public BodegasViewModel[] Bodegas { get; set; }
 
 
-   
+        [BindProperty]
+        public SucursalesViewModel[] Sucursal { get; set; }
 
 
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
-        public IndexModel(ICrudApi<ArqueosViewModel, int> service, ICrudApi<UsuariosViewModel, int> serviceU, ICrudApi<RolesViewModel, int> roles, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<BodegasViewModel, int> bodegas)
+        public IndexModel(ICrudApi<ArqueosViewModel, int> service, ICrudApi<UsuariosViewModel, int> serviceU, ICrudApi<RolesViewModel, int> roles, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<SucursalesViewModel, string> sucursales)
         {
             this.service = service;
             this.serviceU = serviceU;
@@ -55,6 +57,7 @@ namespace NOVAAPP.Pages.Arqueos
     
             this.categorias = categorias;
             this.bodegas = bodegas;
+            this.sucursales = sucursales;
 
         }
 
@@ -112,10 +115,10 @@ namespace NOVAAPP.Pages.Arqueos
                 Users = await serviceU.ObtenerLista("");
 
                 Users = Users.Where(a => a.novapos == true).ToArray();
+                Sucursal = await sucursales.ObtenerLista("");
 
 
 
-            
 
 
                 return Page();

@@ -17,6 +17,62 @@
 
     <script src="/js/Productos/Productos.js"></script>
 
+    <script>
+        function InsertarSAPByCardCode2() {
+            try {
+
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Page("Index", "InsertarSAPByCardCode")',
+                    data: { id: ids },
+                    success: function (result) {
+                        $("#divProcesando").modal("hide");
+
+                        if (result == false) {
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar actualizar'
+
+                            })
+
+                        } else {
+                            Swal.fire({
+                                title: "Ha sido actualizado con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    beforeSend: function () {
+                        $("#divProcesando").modal("show");
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+
+        }
+    </script>
+
 }
 
 <!-- Content Header (Page header) -->
@@ -110,8 +166,9 @@
                 <div class="box-header with-border">
                     <div class="row">
 
-                        <div class="col-sm-8"> <h4 class="box-title">Productos</h4></div>
+                        <div class="col-sm-6"> <h4 class="box-title">Productos</h4></div>
                         <div class="col-sm-2"> <button onclick="javascript: AbrirModalAgregarCliente()" class="btn btn-rounded btn-info"> Desactivar Producto</button></div>
+                        <div class="col-sm-2"> <button onclick="javascript: AbrirModalAgregarCliente2()" class="btn btn-rounded btn-info"> Sincronizar desde SAP</button></div>
                         @* <div class="col-sm-2"> <button onclick="javascript: InsertarSAP()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Sincronizar a SAP"> Sincronizar a SAP</button></div>*@
 
                     </div>
@@ -181,7 +238,7 @@
 
                                         </td>
                                         <td>       @item.FechaActualizacion.ToString("dd/MM/yyyy")  </td>
-
+                                        <td>       @item.FechaConteo.ToString("dd/MM/yyyy HH:mm")  </td>
                                         <td>
                                             @if (item.Activo)
                                             {
@@ -194,7 +251,7 @@
                                             }
 
                                         </td>
-                                        <td>       @item.FechaConteo.ToString("dd/MM/yyyy HH:mm")  </td>
+                                     
 
 
 
@@ -277,6 +334,48 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Cancelar</button> &nbsp;
                 <button type="button" class="btn btn-primary waves-effect text-left" onclick="javascript: onClickModalByCardCode();">Guardar</button> &nbsp;
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="modal fade bs-example-modal-lg" id="ModalAgregarCliente2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Desactivar/Activar Productos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+
+
+
+
+
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <h5>Ingrese el Código del Producto<span class="text-danger">*</span></h5>
+                            <div class="controls">
+                                <input type="text" id="CardCode2" class="form-control" required data-validation-required-message="Este campo es requerido">
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Cancelar</button> &nbsp;
+                <button type="button" class="btn btn-primary waves-effect text-left" onclick="javascript: onClickModalByCardCode2();">Guardar</button> &nbsp;
 
             </div>
         </div>

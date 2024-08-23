@@ -9,7 +9,7 @@ namespace NOVAAPP.Models
 
         public int idCategoria { get; set; }
 
-        public int idBodega { get; set; }
+        public string PalabraClave { get; set; }
 
         public string CodSuc { get; set; }
 
