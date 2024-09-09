@@ -22,6 +22,7 @@
 @inject IHttpContextAccessor httpContextAccessor
 @{
     var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+
 }
 @section styles {
     <style>
@@ -269,6 +270,39 @@
 
 
         }
+
+        function ImprimirPantalla() {
+            try {
+                // window.print();
+                var margins = {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    width: 595
+                };
+
+
+                html = $(".html").html();
+                html2pdf(html, {
+                    margin: 1,
+                    padding: 0,
+                    filename: 'Arqueo.pdf',
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: { scale: 2, logging: true },
+                    jsPDF: { unit: 'in', format: 'A2', orientation: 'P' },
+                    class: ImprimirPantalla
+                });
+
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
     </script>
 
 
@@ -365,7 +399,7 @@
 
 
                         <div class="col-md-4">
-                            <h5> <b>Sucursal: </b> @Model.Arqueo.CodSuc -   @(Model.Sucursal.Where(a => a.CodSuc == Model.Arqueo.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" : Model.Sucursal.Where(a => a.CodSuc == Model.Arqueo.CodSuc).FirstOrDefault().Nombre)</h5>
+                            <h5> <b>Sucursal: </b> @Model.Arqueo.CodSuc - @Model.Sucursal.Nombre</h5>
                         </div>
 
                         <div class="col-md-4">
@@ -426,12 +460,18 @@
                         <thead>
                             <tr>
 
-                                <th class="bg-info">Descripción</th>
+                                <th class="bg-info">Código</th>
+                                <th class="bg-info">Nombre</th>
                                 <th class="bg-info">Bodega</th>
                                 <th class="bg-info">Stock</th>
                                 <th class="bg-info">Contado</th>
-                                <th class="bg-info">Cantidad Contado</th>
+                                <th class="bg-info">C1</th>
+                                <th class="bg-info">C2</th>
+                                <th class="bg-info">C3</th>
+                                <th class="bg-info">Total Contado</th>
                                 <th class="bg-info">Diferencia</th>
+                                <th class="bg-info">Costo</th>
+                                <th class="bg-info">Costo Diferencia</th>
 
 
                             </tr>
@@ -447,10 +487,12 @@
 
 
                                     <td>
-                                        @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Codigo + " - " + Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Nombre)
+                                        @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Codigo)
                                     </td>
 
-
+                                    <td>
+                                        @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Nombre)
+                                    </td>
 
                                     <td>
                                         @(Model.Bodegas.Where(a => a.id == Producto.idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == Producto.idBodega).FirstOrDefault().CodSAP)
@@ -471,7 +513,11 @@
                                         <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Sin contar</span></td>
 
                                     }
-
+                                    <td>  @item.Cantidad1 </td>
+                                    <td>  @item.Cantidad2 </td>
+                                    <td>  @item.Cantidad3 </td>
+                                       
+                                  
                                     <td>
                                         @item.Total
                                     </td>
@@ -490,7 +536,8 @@
                                     }
 
 
-
+                                    <td>  @item.Costo </td>
+                                    <td>  @item.CostoDiferencia </td>
 
 
 
@@ -513,12 +560,18 @@
                         <tfoot>
                             <tr>
 
-                                <th class="bg-info">Descripción</th>
+                                <th class="bg-info">Código</th>
+                                <th class="bg-info">Nombre</th>
                                 <th class="bg-info">Bodega</th>
                                 <th class="bg-info">Stock</th>
                                 <th class="bg-info">Contado</th>
-                                <th class="bg-info">Cantidad Contado</th>
+                                <th class="bg-info">C1</th>
+                                <th class="bg-info">C2</th>
+                                <th class="bg-info">C3</th>
+                                <th class="bg-info">Total Contado</th>
                                 <th class="bg-info">Diferencia</th>
+                                <th class="bg-info">Costo</th>
+                                <th class="bg-info">Costo Diferencia</th>
 
 
                             </tr>
@@ -539,9 +592,240 @@
 
     </div>
 
-
+    <button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
 </section>
 
 
 
 <!-- /.content -->
+<div class="html" hidden>
+    <div class="row">
+
+        <div class="col-md-6">
+            <img id="base64image" style="width: 85%;"
+                 src="data:image/jpeg;base64,@Model.Sucursal.Imagen.ToString()" />
+        </div>
+        <div class="col-md-6">
+            <div style=" font-weight: bold;  font-size: 15px;">
+                <p style="  font-size: 20px !important; ">@Model.NombreCliente</p>
+                <p style="  font-size: 20px !important; ">@Model.Sucursal.Nombre</p>
+                <p>Cedula Juridica:  @Model.Sucursal.Cedula</p>
+                <p>Telefax: @Model.Sucursal.Telefono</p>
+
+                <p>Email: @Model.Sucursal.Correo</p>
+
+                <p> @Model.Sucursal.Sennas   </p>
+
+
+            </div>
+        </div>
+
+        <div class="col-12">
+
+            <div class="box">
+
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Toma Física</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Toma Física No: @Model.Arqueo.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <h5> <b>Fecha</b> @Model.Arqueo.FechaCreacion.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+                                        <div class="col-4">
+                                            <div class="text-left">
+                                                <h5>Última Actualización <span class="font-size-18">@Model.Arqueo.FechaActualizacion.ToString("dd MMM yyy HH:mm")</span></h5>
+                                                <input hidden id="Fecha" type="datetime" value="@Model.Arqueo.FechaActualizacion" />
+
+
+
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+
+                        <div class="col-md-4">
+                            <h5> <b>Sucursal: </b> @Model.Arqueo.CodSuc - @Model.Sucursal.Nombre</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <h5> <b>Categoría: </b>    @(Model.Categorias.Where(a => a.id == Model.Arqueo.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categorias.Where(a => a.id == Model.Arqueo.idCategoria).FirstOrDefault().CodSAP + " - " + Model.Categorias.Where(a => a.id == Model.Arqueo.idCategoria).FirstOrDefault().Nombre)</h5>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <h5> <b>Palabra Clave: </b>@Model.Arqueo.PalabraClave  </h5>
+                        </div>
+                        <div class="col-md-8 invoice-col">
+                            <strong>Responsable</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @(Model.Usuarios.Where(a => a.id == Model.Arqueo.idUsuarioCreador).FirstOrDefault() == null ? "Usuario Inexistente" : Model.Usuarios.Where(a => a.id == Model.Arqueo.idUsuarioCreador).FirstOrDefault().id + " - " + Model.Usuarios.Where(a => a.id == Model.Arqueo.idUsuarioCreador).FirstOrDefault().Nombre)   </strong>
+
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th class="bg-info">Descripción</th>
+                                        <th class="bg-info">Bodega</th>
+                                        <th class="bg-info">Stock</th>
+                                        <th class="bg-info">Contado</th>
+                                        <th class="bg-info">C1</th>
+                                        <th class="bg-info">C2</th>
+                                        <th class="bg-info">C3</th>
+                                        <th class="bg-info">Total Contado</th>
+                                        <th class="bg-info">Diferencia</th>
+                                        <th class="bg-info">Costo</th>
+                                        <th class="bg-info">Costo Diferencia</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.Arqueo.Detalle)
+                                    {
+                                        var Producto = Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault();
+
+                                        <tr>
+
+
+                                            <td>
+                                                @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Codigo + "-" + Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Nombre)
+                                            </td>
+
+                                           
+                                           
+
+                                            <td>
+                                                @(Model.Bodegas.Where(a => a.id == Producto.idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == Producto.idBodega).FirstOrDefault().CodSAP)
+
+                                            </td>
+                                            <td>
+                                                @(Math.Round(item.Stock, 2))
+                                            </td>
+                                            @if (item.Contado == true)
+                                            {
+
+                                                <td align="center" style="padding-top:15px;"><span class="badge badge-success">Contado</span></td>
+
+                                            }
+                                            else
+                                            {
+
+                                                <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Sin contar</span></td>
+
+                                            }
+                                            <td>  @(Math.Round(item.Cantidad1, 2))</td>
+                                            <td>  @(Math.Round(item.Cantidad2, 2)) </td>
+                                            <td>  @(Math.Round(item.Cantidad3, 2))</td>
+
+
+                                            <td>
+                                                @(Math.Round(item.Total, 2).ToString("C", formato))
+                                            </td>
+
+                                            <td>
+                                                @(Math.Round(item.Diferencia, 2).ToString("C", formato))
+                                            </td>
+
+
+                                            <td> @(Math.Round(item.Costo, 2)) </td>
+                                            <td>  @(Math.Round(item.CostoDiferencia, 2).ToString("C", formato)) </td>
+
+
+
+
+                                        </tr>
+
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                  
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+                <div class="box">
+                    <div class="box-body">
+                        <!-- Table row -->
+                        <div class="row">
+                            <!-- accepted payments column -->
+                            <div class="col-12 col-sm-6">
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-12 col-sm-6 text-right">
+
+
+
+
+                                <div class="total-payment">
+                                    <h3><b>Costo :</b>  <span id="totCot">@(Math.Round(Model.Arqueo.TotalCosto, 2).ToString("C", formato)) </span></h3>
+                                </div>
+
+
+                                <div class="total-payment">
+                                    <h3><b>Costo Diferencia :</b>  <span id="totDif">@(Math.Round(Model.Arqueo.TotalCostoDiferencia, 2).ToString("C", formato)) </span></h3>
+                                </div>
+
+
+
+
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                        <!-- /.row -->
+
+                    </div>
+                </div>
+            </div>
+
+
+         
+        </div>
+    
+ 
+    </div>
+</div>

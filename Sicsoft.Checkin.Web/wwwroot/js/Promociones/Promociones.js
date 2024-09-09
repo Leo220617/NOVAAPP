@@ -131,12 +131,12 @@ function onChangeListaPrecio() {
         var Lista = ListaPrecios.find(a => a.id == idListaPrecio);
 
 
-        if (idCategoria != 0 && idListaPrecio != 0) {
-            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio);
+        if (idListaPrecio != 0) {
+            ProdClientes = Productos.filter(a => a.idListaPrecios == idListaPrecio);
 
             RellenaProductos();
         } else {
-            ProdClientes = Productos.filter(a => a.idCategoria == 0 && a.idListaPrecios == 0);
+            ProdClientes = Productos.filter(a =>  a.idListaPrecios == 0);
             RellenaProductos();
         }
        
@@ -210,6 +210,7 @@ function RellenaProductos() {
 function onChangeProducto() {
     try {
         var idProducto = $("#ProductoSeleccionado").val();
+        var Moneda = $("#selectMoneda").val();
 
         var Producto = ProdClientes.find(a => a.Codigo == idProducto);
 
@@ -223,28 +224,36 @@ function onChangeProducto() {
 
         if (Producto != undefined) {
             var Categoria = Categorias.find(a => a.id == Producto.idCategoria);
-            $("#inputPrecio").val(parseFloat(Producto.PrecioUnitario));
+            if (Moneda == "CRC") {
+                $("#inputPrecio").val(parseFloat(Producto.PrecioUnitario));
+                $("#inputFinal").val(parseFloat(Producto.PrecioUnitario));
+            } else {
+                $("#inputPrecio").val(parseFloat(Producto.PrecioUnitario / TipodeCambio.TipoCambio));
+                $("#inputFinal").val(parseFloat(Producto.PrecioUnitario / TipodeCambio.TipoCambio));
+            }
+          
             $("#inputCosto").val(parseFloat(Producto.Costo));
-            $("#inputFinal").val(parseFloat(Producto.PrecioUnitario));
+       
+          
             $("#inputNomPro").val(Producto.Nombre);
             $("#inputNomCat").val(Categoria.Nombre);
 
 
 
-            if (Producto.Moneda == "CRC") {
+            if (Moneda== "CRC") {
                 var Ganancia = retornaMargenGanancia(Producto.PrecioUnitario, Producto.Costo);
                 $("#inputGanancia").val(Ganancia);
 
             } else {
                 var Costo = Producto.Costo / TipodeCambio.TipoCambio;
-                var Ganancia = retornaMargenGanancia(Producto.PrecioUnitario, Costo);
+                var Ganancia = retornaMargenGanancia(Producto.PrecioUnitario / TipodeCambio.TipoCambio, Costo);
                 $("#inputGanancia").val(Ganancia);
 
             }
 
 
 
-            $("#MonedaProducto").val(Producto.Moneda);
+            $("#MonedaProducto").val(Moneda);
         } else {
 
 
@@ -279,31 +288,45 @@ function onChangePrecio() {
         var PrecioFinal = parseFloat($("#inputFinal").val());
 
         var Producto = ProdClientes.find(a => a.Codigo == idProducto);
-
+        var Moneda = $("#selectMoneda").val();
         var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
 
 
+        if (Moneda == "CRC") {
+            if (Producto.PrecioUnitario < PrecioFinal) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + Producto.PrecioUnitario
 
-        if (Producto.PrecioUnitario < PrecioFinal) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + Producto.PrecioUnitario
-
-            })
-            parseFloat($("#inputFinal").val(Producto.PrecioUnitario));
-        } else {
-            if (Producto.Moneda == "CRC") {
-                var Ganancia = retornaMargenGanancia(PrecioFinal, Producto.Costo);
-                $("#inputGanancia").val(Ganancia);
-
+                })
+                parseFloat($("#inputFinal").val(Producto.PrecioUnitario));
             } else {
-                var Costo = Producto.Costo / TipodeCambio.TipoCambio;
-                var Ganancia = retornaMargenGanancia(PrecioFinal, Costo);
-                $("#inputGanancia").val(Ganancia);
+             
+                var Ganancia = retornaMargenGanancia(PrecioFinal, Producto.Costo);
+                    $("#inputGanancia").val(Ganancia);
 
+              
+            }
+        } else {
+            if (Producto.PrecioUnitario / TipodeCambio.TipoCambio < PrecioFinal) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + Producto.PrecioUnitario / TipodeCambio.TipoCambio
+
+                })
+                parseFloat($("#inputFinal").val(Producto.PrecioUnitario / TipodeCambio.TipoCambio));
+            } else {
+            
+                    var Costo = Producto.Costo / TipodeCambio.TipoCambio;
+                var Ganancia = retornaMargenGanancia(PrecioFinal, Costo);
+                    $("#inputGanancia").val(Ganancia);
+
+               
             }
         }
+      
 
 
 
@@ -359,7 +382,7 @@ function AgregarProductoTabla() {
             Fecha: $("#FechaVig").val(),
             PrecioFinal: parseFloat($("#inputFinal").val()),
             PrecioAnterior: parseFloat($("#inputPrecio").val()),
-            Moneda: PE.Moneda,
+            Moneda: $("#selectMoneda").val(),
 
             PrecioUnitario: parseFloat($("#inputPrecio").val())
           
@@ -582,7 +605,7 @@ function onChangePrecioProducto(i) {
 
 
 
-            if (PE.Moneda == "CRC") {
+            if (ProdCadena[i].Moneda == "CRC") {
                 var Ganancia = retornaMargenGanancia(ProdCadena[i].PrecioFinal, PE.Costo);
 
                 $("#" + i + "_ProdG").val(Ganancia.toFixed(2));
@@ -594,7 +617,7 @@ function onChangePrecioProducto(i) {
                 }
             } else {
                 var Costo = PE.Costo / TipodeCambio.TipoCambio;
-                var Ganancia = retornaMargenGanancia(ProdCadena[i].PrecioFinal, PE.Costo);
+                var Ganancia = retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo);
                 $("#" + i + "_ProdG").val(Ganancia.toFixed(2));
 
                 $("#" + i + "_ProdG").text(Ganancia.toFixed(2));
@@ -844,13 +867,66 @@ function EliminarProducto(i) {
 //    }
 
 //}
+
+function onChangeMoneda() {
+    try {
+
+
+
+        var Moneda = $("#selectMoneda").val();
+        var idListaPrecio = $("#ListaSeleccionado").val();
+        for (var i = 0; i < ProdCadena.length; i++) {
+   
+
+            if (ProdCadena[i].Moneda != Moneda) {
+                var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
+
+                if (Moneda != "CRC") {
+
+                    ProdCadena[i].Moneda = Moneda;
+                    ProdCadena[i].PrecioFinal = ProdCadena[i].PrecioFinal / TipodeCambio.TipoCambio;
+                    ProdCadena[i].PrecioAnterior = ProdCadena[i].PrecioAnterior / TipodeCambio.TipoCambio;
+         
+
+
+
+
+
+                } else {
+
+                    ProdCadena[i].Moneda = Moneda;
+                    ProdCadena[i].PrecioFinal = ProdCadena[i].PrecioFinal * TipodeCambio.TipoCambio;
+                    ProdCadena[i].PrecioAnterior = ProdCadena[i].PrecioAnterior * TipodeCambio.TipoCambio;
+         
+
+                }
+
+
+            }
+
+     
+
+        }
+
+
+        RellenaTabla();
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+        })
+    }
+}
 function Generar() {
 
     try {
-
+        var Moneda = $("#selectMoneda").val();
         var EncPromociones = {
             id: 0,
             idListaPrecio: $("#ListaSeleccionado").val(),
+            Moneda: Moneda,
             Nombre: $("#inputNombre").val(),
             Fecha: $("#FechaVig").val(),
             FechaVencimiento: $("#FechaVen").val(),

@@ -24,5 +24,11 @@ namespace NOVAAPP.Models
         public DateTime FechaActualizacion { get; set; }
 
         public List<DetArqueosViewModel> Detalle { get; set; }
+
+
+        public decimal TotalCosto { get; set; }
+        public decimal TotalCostoDiferencia { get; set; }
+
+
     }
 }

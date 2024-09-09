@@ -148,7 +148,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div hidden class="col-md-6">
                             <div class="form-group">
                                 <label>Categoria</label>
                                 <select id="CategoriaSeleccionado" class="form-control select2" onchange="javascript: onChangeCategoria()">
@@ -159,7 +159,18 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Moneda</label>
+                                <select class="form-control" id="selectMoneda" onchange="javascript: onChangeMoneda()">
+                                    <option value="CRC" selected>CRC</option>
+                                    <option value="USD">USD</option>
 
+                                </select>
+
+
+                            </div>
+                        </div>
                        
                       
                         <div class="col-md-4">
@@ -267,7 +278,7 @@
                                         </div>
                                         <div class="col-md-4 pr-1">
                                             <div class="form-group">
-                                                <label>Costo</label>
+                                                <label>Costo (Colones)</label>
                                                 <input id="inputCosto" type="number" disabled class="form-control" placeholder="Costo" value="0">
 
 

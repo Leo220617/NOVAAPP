@@ -13,11 +13,13 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace NOVAAPP.Pages.Arqueos
 {
     public class ObservarModel : PageModel
     {
+        private readonly IConfiguration configuration;
         private readonly ICrudApi<ArqueosViewModel, int> service;
         private readonly ICrudApi<CategoriasViewModel, int> categorias;
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
@@ -48,7 +50,10 @@ namespace NOVAAPP.Pages.Arqueos
 
 
         [BindProperty]
-        public SucursalesViewModel[] Sucursal { get; set; }
+        public SucursalesViewModel Sucursal { get; set; }
+
+        [BindProperty]
+        public string NombreCliente { get; set; }
 
 
         [BindProperty(SupportsGet = true)]
@@ -90,9 +95,10 @@ namespace NOVAAPP.Pages.Arqueos
                
                 Usuarios = await usuarios.ObtenerLista("");
 
-                Sucursal = await sucursales.ObtenerLista("");
+                var MiSucursal = await sucursales.ObtenerLista("");
+                Sucursal = MiSucursal.Where(a => a.CodSuc == Arqueo.CodSuc).FirstOrDefault();
 
-
+                NombreCliente = "NUEVA AGRICULTURA NOVAGRO SA.";
                 return Page();
             }
             catch (ApiException ex)
