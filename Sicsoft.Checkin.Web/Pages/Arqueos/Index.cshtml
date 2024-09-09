@@ -400,7 +400,10 @@
                                     <th>Fecha Creado</th>
                                     <th>Generado Por</th>
                                     <th>Fecha Actualización</th>
+                                    <th>Costo</th>
+                                    <th>Costo Diferencia</th>
                                     <th>Estado</th>
+
 
                                     @*   <th>Procesado SAP</th>*@
 
@@ -456,7 +459,8 @@
 
 
 
-
+                                        <td align="center" style="padding-top:15px;"> @item.TotalCosto</td>
+                                        <td align="center" style="padding-top:15px;">@item.TotalCostoDiferencia</td>
 
 
                                         @{
@@ -489,9 +493,9 @@
 
                                         }
 
+                                      
 
-
-
+                                 
 
                                         @*      <td>
                                     @if (item.ProcesadaSAP)
@@ -526,6 +530,8 @@
                                     <th>Fecha Creado</th>
                                     <th>Generado Por</th>
                                     <th>Fecha Actualización</th>
+                                    <th>Costo</th>
+                                    <th>Costo Diferencia</th>
                                     <th>Estado</th>
 
                                     @* <th>Procesado SAP</th>*@

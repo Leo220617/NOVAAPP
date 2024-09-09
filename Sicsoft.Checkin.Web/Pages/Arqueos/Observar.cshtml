@@ -303,6 +303,36 @@
                 })
             }
         }
+
+        function ImprimirExcel()
+        {
+            try {
+                var tablaDiv = document.getElementById('tablaDiv');
+
+                // Obtenemos la tabla dentro del div
+                var tabla = tablaDiv.querySelector('table');
+
+                // Convertimos la tabla HTML a una hoja de cálculo
+                var hoja = XLSX.utils.table_to_sheet(tabla);
+
+                // Creamos un nuevo libro de trabajo (workbook)
+                var libro = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(libro, hoja, 'Arqueo');
+
+                // Exportamos el archivo Excel
+                XLSX.writeFile(libro, 'Arqueo.xlsx');
+                
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar exportar a excel ' + e
+
+                })
+            }
+        }
     </script>
 
 
@@ -593,6 +623,8 @@
     </div>
 
     <button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
+    <button id="printExcel" class="btn btn-primary" type="button" onclick="javascript: ImprimirExcel()"> <span><i class="fa fa-print"></i> Excel</span> </button>
+
 </section>
 
 
@@ -827,5 +859,94 @@
         </div>
     
  
+    </div>
+</div>
+<div id="tablaDiv" hidden>
+    <div class="row">
+        <div class="col-12 table-responsive">
+            <table class="table table-bordered" id="tablaExportar">
+                <thead>
+                    <tr class="bg-pale-info">
+                        <th style="background-color: black; color: white;"  >Código</th>
+                        <th style="background-color: black; color: white;">Descripción</th>
+                        <th style="background-color: black; color: white;">Bodega</th>
+                        <th style="background-color: black; color: white;">Stock</th>
+                        <th style="background-color: black; color: white;">Contado</th>
+                        <th style="background-color: black; color: white;">C1</th>
+                        <th style="background-color: black; color: white;">C2</th>
+                        <th style="background-color: black; color: white;">C3</th>
+                        <th style="background-color: black; color: white;">Total Contado</th>
+                        <th style="background-color: black; color: white;">Diferencia</th>
+                        <th style="background-color: black; color: white;">Costo</th>
+                        <th style="background-color: black; color: white;">Costo Diferencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.Arqueo.Detalle)
+                    {
+                        var Producto = Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault();
+
+                        <tr>
+
+                            <td>
+                                @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Codigo )
+                            </td>
+                            <td>
+                                @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" :  Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Nombre)
+                            </td>
+
+
+
+
+                            <td>
+                                @(Model.Bodegas.Where(a => a.id == Producto.idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == Producto.idBodega).FirstOrDefault().CodSAP)
+
+                            </td>
+                            <td>
+                                @(Math.Round(item.Stock, 2))
+                            </td>
+                            @if (item.Contado == true)
+                            {
+
+                                <td align="center" style="padding-top:15px;"><span class="badge badge-success">Contado</span></td>
+
+                            }
+                            else
+                            {
+
+                                <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Sin contar</span></td>
+
+                            }
+                            <td>  @(Math.Round(item.Cantidad1, 2))</td>
+                            <td>  @(Math.Round(item.Cantidad2, 2)) </td>
+                            <td>  @(Math.Round(item.Cantidad3, 2))</td>
+
+
+                            <td>
+                                @(Math.Round(item.Total, 2).ToString("C", formato))
+                            </td>
+
+                            <td>
+                                @(Math.Round(item.Diferencia, 2).ToString("C", formato))
+                            </td>
+
+
+                            <td> @(Math.Round(item.Costo, 2)) </td>
+                            <td>  @(Math.Round(item.CostoDiferencia, 2).ToString("C", formato)) </td>
+
+
+
+
+                        </tr>
+
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.col -->
+
     </div>
 </div>
