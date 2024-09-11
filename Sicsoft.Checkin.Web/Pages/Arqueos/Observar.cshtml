@@ -904,7 +904,7 @@
 
                             </td>
                             <td>
-                                @(Math.Round(item.Stock, 2))
+                                @item.Stock
                             </td>
                             @if (item.Contado == true)
                             {
@@ -918,22 +918,22 @@
                                 <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Sin contar</span></td>
 
                             }
-                            <td>  @(Math.Round(item.Cantidad1, 2))</td>
-                            <td>  @(Math.Round(item.Cantidad2, 2)) </td>
-                            <td>  @(Math.Round(item.Cantidad3, 2))</td>
+                            <td>  @item.Cantidad1</td>
+                            <td>  @item.Cantidad2 </td>
+                            <td>  @item.Cantidad3</td>
 
 
                             <td>
-                                @(Math.Round(item.Total, 2).ToString("C", formato))
+                               @item.Total
                             </td>
 
                             <td>
-                                @(Math.Round(item.Diferencia, 2).ToString("C", formato))
+                               @item.Diferencia
                             </td>
 
 
-                            <td> @(Math.Round(item.Costo, 2)) </td>
-                            <td>  @(Math.Round(item.CostoDiferencia, 2).ToString("C", formato)) </td>
+                            <td> @item.Costo </td>
+                            <td>  @item.CostoDiferencia </td>
 
 
 
