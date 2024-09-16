@@ -3,20 +3,20 @@
 @{
     ViewData["Title"] = "Agregar Clientes";
 }
-@section styles{
+@section styles {
 
 
 }
 
-    @section scripts{
+@section scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
-            jQuery(document).ready(function($) {
-                $(document).ready(function() {
+            jQuery(document).ready(function ($) {
+                $(document).ready(function () {
                 });
             });
 
@@ -27,126 +27,126 @@
         var Barrios = [];
 
         function Recuperar() {
-              
-            try { 
-            Cantones = JSON.parse($("#Cantones").val());
-            Distritos = JSON.parse($("#Distritos").val());
-            Barrios = JSON.parse($("#Barrios").val());  //Viene de input
 
-            ModificaSelects(0);
-            maskCedula();
+            try {
+                Cantones = JSON.parse($("#Cantones").val());
+                Distritos = JSON.parse($("#Distritos").val());
+                Barrios = JSON.parse($("#Barrios").val());  //Viene de input
+
+                ModificaSelects(0);
+                maskCedula();
             } catch (e) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Ha ocurrido un error al intentar agregar ' + e
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar agregar ' + e
 
-        })
-    }
+                })
+            }
         }
         function ModificaSelects(i) {
-            try { 
-            var codProvincia = parseInt($("#selectP").val());
-            var codCanton = parseInt($("#selectC").val());
-            var codDistrito = parseInt($("#selectD").val());
+            try {
+                var codProvincia = parseInt($("#selectP").val());
+                var codCanton = parseInt($("#selectC").val());
+                var codDistrito = parseInt($("#selectD").val());
 
-            if (i == 0) {
-                RellenaCantones(Cantones.filter(a => a.CodProvincia == codProvincia));
-                RellenaDistritos(Distritos.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton));
-                RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
+                if (i == 0) {
+                    RellenaCantones(Cantones.filter(a => a.CodProvincia == codProvincia));
+                    RellenaDistritos(Distritos.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton));
+                    RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
 
+                }
+
+                if (i == 1) {
+                    RellenaCantones(Cantones.filter(a => a.CodProvincia == codProvincia));
+                    RellenaDistritos(Distritos.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton));
+                    RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
+
+                }
+                if (i == 2) {
+
+                    RellenaDistritos(Distritos.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton));
+                    RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
+
+                }
+
+                if (i == 3) {
+                    RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
+                }
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar agregar ' + e
+
+                })
             }
-
-            if (i == 1) {
-                RellenaCantones(Cantones.filter(a => a.CodProvincia == codProvincia));
-                RellenaDistritos(Distritos.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton));
-                RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
-
-            }
-            if (i == 2) {
-
-                RellenaDistritos(Distritos.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton));
-                RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
-
-            }
-
-            if (i == 3) {
-                RellenaBarrios(Barrios.filter(a => a.CodProvincia == codProvincia && a.CodCanton == codCanton && a.CodDistrito == codDistrito));
-            }
-             } catch (e) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Ha ocurrido un error al intentar agregar ' + e
-
-        })
-    }
         }
 
         function RellenaCantones(ListCantones) {
-            try { 
-            var sOptions = '';
+            try {
+                var sOptions = '';
 
-            $("#selectC").html('');
+                $("#selectC").html('');
 
-            for (var i = 0; i < ListCantones.length; i++) {
+                for (var i = 0; i < ListCantones.length; i++) {
 
-                sOptions += '<option value="' + ListCantones[i].CodCanton + '">' + ListCantones[i].NomCanton + '</option>';
+                    sOptions += '<option value="' + ListCantones[i].CodCanton + '">' + ListCantones[i].NomCanton + '</option>';
 
+                }
+                $("#selectC").html(sOptions);
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar agregar ' + e
+
+                })
             }
-            $("#selectC").html(sOptions);
-             } catch (e) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Ha ocurrido un error al intentar agregar ' + e
-
-        })
-    }
         }
 
         function RellenaDistritos(ListDistritos) {
-            try { 
-            var sOptions = '';
+            try {
+                var sOptions = '';
 
-            $("#selectD").html('');
+                $("#selectD").html('');
 
-            for (var i = 0; i < ListDistritos.length; i++) {
+                for (var i = 0; i < ListDistritos.length; i++) {
 
-                sOptions += '<option value="' + ListDistritos[i].CodDistrito + '">' + ListDistritos[i].NomDistrito + '</option>';
+                    sOptions += '<option value="' + ListDistritos[i].CodDistrito + '">' + ListDistritos[i].NomDistrito + '</option>';
 
+                }
+                $("#selectD").html(sOptions);
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar agregar ' + e
+
+                })
             }
-            $("#selectD").html(sOptions);
-             } catch (e) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Ha ocurrido un error al intentar agregar ' + e
-
-        })
-    }
         }
 
         function RellenaBarrios(ListBarrios) {
-            try { 
-            var sOptions = '';
+            try {
+                var sOptions = '';
 
-            $("#selectB").html('');
+                $("#selectB").html('');
 
-            for (var i = 0; i < ListBarrios.length; i++) {
+                for (var i = 0; i < ListBarrios.length; i++) {
 
-                sOptions += '<option value="' + ListBarrios[i].CodBarrio + '">' + ListBarrios[i].NomBarrio + '</option>';
+                    sOptions += '<option value="' + ListBarrios[i].CodBarrio + '">' + ListBarrios[i].NomBarrio + '</option>';
 
+                }
+                $("#selectB").html(sOptions);
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar agregar ' + e
+
+                })
             }
-            $("#selectB").html(sOptions);
-             } catch (e) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Ha ocurrido un error al intentar agregar ' + e
-
-        })
-    }
         }
 
     </script>
@@ -287,123 +287,148 @@
 
 }<!-- Content Header (Page header) -->
     @using Newtonsoft.Json;
-    <section class="content-header">
-        <h1>
-            Clientes
-        </h1>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-            <li class="breadcrumb-item active">Crear Nuevo Cliente</li>
-        </ol>
-    </section>
+<section class="content-header">
+    <h1>
+        Clientes
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Crear Nuevo Cliente</li>
+    </ol>
+</section>
 
 
 
-    <section class="content">
-        <div class="row">
-            <div class="col-12">
-                <div class="box">
-                    <div class="box-header with-border">
-                        <div class="row">
-                            <div class="col-8">
-                                <h6 class="box-subtitle"> Crear Nuevo Cliente</h6>
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle"> Crear Nuevo Cliente</h6>
 
-                            </div>
-                            <div class="col-4">
-                                <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
 
 
-                            </div>
                         </div>
                     </div>
-                    <div class="box-body">
-                        <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="cyber">Tipo de Cédula:</label>
-                                        <select id="selectTP" class="form-control" asp-for="Cliente.TipoCedula" onchange="javascript: maskCedula();" required>
+                </div>
+                <div class="box-body">
+                    <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="cyber">Tipo de Cédula:</label>
+                                    <select id="selectTP" class="form-control" asp-for="Cliente.TipoCedula" onchange="javascript: maskCedula();" required>
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                        {
+                                            <option value="01">Natural</option>
+                                            <option value="02">Jurídica</option>
+                                            <option value="03">Extranjero</option>
+
+                                        }
+                                        else
+                                        {
                                             <option value="01">Nacional</option>
                                             <option value="02">Jurídica</option>
                                             <option value="03">DIMEX</option>
                                             <option value="04">NITE</option>
 
-
-                                        </select>
-                                    </div>
+                                        }
+                                    </select>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <h5>Cédula<span class="text-danger">* (Sin guiones, sin espacios y con 0's)</span></h5>
-                                        <div class="controls">
-                                            <input type="text" id="Cedula" asp-for="Cliente.Cedula" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="12" onchange="javascript: BuscarCliente()" onblur="javascript: validarCedula()" onchange="javascript: ponerReadOnly()" >
-                                        </div>
-
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Cédula<span class="text-danger">* (Sin guiones, sin espacios y con 0's)</span></h5>
+                                    <div class="controls">
+                                        <input type="text" id="Cedula" asp-for="Cliente.Cedula" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="12" onchange="javascript: BuscarCliente()" onblur="javascript: validarCedula()" onchange="javascript: ponerReadOnly()">
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <h5>Nombre<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" id="Nombre" asp-for="Cliente.Nombre"  class="form-control" required data-validation-required-message="Este campo es requerido"  >
-                                        </div>
 
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Nombre<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" id="Nombre" asp-for="Cliente.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
 
                                 </div>
 
+                            </div>
+
+
+
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Correo Factura<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Cliente.Email" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Correo Publicitario<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Cliente.CorreoPublicitario" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Teléfono<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" id="Telefono" asp-for="Cliente.Telefono" class="form-control" id="Telefono" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
 
 
                             </div>
 
 
 
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <h5>Correo Factura<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" asp-for="Cliente.Email" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        </div>
-
-                                    </div>
-
-
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <h5>Correo Publicitario<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" asp-for="Cliente.CorreoPublicitario" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        </div>
-
-
-                                    </div>
-
-
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <h5>Teléfono<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" id="Telefono" asp-for="Cliente.Telefono" class="form-control" id="Telefono" required data-validation-required-message="Este campo es requerido">
-                                        </div>
-
-                                    </div>
-
-
-                                </div>
-
-
-
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="nom">Provincia:</label>
-                                        <select id="selectP" class="form-control" asp-for="Cliente.Provincia" onchange="javascript: ModificaSelects(1)" required>
-
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="nom">Provincia:</label>
+                                    <select id="selectP" class="form-control" asp-for="Cliente.Provincia" onchange="javascript: ModificaSelects(1)" required>
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                        {
+                                            <option value="1" selected>Bocas del Toro</option>
+                                            <option value="2">Coclé</option>
+                                            <option value="3">Colón</option>
+                                            <option value="4">Chiriquí</option>
+                                            <option value="5">Darién</option>
+                                            <option value="6">Herrera</option>
+                                            <option value="7">Los Santos</option>
+                                            <option value="8">Panamá</option>
+                                            <option value="9">Panamá Oeste</option>
+                                            <option value="10">Veraguas</option>
+                                            <option value="11">Emberá-Wounaan</option>
+                                            <option value="12">Ngäbe-Buglé</option>
+                                        }
+                                        else
+                                        {
                                             <option value="1" selected>San José</option>
                                             <option value="2">Alajuela</option>
                                             <option value="3">Cartago</option>
@@ -411,21 +436,32 @@
                                             <option value="5">Guanacaste</option>
                                             <option value="6">Puntarenas</option>
                                             <option value="7">Limón</option>
+                                        }
 
 
 
 
-                                        </select>
 
-                                    </div>
-
+                                    </select>
 
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
+
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                    {
+                                        <label for="nom">Distrito:</label>
+                                    }
+                                    else
+                                    {
                                         <label for="nom">Cantón:</label>
-                                        <select id="selectC" class="form-control" asp-for="Cliente.Canton" onchange="javascript: ModificaSelects(2)" required>
-                                            @foreach (var item in Model.Cantones)
+                                    }
+
+
+                                    <select id="selectC" class="form-control" asp-for="Cliente.Canton" onchange="javascript: ModificaSelects(2)" required>
+                                        @foreach (var item in Model.Cantones)
                                         {
                                             <option value="@item.CodCanton">@item.NomCanton</option>
 
@@ -440,7 +476,14 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="nom">Distrito:</label>
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                    {
+                                        <label for="nom">Corregimiento:</label>
+                                    }
+                                    else
+                                    {
+                                        <label for="nom">Distrito:</label>
+                                    }
                                     <select id="selectD" class="form-control" asp-for="Cliente.Distrito" onchange="javascript: ModificaSelects(3)" required>
                                         @foreach (var item in Model.Distritos)
                                         {
@@ -568,8 +611,8 @@
                     $("#CedulaCliente").mask("9999999999");
                     break;
                 }
-            case "03": 
-            {
+            case "03":
+                {
                     $("#CedulaCliente").mask("999999999999");
                     break;
                 }
@@ -609,8 +652,8 @@
 
         }
     }
-     
 
-    
+
+
 </script>
 
