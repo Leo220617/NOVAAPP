@@ -364,6 +364,8 @@
 
                                 </div>
                             </div>
+                               @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                    {
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <h5>D.V<span class="text-danger">*</span></h5>
@@ -374,6 +376,7 @@
                                 </div>
 
                             </div>
+                                    }
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <h5>Nombre<span class="text-danger">*</span></h5>

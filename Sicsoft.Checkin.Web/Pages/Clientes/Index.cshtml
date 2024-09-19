@@ -579,7 +579,16 @@ function onClickModalByClient(id) {
                                     <th>Acción</th>
 
                                     <th>Nombre</th>
-                                     <th>Cédula</th>
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                        {
+                                                 <th>RUC</th> 
+                                        }
+                                        else
+                                        {
+                                                  <th>Cédula</th>                                            
+                                        }
+
+                                  
                                      <th>Correo Factura</th>
                                      <th>Teléfono</th>
                                   
@@ -698,13 +707,21 @@ function onClickModalByClient(id) {
                                     <th>Acción</th>
 
                                     <th>Nombre</th>
-                                     <th>Cédula</th>
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                        {
+                                                 <th>RUC</th> 
+                                        }
+                                        else
+                                        {
+                                                  <th>Cédula</th>                                            
+                                        }
                                      <th>Correo</th>
                                      <th>Teléfono</th>
                                    
                                       <th>Saldo</th>
                                        <th>Grupo</th>
                                       <th>Estado</th>
+                                      <th>MAG</th>
                                        <th>Procesado a SAP</th>
                                           <th> Fecha Actualización</th>
                                        
