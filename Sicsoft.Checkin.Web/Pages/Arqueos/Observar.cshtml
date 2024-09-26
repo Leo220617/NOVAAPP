@@ -429,7 +429,7 @@
 
 
                         <div class="col-md-4">
-                            <h5> <b>Sucursal: </b> @Model.Arqueo.CodSuc - @Model.Sucursal.Nombre</h5>
+                            <h5> <b>Sucursal: </b> @Model.Arqueo.CodSuc - @(Model.Sucursal.Where(a => a.CodSuc == Model.Arqueo.CodSuc).FirstOrDefault() == null ? "" : Model.Sucursal.Where(a => a.CodSuc == Model.Arqueo.CodSuc).FirstOrDefault().Nombre)</h5>
                         </div>
 
                         <div class="col-md-4">
@@ -525,7 +525,7 @@
                                     </td>
 
                                     <td>
-                                        @(Model.Bodegas.Where(a => a.id == Producto.idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == Producto.idBodega).FirstOrDefault().CodSAP)
+                                        @(Model.Bodegas.Where(a => a.id == Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega).FirstOrDefault().CodSAP)
 
                                     </td>
                                     <td>
@@ -634,19 +634,22 @@
     <div class="row">
 
         <div class="col-md-6">
+            @{
+                var Sucursal = Model.Sucursal.Where(a => a.CodSuc == Model.Arqueo.CodSuc).FirstOrDefault();
+            }
             <img id="base64image" style="width: 85%;"
-                 src="data:image/jpeg;base64,@Model.Sucursal.Imagen.ToString()" />
+                 src="data:image/jpeg;base64,@Sucursal.Imagen.ToString()" />
         </div>
         <div class="col-md-6">
             <div style=" font-weight: bold;  font-size: 15px;">
                 <p style="  font-size: 20px !important; ">@Model.NombreCliente</p>
-                <p style="  font-size: 20px !important; ">@Model.Sucursal.Nombre</p>
-                <p>Cedula Juridica:  @Model.Sucursal.Cedula</p>
-                <p>Telefax: @Model.Sucursal.Telefono</p>
+                <p style="  font-size: 20px !important; ">@Sucursal.Nombre</p>
+                <p>Cedula Juridica:  @Sucursal.Cedula</p>
+                <p>Telefax: @Sucursal.Telefono</p>
 
-                <p>Email: @Model.Sucursal.Correo</p>
+                <p>Email: @Sucursal.Correo</p>
 
-                <p> @Model.Sucursal.Sennas   </p>
+                <p> @Sucursal.Sennas   </p>
 
 
             </div>
@@ -709,7 +712,7 @@
                     <div class="row invoice-info">
 
                         <div class="col-md-4">
-                            <h5> <b>Sucursal: </b> @Model.Arqueo.CodSuc - @Model.Sucursal.Nombre</h5>
+                            <h5> <b>Sucursal: </b> @Model.Arqueo.CodSuc - @Sucursal.Nombre</h5>
                         </div>
                         <div class="col-md-4">
                             <h5> <b>Categoría: </b>    @(Model.Categorias.Where(a => a.id == Model.Arqueo.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categorias.Where(a => a.id == Model.Arqueo.idCategoria).FirstOrDefault().CodSAP + " - " + Model.Categorias.Where(a => a.id == Model.Arqueo.idCategoria).FirstOrDefault().Nombre)</h5>
@@ -766,7 +769,7 @@
                                            
 
                                             <td>
-                                                @(Model.Bodegas.Where(a => a.id == Producto.idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == Producto.idBodega).FirstOrDefault().CodSAP)
+                                                  @(Model.Bodegas.Where(a => a.id == Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega).FirstOrDefault().CodSAP)
 
                                             </td>
                                             <td>

@@ -50,7 +50,7 @@ namespace NOVAAPP.Pages.Arqueos
 
 
         [BindProperty]
-        public SucursalesViewModel Sucursal { get; set; }
+        public SucursalesViewModel[] Sucursal { get; set; }
 
         [BindProperty]
         public string NombreCliente { get; set; }
@@ -95,8 +95,8 @@ namespace NOVAAPP.Pages.Arqueos
                
                 Usuarios = await usuarios.ObtenerLista("");
 
-                var MiSucursal = await sucursales.ObtenerLista("");
-                Sucursal = MiSucursal.Where(a => a.CodSuc == Arqueo.CodSuc).FirstOrDefault();
+          
+                Sucursal = await sucursales.ObtenerLista("");
 
                 NombreCliente = "NUEVA AGRICULTURA NOVAGRO SA.";
                 return Page();
