@@ -189,6 +189,16 @@
                                 }
 
                             }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "71").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Arqueos/Index"><i class="mdi mdi-cube"></i>Arqueos</a></li>
+                                
+
+                                }
+
+                            }
                             <li class="treeview">
 
 
@@ -325,6 +335,14 @@
                                 {
 
                                     <li><a asp-page="/ReporteVentas/Index"><i class="mdi mdi-account-outline"></i>Ventas</a></li>
+                                }
+
+                            }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "70").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/BitacoraMargenes/Index"><i class="mdi mdi-book-open-page-variant"></i>Bitácora Margenes</a></li>
                                 }
 
                             }

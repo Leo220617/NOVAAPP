@@ -110,10 +110,10 @@ function onChangeCategoria() {
 
 
         if (idCategoria != 0 && idListaPrecio != 0) {
-            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio && a.Moneda == Moneda);
+            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio && a.Moneda == Moneda && a.Activo == true);
             RellenaProductos();
         } else {
-            ProdClientes = Productos.filter(a => a.idCategoria == 0 && a.idListaPrecios == 0 && a.Moneda == Moneda);
+            ProdClientes = Productos.filter(a => a.idCategoria == 0 && a.idListaPrecios == 0 && a.Moneda == Moneda && a.Activo == true);
             RellenaProductos();
         }
 
@@ -141,11 +141,11 @@ function onChangeListaPrecio() {
 
 
         if (idCategoria != 0 && idListaPrecio != 0) {
-            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio && a.Moneda == Moneda);
+            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio && a.Moneda == Moneda && a.Activo == true);
 
             RellenaProductos();
         } else {
-            ProdClientes = Productos.filter(a => a.idCategoria == 0 && a.idListaPrecios == 0 && a.Moneda == Moneda);
+            ProdClientes = Productos.filter(a => a.idCategoria == 0 && a.idListaPrecios == 0 && a.Moneda == Moneda && a.Activo == true);
             RellenaProductos();
         }
 
@@ -171,11 +171,11 @@ function onChangeMoneda() {
 
 
         if (idCategoria != 0 && idListaPrecio != 0) {
-            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio && a.Moneda == Moneda);
+            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.idListaPrecios == idListaPrecio && a.Moneda == Moneda && a.Activo == true);
 
             RellenaProductos();
         } else {
-            ProdClientes = Productos.filter(a => a.idCategoria == 0 && a.idListaPrecios == 0 && a.Moneda == Moneda);
+            ProdClientes = Productos.filter(a => a.idCategoria == 0 && a.idListaPrecios == 0 && a.Moneda == Moneda && a.Activo == true);
             RellenaProductos();
         }
 

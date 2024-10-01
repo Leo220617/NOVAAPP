@@ -22,6 +22,7 @@ namespace NOVAAPP.Pages.Clientes
         private readonly ICrudApi<ListaPreciosViewModel, int> precio;
         private readonly ICrudApi<CondicionesPagosViewModel, int> condicion;
         private readonly ICrudApi<GruposClientesViewModel, int> grupos;
+        private readonly ICrudApi<ParametrosViewModel, int> param;
 
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
@@ -47,7 +48,11 @@ namespace NOVAAPP.Pages.Clientes
         [BindProperty]
         public GruposClientesViewModel[] Grupos { get; set; }
 
-        public ObservarModel(ICrudApi<ClientesViewModel, string> service, ICrudApi<CantonesViewModel, int> serviceC, ICrudApi<DistritosViewModel, int> serviceD, ICrudApi<BarriosViewModel, int> serviceB, ICrudApi<ListaPreciosViewModel, int> precio, ICrudApi<CondicionesPagosViewModel, int> condicion, ICrudApi<GruposClientesViewModel, int> grupos)
+        [BindProperty]
+        public ParametrosViewModel[] Parametros { get; set; }
+
+
+        public ObservarModel(ICrudApi<ClientesViewModel, string> service, ICrudApi<CantonesViewModel, int> serviceC, ICrudApi<DistritosViewModel, int> serviceD, ICrudApi<BarriosViewModel, int> serviceB, ICrudApi<ListaPreciosViewModel, int> precio, ICrudApi<CondicionesPagosViewModel, int> condicion, ICrudApi<GruposClientesViewModel, int> grupos, ICrudApi<ParametrosViewModel, int> param)
         {
             this.service = service;
             this.serviceC = serviceC;
@@ -56,6 +61,7 @@ namespace NOVAAPP.Pages.Clientes
             this.precio = precio;
             this.condicion = condicion;
             this.grupos = grupos;
+            this.param = param;
         }
         public async Task<IActionResult> OnGetAsync(string id)
         {
@@ -73,6 +79,7 @@ namespace NOVAAPP.Pages.Clientes
                 PrecioLista = await precio.ObtenerLista("");
                 Condiciones = await condicion.ObtenerLista("");
                 Grupos = await grupos.ObtenerLista("");
+                Parametros = await param.ObtenerLista("");
 
                 return Page();
             }

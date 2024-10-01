@@ -19,6 +19,7 @@ namespace NOVAAPP.Pages.Cajas
         private readonly ICrudApi<CajasViewModel, int> service; //API
         private readonly ICrudApi<SucursalesViewModel, string> sucursales;
         private readonly ICrudApi<UsuariosViewModel, int> usuarios;
+        private readonly ICrudApi<ParametrosViewModel, int> param;
 
         [BindProperty]
         public CajasViewModel Caja { get; set; }
@@ -28,11 +29,16 @@ namespace NOVAAPP.Pages.Cajas
 
         [BindProperty]
         public UsuariosViewModel[] UsuariosLista { get; set; }
-        public EditarModel(ICrudApi<CajasViewModel, int> service, ICrudApi<SucursalesViewModel, string> sucursales, ICrudApi<UsuariosViewModel, int> usuarios) //CTOR 
+
+        [BindProperty]
+        public ParametrosViewModel[] Parametros { get; set; }
+
+        public EditarModel(ICrudApi<CajasViewModel, int> service, ICrudApi<SucursalesViewModel, string> sucursales, ICrudApi<UsuariosViewModel, int> usuarios, ICrudApi<ParametrosViewModel, int> param) //CTOR 
         {
             this.service = service;
             this.sucursales = sucursales;
             this.usuarios = usuarios;
+            this.param = param;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -46,6 +52,7 @@ namespace NOVAAPP.Pages.Cajas
                 Caja = await service.ObtenerPorId(id);
                 SucursalesLista = await sucursales.ObtenerLista("");
                 UsuariosLista = await usuarios.ObtenerLista("");
+                Parametros = await param.ObtenerLista("");
 
                 return Page();
             }

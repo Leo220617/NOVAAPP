@@ -23,6 +23,7 @@ namespace NOVAAPP.Pages.CierreCajas
         private readonly ICrudApi<UsuariosViewModel, int> users;
         private readonly ICrudApi<CajasViewModel, int> cajas;
         private readonly ICrudApi<RolesViewModel, int> roles;
+        private readonly ICrudApi<ParametrosViewModel, int> param;
 
 
         [BindProperty(SupportsGet = true)]
@@ -38,12 +39,16 @@ namespace NOVAAPP.Pages.CierreCajas
         public CajasViewModel[] Cajas { get; set; }
 
 
-        public IndexModel(ICrudApi<CierreCajasViewModel, int> service, ICrudApi<UsuariosViewModel, int> users, ICrudApi<CajasViewModel, int> cajas, ICrudApi<RolesViewModel, int> roles)
+        [BindProperty]
+        public ParametrosViewModel[] Parametros { get; set; }
+
+        public IndexModel(ICrudApi<CierreCajasViewModel, int> service, ICrudApi<UsuariosViewModel, int> users, ICrudApi<CajasViewModel, int> cajas, ICrudApi<RolesViewModel, int> roles, ICrudApi<ParametrosViewModel, int> param)
         {
             this.service = service;
             this.users = users;
             this.cajas = cajas;
             this.roles = roles;
+            this.param = param;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -83,7 +88,16 @@ namespace NOVAAPP.Pages.CierreCajas
               
               
                 Cierre = await service.ObtenerLista(filtro);
-                Cierre = Cierre.Where(a => a.TotalVendidoColones > 0 || a.TotalAperturaColones > 0).ToArray();
+                Parametros = await param.ObtenerLista("");
+                if (Parametros.FirstOrDefault().Pais == "P")
+                {
+                    Cierre = Cierre.Where(a => a.TotalVendidoFC > 0 || a.TotalAperturaFC > 0).ToArray();
+                }
+                else
+                {
+                    Cierre = Cierre.Where(a => a.TotalVendidoColones > 0 || a.TotalAperturaColones > 0).ToArray();
+                }
+            
                 Users = await users.ObtenerLista("");
                 Cajas = await cajas.ObtenerLista("");
                 var RolesC = await roles.ObtenerLista("");
@@ -92,7 +106,7 @@ namespace NOVAAPP.Pages.CierreCajas
                 // Users = Users.Where(a => a.idRol == RolCajero.idRol).ToArray();
 
                 Users = Users.Where(a => a.novapos == true).ToArray();
-
+              
 
                 return Page();
             }

@@ -24,11 +24,11 @@
 @{
     var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
 }
-@section styles{
+@section styles {
 
 
 }
-@section scripts{
+@section scripts {
 
 
     <script>
@@ -159,16 +159,23 @@
                         </div>
 
 
+                        @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                        {
+
+                        }
+                        else
+                        {
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Tipo de Cambio</label>
+                                    <h6>₡@Math.Round(Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault() == null ? 0 : Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault().TipoCambio, 2).ToString("C", formato)  </h6>
 
 
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>Tipo de Cambio</label>
-                                <h6>₡@Math.Round( Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault() == null ? 0 :  Model.TC.Where(a => a.Fecha == Model.Cierres.FechaCaja).FirstOrDefault().TipoCambio, 2).ToString("C",formato)  </h6>
-
-
+                                </div>
                             </div>
-                        </div>
+                        }
+
+
 
 
                         <div class="col-md-2">
@@ -201,19 +208,25 @@
                         <input hidden asp-for="Cierres.idUsuario" />
                         <!-- title row -->
                         <div class="row">
-                            <div class="col-md-6">
-
-                                <div class="form-group">
-                                    <label>Apertura Colones</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.TotalAperturaColones, 2).ToString("C",formato) </h6>
+                            @if (Model.Parametros.FirstOrDefault().Pais != "P")
+                            {
+                            
 
 
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label>Apertura Colones</label>
+                                        <h6> ₡@Math.Round(Model.Cierres.TotalAperturaColones, 2).ToString("C", formato) </h6>
+
+
+                                    </div>
                                 </div>
-                            </div>
+                            }
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Apertura Dólares</label>
-                                    <h6> $@Math.Round(Model.Cierres.TotalAperturaFC, 2).ToString("C",formato) </h6>
+                                    <h6> $@Math.Round(Model.Cierres.TotalAperturaFC, 2).ToString("C", formato) </h6>
 
 
                                 </div>
@@ -241,11 +254,14 @@
                         </div>
                         <!-- title row -->
                         <div class="row">
+                                @if (Model.Parametros.FirstOrDefault().Pais != "P")
+                            {
+                          
                             <div class="col-md-3">
 
                                 <div class="form-group">
                                     <label>Efectivo Colones</label>
-                                    <h6>  ₡@Math.Round(Model.Cierres.EfectivoColones, 2).ToString("C",formato)  </h6>
+                                    <h6>  ₡@Math.Round(Model.Cierres.EfectivoColones, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -254,15 +270,16 @@
 
                                 <div class="form-group">
                                     <label>Tarjetas Colones</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.TarjetasColones, 2).ToString("C",formato)  </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.TarjetasColones, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
                             </div>
+                            }
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Efectivo Dólares</label>
-                                    <h6> $@Math.Round(Model.Cierres.EfectivoFC, 2).ToString("C",formato)  </h6>
+                                    <h6> $@Math.Round(Model.Cierres.EfectivoFC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -271,7 +288,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Tarjetas Dólares</label>
-                                    <h6> $@Math.Round(Model.Cierres.TarjetasFC, 2).ToString("C",formato)  </h6>
+                                    <h6> $@Math.Round(Model.Cierres.TarjetasFC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -282,11 +299,13 @@
 
                         <!-- title row -->
                         <div class="row">
+                            @if (Model.Parametros.FirstOrDefault().Pais != "P")
+                            {
                             <div class="col-md-3">
-
+                                
                                 <div class="form-group">
                                     <label>Cheques Colones</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.ChequesColones, 2).ToString("C",formato)  </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.ChequesColones, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -295,15 +314,16 @@
 
                                 <div class="form-group">
                                     <label>Otros Colones</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColones, 2).ToString("C",formato)  </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColones, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
                             </div>
+                            }
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Cheques Dólares</label>
-                                    <h6> $@Math.Round(Model.Cierres.ChequesFC, 2).ToString("C",formato)  </h6>
+                                    <h6> $@Math.Round(Model.Cierres.ChequesFC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -312,7 +332,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Otros Dólares</label>
-                                    <h6> $@Math.Round(Model.Cierres.OtrosMediosFC, 2).ToString("C",formato)  </h6>
+                                    <h6> $@Math.Round(Model.Cierres.OtrosMediosFC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -321,11 +341,13 @@
                         </div>
                         <!-- title row -->
                         <div class="row">
+                                  @if (Model.Parametros.FirstOrDefault().Pais != "P")
+                            {
                             <div class="col-md-3">
 
                                 <div class="form-group">
                                     <label>Transferencias Colones</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.TransferenciasColones, 2).ToString("C",formato)  </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.TransferenciasColones, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -335,15 +357,16 @@
 
                                 <div class="form-group">
                                     <label>Notas Crédito Colones</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.NotasCreditoColones, 2).ToString("C",formato)  </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.NotasCreditoColones, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
                             </div>
+                            }
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Transferencias Dólares</label>
-                                    <h6> $@Math.Round(Model.Cierres.TransferenciasDolares, 2).ToString("C",formato)  </h6>
+                                    <h6> $@Math.Round(Model.Cierres.TransferenciasDolares, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -351,7 +374,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Notas Crédito Dólares</label>
-                                    <h6> $@Math.Round(Model.Cierres.NotasCreditoFC, 2).ToString("C",formato)  </h6>
+                                    <h6> $@Math.Round(Model.Cierres.NotasCreditoFC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -363,19 +386,22 @@
                         </div>
 
                         <div class="row">
+                                @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                             <div class="col-md-6">
-
+     
+                           
                                 <div class="form-group">
                                     <label>Total Colones</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones, 2).ToString("C",formato)  </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
                             </div>
+                            }
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Total Dólares</label>
-                                    <h6> $@Math.Round(Model.Cierres.TotalVendidoFC, 2).ToString("C",formato)  </h6>
+                                    <h6> $@Math.Round(Model.Cierres.TotalVendidoFC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -404,11 +430,12 @@
                             <!-- /.col -->
                         </div>
                         <div class="row">
+                                 @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                             <div class="col-md-3">
 
                                 <div class="form-group">
                                     <label>Efectivo Colones Cajero</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.EfectivoColonesC, 2).ToString("C",formato) </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.EfectivoColonesC, 2).ToString("C", formato) </h6>
 
 
                                 </div>
@@ -416,16 +443,17 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Tarjetas Colones Cajero</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.TarjetasColonesC, 2).ToString("C",formato) </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.TarjetasColonesC, 2).ToString("C", formato) </h6>
 
 
                                 </div>
                             </div>
+                                 }
                             <div class="col-md-3">
 
                                 <div class="form-group">
                                     <label>Efectivo Dólares Cajero</label>
-                                    <h6> $@Math.Round(Model.Cierres.EfectivoFCC, 2).ToString("C",formato) </h6>
+                                    <h6> $@Math.Round(Model.Cierres.EfectivoFCC, 2).ToString("C", formato) </h6>
 
 
                                 </div>
@@ -434,7 +462,7 @@
 
                                 <div class="form-group">
                                     <label>Tarjetas Dólares Cajero</label>
-                                    <h6> $@Math.Round(Model.Cierres.TarjetasFCC, 2).ToString("C",formato) </h6>
+                                    <h6> $@Math.Round(Model.Cierres.TarjetasFCC, 2).ToString("C", formato) </h6>
 
 
                                 </div>
@@ -444,11 +472,12 @@
                         </div>
 
                         <div class="row">
+                                 @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                             <div class="col-md-3">
 
                                 <div class="form-group">
                                     <label>Cheques Colones Cajero</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.ChequesColonesC, 2).ToString("C",formato)  </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.ChequesColonesC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -457,15 +486,16 @@
 
                                 <div class="form-group">
                                     <label>Otros Colones Cajero</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColonesC, 2).ToString("C",formato)  </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColonesC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
                             </div>
+                                 }
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Cheques Dólares Cajero</label>
-                                    <h6> $@Math.Round(Model.Cierres.ChequesFCC, 2).ToString("C",formato)  </h6>
+                                    <h6> $@Math.Round(Model.Cierres.ChequesFCC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -474,7 +504,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Otros Dólares Cajero</label>
-                                    <h6> $@Math.Round(Model.Cierres.OtrosMediosFCC, 2).ToString("C",formato)  </h6>
+                                    <h6> $@Math.Round(Model.Cierres.OtrosMediosFCC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -483,11 +513,12 @@
                         </div>
                         <!-- title row -->
                         <div class="row">
+                                 @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                             <div class="col-md-6">
 
                                 <div class="form-group">
                                     <label>Transferencias Colones Cajero</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.TransferenciasColonesC, 2).ToString("C",formato)  </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.TransferenciasColonesC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -495,11 +526,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Transferencias Dólares Cajero</label>
-                                    <h6> $@Math.Round(Model.Cierres.TransferenciasDolaresC, 2).ToString("C",formato)  </h6>
+                                    <h6> $@Math.Round(Model.Cierres.TransferenciasDolaresC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
                             </div>
+                                 }
 
                             <!-- /.col -->
                             <!-- title row -->
@@ -527,19 +559,21 @@
                             <!-- /.col -->
                         </div>
                         <div class="row">
+                                 @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                             <div class="col-md-4">
 
                                 <div class="form-group">
                                     <label>Total Registrado Colones</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.TotalRegistradoColones, 2).ToString("C",formato)  </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.TotalRegistradoColones, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
                             </div>
+                                 }
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Total Registrado Dólares</label>
-                                    <h6> $@Math.Round(Model.Cierres.TotalRegistradoFC, 2).ToString("C",formato)  </h6>
+                                    <h6> $@Math.Round(Model.Cierres.TotalRegistradoFC, 2).ToString("C", formato)  </h6>
 
 
                                 </div>
@@ -547,7 +581,15 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Totalizado</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.TotalizadoMonedas, 2).ToString("C",formato)  </h6>
+                                    @if (Model.Parametros.FirstOrDefault().Pais != "P")
+                                    {
+                                           <h6> ₡@Math.Round(Model.Cierres.TotalizadoMonedas, 2).ToString("C", formato)  </h6>
+                                    }
+                                    else
+                                    {
+                                        <h6> $@Math.Round(Model.Cierres.TotalizadoMonedas, 2).ToString("C", formato)  </h6>
+                                    }
+                                 
 
 
                                 </div>
@@ -557,19 +599,21 @@
 
 
                         <div class="row">
+                                 @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                             <div class="col-md-6">
 
                                 <div class="form-group">
                                     <label>Diferencia Colones</label>
-                                    <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.TotalRegistradoColones).ToString("C",formato) </h6>
+                                    <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.TotalRegistradoColones).ToString("C", formato) </h6>
 
 
                                 </div>
                             </div>
+                                 }
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Diferencia Dólares</label>
-                                    <h6> $@Math.Round(Model.Cierres.TotalVendidoFC - Model.Cierres.TotalRegistradoFC, 2).ToString("C",formato) </h6>
+                                    <h6> $@Math.Round(Model.Cierres.TotalVendidoFC - Model.Cierres.TotalRegistradoFC, 2).ToString("C", formato) </h6>
 
 
                                 </div>
@@ -657,7 +701,7 @@
                                                 <td class="text-center"> @item.Moneda </td>
                                                 <td class="text-center"> Facturación </td>
 
-                                                <td class="text-right">@item.Monto.ToString("C",formato)</td>
+                                                <td class="text-right">@item.Monto.ToString("C", formato)</td>
 
 
                                             </tr>
@@ -688,7 +732,7 @@
                                                 <td class="text-center"> Abono </td>
 
 
-                                                <td class="text-right">@item.Monto.ToString("C",formato)</td>
+                                                <td class="text-right">@item.Monto.ToString("C", formato)</td>
 
 
 
@@ -726,7 +770,7 @@
                                                 <td class="text-center"> Pagos a Cuenta </td>
 
 
-                                                <td class="text-right">@item.Monto.ToString("C",formato)</td>
+                                                <td class="text-right">@item.Monto.ToString("C", formato)</td>
 
 
 
@@ -753,13 +797,23 @@
                                 @{
                                     var cond = Model.Condicion;
                                 }
-                                <p>Total Colones  : <span> ₡ @Math.Round( Model.TotalColones, 2).ToString("C",formato)</span> </p>
-                                <p>Total Dólares  : <span> $ @Math.Round(Model.TotalFC, 2).ToString("C",formato)</span></p>
+                                     @if (Model.Parametros.FirstOrDefault().Pais != "P"){
+                                <p>Total Colones  : <span> ₡ @Math.Round(Model.TotalColones, 2).ToString("C", formato)</span> </p>
+                                     }
+                                <p>Total Dólares  : <span> $ @Math.Round(Model.TotalFC, 2).ToString("C", formato)</span></p>
 
 
                             </div>
+
                             <div class="total-payment">
-                                <h3><b>Totalizado :</b>  <span> ₡ @((@Math.Round(Model.Totalizado, 2).ToString("C", formato))) </span></h3>
+                                @if (Model.Parametros.FirstOrDefault().Pais != "P")
+                                {
+                                    <h3><b>Totalizado :</b>  <span> ₡ @((@Math.Round(Model.Totalizado, 2).ToString("C", formato))) </span></h3>
+                                }
+                                else
+                                {
+                                    <h3><b>Totalizado :</b>  <span> $ @((@Math.Round(Model.Totalizado, 2).ToString("C", formato))) </span></h3>
+                                }
                             </div>
 
 
@@ -844,7 +898,7 @@
 
 
 
-                                            <td class="text-right"> @Math.Round( Convert.ToDecimal(item2.TotalCompra + item2.Redondeo), 2).ToString("C",formato)</td>
+                                            <td class="text-right"> @Math.Round(Convert.ToDecimal(item2.TotalCompra + item2.Redondeo), 2).ToString("C", formato)</td>
 
 
 
@@ -884,8 +938,10 @@
                                 @{
 
                                 }
-                                <p>Total Colones  : <span> ₡ @Math.Round( Convert.ToDecimal(TotalC), 2).ToString("C",formato)</span> </p>
-                                <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalD), 2).ToString("C",formato)</span></p>
+                                     @if (Model.Parametros.FirstOrDefault().Pais != "P"){
+                                <p>Total Colones  : <span> ₡ @Math.Round(Convert.ToDecimal(TotalC), 2).ToString("C", formato)</span> </p>
+                                     }
+                                <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalD), 2).ToString("C", formato)</span></p>
 
 
                             </div>
@@ -972,7 +1028,7 @@
 
 
 
-                                            <td class="text-right"> @Math.Round( Convert.ToDecimal(item2.TotalCompra + item2.Redondeo), 2).ToString("C",formato)</td>
+                                            <td class="text-right"> @Math.Round(Convert.ToDecimal(item2.TotalCompra + item2.Redondeo), 2).ToString("C", formato)</td>
 
 
 
@@ -1012,8 +1068,10 @@
                                 @{
 
                                 }
-                                <p>Total Colones  : <span> ₡ @Math.Round( Convert.ToDecimal(TotalNC), 2).ToString("C",formato)</span> </p>
-                                <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalND), 2).ToString("C",formato)</span></p>
+                                     @if (Model.Parametros.FirstOrDefault().Pais != "P"){
+                                <p>Total Colones  : <span> ₡ @Math.Round(Convert.ToDecimal(TotalNC), 2).ToString("C", formato)</span> </p>
+                                     }
+                                <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalND), 2).ToString("C", formato)</span></p>
 
 
                             </div>
@@ -1098,7 +1156,7 @@
 
 
 
-                                            <td class="text-right">@item2.Total.ToString("C",formato)</td>
+                                            <td class="text-right">@item2.Total.ToString("C", formato)</td>
 
 
 
@@ -1138,8 +1196,10 @@
                                 @{
 
                                 }
-                                <p>Total Colones  : <span> ₡ @Math.Round( Convert.ToDecimal(TotalPC), 2).ToString("C",formato)</span> </p>
-                                <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalPD), 2).ToString("C",formato)</span></p>
+                                     @if (Model.Parametros.FirstOrDefault().Pais != "P"){
+                                <p>Total Colones  : <span> ₡ @Math.Round(Convert.ToDecimal(TotalPC), 2).ToString("C", formato)</span> </p>
+                                     }
+                                <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalPD), 2).ToString("C", formato)</span></p>
 
 
                             </div>
@@ -1221,7 +1281,7 @@
 
 
 
-                                            <td class="text-right">@item2.Saldo.ToString("C",formato)</td>
+                                            <td class="text-right">@item2.Saldo.ToString("C", formato)</td>
 
 
 
@@ -1261,8 +1321,10 @@
                                 @{
 
                                 }
-                                <p>Total Colones  : <span> ₡ @Math.Round( Convert.ToDecimal(TotalDC), 2).ToString("C",formato)</span> </p>
-                                <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalDD), 2).ToString("C",formato)</span></p>
+                                     @if (Model.Parametros.FirstOrDefault().Pais != "P"){
+                                <p>Total Colones  : <span> ₡ @Math.Round(Convert.ToDecimal(TotalDC), 2).ToString("C", formato)</span> </p>
+                                     }
+                                <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalDD), 2).ToString("C", formato)</span></p>
 
 
                             </div>
@@ -1346,20 +1408,21 @@
                 <input hidden asp-for="Cierres.idUsuario" />
                 <!-- title row -->
                 <div class="row">
-
+                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                     <div class="col-6">
 
                         <div class="form-group">
                             <label>Apertura Colones</label>
-                            <h6> ₡@Math.Round(Model.Cierres.TotalAperturaColones, 2).ToString("C",formato) </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.TotalAperturaColones, 2).ToString("C", formato) </h6>
 
 
                         </div>
                     </div>
+                         }
                     <div class="col-6">
                         <div class="form-group">
                             <label>Apertura Dólares</label>
-                            <h6> $@Math.Round(Model.Cierres.TotalAperturaFC, 2).ToString("C",formato) </h6>
+                            <h6> $@Math.Round(Model.Cierres.TotalAperturaFC, 2).ToString("C", formato) </h6>
 
 
                         </div>
@@ -1389,36 +1452,40 @@
                 <!-- title row -->
 
                 <div class="row">
+                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                     <div class="col-3">
 
                         <div class="form-group">
                             <label>Efectivo Colones</label>
-                            <h6>  ₡@Math.Round(Model.Cierres.EfectivoColones, 2).ToString("C",formato)  </h6>
+                            <h6>  ₡@Math.Round(Model.Cierres.EfectivoColones, 2).ToString("C", formato)  </h6>
 
 
                         </div>
                     </div>
+                         }
                     <div class="col-3">
                         <div class="form-group">
                             <label>Efectivo Dólares</label>
-                            <h6> $@Math.Round(Model.Cierres.EfectivoFC, 2).ToString("C",formato)  </h6>
+                            <h6> $@Math.Round(Model.Cierres.EfectivoFC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
                     </div>
+                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                     <div class="col-3">
 
                         <div class="form-group">
                             <label>Tarjetas Colones</label>
-                            <h6> ₡@Math.Round(Model.Cierres.TarjetasColones, 2).ToString("C",formato)  </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.TarjetasColones, 2).ToString("C", formato)  </h6>
 
 
                         </div>
                     </div>
+                         }
                     <div class="col-3">
                         <div class="form-group">
                             <label>Tarjetas Dólares</label>
-                            <h6> $@Math.Round(Model.Cierres.TarjetasFC, 2).ToString("C",formato)  </h6>
+                            <h6> $@Math.Round(Model.Cierres.TarjetasFC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
@@ -1429,36 +1496,40 @@
 
                 <!-- title row -->
                 <div class="row">
+                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                     <div class="col-3">
 
                         <div class="form-group">
                             <label>Cheques Colones</label>
-                            <h6> ₡@Math.Round(Model.Cierres.ChequesColones, 2).ToString("C",formato)  </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.ChequesColones, 2).ToString("C", formato)  </h6>
 
 
                         </div>
                     </div>
+                         }
                     <div class="col-3">
                         <div class="form-group">
                             <label>Cheques Dólares</label>
-                            <h6> $@Math.Round(Model.Cierres.ChequesFC, 2).ToString("C",formato)  </h6>
+                            <h6> $@Math.Round(Model.Cierres.ChequesFC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
                     </div>
+                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                     <div class="col-3">
 
                         <div class="form-group">
                             <label>Otros Colones</label>
-                            <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColones, 2).ToString("C",formato)  </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColones, 2).ToString("C", formato)  </h6>
 
 
                         </div>
                     </div>
+                         }
                     <div class="col-3">
                         <div class="form-group">
                             <label>Otros Dólares</label>
-                            <h6> $@Math.Round(Model.Cierres.OtrosMediosFC, 2).ToString("C",formato)  </h6>
+                            <h6> $@Math.Round(Model.Cierres.OtrosMediosFC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
@@ -1466,11 +1537,12 @@
                     <!-- /.col -->
                 </div>
                 <div class="row">
+                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                     <div class="col-md-3">
 
                         <div class="form-group">
                             <label>Transferencias Colones</label>
-                            <h6> ₡@Math.Round(Model.Cierres.TransferenciasColones, 2).ToString("C",formato)  </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.TransferenciasColones, 2).ToString("C", formato)  </h6>
 
 
                         </div>
@@ -1480,15 +1552,16 @@
 
                         <div class="form-group">
                             <label>Notas Crédito Colones</label>
-                            <h6> ₡@Math.Round(Model.Cierres.NotasCreditoColones, 2).ToString("C",formato)  </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.NotasCreditoColones, 2).ToString("C", formato)  </h6>
 
 
                         </div>
                     </div>
+                         }
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Transferencias Dólares</label>
-                            <h6> $@Math.Round(Model.Cierres.TransferenciasDolares, 2).ToString("C",formato)  </h6>
+                            <h6> $@Math.Round(Model.Cierres.TransferenciasDolares, 2).ToString("C", formato)  </h6>
 
 
                         </div>
@@ -1496,7 +1569,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Notas Crédito Dólares</label>
-                            <h6> $@Math.Round(Model.Cierres.NotasCreditoFC, 2).ToString("C",formato)  </h6>
+                            <h6> $@Math.Round(Model.Cierres.NotasCreditoFC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
@@ -1507,19 +1580,21 @@
 
                 </div>
                 <div class="row">
+                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                     <div class="col-6">
 
                         <div class="form-group">
                             <label>Total Colones</label>
-                            <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones, 2).ToString("C",formato)  </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones, 2).ToString("C", formato)  </h6>
 
 
                         </div>
                     </div>
+                         }
                     <div class="col-6">
                         <div class="form-group">
                             <label>Total Dólares</label>
-                            <h6> $@Math.Round(Model.Cierres.TotalVendidoFC, 2).ToString("C",formato)  </h6>
+                            <h6> $@Math.Round(Model.Cierres.TotalVendidoFC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
@@ -1549,11 +1624,12 @@
                     <!-- /.col -->
                 </div>
                 <div class="row">
+                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                     <div class="col-3">
 
                         <div class="form-group">
                             <label>Efectivo Colones Cajero</label>
-                            <h6> ₡@Math.Round(Model.Cierres.EfectivoColonesC, 2).ToString("C",formato) </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.EfectivoColonesC, 2).ToString("C", formato) </h6>
 
 
                         </div>
@@ -1561,16 +1637,17 @@
                     <div class="col-3">
                         <div class="form-group">
                             <label>Tarjetas Colones Cajero</label>
-                            <h6> ₡@Math.Round(Model.Cierres.TarjetasColonesC, 2).ToString("C",formato) </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.TarjetasColonesC, 2).ToString("C", formato) </h6>
 
 
                         </div>
                     </div>
+                         }
                     <div class="col-3">
 
                         <div class="form-group">
                             <label>Efectivo Dólares Cajero</label>
-                            <h6> $@Math.Round(Model.Cierres.EfectivoFCC, 2).ToString("C",formato) </h6>
+                            <h6> $@Math.Round(Model.Cierres.EfectivoFCC, 2).ToString("C", formato) </h6>
 
 
                         </div>
@@ -1579,7 +1656,7 @@
 
                         <div class="form-group">
                             <label>Tarjetas Dólares Cajero</label>
-                            <h6> $@Math.Round(Model.Cierres.TarjetasFCC, 2).ToString("C",formato) </h6>
+                            <h6> $@Math.Round(Model.Cierres.TarjetasFCC, 2).ToString("C", formato) </h6>
 
 
                         </div>
@@ -1588,11 +1665,12 @@
                     <!-- /.col -->
                 </div>
                 <div class="row">
+                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                     <div class="col-3">
 
                         <div class="form-group">
                             <label>Cheques Colones Cajero</label>
-                            <h6> ₡@Math.Round(Model.Cierres.ChequesColonesC, 2).ToString("C",formato)  </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.ChequesColonesC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
@@ -1601,15 +1679,16 @@
 
                         <div class="form-group">
                             <label>Otros Colones Cajero</label>
-                            <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColonesC, 2).ToString("C",formato)  </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.OtrosMediosColonesC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
                     </div>
+                         }
                     <div class="col-3">
                         <div class="form-group">
                             <label>Cheques Dólares Cajero</label>
-                            <h6> $@Math.Round(Model.Cierres.ChequesFCC, 2).ToString("C",formato)  </h6>
+                            <h6> $@Math.Round(Model.Cierres.ChequesFCC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
@@ -1618,7 +1697,7 @@
                     <div class="col-3">
                         <div class="form-group">
                             <label>Otros Dólares Cajero</label>
-                            <h6> $@Math.Round(Model.Cierres.OtrosMediosFCC, 2).ToString("C",formato)  </h6>
+                            <h6> $@Math.Round(Model.Cierres.OtrosMediosFCC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
@@ -1627,19 +1706,21 @@
                 </div>
                 <!-- title row -->
                 <div class="row">
+                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                     <div class="col-6">
 
                         <div class="form-group">
                             <label>Transferencias Colones Cajero</label>
-                            <h6> ₡@Math.Round(Model.Cierres.TransferenciasColonesC, 2).ToString("C",formato)  </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.TransferenciasColonesC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
                     </div>
+                         }
                     <div class="col-6">
                         <div class="form-group">
                             <label>Transferencias Dólares Cajero</label>
-                            <h6> $@Math.Round(Model.Cierres.TransferenciasDolaresC, 2).ToString("C",formato)  </h6>
+                            <h6> $@Math.Round(Model.Cierres.TransferenciasDolaresC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
@@ -1668,27 +1749,37 @@
                     <!-- /.col -->
                 </div>
                 <div class="row">
+                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                     <div class="col-4">
 
                         <div class="form-group">
                             <label>Total Registrado Colones</label>
-                            <h6> ₡@Math.Round(Model.Cierres.TotalRegistradoColones, 2).ToString("C",formato)  </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.TotalRegistradoColones, 2).ToString("C", formato)  </h6>
 
 
                         </div>
                     </div>
+                         }
                     <div class="col-4">
                         <div class="form-group">
                             <label>Total Registrado Dólares</label>
-                            <h6> $@Math.Round(Model.Cierres.TotalRegistradoFC, 2).ToString("C",formato)  </h6>
+                            <h6> $@Math.Round(Model.Cierres.TotalRegistradoFC, 2).ToString("C", formato)  </h6>
 
 
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Totalizado</label>
-                            <h6> ₡@Math.Round(Model.Cierres.TotalizadoMonedas, 2).ToString("C",formato)  </h6>
+                            @if (Model.Parametros.FirstOrDefault().Pais != "P")
+                            {
+                                <h6> ₡@Math.Round(Model.Cierres.TotalizadoMonedas, 2).ToString("C", formato)  </h6>
+                            }
+                            else
+                            {
+                                <h6> $@Math.Round(Model.Cierres.TotalizadoMonedas, 2).ToString("C", formato)  </h6>
+                            }
+
 
 
                         </div>
@@ -1700,19 +1791,21 @@
 
 
                 <div class="row">
+                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                     <div class="col-6">
 
                         <div class="form-group">
                             <label>Faltantes Colones</label>
-                            <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.TotalRegistradoColones).ToString("C",formato) </h6>
+                            <h6> ₡@Math.Round(Model.Cierres.TotalVendidoColones - Model.Cierres.TotalRegistradoColones).ToString("C", formato) </h6>
 
 
                         </div>
                     </div>
+                         }
                     <div class="col-6">
                         <div class="form-group">
                             <label>Faltantes Dólares</label>
-                            <h6> $@Math.Round(Model.Cierres.TotalVendidoFC - Model.Cierres.TotalRegistradoFC, 2).ToString("C",formato) </h6>
+                            <h6> $@Math.Round(Model.Cierres.TotalVendidoFC - Model.Cierres.TotalRegistradoFC, 2).ToString("C", formato) </h6>
 
 
                         </div>
@@ -1796,7 +1889,7 @@
                                                     <td class="text-center"> @item.Moneda</td>
 
 
-                                                    <td class="text-right">@item.Monto.ToString("C",formato)</td>
+                                                    <td class="text-right">@item.Monto.ToString("C", formato)</td>
 
 
 
@@ -1826,14 +1919,20 @@
 
 
                                 <div>
-
-                                    <p>Total Colones  : <span> ₡ @Math.Round( Model.TotalColones, 2).ToString("C",formato)</span> </p>
-                                    <p>Total Dólares  : <span> $ @Math.Round(Model.TotalFC, 2).ToString("C",formato)</span></p>
+                                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
+                                    <p>Total Colones  : <span> ₡ @Math.Round(Model.TotalColones, 2).ToString("C", formato)</span> </p>
+                                         }
+                                    <p>Total Dólares  : <span> $ @Math.Round(Model.TotalFC, 2).ToString("C", formato)</span></p>
 
 
                                 </div>
+
                                 <div class="total-payment">
+                                        @if (Model.Parametros.FirstOrDefault().Pais != "P"){
                                     <h3><b>Totalizado :</b>  <span> ₡ @((@Math.Round(Model.Totalizado, 2).ToString("C", formato))) </span></h3>
+                                        }else{
+                                        <h3><b>Totalizado :</b>  <span> $ @((@Math.Round(Model.Totalizado, 2).ToString("C", formato))) </span></h3>
+                                        }
                                 </div>
 
 
@@ -1916,7 +2015,7 @@
 
 
 
-                                                <td class="text-right"> @Math.Round( Convert.ToDecimal(item2.TotalCompra + item2.Redondeo), 2).ToString("C",formato)</td>
+                                                <td class="text-right"> @Math.Round(Convert.ToDecimal(item2.TotalCompra + item2.Redondeo), 2).ToString("C", formato)</td>
 
 
 
@@ -1956,8 +2055,10 @@
                                     @{
 
                                     }
-                                    <p>Total Colones  : <span> ₡ @Math.Round( Convert.ToDecimal(TotalC), 2).ToString("C",formato)</span> </p>
-                                    <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalD), 2).ToString("C",formato)</span></p>
+                                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
+                                    <p>Total Colones  : <span> ₡ @Math.Round(Convert.ToDecimal(TotalC), 2).ToString("C", formato)</span> </p>
+                                         }
+                                    <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalD), 2).ToString("C", formato)</span></p>
 
 
                                 </div>
@@ -2042,7 +2143,7 @@
 
 
 
-                                                <td class="text-right"> @Math.Round( Convert.ToDecimal(item2.TotalCompra + item2.Redondeo), 2).ToString("C",formato)</td>
+                                                <td class="text-right"> @Math.Round(Convert.ToDecimal(item2.TotalCompra + item2.Redondeo), 2).ToString("C", formato)</td>
 
 
 
@@ -2082,8 +2183,10 @@
                                     @{
 
                                     }
-                                    <p>Total Colones  : <span> ₡ @Math.Round( Convert.ToDecimal(TotalNC), 2).ToString("C",formato)</span> </p>
-                                    <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalND), 2).ToString("C",formato)</span></p>
+                                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
+                                    <p>Total Colones  : <span> ₡ @Math.Round(Convert.ToDecimal(TotalNC), 2).ToString("C", formato)</span> </p>
+                                         }
+                                    <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalND), 2).ToString("C", formato)</span></p>
 
 
                                 </div>
@@ -2168,7 +2271,7 @@
 
 
 
-                                                <td class="text-right">@item2.Total.ToString("C",formato)</td>
+                                                <td class="text-right">@item2.Total.ToString("C", formato)</td>
 
 
 
@@ -2208,8 +2311,10 @@
                                     @{
 
                                     }
-                                    <p>Total Colones  : <span> ₡ @Math.Round( Convert.ToDecimal(TotalPC), 2).ToString("C",formato)</span> </p>
-                                    <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalPD), 2).ToString("C",formato)</span></p>
+                                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
+                                    <p>Total Colones  : <span> ₡ @Math.Round(Convert.ToDecimal(TotalPC), 2).ToString("C", formato)</span> </p>
+                                         }
+                                    <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalPD), 2).ToString("C", formato)</span></p>
 
 
                                 </div>
@@ -2291,7 +2396,7 @@
 
 
 
-                                                <td class="text-right">@item2.Saldo.ToString("C",formato)</td>
+                                                <td class="text-right">@item2.Saldo.ToString("C", formato)</td>
 
 
 
@@ -2331,8 +2436,10 @@
                                     @{
 
                                     }
-                                    <p>Total Colones  : <span> ₡ @Math.Round( Convert.ToDecimal(TotalDC), 2).ToString("C",formato)</span> </p>
-                                    <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalDD), 2).ToString("C",formato)</span></p>
+                                         @if (Model.Parametros.FirstOrDefault().Pais != "P"){
+                                    <p>Total Colones  : <span> ₡ @Math.Round(Convert.ToDecimal(TotalDC), 2).ToString("C", formato)</span> </p>
+                                         }
+                                    <p>Total Dólares  : <span> $ @Math.Round(Convert.ToDecimal(TotalDD), 2).ToString("C", formato)</span></p>
 
 
                                 </div>

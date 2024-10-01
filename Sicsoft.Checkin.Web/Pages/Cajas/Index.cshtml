@@ -3,7 +3,7 @@
 @model NOVAAPP.Pages.Cajas.IndexModel
 @{
     ViewData["Title"] = "Cajas";
-     NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
     formato.CurrencySymbol = "";
     formato.CurrencyGroupSeparator = ",";
     formato.NumberDecimalSeparator = ".";
@@ -12,12 +12,12 @@
 
 
 
-@section styles{
+@section styles {
 
 
 }
 
-@section scripts{
+@section scripts {
 
     <script>
         $(document).ready(function () {
@@ -31,75 +31,75 @@
                 height: 'resolve'
             });
 
-          
+
 
 
 
         });
 
-         var ids = 0;
-    function onClickModal(id) {
-        ids = id;
-        Swal.fire({
-            title: '¿Desea eliminar esta Caja?',
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: `Aceptar`,
-            denyButtonText: `Cancelar`,
-            customClass: {
-                confirmButton: 'swalBtnColor',
-                denyButton: 'swalDeny'
-            },
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
+        var ids = 0;
+        function onClickModal(id) {
+            ids = id;
+            Swal.fire({
+                title: '¿Desea eliminar esta Caja?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
 
-                Eliminar();
+                    Eliminar();
 
-            }
-        })
+                }
+            })
 
-    }
-        function  Eliminar() {
+        }
+        function Eliminar() {
 
-         $.ajax({
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '@Url.Page("Index", "Eliminar")',
-                        data: { id: ids },
-                        success: function (result) {
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Page("Index", "Eliminar")',
+                data: { id: ids },
+                success: function (result) {
 
-                             if (result == false) {
-                                 ids = 0;
-                                 Swal.fire({
-                                     icon: 'error',
-                                     title: 'Oops...',
-                                     text: 'Ha ocurrido un error al intentar eliminar'
+                    if (result == false) {
+                        ids = 0;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error al intentar eliminar'
 
-                                 })
+                        })
 
-                             } else {
-                                 Swal.fire({
-                                     title: "Ha sido eliminado con éxito",
+                    } else {
+                        Swal.fire({
+                            title: "Ha sido eliminado con éxito",
 
-                                     icon: 'success',
-                                     showCancelButton: false,
-                                     customClass: {
-                                         confirmButton: 'swalBtnColor',
+                            icon: 'success',
+                            showCancelButton: false,
+                            customClass: {
+                                confirmButton: 'swalBtnColor',
 
-                                     },
-                                     confirmButtonText: 'OK'
-                                 }).then((result) => {
-                                     if (result.isConfirmed) {
-                                         location.reload();
-                                     }
-                                 })
-                             }
-             },
-             beforeSend: function () {
+                            },
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                beforeSend: function () {
 
-             }
-                     })
+                }
+            })
         }
 
 
@@ -108,7 +108,7 @@
 
 }
 
-      
+
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -130,8 +130,8 @@
                 <div class="box-header with-border">
                     <div class="row">
                         <div class="col-sm-8"> <h4 class="box-title">Cajas</h4></div>
-                          <div class="col-sm-4"> <a asp-page="Nuevo" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Caja</a></div>
-                      
+                        <div class="col-sm-4"> <a asp-page="Nuevo" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Caja</a></div>
+
 
                     </div>
 
@@ -143,40 +143,57 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                   <th>ID</th>
+                                    <th>ID</th>
                                     <th>Acción</th>
-                                    <th>Sucursal</th> 
+                                    <th>Sucursal</th>
                                     <th>Nombre</th>
-                                    <th>Apertura ₡ </th>
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        <th>Apertura ₡ </th>
+                                    }
+
                                     <th>Apertura $ </th>
-                                    
+
 
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.Objeto)
                                 {
-                                <tr>
+                                    <tr>
 
-                                    <td>
-                                        @item.id
-                                    </td>
-                                       <td align="center" style="padding-top:15px;">
-                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
+                                        <td>
+                                            @item.id
+                                        </td>
+                                        <td align="center" style="padding-top:15px;">
+                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a>
                                             &nbsp;
                                             <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
                                             &nbsp;
-                                            
-                                     </td>
-                                     <td>  @( Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" :  Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre) </td>  
-                                    <td>         @item.Nombre </td>
 
-                                    <td> ₡@Math.Round(@item.MontoAperturaColones, 2).ToString("C",formato)</td>
-                                    <td>  $@Math.Round(@item.MontoAperturaDolares, 2).ToString("C",formato)</td>
-                              
+                                        </td>
+                                        <td>  @(Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" : Model.SucursalesLista.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre) </td>
+                                        <td>         @item.Nombre </td>
+
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            <td> ₡@Math.Round(@item.MontoAperturaColones, 2).ToString("C", formato)</td>
+                                        }
+
+                                
+                                        <td>  $@Math.Round(@item.MontoAperturaDolares, 2).ToString("C", formato)</td>
 
 
-                                </tr>
+
+                                    </tr>
 
                                 }
 
@@ -185,12 +202,20 @@
                             <tfoot>
                                 <tr>
                                     <th>ID</th>
-                                     <th>Acción</th>
-                                    <th>Sucursal</th> 
+                                    <th>Acción</th>
+                                    <th>Sucursal</th>
                                     <th>Nombre</th>
-                                    <th>Apertura ₡ </th>
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        <th>Apertura ₡ </th>
+                                    }
+
                                     <th>Apertura $ </th>
-                                    
+
                                 </tr>
                             </tfoot>
                         </table>
@@ -205,4 +230,3 @@
     <!-- /.row -->
 </section>
 <!-- /.content -->
-

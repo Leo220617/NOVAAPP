@@ -212,8 +212,16 @@
                                     <div class="form-group">
                                         <label for="cyber">Moneda:</label>
                                         <select class="form-control" id="money" asp-for="filtro.CardCode" required>
-                                       
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                        {
+                   
+                                        }
+                                        else
+                                        {
                                             <option value="CRC">CRC</option>
+                                        }
+
+                                           
                                             <option value="USD">USD</option>
                                     
 

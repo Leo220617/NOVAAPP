@@ -71,6 +71,7 @@ namespace NOVAAPP.Models
         public bool CxC { get; set; }
 
         public bool Transitorio { get; set; }
+        public string DV { get; set; }
 
 
     }

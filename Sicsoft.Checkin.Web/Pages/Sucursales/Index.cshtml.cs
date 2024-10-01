@@ -21,7 +21,7 @@ namespace NOVAAPP.Pages.Sucursales
         private readonly IConfiguration configuration;
         private readonly ICrudApi<SucursalesViewModel, string> service;
         private readonly ICrudApi<ListaPreciosViewModel, int> precios;
-
+        private readonly ICrudApi<ParametrosViewModel, int> param;
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
@@ -32,10 +32,13 @@ namespace NOVAAPP.Pages.Sucursales
         [BindProperty]
         public ListaPreciosViewModel[] Precio { get; set; }
 
-        public IndexModel(ICrudApi<SucursalesViewModel, string> service, ICrudApi<ListaPreciosViewModel, int> precios)
+        [BindProperty]
+        public ParametrosViewModel[] Parametros { get; set; }
+        public IndexModel(ICrudApi<SucursalesViewModel, string> service, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<ParametrosViewModel, int> param)
         {
             this.service = service;
             this.precios = precios;
+            this.param = param;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -48,6 +51,7 @@ namespace NOVAAPP.Pages.Sucursales
                 }
                 Objeto = await service.ObtenerLista(filtro);
                 Precio = await precios.ObtenerLista("");
+                Parametros = await param.ObtenerLista("");
 
 
                 return Page();

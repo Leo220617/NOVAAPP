@@ -199,6 +199,7 @@ function AbrirModalAgregarCliente() {
 
 }
 
+
 function formatoDecimal(numero) {
     var number = numero;
 
@@ -248,3 +249,61 @@ function ImprimirEtiqueta(id) {
         })
     }
 }
+
+function onClickModalByCardCode2() {
+    try {
+        var id = document.getElementById("CardCode2").value;
+        ids = id;
+        Swal.fire({
+            title: '¿Desea actualizar este producto?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: `Aceptar`,
+            denyButtonText: `Cancelar`,
+            customClass: {
+                confirmButton: 'swalBtnColor',
+                denyButton: 'swalDeny'
+            },
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                InsertarSAPByCardCode2();
+
+            }
+        })
+    } catch (e) {
+        console.log(e);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+        })
+    }
+
+
+
+
+}
+
+
+
+
+
+function AbrirModalAgregarCliente2() {
+
+    try {
+        $("#ModalAgregarCliente2").modal("show");
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error ' + e
+
+        })
+    }
+
+}  

@@ -52,6 +52,7 @@ namespace NOVAAPP.Models
         public bool MAG { get; set; }
         public bool Serie { get; set; }
 
+        public DateTime FechaConteo { get; set; }
 
     }
 }

@@ -62,6 +62,7 @@ namespace NOVAAPP.Models
 
 
         public string SQLSeriesProductos { get; set; }
+        public string Pais { get; set; }
 
     }
 }

@@ -1,0 +1,955 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.Arqueos.ObservarModel
+@{
+    ViewData["Title"] = "Arqueos";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+}
+@using Microsoft.AspNetCore.Http
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using System.Linq;
+@using System.Security.Claims;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.Extensions.Configuration;
+@using Refit;
+@using Sicsoft.Checkin.Web.Models;
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+
+}
+@section styles {
+    <style>
+        .tableFixHead th {
+            position: sticky;
+            top: 0;
+            background: white;
+        }
+    </style>
+
+}
+
+
+@section scripts {
+
+    <script>
+        function Generar() {
+
+            try {
+
+                var EncArqueos = {
+
+                    id: $("#id").val(),
+                    Status: "C"
+                }
+
+
+                Swal.fire({
+                    title: '¿Desea contabilizar la Toma Física?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: `Aceptar`,
+                    denyButtonText: `Cancelar`,
+                    customClass: {
+                        confirmButton: 'swalBtnColor',
+                        denyButton: 'swalDeny'
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var jsonString = JSON.stringify(EncArqueos);
+                        // Comprimir la cadena JSON utilizando gzip
+                        var compressedData = pako.gzip(jsonString);
+
+                        // Convertir los datos comprimidos a un ArrayBuffer (opcional, depende de tu caso de uso)
+                        var compressedArrayBuffer = compressedData.buffer;
+
+                        $.ajax({
+                            type: 'POST',
+
+                            url: '@Url.Page("Observar", "AgregarArqueo")',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            data: compressedArrayBuffer,
+                            processData: false,
+                            headers: {
+                                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                            },
+                            success: function (json) {
+
+
+                                console.log("resultado " + json.arqueo);
+                                if (json.success == true) {
+                                    $("#divProcesando").modal("hide");
+                                    Swal.fire({
+                                        title: "Ha sido generado con éxito",
+
+                                        icon: 'success',
+                                        showCancelButton: false,
+
+                                        confirmButtonText: 'OK',
+                                        customClass: {
+                                            confirmButton: 'swalBtnColor',
+
+                                        },
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            //Despues de insertar, ocupariamos el id del cliente en la bd
+                                            //para entonces setearlo en el array de clientes
+
+                                            window.location.href = window.location.href.split("/Observar")[0];
+
+
+                                        }
+                                    })
+
+                                } else {
+
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: 'Ha ocurrido un error al intentar guardar ' + json.arqueo
+
+                                    })
+                                }
+                            },
+
+                            beforeSend: function () {
+                                $("#divProcesando").modal("show");
+
+                            },
+                            complete: function () {
+                                $("#divProcesando").modal("hide");
+
+                            },
+                            error: function (error) {
+                                $("#divProcesando").modal("hide");
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Ha ocurrido un error al intentar guardar ' + error
+
+                                })
+                            }
+                        });
+                    }
+                })
+
+
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar agregar ' + e
+
+                })
+            }
+
+
+
+        }
+
+        function GenerarR() {
+
+            try {
+
+                var EncArqueos = {
+
+                    id: $("#id").val(),
+                    Status: "R"
+                }
+
+
+                Swal.fire({
+                    title: '¿Desea rechazar la Toma Física?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: `Aceptar`,
+                    denyButtonText: `Cancelar`,
+                    customClass: {
+                        confirmButton: 'swalBtnColor',
+                        denyButton: 'swalDeny'
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var jsonString = JSON.stringify(EncArqueos);
+                        // Comprimir la cadena JSON utilizando gzip
+                        var compressedData = pako.gzip(jsonString);
+
+                        // Convertir los datos comprimidos a un ArrayBuffer (opcional, depende de tu caso de uso)
+                        var compressedArrayBuffer = compressedData.buffer;
+
+                        $.ajax({
+                            type: 'POST',
+
+                            url: '@Url.Page("Observar", "AgregarArqueo")',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            data: compressedArrayBuffer,
+                            processData: false,
+                            headers: {
+                                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                            },
+                            success: function (json) {
+
+
+                                console.log("resultado " + json.arqueo);
+                                if (json.success == true) {
+                                    $("#divProcesando").modal("hide");
+                                    Swal.fire({
+                                        title: "Ha sido generado con éxito",
+
+                                        icon: 'success',
+                                        showCancelButton: false,
+
+                                        confirmButtonText: 'OK',
+                                        customClass: {
+                                            confirmButton: 'swalBtnColor',
+
+                                        },
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            //Despues de insertar, ocupariamos el id del cliente en la bd
+                                            //para entonces setearlo en el array de clientes
+
+                                            window.location.href = window.location.href.split("/Observar")[0];
+
+
+                                        }
+                                    })
+
+                                } else {
+
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: 'Ha ocurrido un error al intentar guardar ' + json.arqueo
+
+                                    })
+                                }
+                            },
+
+                            beforeSend: function () {
+                                $("#divProcesando").modal("show");
+
+                            },
+                            complete: function () {
+                                $("#divProcesando").modal("hide");
+
+                            },
+                            error: function (error) {
+                                $("#divProcesando").modal("hide");
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Ha ocurrido un error al intentar guardar ' + error
+
+                                })
+                            }
+                        });
+                    }
+                })
+
+
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar agregar ' + e
+
+                })
+            }
+
+
+
+        }
+
+        function ImprimirPantalla() {
+            try {
+                // window.print();
+                var margins = {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    width: 595
+                };
+
+
+                html = $(".html").html();
+                html2pdf(html, {
+                    margin: 1,
+                    padding: 0,
+                    filename: 'Arqueo.pdf',
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: { scale: 2, logging: true },
+                    jsPDF: { unit: 'in', format: 'A2', orientation: 'P' },
+                    class: ImprimirPantalla
+                });
+
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
+
+        function ImprimirExcel()
+        {
+            try {
+                var tablaDiv = document.getElementById('tablaDiv');
+
+                // Obtenemos la tabla dentro del div
+                var tabla = tablaDiv.querySelector('table');
+
+                // Convertimos la tabla HTML a una hoja de cálculo
+                var hoja = XLSX.utils.table_to_sheet(tabla);
+
+                // Creamos un nuevo libro de trabajo (workbook)
+                var libro = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(libro, hoja, 'Arqueo');
+
+                // Exportamos el archivo Excel
+                XLSX.writeFile(libro, 'Arqueo.xlsx');
+                
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar exportar a excel ' + e
+
+                })
+            }
+        }
+    </script>
+
+
+
+}
+
+
+@using Newtonsoft.Json;
+@using System.Globalization
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Toma Física
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Toma Física</li>
+    </ol>
+</section>
+
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
+            <input hidden asp-for="Arqueo.id" id="id" />
+            <input hidden id="Arqueo" value="@JsonConvert.SerializeObject(Model.Arqueo)" />
+            <input hidden id="Productos" value="@JsonConvert.SerializeObject(Model.Productos)" />
+            <input hidden id="Categorias" value="@JsonConvert.SerializeObject(Model.Categorias)" />
+            <input hidden id="Bodegas" value="@JsonConvert.SerializeObject(Model.Bodegas)" />
+    
+            <input hidden id="urlGenerar" value="@Url.Page("Observar", "AgregarArqueo")" />
+
+
+
+
+            <!-- Content Header (Page header) -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Toma Física</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Toma Física No: @Model.Arqueo.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <h5>Fecha <span class="font-size-18">@Model.Arqueo.FechaCreacion.ToString("dd MMM yyy")</span></h5>
+                                    <input hidden id="Fecha" type="datetime" value="@Model.Arqueo.FechaCreacion" />
+
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-4">
+                            <div class="text-left">
+                                <h5>Última Actualización <span class="font-size-18">@Model.Arqueo.FechaActualizacion.ToString("dd MMM yyy HH:mm")</span></h5>
+                                <input hidden id="Fecha" type="datetime" value="@Model.Arqueo.FechaActualizacion" />
+
+
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <div class="row invoice-info">
+                        <div class="col-md-8 invoice-col">
+                            <strong>Responsable</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @(Model.Usuarios.Where(a => a.id == Model.Arqueo.idUsuarioCreador).FirstOrDefault() == null ? "Usuario Inexistente" : Model.Usuarios.Where(a => a.id == Model.Arqueo.idUsuarioCreador).FirstOrDefault().id + " - " + Model.Usuarios.Where(a => a.id == Model.Arqueo.idUsuarioCreador).FirstOrDefault().Nombre)   </strong>
+
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+
+                    <div class="row invoice-info">
+
+
+                        <div class="col-md-4">
+                            <h5> <b>Sucursal: </b> @Model.Arqueo.CodSuc - @(Model.Sucursal.Where(a => a.CodSuc == Model.Arqueo.CodSuc).FirstOrDefault() == null ? "" : Model.Sucursal.Where(a => a.CodSuc == Model.Arqueo.CodSuc).FirstOrDefault().Nombre)</h5>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h5> <b>Categoría: </b>    @(Model.Categorias.Where(a => a.id == Model.Arqueo.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categorias.Where(a => a.id == Model.Arqueo.idCategoria).FirstOrDefault().CodSAP + " - " + Model.Categorias.Where(a => a.id == Model.Arqueo.idCategoria).FirstOrDefault().Nombre)</h5>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <h5> <b>Palabra Clave: </b>@Model.Arqueo.PalabraClave  </h5>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(Roles.Where(a => a == "74").FirstOrDefault()) && Model.Arqueo.Status == "E")
+                        {
+                            <div class="col-2">
+
+                                <button type="button" id="botonG" class="btn btn-danger pull-right" onclick="    javascript: GenerarR()">
+                                    <i class="fa fa-credit-card"></i> Rechazar
+                                </button>
+
+                            </div>
+                            <div class="col-2">
+                                @*<button id="print" class="btn btn-warning" type="button"> <span><i class="fa fa-print"></i> Imprimir</span> </button>*@
+                                <button type="button" id="botonG" class="btn btn-success pull-right" onclick="    javascript: Generar()">
+                                    <i class="fa fa-credit-card"></i> Contabilizar
+                                </button>
+
+                            </div>
+                        }
+
+
+                    </div>
+
+
+                </div>
+                <!-- /.col -->
+                <!-- /.row -->
+
+            </div>
+
+        </div>
+
+
+
+        <div class="box">
+            <div class="box-header with-border">
+                <div class="row">
+                    <div class="col-sm-8"> <h4 class="box-title">Productos</h4></div>
+                    <div class="col-sm-4">  </div>
+
+                </div>
+
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+
+                                <th class="bg-info">Código</th>
+                                <th class="bg-info">Nombre</th>
+                                <th class="bg-info">Bodega</th>
+                                <th class="bg-info">Stock</th>
+                                <th class="bg-info">Contado</th>
+                                <th class="bg-info">C1</th>
+                                <th class="bg-info">C2</th>
+                                <th class="bg-info">C3</th>
+                                <th class="bg-info">Total Contado</th>
+                                <th class="bg-info">Diferencia</th>
+                                <th class="bg-info">Costo</th>
+                                <th class="bg-info">Costo Diferencia</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                            @foreach (var item in Model.Arqueo.Detalle)
+                            {
+                                var Producto = Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault();
+
+                                <tr>
+
+
+                                    <td>
+                                        @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Codigo)
+                                    </td>
+
+                                    <td>
+                                        @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Nombre)
+                                    </td>
+
+                                    <td>
+                                        @(Model.Bodegas.Where(a => a.id == Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega).FirstOrDefault().CodSAP)
+
+                                    </td>
+                                    <td>
+                                        @item.Stock
+                                    </td>
+                                    @if (item.Contado == true)
+                                    {
+
+                                        <td align="center" style="padding-top:15px;"><span class="badge badge-success">Contado</span></td>
+
+                                    }
+                                    else
+                                    {
+
+                                        <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Sin contar</span></td>
+
+                                    }
+                                    <td>  @item.Cantidad1 </td>
+                                    <td>  @item.Cantidad2 </td>
+                                    <td>  @item.Cantidad3 </td>
+                                       
+                                  
+                                    <td>
+                                        @item.Total
+                                    </td>
+
+                                    @if (item.Diferencia == 0)
+                                    {
+                                        <td style="background-color: #EFFFE9">
+                                            @item.Diferencia
+                                        </td>
+                                    }
+                                    else if (item.Diferencia < 0 || item.Diferencia > 0)
+                                    {
+                                        <td style="background-color: #FFE9E9">
+                                            @item.Diferencia
+                                        </td>
+                                    }
+
+
+                                    <td>  @item.Costo </td>
+                                    <td>  @item.CostoDiferencia </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                </tr>
+
+                            }
+
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+
+                                <th class="bg-info">Código</th>
+                                <th class="bg-info">Nombre</th>
+                                <th class="bg-info">Bodega</th>
+                                <th class="bg-info">Stock</th>
+                                <th class="bg-info">Contado</th>
+                                <th class="bg-info">C1</th>
+                                <th class="bg-info">C2</th>
+                                <th class="bg-info">C3</th>
+                                <th class="bg-info">Total Contado</th>
+                                <th class="bg-info">Diferencia</th>
+                                <th class="bg-info">Costo</th>
+                                <th class="bg-info">Costo Diferencia</th>
+
+
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
+    <button id="printExcel" class="btn btn-primary" type="button" onclick="javascript: ImprimirExcel()"> <span><i class="fa fa-print"></i> Excel</span> </button>
+
+</section>
+
+
+
+<!-- /.content -->
+<div class="html" hidden>
+    <div class="row">
+
+        <div class="col-md-6">
+            @{
+                var Sucursal = Model.Sucursal.Where(a => a.CodSuc == Model.Arqueo.CodSuc).FirstOrDefault();
+            }
+            <img id="base64image" style="width: 85%;"
+                 src="data:image/jpeg;base64,@Sucursal.Imagen.ToString()" />
+        </div>
+        <div class="col-md-6">
+            <div style=" font-weight: bold;  font-size: 15px;">
+                <p style="  font-size: 20px !important; ">@Model.NombreCliente</p>
+                <p style="  font-size: 20px !important; ">@Sucursal.Nombre</p>
+                <p>Cedula Juridica:  @Sucursal.Cedula</p>
+                <p>Telefax: @Sucursal.Telefono</p>
+
+                <p>Email: @Sucursal.Correo</p>
+
+                <p> @Sucursal.Sennas   </p>
+
+
+            </div>
+        </div>
+
+        <div class="col-12">
+
+            <div class="box">
+
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Toma Física</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Toma Física No: @Model.Arqueo.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <h5> <b>Fecha</b> @Model.Arqueo.FechaCreacion.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+                                        <div class="col-4">
+                                            <div class="text-left">
+                                                <h5>Última Actualización <span class="font-size-18">@Model.Arqueo.FechaActualizacion.ToString("dd MMM yyy HH:mm")</span></h5>
+                                                <input hidden id="Fecha" type="datetime" value="@Model.Arqueo.FechaActualizacion" />
+
+
+
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+
+                        <div class="col-md-4">
+                            <h5> <b>Sucursal: </b> @Model.Arqueo.CodSuc - @Sucursal.Nombre</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <h5> <b>Categoría: </b>    @(Model.Categorias.Where(a => a.id == Model.Arqueo.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categorias.Where(a => a.id == Model.Arqueo.idCategoria).FirstOrDefault().CodSAP + " - " + Model.Categorias.Where(a => a.id == Model.Arqueo.idCategoria).FirstOrDefault().Nombre)</h5>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <h5> <b>Palabra Clave: </b>@Model.Arqueo.PalabraClave  </h5>
+                        </div>
+                        <div class="col-md-8 invoice-col">
+                            <strong>Responsable</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @(Model.Usuarios.Where(a => a.id == Model.Arqueo.idUsuarioCreador).FirstOrDefault() == null ? "Usuario Inexistente" : Model.Usuarios.Where(a => a.id == Model.Arqueo.idUsuarioCreador).FirstOrDefault().id + " - " + Model.Usuarios.Where(a => a.id == Model.Arqueo.idUsuarioCreador).FirstOrDefault().Nombre)   </strong>
+
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th class="bg-info">Descripción</th>
+                                        <th class="bg-info">Bodega</th>
+                                        <th class="bg-info">Stock</th>
+                                        <th class="bg-info">Contado</th>
+                                        <th class="bg-info">C1</th>
+                                        <th class="bg-info">C2</th>
+                                        <th class="bg-info">C3</th>
+                                        <th class="bg-info">Total Contado</th>
+                                        <th class="bg-info">Diferencia</th>
+                                        <th class="bg-info">Costo</th>
+                                        <th class="bg-info">Costo Diferencia</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.Arqueo.Detalle)
+                                    {
+                                        var Producto = Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault();
+
+                                        <tr>
+
+
+                                            <td>
+                                                @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Codigo + "-" + Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Nombre)
+                                            </td>
+
+                                           
+                                           
+
+                                            <td>
+                                                  @(Model.Bodegas.Where(a => a.id == Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega).FirstOrDefault().CodSAP)
+
+                                            </td>
+                                            <td>
+                                                @(Math.Round(item.Stock, 2))
+                                            </td>
+                                            @if (item.Contado == true)
+                                            {
+
+                                                <td align="center" style="padding-top:15px;"><span class="badge badge-success">Contado</span></td>
+
+                                            }
+                                            else
+                                            {
+
+                                                <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Sin contar</span></td>
+
+                                            }
+                                            <td>  @(Math.Round(item.Cantidad1, 2))</td>
+                                            <td>  @(Math.Round(item.Cantidad2, 2)) </td>
+                                            <td>  @(Math.Round(item.Cantidad3, 2))</td>
+
+
+                                            <td>
+                                                @(Math.Round(item.Total, 2).ToString("C", formato))
+                                            </td>
+
+                                            <td>
+                                                @(Math.Round(item.Diferencia, 2).ToString("C", formato))
+                                            </td>
+
+
+                                            <td> @(Math.Round(item.Costo, 2)) </td>
+                                            <td>  @(Math.Round(item.CostoDiferencia, 2).ToString("C", formato)) </td>
+
+
+
+
+                                        </tr>
+
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                  
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+                <div class="box">
+                    <div class="box-body">
+                        <!-- Table row -->
+                        <div class="row">
+                            <!-- accepted payments column -->
+                            <div class="col-12 col-sm-6">
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-12 col-sm-6 text-right">
+
+
+
+
+                                <div class="total-payment">
+                                    <h3><b>Costo :</b>  <span id="totCot">@(Math.Round(Model.Arqueo.TotalCosto, 2).ToString("C", formato)) </span></h3>
+                                </div>
+
+
+                                <div class="total-payment">
+                                    <h3><b>Costo Diferencia :</b>  <span id="totDif">@(Math.Round(Model.Arqueo.TotalCostoDiferencia, 2).ToString("C", formato)) </span></h3>
+                                </div>
+
+
+
+
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                        <!-- /.row -->
+
+                    </div>
+                </div>
+            </div>
+
+
+         
+        </div>
+    
+ 
+    </div>
+</div>
+<div id="tablaDiv" hidden>
+    <div class="row">
+        <div class="col-12 table-responsive">
+            <table class="table table-bordered" id="tablaExportar">
+                <thead>
+                    <tr class="bg-pale-info">
+                        <th style="background-color: black; color: white;"  >Código</th>
+                        <th style="background-color: black; color: white;">Descripción</th>
+                        <th style="background-color: black; color: white;">Bodega</th>
+                        <th style="background-color: black; color: white;">Stock</th>
+                        <th style="background-color: black; color: white;">Contado</th>
+                        <th style="background-color: black; color: white;">C1</th>
+                        <th style="background-color: black; color: white;">C2</th>
+                        <th style="background-color: black; color: white;">C3</th>
+                        <th style="background-color: black; color: white;">Total Contado</th>
+                        <th style="background-color: black; color: white;">Diferencia</th>
+                        <th style="background-color: black; color: white;">Costo</th>
+                        <th style="background-color: black; color: white;">Costo Diferencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.Arqueo.Detalle)
+                    {
+                        var Producto = Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault();
+
+                        <tr>
+
+                            <td>
+                                @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Codigo )
+                            </td>
+                            <td>
+                                @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" :  Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Nombre)
+                            </td>
+
+
+
+
+                            <td>
+                                @(Model.Bodegas.Where(a => a.id == Producto.idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == Producto.idBodega).FirstOrDefault().CodSAP)
+
+                            </td>
+                            <td>
+                                @item.Stock
+                            </td>
+                            @if (item.Contado == true)
+                            {
+
+                                <td align="center" style="padding-top:15px;"><span class="badge badge-success">Contado</span></td>
+
+                            }
+                            else
+                            {
+
+                                <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Sin contar</span></td>
+
+                            }
+                            <td>  @item.Cantidad1</td>
+                            <td>  @item.Cantidad2 </td>
+                            <td>  @item.Cantidad3</td>
+
+
+                            <td>
+                               @item.Total
+                            </td>
+
+                            <td>
+                               @item.Diferencia
+                            </td>
+
+
+                            <td> @item.Costo </td>
+                            <td>  @item.CostoDiferencia </td>
+
+
+
+
+                        </tr>
+
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.col -->
+
+    </div>
+</div>

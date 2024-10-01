@@ -308,6 +308,17 @@ namespace Sicsoft.Checkin.Web
 .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Reportes"))
 .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
+            services.AddRefitClient<ICrudApi<BitacoraMargenesViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/BitacoraMargenes"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddRefitClient<ICrudApi<ArqueosViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Arqueos"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddRefitClient<ICrudApi<ClientesPromocionesViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/ClientesPromociones"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
             return services;
         }

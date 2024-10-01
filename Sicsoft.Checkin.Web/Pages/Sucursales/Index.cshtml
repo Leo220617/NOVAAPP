@@ -153,7 +153,14 @@
                                         <th>Cod.Sucursal</th>
                                         <th>Acción</th>
                                         <th>Nombre</th>
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                    {
+                                        <th>RUC</th>
+                                    }
+                                    else
+                                    {
                                         <th>Cédula</th>
+                                    }
                                         <th>Lista de Precio</th>
                                         <th>Provincia</th>
                                         <th>Teléfono</th>
@@ -198,7 +205,14 @@
                                     <th>Cod.Sucursal</th>
                                     <th>Acción</th>
                                     <th>Nombre</th>
-                                    <th>Cédula</th>  
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                    {
+                                        <th>RUC</th>
+                                    }
+                                    else
+                                    {
+                                        <th>Cédula</th>
+                                    }
                                     <th>Lista de Precio</th>
                                     <th>Provincia</th>
                                     <th>Teléfono</th>
