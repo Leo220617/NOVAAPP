@@ -20,6 +20,8 @@ namespace NOVAAPP.Pages.Promociones
         private readonly ICrudApi<ListaPreciosViewModel, int> precios;
         private readonly ICrudApi<CategoriasViewModel, int> categorias;
         private readonly ICrudApi<TipoCambiosViewModel, int> tipoCambio;
+        private readonly ICrudApi<ClientesViewModel, string> clientes;
+  
 
         [BindProperty]
         public EncPromocionesViewModel[] Lista { get; set; }
@@ -36,16 +38,25 @@ namespace NOVAAPP.Pages.Promociones
         [BindProperty]
         public ListaPreciosViewModel[] Precios { get; set; }
 
+
+        [BindProperty]
+        public ClientesViewModel[] Clientes { get; set; }
+
+
+
+
         [BindProperty]
         public TipoCambiosViewModel[] TP { get; set; }
 
-        public NuevoModel(ICrudApi<EncPromocionesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
+        public NuevoModel(ICrudApi<EncPromocionesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<ClientesViewModel, string> clientes) //CTOR 
         {
             this.service = service;
             this.productos = productos;
             this.precios = precios;
             this.categorias = categorias;
             this.tipoCambio = tipoCambio;
+            this.clientes = clientes;
+   
 
         }
         public async Task<IActionResult> OnGetAsync()
@@ -91,7 +102,10 @@ namespace NOVAAPP.Pages.Promociones
                 Lista = await service.ObtenerLista(filtro2);
                 filtro.FechaInicial = DateTime.Now.Date;
                 TP = await tipoCambio.ObtenerLista(filtro);
-
+                filtro.Externo = true;
+                filtro.Activo = true;
+                Clientes = await clientes.ObtenerLista(filtro);
+                //ClientesPromociones = await promoC.ObtenerLista("");
                 return Page();
             }
             catch (Exception ex)

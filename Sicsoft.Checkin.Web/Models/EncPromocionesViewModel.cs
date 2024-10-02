@@ -16,5 +16,6 @@ namespace NOVAAPP.Models
         public DateTime FechaCreacion { get; set; }
 
         public PromocionesViewModel[] Detalle { get; set; }
+        public ClientesPromocionesViewModel[] Clientes { get; set; }
     }
 }

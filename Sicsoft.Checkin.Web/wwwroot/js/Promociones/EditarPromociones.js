@@ -21,7 +21,8 @@ var Duplicado = false;
 var TipoCambio = [];
 var Fechabool = false;
 var Promocion = [];
-
+var Clientes = [];
+var ProdCadenaC = [];
 function retornaMargenGanancia(PrecioVenta, Costo) {
     try {
 
@@ -40,10 +41,10 @@ function Recuperar() {
         Productos = JSON.parse($("#Productos").val());
         Categorias = JSON.parse($("#Categorias").val());
         TipoCambio = JSON.parse($("#TipoCambio").val());
-
+        Clientes = JSON.parse($("#Clientes").val());
         RellenaListaPrecios()
         RellenaCategorias()
-
+        RellenaClientes();
 
 
         RecuperarInformacion() 
@@ -105,9 +106,23 @@ function RecuperarInformacion() {
             };
             ProdCadena.push(Producto);
         }
+        for (var i = 0; i < Promocion.Clientes.length; i++) {
 
+ 
+            var Cliente =
+            {
+                idPromocion: 0,
+
+                idCliente: Promocion.Clientes[i].idCliente
+              
+
+
+            };
+            ProdCadenaC.push(Cliente);
+        }
 
         RellenaTabla();
+        RellenaTablaC();
         onChangeListaPrecio();
     
 
@@ -120,6 +135,176 @@ function RecuperarInformacion() {
 
         })
     }
+}
+
+function RellenaClientes() {
+    try {
+        var html = "";
+        $("#ClienteSeleccionado").html(html);
+        html += "<option value='0' > Seleccione Cliente </option>";
+
+        for (var i = 0; i < Clientes.length; i++) {
+            html += "<option value='" + Clientes[i].id + "' > " + Clientes[i].Codigo + " - " + Clientes[i].Cedula + " - " + Clientes[i].Nombre + " </option>";
+        }
+
+
+
+        $("#ClienteSeleccionado").html(html);
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error ' + e
+
+        })
+    }
+
+} function AgregarClienteTabla() {
+    try {
+
+
+        var id = parseFloat($("#ClienteSeleccionado").val()),
+
+            Duplicado = false;
+
+
+
+        var Cliente =
+        {
+
+
+            idPromocion: 0,
+
+            idCliente: parseFloat($("#ClienteSeleccionado").val()),
+
+
+
+
+        };
+
+
+
+
+        for (var i = 0; i < ProdCadenaC.length; i++) {
+
+
+
+
+            if (Cliente.idCliente == ProdCadenaC[i].idCliente) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ya se ingreso el mismo cliente en otra línea '
+
+                })
+                Duplicado = true;
+                return false;
+            } else {
+                Duplicado = false;
+            }
+        }
+
+
+
+
+
+
+
+        if (Duplicado == false && Cliente.idCliente != 0) {
+
+
+
+
+
+
+            ProdCadenaC.push(Cliente);
+
+            RellenaTablaC();
+
+            $("#ClienteSeleccionado").val("0").trigger('change.select2');
+        }
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error: ' + e
+
+        })
+    }
+
+
+
+
+
+
+
+
+}
+function EliminarCliente(i) {
+    try {
+        var Cliente = ProdCadenaC[i];
+
+
+
+
+        ProdCadenaC.splice(i, 1);
+
+
+
+        RellenaTablaC();
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error ' + e
+
+        })
+    }
+
+}
+function RellenaTablaC() {
+    try {
+        var html = "";
+        $("#tbody2").html(html);
+
+
+
+
+        for (var i = 0; i < ProdCadenaC.length; i++) {
+            var Client = Clientes.find(a => a.id == ProdCadenaC[i].idCliente);
+
+
+
+
+            html += "<tr>";
+
+            html += "<td> " + (i + 1) + " </td>";
+
+            html += "<td > " + Client.Codigo + " - " + Client.Nombre + " </td>";
+
+
+            html += "<td class='text-center'> <a class='fa fa-trash' onclick='javascript:EliminarCliente(" + i + ") '> </a> </td>";
+
+
+            html += "</tr>";
+
+
+
+        }
+
+
+
+
+        $("#tbody2").html(html);
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error ' + e
+
+        })
+    }
+
 }
 function RellenaCategorias() {
     try {
@@ -935,7 +1120,8 @@ function Generar() {
             FechaVencimiento: $("#FechaVen").val(),
             FechaCreacion: $("#Fecha").val(),
             idUsuarioCreador: 0,
-            Detalle: ProdCadena
+            Detalle: ProdCadena,
+            Clientes: ProdCadenaC
         }
 
         if (validarPromocion(EncPromociones)) {
