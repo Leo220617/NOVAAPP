@@ -872,19 +872,32 @@ function onChangePrecioProducto(i) {
 
 
 
+            if (Pais == "C") {
+                if (ProdCadena[i].Moneda == "CRC") {
+                    var Ganancia = retornaMargenGanancia(ProdCadena[i].PrecioFinal, PE.Costo);
 
-            if (ProdCadena[i].Moneda == "CRC") {
-                var Ganancia = retornaMargenGanancia(ProdCadena[i].PrecioFinal, PE.Costo);
-
-                $("#" + i + "_ProdG").val(Ganancia.toFixed(2));
-                $("#" + i + "_ProdG").text(Ganancia.toFixed(2));
-                if (Ganancia > 0) {
-                    input.css('background-color', '#EFFFE9')
+                    $("#" + i + "_ProdG").val(Ganancia.toFixed(2));
+                    $("#" + i + "_ProdG").text(Ganancia.toFixed(2));
+                    if (Ganancia > 0) {
+                        input.css('background-color', '#EFFFE9')
+                    } else {
+                        input.css('background-color', '#FFE9E9')
+                    }
                 } else {
-                    input.css('background-color', '#FFE9E9')
+                    var Costo = PE.Costo / TipodeCambio.TipoCambio;
+                    var Ganancia = retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo);
+                    $("#" + i + "_ProdG").val(Ganancia.toFixed(2));
+
+                    $("#" + i + "_ProdG").text(Ganancia.toFixed(2));
+                    if (Ganancia > 0) {
+                        input.css('background-color', '#EFFFE9')
+                    } else {
+                        input.css('background-color', '#FFE9E9')
+                    }
                 }
+
             } else {
-                var Costo = PE.Costo / TipodeCambio.TipoCambio;
+                var Costo = PE.Costo;
                 var Ganancia = retornaMargenGanancia(ProdCadena[i].PrecioFinal, Costo);
                 $("#" + i + "_ProdG").val(Ganancia.toFixed(2));
 
