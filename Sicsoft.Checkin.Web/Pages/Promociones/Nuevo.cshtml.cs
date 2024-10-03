@@ -39,6 +39,9 @@ namespace NOVAAPP.Pages.Promociones
         [BindProperty]
         public ListaPreciosViewModel[] Precios { get; set; }
 
+        [BindProperty]
+        public string Pais { get; set; }
+
 
         [BindProperty]
         public ClientesViewModel[] Clientes { get; set; }
@@ -128,6 +131,7 @@ namespace NOVAAPP.Pages.Promociones
                 filtro.Externo = true;
                 filtro.Activo = true;
                 Clientes = await clientes.ObtenerLista(filtro);
+                Pais = Parametros.FirstOrDefault().Pais;
                 //ClientesPromociones = await promoC.ObtenerLista("");
                 return Page();
             }

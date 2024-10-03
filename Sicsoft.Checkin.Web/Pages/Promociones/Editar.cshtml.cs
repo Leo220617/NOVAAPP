@@ -43,7 +43,8 @@ namespace NOVAAPP.Pages.Promociones
 
         [BindProperty]
         public ClientesViewModel[] Clientes { get; set; }
-
+        [BindProperty]
+        public string Pais { get; set; }
 
         [BindProperty]
         public ParametrosViewModel[] Parametros { get; set; }
@@ -124,7 +125,8 @@ namespace NOVAAPP.Pages.Promociones
                 filtro.Activo = true;
                 Clientes = await clientes.ObtenerLista(filtro);
 
-             
+                Pais = Parametros.FirstOrDefault().Pais;
+
                 return Page();
             }
             catch (Exception ex)

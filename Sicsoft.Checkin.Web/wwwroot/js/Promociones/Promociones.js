@@ -22,6 +22,7 @@ var Duplicado = false;
 var TipoCambio = [];
 var Fechabool = false;
 var Clientes = [];
+var Pais = "";
 
 function retornaMargenGanancia(PrecioVenta, Costo) {
     try {
@@ -42,7 +43,7 @@ function Recuperar() {
         Categorias = JSON.parse($("#Categorias").val());
         TipoCambio = JSON.parse($("#TipoCambio").val());
         Clientes = JSON.parse($("#Clientes").val());
-
+        Pais = $("#Pais").val();
         RellenaListaPrecios();
         RellenaCategorias();
         RellenaClientes();
@@ -250,13 +251,19 @@ function onChangeProducto() {
 
         if (Producto != undefined) {
             var Categoria = Categorias.find(a => a.id == Producto.idCategoria);
-            if (Moneda == "CRC") {
+            if (Pais == "C") {
+                if (Moneda == "CRC") {
+                    $("#inputPrecio").val(parseFloat(Producto.PrecioUnitario));
+                    $("#inputFinal").val(parseFloat(Producto.PrecioUnitario));
+                } else {
+                    $("#inputPrecio").val(parseFloat(Producto.PrecioUnitario / TipodeCambio.TipoCambio));
+                    $("#inputFinal").val(parseFloat(Producto.PrecioUnitario / TipodeCambio.TipoCambio));
+                }
+            } else {
                 $("#inputPrecio").val(parseFloat(Producto.PrecioUnitario));
                 $("#inputFinal").val(parseFloat(Producto.PrecioUnitario));
-            } else {
-                $("#inputPrecio").val(parseFloat(Producto.PrecioUnitario / TipodeCambio.TipoCambio));
-                $("#inputFinal").val(parseFloat(Producto.PrecioUnitario / TipodeCambio.TipoCambio));
             }
+           
 
             $("#inputCosto").val(parseFloat(Producto.Costo));
 
@@ -335,22 +342,42 @@ function onChangePrecio() {
 
             }
         } else {
-            if (Producto.PrecioUnitario / TipodeCambio.TipoCambio < PrecioFinal) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + Producto.PrecioUnitario / TipodeCambio.TipoCambio
+            if (Pais == "C") {
+                if (Producto.PrecioUnitario / TipodeCambio.TipoCambio < PrecioFinal) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + Producto.PrecioUnitario / TipodeCambio.TipoCambio
 
-                })
-                parseFloat($("#inputFinal").val(Producto.PrecioUnitario / TipodeCambio.TipoCambio));
+                    })
+                    parseFloat($("#inputFinal").val(Producto.PrecioUnitario / TipodeCambio.TipoCambio));
+                } else {
+
+                    var Costo = Producto.Costo / TipodeCambio.TipoCambio;
+                    var Ganancia = retornaMargenGanancia(PrecioFinal, Costo);
+                    $("#inputGanancia").val(Ganancia);
+
+
+                }
             } else {
+                if (Producto.PrecioUnitario < PrecioFinal) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + Producto.PrecioUnitario
 
-                var Costo = Producto.Costo / TipodeCambio.TipoCambio;
-                var Ganancia = retornaMargenGanancia(PrecioFinal, Costo);
-                $("#inputGanancia").val(Ganancia);
+                    })
+                    parseFloat($("#inputFinal").val(Producto.PrecioUnitario));
+                } else {
+
+                    var Costo = Producto.Costo;
+                    var Ganancia = retornaMargenGanancia(PrecioFinal, Costo);
+                    $("#inputGanancia").val(Ganancia);
 
 
+                }
             }
+           
         }
 
 

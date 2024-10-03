@@ -23,11 +23,11 @@
 @{
     var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
 }
-@section styles{
+@section styles {
 
 
 }
-@section scripts{
+@section scripts {
 
 
     <script src="/js/Promociones/Promociones.js"></script>
@@ -61,6 +61,8 @@
             <input hidden id="Categorias" value="@JsonConvert.SerializeObject(Model.Categoria)" />
             <input hidden id="Clientes" value="@JsonConvert.SerializeObject(Model.Clientes)" />
             <input hidden id="TipoCambio" value="@JsonConvert.SerializeObject(Model.TP)" />
+            <input hidden id="Pais" value="@Model.Pais" />
+
 
             <input hidden id="urlGenerar" value="@Url.Page("Nuevo", "AgregarPromocion")" />
             <input hidden id="urlProductos" value="@Url.Page("Nuevo", "Productos")" />
@@ -113,7 +115,7 @@
                         <div class="col-md-4 pr-1">
                             <div class="form-group">
                                 <label>Nombre</label>
-                                <input id="inputNombre" type="text" class="form-control" placeholder="Nombre" >
+                                <input id="inputNombre" type="text" class="form-control" placeholder="Nombre">
 
 
                             </div>
@@ -136,11 +138,11 @@
 
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Lista de Precio</label>
-                                <select id="ListaSeleccionado"  class="form-control select2" onchange="javascript: onChangeListaPrecio()">
+                                <select id="ListaSeleccionado" class="form-control select2" onchange="javascript: onChangeListaPrecio()">
                                     <option value="0"> Seleccione Lista de Precio</option>
 
 
@@ -164,10 +166,10 @@
                             <div class="form-group">
                                 <label>Moneda</label>
                                 <select class="form-control" id="selectMoneda" onchange="javascript: onChangeMoneda()">
-                                    @if(Model.Parametros.FirstOrDefault().Pais == "C")
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                     {
-                                    <option value="CRC" selected>CRC</option>
-                                        
+                                        <option value="CRC" selected>CRC</option>
+
                                     }
                                     <option value="USD">USD</option>
 
@@ -176,8 +178,8 @@
 
                             </div>
                         </div>
-                       
-                      
+
+
                         <div class="col-md-4">
                             <br><br>
                             <br><br>
@@ -283,7 +285,9 @@
                                         </div>
                                         <div class="col-md-4 pr-1">
                                             <div class="form-group">
-                                                <label>Costo (Colones)</label>
+
+                                                <label>Costo @(Model.Pais == "C" ? "(Colones)" : "")</label>
+
                                                 <input id="inputCosto" type="number" disabled class="form-control" placeholder="Costo" value="0">
 
 
@@ -297,7 +301,7 @@
 
                                     <div class="row">
 
-                                      
+
 
                                         <div class="col-md-6 pr-1">
                                             <div class="form-group">
@@ -386,7 +390,6 @@
                         <div class="col-12 col-sm-6">
                         </div>
                         <!-- /.col -->
-                     
                         <!-- /.col -->
                     </div>
                     <!-- /.row -->
@@ -430,9 +433,9 @@
 
                                     </div>
                                     <br />
-                                 
 
-                                 
+
+
 
                                     <div class="row">
 
