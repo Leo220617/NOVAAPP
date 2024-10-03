@@ -23,11 +23,11 @@
 @{
     var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
 }
-@section styles{
+@section styles {
 
 
 }
-@section scripts{
+@section scripts {
 
 
     <script src="/js/Promociones/EditarPromociones.js"></script>
@@ -164,7 +164,11 @@
                             <div class="form-group">
                                 <label>Moneda</label>
                                 <select class="form-control" id="selectMoneda" onchange="javascript: onChangeMoneda()">
-                                    <option value="CRC" selected>CRC</option>
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "C")
+                                    {
+                                        <option value="CRC" selected>CRC</option>
+
+                                    }
                                     <option value="USD">USD</option>
 
                                 </select>

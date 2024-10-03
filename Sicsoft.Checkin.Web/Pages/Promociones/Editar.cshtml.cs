@@ -21,7 +21,8 @@ namespace NOVAAPP.Pages.Promociones
         private readonly ICrudApi<CategoriasViewModel, int> categorias;
         private readonly ICrudApi<TipoCambiosViewModel, int> tipoCambio;
         private readonly ICrudApi<ClientesViewModel, string> clientes;
-    
+        private readonly ICrudApi<ParametrosViewModel, int> param;
+
         [BindProperty]
         public EncPromocionesViewModel[] Lista { get; set; }
 
@@ -44,7 +45,10 @@ namespace NOVAAPP.Pages.Promociones
         public ClientesViewModel[] Clientes { get; set; }
 
 
-        public EditarModel(ICrudApi<EncPromocionesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<ClientesViewModel, string> clientes) //CTOR 
+        [BindProperty]
+        public ParametrosViewModel[] Parametros { get; set; }
+
+        public EditarModel(ICrudApi<EncPromocionesViewModel, int> service, ICrudApi<ParametrosViewModel, int> param, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<ClientesViewModel, string> clientes) //CTOR 
         {
             this.service = service;
             this.productos = productos;
@@ -52,7 +56,8 @@ namespace NOVAAPP.Pages.Promociones
             this.categorias = categorias;
             this.tipoCambio = tipoCambio;
             this.clientes = clientes;
-   
+            this.param = param;
+
 
         }
         public async Task<IActionResult> OnGetAsync(int id)
@@ -97,10 +102,28 @@ namespace NOVAAPP.Pages.Promociones
 
                 Lista = await service.ObtenerLista(filtro2);
                 filtro.FechaInicial = DateTime.Now.Date;
-                TP = await tipoCambio.ObtenerLista(filtro);
+                Parametros = await param.ObtenerLista("");
+                if (Parametros.FirstOrDefault().Pais == "P")
+                {
+                    TP = await tipoCambio.ObtenerLista(filtro);
+                    if (TP == null)
+                    {
+                        TP = new TipoCambiosViewModel[1];
+                        var TipodeCambio = new TipoCambiosViewModel();
+                        TipodeCambio.Moneda = "USD";
+                        TipodeCambio.TipoCambio = 0;
+                        TP[0] = TipodeCambio;
+                    }
+                }
+                else
+                {
+                    TP = await tipoCambio.ObtenerLista(filtro);
+
+                }
                 filtro.Externo = true;
                 filtro.Activo = true;
                 Clientes = await clientes.ObtenerLista(filtro);
+
              
                 return Page();
             }
