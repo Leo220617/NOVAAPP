@@ -114,7 +114,13 @@
         function BuscarCliente() {
             try {
                 $("#NombreCliente").val("");
-                BuscarClienteRegistro();
+                var pais = "@Model.Parametros.FirstOrDefault().Pais";
+                if (pais == "P") {
+                    BuscarClientePanama();
+                }
+                else if (pais == "C") {
+                    BuscarClienteRegistro();
+                }
                 console.log($("#NombreCliente").val());
 
 
@@ -130,7 +136,7 @@
         function BuscarClienteRegistro() {
             try {
 
-                fetch('https://apis.gometa.org/cedulas/' + $("#Cedula").val() + '&fbclid=IwAR02XHHfB7dQycQ1XGVVo8bhyuRZ_jkNgWCZBW5GscL7S18lnG3jQfgeaS8')
+                fetch('https://apis.gometa.org/cedulas/' + $("#CedulaCliente").val() + '&fbclid=IwAR02XHHfB7dQycQ1XGVVo8bhyuRZ_jkNgWCZBW5GscL7S18lnG3jQfgeaS8')
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
@@ -187,7 +193,7 @@
         }
         function BuscarClienteHacienda() {
             try {
-                fetch('https://api.hacienda.go.cr/fe/ae?identificacion=' + $("#Cedula").val() + '&fbclid=IwAR02XHHfB7dQycQ1XGVVo8bhyuRZ_jkNgWCZBW5GscL7S18lnG3jQfgeaS8')
+                fetch('https://api.hacienda.go.cr/fe/ae?identificacion=' + $("#CedulaCliente").val() + '&fbclid=IwAR02XHHfB7dQycQ1XGVVo8bhyuRZ_jkNgWCZBW5GscL7S18lnG3jQfgeaS8')
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
@@ -203,6 +209,64 @@
                             $("#NombreCliente").val(data.nombre.toString());
                             $("#selectTP").val(data.tipoIdentificacion.toString());
                             $("#NombreCliente").attr("readonly", "readonly");
+
+
+
+                        }
+
+                        if ($("#NombreCliente").val().toString() == "" || $("#NombreCliente").val().toString() == undefined || $("#NombreCliente").val().toString() == '' || $("#NombreCliente").val().toString() == null) {
+                            console.log($("#NombreCliente").val());
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Cliente no encontrado en registros. Contactar a soporte!  '
+
+                            })
+                        }
+                    })
+                    .catch(error => {
+                        // Maneja errores
+                        console.error('Fetch error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error  ' + error
+
+                        })
+                    });
+
+
+
+
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'ha ocurrido un error  ' + e
+
+                })
+            }
+        }
+        function BuscarClientePanama() {
+            try {
+                fetch('https://fepatest-api.webposonline.com/api/fepa/ak/v1/test/CheckRuc/ad733bad-167b-4478-87be-aa2035bba008/' + $("#CedulaCliente").val() + '/0')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json(); // Parsea la respuesta como JSON
+                    })
+                    .then(data => {
+                        // Maneja los datos obtenidos
+                        console.log(data);
+
+                        if (data.razonSocial != undefined) {
+
+                            $("#NombreCliente").val(data.razonSocial.toString());
+                            $("#selectTP").val(data.tipoRuc.toString().padStart(2, '0'));
+                            $("#DV").val(data.dv.toString());
+                            $("#NombreCliente").attr("readonly", "readonly");
+                            $("#DV").attr("readonly", "readonly");
 
 
 

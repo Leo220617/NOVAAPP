@@ -155,7 +155,14 @@
         function BuscarCliente() {
             try {
                 $("#Nombre").val("");
-                BuscarClienteRegistro();
+                var pais = "@Model.Parametros.FirstOrDefault().Pais";
+                if (pais == "P") {
+                    BuscarClientePanama();
+                }
+                else if (pais == "C") {
+                    BuscarClienteRegistro();
+                }
+
                 console.log($("#Nombre").val());
 
 
@@ -282,7 +289,64 @@
                 })
             }
         }
+        function BuscarClientePanama() {
+            try {
+                fetch('https://fepatest-api.webposonline.com/api/fepa/ak/v1/test/CheckRuc/ad733bad-167b-4478-87be-aa2035bba008/' + $("#Cedula").val() + '/0')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json(); // Parsea la respuesta como JSON
+                    })
+                    .then(data => {
+                        // Maneja los datos obtenidos
+                        console.log(data);
 
+                        if (data.razonSocial != undefined) {
+
+                            $("#Nombre").val(data.razonSocial.toString());
+                            $("#selectTP").val(data.tipoRuc.toString().padStart(2, '0'));
+                            $("#DV").val(data.dv.toString());
+                            $("#Nombre").attr("readonly", "readonly");
+                            $("#DV").attr("readonly", "readonly");
+
+
+
+                        }
+
+                        if ($("#Nombre").val().toString() == "" || $("#Nombre").val().toString() == undefined || $("#Nombre").val().toString() == '' || $("#Nombre").val().toString() == null) {
+                            console.log($("#Nombre").val());
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Cliente no encontrado en registros. Contactar a soporte!  '
+
+                            })
+                        }
+                    })
+                    .catch(error => {
+                        // Maneja errores
+                        console.error('Fetch error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error  ' + error
+
+                        })
+                    });
+
+
+
+
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'ha ocurrido un error  ' + e
+
+                })
+            }
+        }
     </script>
 
 }<!-- Content Header (Page header) -->
@@ -322,13 +386,15 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
-                                      @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "P")
                                     {
                                         <label for="cyber">Tipo de RUC:</label>
-                                    }else{
+                                    }
+                                    else
+                                    {
                                         <label for="cyber">Tipo de Cédula:</label>
                                     }
-                                  
+
                                     <select id="selectTP" class="form-control" asp-for="Cliente.TipoCedula" onchange="javascript: maskCedula();" required>
                                         @if (Model.Parametros.FirstOrDefault().Pais == "P")
                                         {
@@ -349,39 +415,40 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group">   @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                <div class="form-group">
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "P")
                                     {
-                                         <h5>RUC<span class="text-danger">* (Sin guiones, sin espacios y con 0's)</span></h5>   
-                                              <div class="controls">
-                                        <input type="text" id="Cedula" asp-for="Cliente.Cedula" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="15" onchange="javascript: BuscarCliente()" onblur="javascript: validarCedula()" onchange="javascript: ponerReadOnly()">
-                                    </div>
+                                        <h5>RUC<span class="text-danger">* (Sin guiones, sin espacios y con 0's)</span></h5>
+                                        <div class="controls">
+                                            <input type="text" id="Cedula" asp-for="Cliente.Cedula" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="15" onchange="javascript: BuscarCliente()" onblur="javascript: validarCedula()" onchange="javascript: ponerReadOnly()">
+                                        </div>
 
                                     }
                                     else
                                     {
                                         <h5>Cédula<span class="text-danger">* (Sin guiones, sin espacios y con 0's)</span></h5>
-                                             <div class="controls">
-                                        <input type="text" id="Cedula" asp-for="Cliente.Cedula" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="12" onchange="javascript: BuscarCliente()" onblur="javascript: validarCedula()" onchange="javascript: ponerReadOnly()">
-                                    </div>
+                                        <div class="controls">
+                                            <input type="text" id="Cedula" asp-for="Cliente.Cedula" class="form-control" required data-validation-required-message="Este campo es requerido" maxlength="12" onchange="javascript: BuscarCliente()" onblur="javascript: validarCedula()" onchange="javascript: ponerReadOnly()">
+                                        </div>
 
                                     }
-                                   
-                               
+
+
                                 </div>
                             </div>
-                               @if (Model.Parametros.FirstOrDefault().Pais == "P")
-                                    {
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <h5>D.V<span class="text-danger">*</span></h5>
-                                    <div class="controls">
-                                        <input type="text" id="DV" asp-for="Cliente.DV" class="form-control" required data-validation-required-message="Este campo es requerido">
+                            @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                            {
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <h5>D.V<span class="text-danger">*</span></h5>
+                                        <div class="controls">
+                                            <input type="text" id="DV" asp-for="Cliente.DV" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        </div>
+
                                     </div>
 
                                 </div>
-
-                            </div>
-                                    }
+                            }
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <h5>Nombre<span class="text-danger">*</span></h5>
@@ -551,7 +618,7 @@
                                 </div>
                             }
 
-                         
+
                         </div>
                         <div class="row">
                             <div class="col-md-4">
@@ -637,89 +704,89 @@
 
 </section>
 <script>
-    var Pais ="";
+    var Pais = "";
     function maskCedula() {
         Pais = $("#Pais").val();
         $("#Telefono").mask("9999-9999");
         var TC = $("#selectTP").val();
-        if(Pais == "P"){
-                switch (TC) {
-            case "01":
-                {
-                    $("#Cedula").mask("9-9999-9999");
-                    break;
-                }
-            case "02":
-                {
-                    $("#Cedula").mask(" 999-999-999-99-9999");
-                    break;
-                }
-            case "03":
-                {
-                    $("#Cedula").mask("999999999999999");
-                    break;
-                }
-   9
+        if (Pais == "P") {
+            switch (TC) {
+                case "01":
+                    {
+                        $("#Cedula").mask("9-9999-9999");
+                        break;
+                    }
+                case "02":
+                    {
+                        $("#Cedula").mask(" 999-999-999-99-9999");
+                        break;
+                    }
+                case "03":
+                    {
+                        $("#Cedula").mask("999999999999999");
+                        break;
+                    }
+                    9
+            }
+        } else {
+            switch (TC) {
+                case "01":
+                    {
+                        $("#CedulaCliente").mask("999999999");
+                        break;
+                    }
+                case "02":
+                    {
+                        $("#CedulaCliente").mask("9999999999");
+                        break;
+                    }
+                case "03":
+                    {
+                        $("#CedulaCliente").mask("999999999999");
+                        break;
+                    }
+                case "04":
+                    {
+                        $("#CedulaCliente").mask("999999999999");
+                        break;
+                    }
+            }
         }
-        }else{
-    switch (TC) {
-            case "01":
-                {
-                    $("#CedulaCliente").mask("999999999");
-                    break;
-                }
-            case "02":
-                {
-                    $("#CedulaCliente").mask("9999999999");
-                    break;
-                }
-            case "03":
-                {
-                    $("#CedulaCliente").mask("999999999999");
-                    break;
-                }
-            case "04":
-                {
-                    $("#CedulaCliente").mask("999999999999");
-                    break;
-                }
-        }
-        }
-    
+
 
     }
 
     function validarCedula() {
         Pais = $("#Pais").val();
         var TC = $("#selectTP").val();
-        if(Pais == "P"){
+        if (Pais == "P") {
 
-        }else{
-                 switch (TC) {
-            case "01":
-                {
-                    if ($("#CedulaCliente").val().length < 9) {
+        } else {
+            switch (TC) {
+                case "01":
+                    {
+                        if ($("#CedulaCliente").val().length < 9) {
 
-                        $("#CedulaCliente").focus();
-                        $("#CedulaCliente").select();
+                            $("#CedulaCliente").focus();
+                            $("#CedulaCliente").select();
+                        }
+
+                        break;
+                    }
+                case "02":
+                    {
+                        if ($("#CedulaCliente").val().length < 10) {
+
+                            $("#CedulaCliente").focus();
+                            $("#CedulaCliente").select();
+                        }
+
+                        break;
                     }
 
-                    break;
-                }
-            case "02":
-                {
-                    if ($("#CedulaCliente").val().length < 10) {
-
-                        $("#CedulaCliente").focus();
-                        $("#CedulaCliente").select();
-                    }
-
-                    break;
-                }
-
+            }
         }
-        }
-   
+
     }
 
 
