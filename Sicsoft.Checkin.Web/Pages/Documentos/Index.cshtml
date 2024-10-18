@@ -84,6 +84,57 @@
             
                
        }
+
+             function  EnviarConsecutivos() {
+            try { 
+         $.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        url: '@Url.Page("Index", "EnviarConsecutivos")',
+                        data: { },
+                        success: function (result) {
+                 $("#divProcesando").modal("hide");
+                              
+                             if (result == false) {
+                                 
+                                 Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar enviar a Hacienda'
+
+                                 })
+
+                             } else {
+                                 Swal.fire({
+                                     title: "Ha sido enviado con éxito",
+
+                                     icon: 'success',
+                                     showCancelButton: false,
+                                     customClass: {
+                                         confirmButton: 'swalBtnColor',
+
+                                     },
+                                     confirmButtonText: 'OK'
+                                 }).then((result) => {
+                                     if (result.isConfirmed) {
+                                         location.reload();
+                                     }
+                                 })
+                             }
+             },
+             beforeSend: function () {
+                 $("#divProcesando").modal("show");
+             }
+                     })
+
+           
+        }catch(e)
+        {
+
+        }
+            
+               
+       }
         var ids = 0;
         function onClickModal(id) {
             try {
@@ -189,8 +240,13 @@
                 <div class="box">
                     <div class="box-header with-border">
                         <div class="row">
-                            <div class="col-sm-8"> <h4 class="box-title">Documentos</h4></div>
-                           <div class="col-sm-4"> <button onclick="javascript: ActualizarConsecutivos()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Actualizar Consecutivos"> Actualizar Consecutivos</button></div>
+                            <div class="col-sm-6"> <h4 class="box-title">Documentos</h4></div>
+                        @if(Model.Parametros.FirstOrDefault().Pais == "C")
+                        {
+                             <div class="col-sm-3"> <button onclick="javascript: ActualizarConsecutivos()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Actualizar Consecutivos"> Actualizar Consecutivos</button></div>
+                             <div class="col-sm-3"> <button onclick="javascript: EnviarConsecutivos()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Actualizar Consecutivos"> Enviar a Hacienda</button></div>
+                        }
+                       
 
                         </div>
 
