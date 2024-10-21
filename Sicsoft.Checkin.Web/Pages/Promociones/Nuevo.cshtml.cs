@@ -114,12 +114,12 @@ namespace NOVAAPP.Pages.Promociones
                 if (Parametros.FirstOrDefault().Pais == "P")
                 {
                     TP = await tipoCambio.ObtenerLista(filtro);
-                    if (TP == null)
+                    if (TP.Length == 0)
                     {
                         TP = new TipoCambiosViewModel[1];
                         var TipodeCambio = new TipoCambiosViewModel();
                         TipodeCambio.Moneda = "USD";
-                        TipodeCambio.TipoCambio = 0;
+                        TipodeCambio.TipoCambio = 1;
                         TP[0] = TipodeCambio;
                     }
                 }
