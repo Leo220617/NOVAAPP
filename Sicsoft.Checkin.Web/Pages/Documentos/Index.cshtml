@@ -481,7 +481,7 @@
                                     <th>Procesado SAP</th>
                                     <th>Pago SAP</th>
                                     <th>Generado Por</th>
-
+                                    <th>Validado</th>
 
 
 
@@ -599,7 +599,17 @@
                                             @(Model.Users.Where(a => a.id == item.idUsuarioCreador).FirstOrDefault() == null ? "": Model.Users.Where(a => a.id == item.idUsuarioCreador).FirstOrDefault().Nombre )
 
                                         </td>
+                                         <td>
+                                            @if (item.Validado)
+                                            {
+                                                <span class="badge badge-pill badge-success">Validado</span>
 
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-pill badge-danger">Sin Validar</span>
+                                            }
+                                        </td>
 
 
 
@@ -634,6 +644,7 @@
                                     <th>Procesado SAP</th>
                                     <th>Pago SAP</th>
                                     <th>Generado Por</th>
+                                    <th>Validado</th>
 
 
 

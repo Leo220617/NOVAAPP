@@ -59,7 +59,7 @@
 
                             </div>
 
-                             <div class="col-4">
+                            <div class="col-4">
                                 <div class="form-group">
                                     <h5>Descuento Máximo<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -73,16 +73,16 @@
 
                         </div>
 
-                             <br />
-                        <input type="checkbox" asp-for="Usuario.novapos" id="md_checkbox_10" class="chk-col-green" >
+                        <br />
+                        <input type="checkbox" asp-for="Usuario.novapos" id="md_checkbox_10" class="chk-col-green">
                         <label for="md_checkbox_10">NOVAPOS</label>
                         <br />
                         <br />
 
-                           <div class="row">
+                        <div class="row">
 
-                            
-                                <div class="col-6">
+
+                            <div class="col-6">
                                 <div class="form-group">
                                     <h5>Rol<span class="text-danger">*</span></h5>
 
@@ -100,7 +100,7 @@
                                 </div>
 
                             </div>
-                               <div class="col-6">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <h5>Vendedor<span class="text-danger">*</span></h5>
 
@@ -119,12 +119,12 @@
 
                             </div>
 
-                           
 
-                               </div>
+
+                        </div>
 
                         <div class="row">
-                            
+
                             <div class="col-4">
                                 <div class="form-group">
                                     <h5>Contraseña<span class="text-danger"> (Para este caso, si desea cambiar la contraseña, deben digitarla, sino, solamente se deja en blanco)</span></h5>
@@ -136,7 +136,19 @@
 
 
                             </div>
-                           
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>PIN<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Usuario.PIN" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
                         </div>
 
                         <div class="text-xs-right">
