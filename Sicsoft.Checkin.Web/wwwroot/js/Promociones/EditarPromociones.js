@@ -61,7 +61,15 @@ function Recuperar() {
     }
 
 }
+function convertirAFecha(fechaString) {
+    const [dia, mes, año] = fechaString.split('/').map(Number);
+    return new Date(año, mes - 1, dia); // Restamos 1 al mes porque los meses en Date empiezan desde 0
+}
 
+function convertirAFechaX(fechaString) {
+    const [año, mes, dia] = fechaString.split('-').map(Number);
+    return new Date(año, mes - 1, dia); // Restamos 1 al mes porque los meses en Date empiezan desde 0
+}
 function RecuperarInformacion() {
     try {
     
@@ -614,7 +622,7 @@ function AgregarProductoTabla() {
 
 
         var id = $("#ProductoSeleccionado").val();
-        var fechaHoy = $.datepicker.formatDate('dd/mm/yy', new Date());
+        var fechaHoy = convertirAFecha($.datepicker.formatDate('dd/mm/yy', new Date()));
         var fechaHoyX = $.datepicker.formatDate('yy-mm-dd', new Date());
         var idCategoria = $("#CategoriaSeleccionado").val();
         var idListaPrecio = $("#ListaSeleccionado").val();
@@ -670,18 +678,8 @@ function AgregarProductoTabla() {
             }
         }
 
-        var PromoFechaX = Producto.FechaVen;
-        var fecha = new Date(PromoFechaX + 'T00:00:00');
-        var dia = fecha.getDate();
-        var mes = fecha.getMonth() + 1;
-        var anio = fecha.getFullYear();
-
-
-        dia = dia < 10 ? '0' + dia : dia;
-        mes = mes < 10 ? '0' + mes : mes;
-
-        var fechaFormateada = dia + '/' + mes + '/' + anio;
-        var PromoFechaHoraX = fechaFormateada;
+        var PromoFechaX = convertirAFechaX(Producto.FechaVen);
+   
 
         if (Promociones != undefined && Promociones.FechaVen > fechaHoy) {
             var PromoFecha = Promociones.FechaVen;
@@ -737,7 +735,7 @@ function AgregarProductoTabla() {
 
 
 
-        } else if (Duplicado == false && Fechabool == false && Producto.PrecioFinal > 0 && (Producto.PrecioFinal != PE.PrecioUnitario || Producto.PrecioFinal != Producto.PrecioAnterior) && PromoFechaHoraX >= fechaHoy) {
+        } else if (Duplicado == false && Fechabool == false && Producto.PrecioFinal > 0 && (Producto.PrecioFinal != PE.PrecioUnitario || Producto.PrecioFinal != Producto.PrecioAnterior) && PromoFechaX >= fechaHoy) {
 
 
 
