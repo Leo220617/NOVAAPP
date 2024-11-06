@@ -9,6 +9,8 @@ namespace InversionGloblalWeb.Models
     {
         public string Texto { get; set; }
         public string CardName { get; set; }
+
+        public string Buscar { get; set; }
         public string CardCode { get; set; }
         public int Codigo1 { get; set; }
         public int Codigo2 { get; set; }
