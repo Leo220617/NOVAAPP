@@ -114,9 +114,12 @@
         function BuscarCliente() {
             try {
                 $("#NombreCliente").val("");
+                var selectTP = $("#selectTP").val();
                 var pais = "@Model.Parametros.FirstOrDefault().Pais";
-                if (pais == "P") {
+                if (pais == "P" && selectTP != 99) {
                     BuscarClientePanama();
+                } else if (selectTP == 99) {
+                    $("#Nombre").removeAttr("readonly");
                 }
                 else if (pais == "C") {
                     BuscarClienteRegistro();
@@ -360,6 +363,7 @@
                                             <option value="01">Natural</option>
                                             <option value="02">Jurídica</option>
                                             <option value="03">Extranjero</option>
+                                            <option value="99">No Contribuyente</option>
 
                                         }
                                         else
