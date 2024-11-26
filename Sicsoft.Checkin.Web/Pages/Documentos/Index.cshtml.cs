@@ -23,6 +23,7 @@ namespace NOVAAPP.Pages.Documentos
         private readonly ICrudApi<CondicionesPagosViewModel, int> cond;
         private readonly ICrudApi<VendedoresViewModel, int> vendedor;
         private readonly ICrudApi<CajasViewModel, int> cajas;
+        private readonly ICrudApi<ParametrosViewModel, int> param;
 
 
         [BindProperty]
@@ -44,7 +45,10 @@ namespace NOVAAPP.Pages.Documentos
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
-        public IndexModel(ICrudApi<DocumentosViewModel, int> service, ICrudApi<ClientesViewModel, string> clientes, ICrudApi<UsuariosViewModel, int> serviceU, ICrudApi<RolesViewModel, int> roles, ICrudApi<UsuariosSucursalesViewModel, string> usuc, ICrudApi<CondicionesPagosViewModel, int> cond, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<CajasViewModel, int> cajas)
+        [BindProperty]
+        public ParametrosViewModel[] Parametros { get; set; }
+
+        public IndexModel(ICrudApi<DocumentosViewModel, int> service, ICrudApi<ClientesViewModel, string> clientes, ICrudApi<UsuariosViewModel, int> serviceU, ICrudApi<RolesViewModel, int> roles, ICrudApi<UsuariosSucursalesViewModel, string> usuc, ICrudApi<CondicionesPagosViewModel, int> cond, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<CajasViewModel, int> cajas, ICrudApi<ParametrosViewModel, int> param)
         {
             this.service = service;
             this.clientes = clientes;
@@ -54,6 +58,7 @@ namespace NOVAAPP.Pages.Documentos
             this.cond = cond;
             this.vendedor = vendedor;
             this.cajas = cajas;
+            this.param = param;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -116,7 +121,7 @@ namespace NOVAAPP.Pages.Documentos
                 Clientes = await clientes.ObtenerLista(filtro2);
 
                 Condicion = await cond.ObtenerLista("");
-
+                Parametros = await param.ObtenerLista("");
                 return Page();
             }
             catch (ApiException ex)
@@ -175,6 +180,20 @@ namespace NOVAAPP.Pages.Documentos
             {
 
                 await service.ActualizarConsecutivos();
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+        }
+
+        public async Task<IActionResult> OnGetEnviarConsecutivos()
+        {
+            try
+            {
+
+                await service.EnviarConsecutivos();
                 return new JsonResult(true);
             }
             catch (ApiException ex)

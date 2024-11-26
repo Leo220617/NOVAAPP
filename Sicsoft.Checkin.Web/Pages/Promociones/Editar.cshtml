@@ -23,11 +23,11 @@
 @{
     var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
 }
-@section styles{
+@section styles {
 
 
 }
-@section scripts{
+@section scripts {
 
 
     <script src="/js/Promociones/EditarPromociones.js"></script>
@@ -60,7 +60,7 @@
             <input hidden id="ListaPrecios" value="@JsonConvert.SerializeObject(Model.Precios)" />
             <input hidden id="Categorias" value="@JsonConvert.SerializeObject(Model.Categoria)" />
             <input hidden id="TipoCambio" value="@JsonConvert.SerializeObject(Model.TP)" />
-
+            <input hidden id="Clientes" value="@JsonConvert.SerializeObject(Model.Clientes)" />
             <input hidden id="urlGenerar" value="@Url.Page("Editar", "AgregarPromocion")" />
             <input hidden id="urlProductos" value="@Url.Page("Editar", "Productos")" />
 
@@ -164,7 +164,11 @@
                             <div class="form-group">
                                 <label>Moneda</label>
                                 <select class="form-control" id="selectMoneda" onchange="javascript: onChangeMoneda()">
-                                    <option value="CRC" selected>CRC</option>
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "C")
+                                    {
+                                        <option value="CRC" selected>CRC</option>
+
+                                    }
                                     <option value="USD">USD</option>
 
                                 </select>
@@ -278,7 +282,7 @@
                                         </div>
                                         <div class="col-md-4 pr-1">
                                             <div class="form-group">
-                                                <label>Costo</label>
+                                                <label>Costo @(Model.Pais == "C" ? "(Colones)" : "")</label>
                                                 <input id="inputCosto" type="number" disabled class="form-control" placeholder="Costo" value="0">
 
 
@@ -369,6 +373,114 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+
+                    <div class="row">
+                        <!-- accepted payments column -->
+                        <div class="col-12 col-sm-6">
+                        </div>
+                        <!-- /.col -->
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-body">
+                    <div class="row">
+
+
+                        <div class="col-md-12  ">
+                            <div class="x_panel">
+                                <div class="x_content">
+
+
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h3>Clientes</h3>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="x_content">
+
+
+
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <select id="ClienteSeleccionado" class="form-control select2">
+                                                <option value="0"> Seleccione Clientes</option>
+
+
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <br />
+
+
+
+
+                                    <div class="row">
+
+
+
+
+                                        <div class="col-sm-12 pl-1" style="text-align: right;">
+
+                                            <a id="agregar" onclick="javascript: AgregarClienteTabla();" class="btn btn-primary" style="color: white !important;">+ Agregar </a>
+                                        </div>
+
+
+
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-body">
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+
+                                        <th>Nombre</th>
+
+                                        <th class="text-right">Eliminar</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody2">
                                 </tbody>
                             </table>
                         </div>

@@ -32,6 +32,7 @@ namespace NOVAAPP.Models
         public int idVendedor { get; set; }
 
         public decimal Descuento { get; set; }
+        public string PIN { get; set; }
 
     }
 }

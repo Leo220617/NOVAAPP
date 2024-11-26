@@ -93,7 +93,7 @@ namespace NOVAAPP.Pages.CierreCajas
                 {
                     Cierre = Cierre.Where(a => a.TotalVendidoFC > 0 || a.TotalAperturaFC > 0).ToArray();
                 }
-                else
+                if (Parametros.FirstOrDefault().Pais == "C")
                 {
                     Cierre = Cierre.Where(a => a.TotalVendidoColones > 0 || a.TotalAperturaColones > 0).ToArray();
                 }

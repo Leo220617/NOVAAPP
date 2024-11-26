@@ -9,6 +9,8 @@ using System.Linq;
 using InversionGloblalWeb.Models;
 using Refit;
 using Newtonsoft.Json;
+using System.IO.Compression;
+using System.IO;
 
 namespace NOVAAPP.Pages.Promociones
 {
@@ -20,6 +22,9 @@ namespace NOVAAPP.Pages.Promociones
         private readonly ICrudApi<ListaPreciosViewModel, int> precios;
         private readonly ICrudApi<CategoriasViewModel, int> categorias;
         private readonly ICrudApi<TipoCambiosViewModel, int> tipoCambio;
+        private readonly ICrudApi<ClientesViewModel, string> clientes;
+        private readonly ICrudApi<ParametrosViewModel, int> param;
+
 
         [BindProperty]
         public EncPromocionesViewModel[] Lista { get; set; }
@@ -37,15 +42,32 @@ namespace NOVAAPP.Pages.Promociones
         public ListaPreciosViewModel[] Precios { get; set; }
 
         [BindProperty]
+        public string Pais { get; set; }
+
+
+        [BindProperty]
+        public ClientesViewModel[] Clientes { get; set; }
+
+
+
+
+        [BindProperty]
         public TipoCambiosViewModel[] TP { get; set; }
 
-        public NuevoModel(ICrudApi<EncPromocionesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
+
+        [BindProperty]
+        public ParametrosViewModel[] Parametros { get; set; }
+
+        public NuevoModel(ICrudApi<EncPromocionesViewModel, int> service, ICrudApi<ParametrosViewModel, int> param, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<ClientesViewModel, string> clientes) //CTOR 
         {
             this.service = service;
             this.productos = productos;
             this.precios = precios;
             this.categorias = categorias;
             this.tipoCambio = tipoCambio;
+            this.clientes = clientes;
+            this.param = param;
+
 
         }
         public async Task<IActionResult> OnGetAsync()
@@ -64,7 +86,7 @@ namespace NOVAAPP.Pages.Promociones
 
                 Categoria = await categorias.ObtenerLista("");
                 ParametrosFiltros filtro = new ParametrosFiltros();
-                
+
 
                 var Productos1 = await productos.ObtenerLista(filtro);
 
@@ -87,11 +109,32 @@ namespace NOVAAPP.Pages.Promociones
                 }).Distinct().ToList();
 
                 ParametrosFiltros filtro2 = new ParametrosFiltros();
-               
+
                 Lista = await service.ObtenerLista(filtro2);
                 filtro.FechaInicial = DateTime.Now.Date;
-                TP = await tipoCambio.ObtenerLista(filtro);
+                Parametros = await param.ObtenerLista("");
+                if (Parametros.FirstOrDefault().Pais == "P")
+                {
+                    TP = await tipoCambio.ObtenerLista(filtro);
+                    if (TP.Length == 0)
+                    {
+                        TP = new TipoCambiosViewModel[1];
+                        var TipodeCambio = new TipoCambiosViewModel();
+                        TipodeCambio.Moneda = "USD";
+                        TipodeCambio.TipoCambio = 1;
+                        TP[0] = TipodeCambio;
+                    }
+                }
+                else
+                {
+                    TP = await tipoCambio.ObtenerLista(filtro);
 
+                }
+                filtro.Externo = true;
+                filtro.Activo = true;
+                Clientes = await clientes.ObtenerLista(filtro);
+                Pais = Parametros.FirstOrDefault().Pais;
+                //ClientesPromociones = await promoC.ObtenerLista("");
                 return Page();
             }
             catch (Exception ex)
@@ -168,20 +211,44 @@ namespace NOVAAPP.Pages.Promociones
             }
         }
 
-        public async Task<IActionResult> OnPostAgregarPromocion(EncPromocionesViewModel recibidos)
+        public async Task<IActionResult> OnPostAgregarPromocion()
         {
             string error = "";
 
-
+            EncPromocionesViewModel recibidos = new EncPromocionesViewModel();
             try
             {
+
+
+                var ms = new MemoryStream();
+                await Request.Body.CopyToAsync(ms);
+
+                byte[] compressedData = ms.ToArray();
+
+                // Descomprimir los datos utilizando GZip
+                using (var compressedStream = new MemoryStream(compressedData))
+                using (var decompressedStream = new MemoryStream())
+                {
+                    using (var decompressionStream = new GZipStream(compressedStream, CompressionMode.Decompress))
+                    {
+                        decompressionStream.CopyTo(decompressedStream);
+                    }
+
+                    // Convertir los datos descomprimidos a una cadena JSON
+                    var jsonString = System.Text.Encoding.UTF8.GetString(decompressedStream.ToArray());
+
+                    // Procesar la cadena JSON como desees
+                    // Por ejemplo, puedes deserializarla a un objeto C# utilizando Newtonsoft.Json
+                    recibidos = Newtonsoft.Json.JsonConvert.DeserializeObject<EncPromocionesViewModel>(jsonString);
+                }
                 recibidos.idUsuarioCreador = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == ClaimTypes.Actor).Select(s1 => s1.Value).FirstOrDefault().ToString());
-                var resp = await service.Agregar(recibidos);
+                await service.Agregar(recibidos);
 
                 var resp2 = new
                 {
                     success = true,
-                    ListaX = resp
+                    ListaX = ""
+
                 };
                 return new JsonResult(resp2);
             }
