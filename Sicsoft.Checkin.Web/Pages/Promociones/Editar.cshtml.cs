@@ -9,6 +9,8 @@ using System.Linq;
 using InversionGloblalWeb.Models;
 using Refit;
 using Newtonsoft.Json;
+using System.IO.Compression;
+using System.IO;
 
 namespace NOVAAPP.Pages.Promociones
 {
@@ -138,13 +140,34 @@ namespace NOVAAPP.Pages.Promociones
         }
      
 
-        public async Task<IActionResult> OnPostAgregarPromocion(EncPromocionesViewModel recibidos)
+        public async Task<IActionResult> OnPostAgregarPromocion()
         {
             string error = "";
 
-
+            EncPromocionesViewModel recibidos = new EncPromocionesViewModel();
             try
             {
+                var ms = new MemoryStream();
+                await Request.Body.CopyToAsync(ms);
+
+                byte[] compressedData = ms.ToArray();
+
+                // Descomprimir los datos utilizando GZip
+                using (var compressedStream = new MemoryStream(compressedData))
+                using (var decompressedStream = new MemoryStream())
+                {
+                    using (var decompressionStream = new GZipStream(compressedStream, CompressionMode.Decompress))
+                    {
+                        decompressionStream.CopyTo(decompressedStream);
+                    }
+
+                    // Convertir los datos descomprimidos a una cadena JSON
+                    var jsonString = System.Text.Encoding.UTF8.GetString(decompressedStream.ToArray());
+
+                    // Procesar la cadena JSON como desees
+                    // Por ejemplo, puedes deserializarla a un objeto C# utilizando Newtonsoft.Json
+                    recibidos = Newtonsoft.Json.JsonConvert.DeserializeObject<EncPromocionesViewModel>(jsonString);
+                }
                 recibidos.idUsuarioCreador = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == ClaimTypes.Actor).Select(s1 => s1.Value).FirstOrDefault().ToString());
                 await service.Editar(recibidos);
 
