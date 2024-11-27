@@ -190,6 +190,15 @@
 
                             }
                             @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "77").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/SubCategorias/Index"><i class="mdi mdi-cube"></i>SubCategorias</a></li>
+                                }
+
+                            }
+                      
+                            @{
                                 if (!string.IsNullOrEmpty(Roles.Where(a => a == "71").FirstOrDefault()))
                                 {
 
@@ -205,6 +214,44 @@
                         </ul>
                     </li>
 
+                    <li class="treeview">
+                        <a href="#">
+                            Aprovisionamiento
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                         
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "77").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/SubCategorias/Index"><i class="mdi mdi-cube"></i>SubCategorias</a></li>
+                                }
+
+                            }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "78").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/LogsProductosAprov/Index"><i class="mdi mdi-cube"></i>Logs Prod Aprov</a></li>
+                                }
+
+                            }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "79").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/MantenimientoProductos/Nuevo"><i class="mdi mdi-cube"></i>Mant Productos</a></li>
+                                }
+
+                            }
+                            <li class="treeview">
+
+
+                        </ul>
+                    </li>
                     <li class="treeview">
                         <a href="#">
                             Precios

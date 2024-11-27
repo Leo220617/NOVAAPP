@@ -320,6 +320,17 @@ namespace Sicsoft.Checkin.Web
 .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/ClientesPromociones"))
 .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
+            services.AddRefitClient<ICrudApi<LogsProductosAprovViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/LogsProductosAprov"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddRefitClient<ICrudApi<LogsProductosAprovisionamientoViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/LogsProductosAprov"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddRefitClient<ICrudApi<SubCategoriasViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/SubCategorias"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
             return services;
         }
     }

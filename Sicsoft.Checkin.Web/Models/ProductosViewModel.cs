@@ -54,5 +54,11 @@ namespace NOVAAPP.Models
 
         public DateTime FechaConteo { get; set; }
 
+        public string Localizacion { get; set; }
+
+        public decimal Minimo { get; set; }
+
+
+        public string Clasificacion { get; set; }
     }
 }

@@ -1,0 +1,293 @@
+﻿@page
+@model NOVAAPP.Pages.SubCategorias.IndexModel
+@{
+    ViewData["Title"] = "SubCategorias";
+
+}
+@using System.Globalization;
+@{
+
+
+
+}
+
+
+@section styles {
+
+
+}
+
+@section scripts {
+
+    <script>
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
+                $(document).ready(function () {
+                    $('.mi-selector').select2();
+                });
+            });
+            $(".js-example-responsive").select2({
+                width: 'resolve',// need to override the changed default
+                height: 'resolve'
+            });
+
+
+
+
+
+        });
+
+
+
+        var ids = 0;
+        function onClickModal(id) {
+            try {
+                ids = id;
+                Swal.fire({
+                    title: '¿Desea sincronizar a SAP?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: `Aceptar`,
+                    denyButtonText: `Cancelar`,
+                    customClass: {
+                        confirmButton: 'swalBtnColor',
+                        denyButton: 'swalDeny'
+                    },
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        SincronizarSAP();
+
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+
+        }
+        function SincronizarSAP() {
+            try {
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Page("Index", "SincronizarSAP")',
+                    data: { id: ids },
+                    success: function (result) {
+                        $("#divProcesando").modal("hide");
+
+                        if (result == false) {
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar sincronizar a SAP'
+
+                            })
+
+                        } else {
+                            Swal.fire({
+                                title: "Ha sido sincronizado a SAP con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    beforeSend: function () {
+                        $("#divProcesando").modal("show");
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
+
+
+
+    </script>
+
+
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Sub Categorias
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Listado Sub Categorias</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Filtro</h4></div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="box-body">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-sm-4 pr-1">
+                                <div class="form-group">
+                                    <label>Categorias</label>
+                                    <select class="form-control select2  " asp-for="filtro.Codigo1">
+                                        <option value="0"> Seleccione</option>
+
+                                        @foreach (var item in Model.Categorias)
+                                        {
+                                            <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
+                                        }
+
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="col-sm-4  pl-1" style="text-align: center; padding-top: 2%;">
+                                <input type="checkbox" id="md_checkbox_1" class="chk-col-red" asp-for="filtro.Procesado" onclick="this.form.submit()" />
+                                <label for="md_checkbox_1">Procesado SAP</label>
+                            </div>
+
+
+                            <div class="col-sm-4 pl-1" style="text-align: center; padding-top: 1%;">
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary"> <i class="fa fa-search"></i></button>
+                            </div>
+
+
+
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-6"> <h4 class="box-title">Sub Categorias</h4></div>
+
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+
+                                        <th>ID</th>
+                                        <th>Acción</th>
+                                        <th>Nombre</th>
+                                        <th>Categoria</th>
+                                        <th>Procesado a SAP</th>
+                                        <th> Fecha Actualización</th>
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Objeto)
+                                    {
+                                        <tr>
+
+
+
+                                            <td>
+                                                @item.id
+                                            </td>
+                                            <td align="center">
+                                                <a onclick="javascript: onClickModal('@item.id')" title="Insertar a SAP"><img src="/sapX.png" /></a>
+
+                                            </td>
+
+                                            <td>         @item.Nombre </td>
+
+                                            <td>
+                                                @(Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault().id + " - " + Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault().Nombre)
+                                            </td>
+
+                                            <td>
+                                                @if (item.ProcesadoSAP)
+                                                {
+                                                    <span class="badge badge-pill badge-success">Procesado</span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge badge-pill badge-danger">Sin procesar</span>
+                                                }
+
+                                            </td>
+                                            <td>
+                                                @item.FechaActualizacion.ToString("dd/MM/yyyy")
+                                            </td>
+
+
+                                        </tr>
+
+                                    }
+
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+
+                                        <th>ID</th>
+                                        <th>Acción</th>
+                                        <th>Nombre</th>
+                                        <th>Categoria</th>
+                                        <th>Procesado a SAP</th>
+                                        <th> Fecha Actualización</th>
+
+
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
