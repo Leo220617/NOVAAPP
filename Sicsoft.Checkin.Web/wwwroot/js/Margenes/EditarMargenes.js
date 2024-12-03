@@ -911,7 +911,7 @@ function validarMargen(e) {
             })
             return false;
         }
-        else if (e.Cobertura == "" || e.Cobertura == null || e.Cobertura <= 0) {
+        else if ( e.Cobertura == null || e.Cobertura < 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
