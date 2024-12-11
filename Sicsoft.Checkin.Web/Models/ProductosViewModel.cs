@@ -19,7 +19,7 @@ namespace NOVAAPP.Models
 
         public int idListaPrecios { get; set; }
 
-        
+        public int idSubCategoria { get; set; }
         public string Nombre { get; set; }
 
         public string Moneda { get; set; }

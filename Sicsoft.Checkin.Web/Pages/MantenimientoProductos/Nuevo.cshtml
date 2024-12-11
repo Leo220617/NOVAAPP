@@ -62,6 +62,7 @@
             <input hidden id="Productos" value="@JsonConvert.SerializeObject(Model.Productos)" />
             <input hidden id="Categorias" value="@JsonConvert.SerializeObject(Model.Categorias)" />
             <input hidden id="Bodegas" value="@JsonConvert.SerializeObject(Model.Bodegas)" />
+            <input hidden id="SubCategorias" value="@JsonConvert.SerializeObject(Model.SubCategorias)" />
 
             <input hidden id="urlGenerar" value="@Url.Page("Nuevo", "AgregarLogsProductosAprov")" />
 
@@ -201,17 +202,42 @@
                                         </div>
 
                                     </div>
-
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <h5>Clasificación<span class="text-danger">*</span></h5>
                                             <div class="controls">
-                                                <input type="text" id="ClasificacionT" value="0" class="form-control">
+                                                <select id="ClasificacionT" class="form-control select2">
+                                                    <option value="A">A</option>
+                                                    <option value="B">B</option>
+                                                    <option value="C">C</option>
+                                                    <option value="D">D</option>
+                                                    <option value="E">E</option>
+                                                    <option value="F">F</option>
+                                                    <option value="G">G</option>
+                                                    <option value="H">H</option>
+                                                    <option value="I">I</option>
+                                                    <option value="J">J</option>
+                                                    <option value="K">K</option>
+                                                    <option value="L">L</option>
+                                                    <option value="M">M</option>
+                                                    <option value="N">N</option>
+                                                    <option value="O">O</option>
+                                                    <option value="P">P</option>
+                                                    <option value="Q">Q</option>
+                                                    <option value="R">R</option>
+                                                    <option value="S">S</option>
+                                                    <option value="T">T</option>
+                                                    <option value="U">U</option>
+                                                    <option value="V">V</option>
+                                                    <option value="W">W</option>
+                                                    <option value="X">X</option>
+                                                    <option value="Y">Y</option>
+                                                    <option value="Z">Z</option>
+                                                </select>
                                             </div>
-
                                         </div>
-
                                     </div>
+
 
                                     <div class="col-md-4">
                                     </div>

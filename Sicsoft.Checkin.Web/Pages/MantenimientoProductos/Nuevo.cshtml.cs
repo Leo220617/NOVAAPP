@@ -26,6 +26,7 @@ namespace NOVAAPP.Pages.MantenimientoProductos
 
 
 
+
         [BindProperty]
         public LogsProductosAprovisionamientoViewModel LogsProductosAprov { get; set; }
 

@@ -63,9 +63,10 @@ function Recuperar() {
         Bodegas = JSON.parse($("#Bodegas").val());
         Productos = JSON.parse($("#Productos").val());
         Categorias = JSON.parse($("#Categorias").val());
+        SubCategorias = JSON.parse($("#SubCategorias").val());
 
 
-  
+
         RellenaCategorias()
 
 
@@ -122,8 +123,8 @@ function onChangeCategoria() {
             ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.Stock > 0);
             ProdClientes2 = Productos.filter(a => a.idCategoria == idCategoria && a.Stock == 0);
             RellenaProductos();
-       
-        } 
+            $("#botonGT").prop("disabled", false);
+        }
 
     } catch (e) {
         Swal.fire({
@@ -183,7 +184,7 @@ function RellenaTabla() {
             var idBodega = ProdClientes[i].idBodega;
             var Bodega = Bodegas.find(a => a.id == idBodega);
             var idSubCategoria = ProdClientes[i].idSubCategoria;
-            var SubCategoria = Bodegas.find(a => a.id == idSubCategoria && a.idCategoria);
+            var SubCategoria = SubCategorias.find(a => a.id == idSubCategoria);
             html += "<tr>";
 
             html += "<td class='text-center'>  <input  type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeRevisado(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> ";
@@ -202,9 +203,23 @@ function RellenaTabla() {
 
 
 
-            html += "<td class='text-center'> <input type='number' id='" + i + "_Cantidad1' class='form-control'   value= '0' min='1'/>  </td>";
-            html += "<td class='text-center'> <input  type='text' id='" + i + "_Cantidad2' class='form-control'   value= '0' min='1'/>  </td>";
-          
+            html += "<td class='text-center'> <input type='number' id='" + i + "_Cantidad1' class='form-control'   value= '" + ProdClientes[i].Minimo + "' min='1'/>  </td>";
+            html += "<td class='text-center'>  ";
+            let selectHTML = "<select id='" + i + "_Cantidad2' class='form-control'>";
+            let abecedario = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            // Generar las opciones dinámicamente
+            for (let letra of abecedario) {
+                let selected = ProdClientes[i].Clasificacion === letra ? "selected" : "";
+                selectHTML += `<option value='${letra}' ${selected}>${letra}</option>`;
+            }
+
+            selectHTML += "</select>";
+            html += selectHTML;
+            html += "</td>";
+
+
+
 
 
 
@@ -278,7 +293,7 @@ function onChangeRevisado(i) {
                 $("#" + i + "_Cantidad3").prop('disabled', true);
 
                 $("#" + i + "_SubCategoria").text(PalabraClave);
-            } 
+            }
 
             ProdCadena.push(Producto);
         } else {
@@ -294,7 +309,7 @@ function onChangeRevisado(i) {
             ProdCadena[x].Minimo = Cantidad1;
             ProdCadena[x].Clasificacion = Clasificacion;
 
-            
+
 
             if (valorCheck == true) {
                 $("#" + i + "_Cantidad1").prop('disabled', true);
@@ -302,20 +317,20 @@ function onChangeRevisado(i) {
                 $("#" + i + "_SubCategoria").text(PalabraClave);
 
 
-              
+
             } else {
                 $("#" + i + "_Cantidad1").prop('disabled', false);
                 $("#" + i + "_Cantidad2").prop('disabled', false);
                 $("#" + i + "_SubCategoria").text("N/A");
                 ProdCadena.splice(x, 1);
-        
+
             }
 
 
         }
 
         $("#CategoriaSeleccionado").prop("disabled", true);
-        $("#botonGT").prop("disabled", false);
+
 
     } catch (e) {
         Swal.fire({
@@ -334,7 +349,7 @@ function Generar() {
 
     try {
 
-     
+
         var MantinimientoProductos = {
 
             idCategoria: $("#CategoriaSeleccionado").val(),
@@ -682,43 +697,43 @@ function SetearT() {
             var descripcion = $(this).find("td:eq(1)").text().toLowerCase();
             var busqueda = $("#busqueda").val().toLowerCase
             var valorCheck = $("#" + index + "_mdcheckbox").prop('checked');
-            if (valorCheck == true) {
-                if (descripcion.includes(busqueda)) {
-                    var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[index].Codigo && a.idCategoria == idCategoria);
+
+            if (descripcion.includes(busqueda)) {
+                var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[index].Codigo && a.idCategoria == idCategoria);
 
 
 
 
-                    if (Existe == undefined) {
+                if (Existe == undefined) {
 
 
 
-                      
-
-                        $("#" + index + "_Cantidad1").val(Minimo);
-                        $("#" + index + "_Cantidad2").val(Clasificacion);
-              
-         
-
-                        onChangeRevisado(index);
 
 
-
-                    }
-                } else {
-
-
-
-                 
                     $("#" + index + "_Cantidad1").val(Minimo);
                     $("#" + index + "_Cantidad2").val(Clasificacion);
 
-              
-                    onChangeRevisado(index);
+
+
+
 
 
 
                 }
+            } else if (valorCheck == false) {
+
+
+
+
+                $("#" + index + "_Cantidad1").val(Minimo);
+                $("#" + index + "_Cantidad2").val(Clasificacion);
+
+
+
+
+
+
+
             }
         });
     } catch (e) {
