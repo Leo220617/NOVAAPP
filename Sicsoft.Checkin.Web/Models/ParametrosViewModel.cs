@@ -64,5 +64,7 @@ namespace NOVAAPP.Models
         public string SQLSeriesProductos { get; set; }
         public string Pais { get; set; }
 
+        public string SQLAprovisionamiento { get; set; }
+
     }
 }
