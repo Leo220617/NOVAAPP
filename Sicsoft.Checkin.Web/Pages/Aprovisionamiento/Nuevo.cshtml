@@ -30,13 +30,26 @@
             top: 0;
             background: white;
         }
+
+        .table-responsive {
+            position: relative;
+            width: 100%;
+        }
+
+        .container, .row {
+        
+            overflow-x: scroll; /* Habilita desplazamiento si es necesario */
+        }
+      
+
     </style>
 
 }
 @section scripts {
 
 
-    <script src="/js/MantenimientoProductos/MantenimientoProductos.js?v=0.1.3"></script>
+
+    <script src="/js/Aprovisionamiento/Aprovisionamiento.js?v=0.1.3"></script>
 
 
 }
@@ -63,7 +76,7 @@
             <input hidden id="Categorias" value="@JsonConvert.SerializeObject(Model.Categorias)" />
             <input hidden id="Bodegas" value="@JsonConvert.SerializeObject(Model.Bodegas)" />
             <input hidden id="SubCategorias" value="@JsonConvert.SerializeObject(Model.SubCategorias)" />
-            @*      <input hidden id="AprovisionamientoProductos" value="@JsonConvert.SerializeObject(Model.AprovisionamientoProductos.AprovisionamientoProductos)" /> *@
+            <input hidden id="AprovisionamientoProductos" value="@JsonConvert.SerializeObject(Model.AprovisionamientoProductos.AprovisionamientoProductos)" />
             <input hidden id="urlGenerar" value="@Url.Page("Nuevo", "Agregar")" />
 
 
@@ -115,17 +128,17 @@
                         <div class="col-2">
 
                             <div class="col-12" style=" padding-top: 2%;">
-                                <input type="checkbox" id="md_checkbox_Cedi" class="chk-col-red" onclick="javascript: onChangeBodega()" />
+                                <input type="checkbox" id="md_checkbox_Cedi" class="chk-col-red" onclick="javascript: onChangeFiltro()" />
                                 <label for="md_checkbox_Cedi"> Cedi Pital </label>
                             </div>
                             <div class="col-12" style=" padding-top: 2%;">
-                                <input type="checkbox" id="md_checkbox_VK" class="chk-col-red" onclick="javascript: onChangeBodega()" />
+                                <input type="checkbox" id="md_checkbox_VK" class="chk-col-red" onclick="javascript: onChangeFiltro()" />
                                 <label for="md_checkbox_VK"> Vuelta Kooper </label>
                             </div>
 
 
                             <div class="col-12" style=" padding-top: 2%;">
-                                <input type="checkbox" id="md_checkbox_AZ" class="chk-col-red" onclick="javascript: onChangeBodega()" />
+                                <input type="checkbox" id="md_checkbox_AZ" class="chk-col-red" onclick="javascript: onChangeFiltro()" />
                                 <label for="md_checkbox_AZ"> Aguas Zarcas </label>
                             </div>
 
@@ -134,27 +147,28 @@
 
 
                             <div class="col-12" style=" padding-top: 2%;">
-                                <input type="checkbox" id="md_checkbox_Belen" class="chk-col-red" onclick="javascript: onChangeBodega()" />
+                                <input type="checkbox" id="md_checkbox_Belen" class="chk-col-red" onclick="javascript: onChangeFiltro()" />
                                 <label for="md_checkbox_Belen"> Belen </label>
                             </div>
 
                             <div class="col-12" style=" padding-top: 2%;">
-                                <input type="checkbox" id="md_checkbox_St" class="chk-col-red" onclick="javascript: onChangeBodega()" />
+                                <input type="checkbox" id="md_checkbox_St" class="chk-col-red" onclick="javascript: onChangeFiltro()" />
                                 <label for="md_checkbox_St"> Santa Rosa </label>
                             </div>
                             <div class="col-12" style=" padding-top: 2%;">
-                                <input type="checkbox" id="md_checkbox_Todas" class="chk-col-red" onclick="javascript: onChangeBodega()" />
+                                <input type="checkbox" id="md_checkbox_Todas" class="chk-col-red" onclick="javascript: onChangeFiltro()" />
                                 <label for="md_checkbox_Todas"> Todas </label>
                             </div>
                         </div>
                         <div class="col-4">
 
-                       
+
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <h5>Clasificación<span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <select id="ClasificacionT" class="form-control select2">
+                                        <select id="ClasificacionSeleccionado" onchange="javascript: onChangeFiltro()" class="form-control select2">
+                                            <option selected value="0">Seleccione Clasificación</option>
                                             <option value="A">A</option>
                                             <option value="B">B</option>
                                             <option value="C">C</option>
@@ -188,9 +202,9 @@
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <h5>Indicador<span class="text-danger">*</span></h5>
+                                    <h5>Indicador ><span class="text-danger">*</span></h5>
                                     <div class="controls">
-                                        <input type="number" id="Indicador" value="0" class="form-control">
+                                        <input type="number" id="Indicador"  onchange="javascript: onChangeFiltro()" value="0" class="form-control">
                                     </div>
 
                                 </div>
@@ -202,7 +216,7 @@
 
                                 <div class="form-group">
                                     <label>Categoria</label>
-                                    <select id="CategoriaSeleccionado" class="form-control select2" onchange="javascript: onChangeCategoria()">
+                                    <select id="CategoriaSeleccionado" class="form-control select2" onchange="javascript: onChangeFiltro()">
                                         <option value="0"> Seleccione Categoria</option>
 
                                     </select>
@@ -211,8 +225,8 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Sub Categoria</label>
-                                    <select id="CategoriaSeleccionado" class="form-control select2" onchange="javascript: onChangeSubCategoria()">
-                                        <option value="0"> Seleccione Categoria</option>
+                                    <select id="SubCategoriaSeleccionado" disabled class="form-control select2" onchange="javascript: onChangeFiltro()">
+                                        <option value="0"> Seleccione Sub Categoria</option>
 
 
 
@@ -238,7 +252,7 @@
 
             </div>
 
-        </div>
+     
 
 
 
@@ -268,7 +282,7 @@
                                             <input type="text" class="form-control" id="busqueda" placeholder="Ingrese la descripción" oninput="filtrarTabla()">
                                         </div>
                                     </div>
-                             
+
 
 
                                 </div>
@@ -280,30 +294,44 @@
                     </div>
                     <div class="box-body">
                         <div class="row">
-                            <div class="col-12 table-responsive tableFixHead" style=" overflow-y:scroll; z-index: 5; height: 500px;">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th class="bg-info">Check</th>
-                                            <th class="bg-info">Descripción</th>
-                                            <th class="bg-info">Bodega</th>
-                                            <th class="bg-info">Sub Categoria</th>
-                                            <th class="bg-info">Minimo</th>
-                                            <th class="bg-info">Clasificación</th>
-
-
-
-
-
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody">
-                                    </tbody>
-
-                                </table>
-                            </div>
+                            <div class="col-12 table-responsive tableFixHead" style="overflow-y: scroll; z-index: 5; height: 500px;">
+                                <!-- Envoltura para el slider horizontal -->
+                         
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="bg-info">Acción</th>
+                                                <th class="bg-info">Descripción</th>
+                                                <th class="bg-info">Grupo</th>
+                                                <th class="bg-info">Categoría</th>
+                                                <th class="bg-info">Sub Categoría</th>
+                                                <th class="bg-info">Bodega</th>
+                                                <th class="bg-info">Stock</th>
+                                                <th class="bg-info">Pedido</th>
+                                                <th class="bg-info">Proveedor</th>
+                                                <th class="bg-info">Ult Precio Compra</th>
+                                                <th class="bg-info">Costo Promedio</th>
+                                                <th class="bg-info">Promedio Venta Ult 3 Meses</th>
+                                                <th class="bg-info">Desviación Estándar</th>
+                                                <th class="bg-info">Inventario Ideal</th>
+                                                <th class="bg-info">Indicador ST</th>
+                                                <th class="bg-info">Pedido Sugerido</th>
+                                                <th class="bg-info">Clasificación</th>
+                                                <th class="bg-info">Artículo Relac</th>
+                                                <th class="bg-info">Stock Relac</th>
+                                                <th class="bg-info">Pedido Relac</th>
+                                                <th class="bg-info">Sugerido Relac</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody">
+                                      
+                                        </tbody>
+                                    </table>
+                                </div>
+                      
                         </div>
                     </div>
+
 
                     <!-- /.col -->
                 </div>
@@ -316,7 +344,7 @@
 
 
 
-
+        </div>
     </div>
 
 

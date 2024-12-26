@@ -55,7 +55,7 @@ namespace NOVAAPP.Pages.Aprovisionamiento
                 Bodegas = await bodegas.ObtenerLista("");
                 Categorias = await categorias.ObtenerLista("");
                 SubCategorias = await subCategorias.ObtenerLista("");
-                //AprovisionamientoProductos = await aprovisionamientoProductos.ObtenerListaEspecial("");
+                AprovisionamientoProductos = await aprovisionamientoProductos.ObtenerListaEspecial("");
 
 
 

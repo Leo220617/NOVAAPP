@@ -8,7 +8,7 @@
     {
         public string Codigo_Articulo { get; set; }
 
-        public string Nombre_Aritculo { get; set; }
+        public string Nombre_Articulo { get; set; }
 
         public string Grupo_Articulo { get; set; }
 
@@ -47,6 +47,9 @@
         public decimal Pedido_Relac { get; set; }
 
         public decimal Sugerido_Relac { get; set; }
+
+        public int Id_Categoria { get; set; }
+        public int Id_Subcategoria { get; set; }
 
 
 
