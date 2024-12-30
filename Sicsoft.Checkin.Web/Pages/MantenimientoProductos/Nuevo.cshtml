@@ -128,7 +128,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Sub Categoria</label>
-                                <input type="text" class="form-control" id="busqueda2" placeholder="Ingrese la descripción" list="subCategoriaList" oninput="filtrarTabla()">
+                                <input type="text" class="form-control" id="busqueda2" placeholder="Ingrese la descripción" list="subCategoriaList">
                                 <datalist id="subCategoriaList">
                                     @foreach (var subCategoria in Model.SubCategorias)
                                     {
@@ -274,6 +274,7 @@
                                     <thead>
                                         <tr>
                                             <th class="bg-info">Check</th>
+                                            <th class="bg-info">Solo Minimo y Clasificación</th>
                                             <th class="bg-info">Descripción</th>
                                             <th class="bg-info">Bodega</th>
                                             <th class="bg-info">Sub Categoria</th>

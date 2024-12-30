@@ -284,22 +284,11 @@ function RellenaTabla() {
             var Categoria = Categorias.find(a => a.id == idCategoria);
             html += "<tr>";
 
-            html += "<td class='text-center'>  <input  type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeRevisado(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> ";
+         
+      
             html += "<td > " + ProdClientes[i].Codigo_Articulo + "-" + ProdClientes[i].Nombre_Articulo + " </td>";
 
 
-            html += "<td > " + ProdClientes[i].Grupo_Articulo + " </td>";
-
-            if (Categoria != undefined) {
-                html += "<td > " + ProdClientes[i].Id_Categoria + "-" + Categoria.Nombre + " </td>";
-            } else {
-                html += "<td > " + "N/A" + " </td>";
-            }
-            if (SubCategoria != undefined) {
-                html += "<td > " + ProdClientes[i].Id_Subcategoria + "-" + SubCategoria.Nombre + " </td>";
-            } else {
-                html += "<td > " + "N/A" + " </td>";
-            }
             html += "<td > " + ProdClientes[i].Bodega + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Stock_en_Bodega).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Pedido).toFixed(2)) + " </td>";
@@ -307,16 +296,21 @@ function RellenaTabla() {
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Ultimo_Precio_Compra).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Costo_Promedio).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Promedio_Venta_Ult_3_Meses).toFixed(2)) + " </td>";
-            html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Desviacion_Estandar).toFixed(2)) + " </td>";
+          
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Inventario_Ideal).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Indicador_ST).toFixed(2)) + " </td>";
-            html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Pedido_Sugerido).toFixed(2)) + " </td>";
-            html += "<td > " + ProdClientes[i].Cat_Art_en_Bodega + " </td>";
-            html += "<td > " + ProdClientes[i].Cod_Relac + "-" + ProdClientes[i].Nombre_de_Articulo_Relac + " </td>";
-            html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Stock_Relac).toFixed(2)) + " </td>";
-            html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Pedido_Relac).toFixed(2)) + " </td>";
-            html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Sugerido_Relac).toFixed(2)) + " </td>";
-
+            if (ProdClientes[i].Pedido_Sugerido < 0) {
+                html += "<td class='text-right' style='background-color : #FFE9E9;'>" + formatoDecimal(parseFloat(ProdClientes[i].Pedido_Sugerido).toFixed(2)) + " </td>";
+            } else {
+                html += "<td class='text-right' style='background-color : #EFFFE9;'>" + formatoDecimal(parseFloat(ProdClientes[i].Pedido_Sugerido).toFixed(2)) + " </td>";
+            }
+            html += "<td class='text-center'> <input onchange='javascript: onChangeCobertura(" + i + ")' type='number' id='" + i + "_Cobertura' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td class='text-center'>  <input  type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeRevisado(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> ";
+      
+   
+            html += "<td class='text-right'  style='background-color : #fff4e9;'> " + formatoDecimal(parseFloat(0).toFixed(2)) + " </td>";
+            html += "<td class='text-right'  style='background-color : #fff4e9;'> " + formatoDecimal(parseFloat(0).toFixed(2)) + " </td>";
+            html += "<td class='text-right'  style='background-color : #fff4e9;'> " + formatoDecimal(parseFloat(0).toFixed(2)) + " </td>";
 
 
 

@@ -188,6 +188,7 @@ function RellenaTabla() {
             html += "<tr>";
 
             html += "<td class='text-center'>  <input  type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeRevisado(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> ";
+            html += "<td class='text-center'>  <input  type='checkbox' id='" + i + "_mdcheckboxS' class='chk-col-green' onchange='javascript: onChangeSolo(" + i + ")'>  <label for='" + i + "_mdcheckboxS'></label> </td> ";
             html += "<td > " + ProdClientes[i].Codigo + "-" + ProdClientes[i].Nombre + " </td>";
 
 
@@ -256,6 +257,7 @@ function onChangeRevisado(i) {
 
 
         var valorCheck = $("#" + i + "_mdcheckbox").prop('checked');
+        var valorCheckS = $("#" + i + "_mdcheckboxS").prop('checked');
         var PalabraClave = $("#busqueda2").val();
 
 
@@ -263,6 +265,8 @@ function onChangeRevisado(i) {
         var x = ProdCadena.findIndex(a => a.idProducto == ProdClientes[i].id);
 
         var PE = ProdClientes[i];
+        var idSubCategoria = ProdClientes[i].idSubCategoria;
+        var SubCategoria = SubCategorias.find(a => a.id == idSubCategoria);
         if (Existe == undefined) {
 
             var Cantidad1 = parseFloat($("#" + i + "_Cantidad1").val());
@@ -282,7 +286,8 @@ function onChangeRevisado(i) {
                 Fecha: $("#Fecha").val(),
                 ItemCode: PE.Codigo,
                 Minimo: Cantidad1,
-                Clasificacion: Clasificacion
+                Clasificacion: Clasificacion,
+                Solo: valorCheckS
 
 
             };
@@ -291,8 +296,9 @@ function onChangeRevisado(i) {
                 $("#" + i + "_Cantidad1").prop('disabled', true);
                 $("#" + i + "_Cantidad2").prop('disabled', true);
                 $("#" + i + "_Cantidad3").prop('disabled', true);
-
-                $("#" + i + "_SubCategoria").text(PalabraClave);
+                if (valorCheckS == false) {
+                    $("#" + i + "_SubCategoria").text(PalabraClave);
+                }
             }
 
             ProdCadena.push(Producto);
@@ -308,20 +314,33 @@ function onChangeRevisado(i) {
             ProdCadena[x].ItemCode = PE.Codigo;
             ProdCadena[x].Minimo = Cantidad1;
             ProdCadena[x].Clasificacion = Clasificacion;
+            ProdCadena[x].Solo = valorCheckS;
 
 
 
             if (valorCheck == true) {
                 $("#" + i + "_Cantidad1").prop('disabled', true);
                 $("#" + i + "_Cantidad2").prop('disabled', true);
-                $("#" + i + "_SubCategoria").text(PalabraClave);
+                if (valorCheckS == false) {
+
+                    $("#" + i + "_SubCategoria").text(PalabraClave);
+                }
+
+
+
 
 
 
             } else {
                 $("#" + i + "_Cantidad1").prop('disabled', false);
                 $("#" + i + "_Cantidad2").prop('disabled', false);
-                $("#" + i + "_SubCategoria").text("N/A");
+                if (SubCategoria != undefined) {
+                    $("#" + i + "_SubCategoria").text(SubCategoria.id + ' - ' + SubCategoria.Nombre);
+                } else {
+                    $("#" + i + "_SubCategoria").text("N/A");
+                }
+         
+
                 ProdCadena.splice(x, 1);
 
             }
@@ -612,10 +631,6 @@ function validarMantenimiento(e) {
 
 
 
-
-
-
-
         else {
             return true;
         }
@@ -635,50 +650,37 @@ function validarMantenimiento(e) {
 
 
 
-
 function filtrarTabla() {
-    var busqueda = $("#busqueda2").val().toLowerCase().trim();
-    var busqueda2 = $("#busqueda").val().toLowerCase().trim();
+    var busqueda = $("#busqueda").val().toLowerCase().trim();
     var filas = $("#tbody tr");
     var indicesVisibles = [];
 
-    // Dividir la búsqueda en palabras
-    var palabrasBusqueda = busqueda.split(" ");
+    // Si la búsqueda está vacía, muestra todas las filas
+    if (busqueda === "") {
+        filas.show();
+        return;
+    }
 
     filas.each(function (index) {
-        var descripcion = $(this).find("td:eq(1)").text().toLowerCase().trim();
+        var coincide = false; // Bandera para verificar si la fila cumple con la búsqueda
 
-        // Extraer el texto después del primer guion para 'palabraClave'
-        var partes = descripcion.split('-');
-        var palabraClave = partes.length > 1 ? partes[1].trim() : ''; // Toma la parte después del primer guion, si existe
+        // Recorre cada celda de la fila
+        $(this).find("td").each(function () {
+            var textoCelda = $(this).text().toLowerCase().trim();
 
-        // Filtrar solo si 'busqueda' no está vacío
-        if (busqueda) {
-            // Verifica que 'palabraClave' comience exactamente con las palabras en 'busqueda'
-            var coincidePalabraClave = palabraClave.startsWith(busqueda);
-
-            if (coincidePalabraClave) {
-                // Si 'busqueda2' está vacío o la 'descripcion' comienza con 'busqueda2'
-                if (!busqueda2 || descripcion.includes(busqueda2)) {
-                    $(this).show();
-                    indicesVisibles.push(index);
-                } else {
-                    $(this).hide();
-                }
-            } else {
-                $(this).hide();
+            // Verifica si alguna celda contiene el término de búsqueda
+            if (textoCelda.includes(busqueda)) {
+                coincide = true;
             }
+        });
+
+        // Si la fila cumple con la búsqueda, la muestra
+        if (coincide) {
+            $(this).show();
+            indicesVisibles.push(index);
         } else {
-            $(this).hide(); // Si 'busqueda' está vacío, no muestra registros
+            $(this).hide();
         }
-    });
-
-    // Filtrar ProdClientes2 para que solo muestre productos cuyo 'Nombre' comience exactamente con las palabras de 'busqueda'
-    ProdClientes2 = ProdClientes.filter(a => {
-        const nombreProducto = a.Nombre.toLowerCase().trim();
-
-        // Verifica que 'nombreProducto' comience exactamente con las palabras en 'busqueda'
-        return nombreProducto.startsWith(busqueda);
     });
 
     return indicesVisibles;

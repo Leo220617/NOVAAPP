@@ -70,7 +70,10 @@ namespace NOVAAPP.Pages.MantenimientoProductos
                 }
 
                 Categorias = await categorias.ObtenerLista("");
-                SubCategorias = await subCategorias.ObtenerLista("");
+                ParametrosFiltros filtro2 = new ParametrosFiltros();
+                filtro2.Externo = true;
+          
+                SubCategorias = await subCategorias.ObtenerLista(filtro2);
 
                 Bodegas = await bodegas.ObtenerLista("");
 
