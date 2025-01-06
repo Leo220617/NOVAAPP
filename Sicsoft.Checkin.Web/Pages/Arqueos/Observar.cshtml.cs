@@ -89,7 +89,7 @@ namespace NOVAAPP.Pages.Arqueos
                 Arqueo = await service.ObtenerPorId(id);
                 filtro.Externo = true;
                 filtro.Activo = true;
-                filtro.Codigo3 = Arqueo.idCategoria;
+                //filtro.Codigo3 = Arqueo.idCategoria;
               
                 Productos = await productos.ObtenerLista(filtro);
                

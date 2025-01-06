@@ -14,5 +14,7 @@ namespace NOVAAPP.Models
         public string Clasificacion { get; set; }
         public string ItemCode { get; set; }
         public string NombreProducto { get; set; }
+
+        public bool Solo { get; set; }
     }
 }
