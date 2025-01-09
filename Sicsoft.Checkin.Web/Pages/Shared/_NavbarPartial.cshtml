@@ -222,7 +222,14 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                         
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "80").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Aprovisionamiento/Index"><i class="mdi mdi-cube"></i>Aprovisionamiento</a></li>
+                                }
+
+                            }
                             @{
                                 if (!string.IsNullOrEmpty(Roles.Where(a => a == "77").FirstOrDefault()))
                                 {

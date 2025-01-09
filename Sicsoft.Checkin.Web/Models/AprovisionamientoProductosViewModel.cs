@@ -51,7 +51,11 @@
         public int Id_Categoria { get; set; }
         public int Id_Subcategoria { get; set; }
 
+        public decimal Stock_Todas { get; set; }
 
+        public decimal Promedio_Venta_Todas_3Meses { get; set; }
+
+        public decimal Indicador_ST_Todas { get; set; }
 
     }
 }
