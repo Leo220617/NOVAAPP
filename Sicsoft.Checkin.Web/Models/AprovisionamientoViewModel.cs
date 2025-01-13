@@ -14,7 +14,11 @@ namespace NOVAAPP.Models
 
         public string Clasificacion { get; set; }
         public decimal IndicadorMenor { get; set; }
-        public decimal IndicadorMayor { get; set; } 
+        public decimal IndicadorMayor { get; set; }
+
+        public string FiltroSeleccionado { get; set; }
+
+        public DateTime FechaActualizacion { get; set; }
         public List<DetAprovisionamientoViewModel> Detalle { get; set; }
     }
 }

@@ -49,18 +49,22 @@ var ProdClientes2 = [];
 var AprovisionamientoProductos = [];
 var SubCategorias = [];
 var ProdClientes2 = [];
+var Aprovisionamiento = [];
 function Recuperar() {
     try {
 
 
         Bodegas = JSON.parse($("#Bodegas").val());
+        Aprovisionamiento = JSON.parse($("#Aprovisionamiento").val());
         Categorias = JSON.parse($("#Categorias").val());
         SubCategorias = JSON.parse($("#SubCategorias").val());
         AprovisionamientoProductos = JSON.parse($("#AprovisionamientoProductos").val());
 
-
-
         RellenaCategorias()
+        RecuperarInformacion()
+
+
+
 
 
 
@@ -75,6 +79,106 @@ function Recuperar() {
         })
     }
 
+}
+function RecuperarInformacion() {
+    try {
+
+
+        $("#CategoriaSeleccionado").val(Aprovisionamiento.idCategoria).trigger('change.select2');
+        $("#ClasificacionSeleccionado").val(Aprovisionamiento.Clasificacion).trigger('change.select2');
+        $("#Indicador").val(Aprovisionamiento.IndicadorMayor);
+        $("#IndicadorX").val(Aprovisionamiento.IndicadorMenor);
+
+        var FechaX = new Date(Aprovisionamiento.Fecha);
+
+        var Fecha = $.datepicker.formatDate('yy-mm-dd', FechaX);
+
+
+
+        $("#Fecha").val(Fecha);
+        var FiltroSeleccionado = Aprovisionamiento.FiltroSeleccionado.split(';');
+
+        for (var i = 0; i < FiltroSeleccionado.length; i++) {
+            if (FiltroSeleccionado[i] == "C") {
+                $("#md_checkbox_Cedi").prop('checked', true);
+            }
+            if (FiltroSeleccionado[i] == "VK") {
+                $("#md_checkbox_VK").prop('checked', true);
+            }
+            if (FiltroSeleccionado[i] == "AZ") {
+                $("#md_checkbox_AZ").prop('checked', true);
+            }
+            if (FiltroSeleccionado[i] == "B") {
+                $("#md_checkbox_Belen").prop('checked', true);
+            }
+            if (FiltroSeleccionado[i] == "St") {
+                $("#md_checkbox_St").prop('checked', true);
+            }
+            if (FiltroSeleccionado[i] == "T") {
+                $("#md_checkbox_Todas").prop('checked', true);
+            }
+
+        }
+        onChangeFiltro();
+        $("#SubCategoriaSeleccionado").val(Aprovisionamiento.idSubCategoria).trigger('change.select2');
+        for (var i = 0; i < Aprovisionamiento.Detalle.length; i++) {
+
+
+
+            var Producto =
+            {
+
+
+                CodigoProducto: Aprovisionamiento.Detalle[i].CodigoProducto,
+                NombreProducto: Aprovisionamiento.Detalle[i].NombreProducto,
+                Bodega: Aprovisionamiento.Detalle[i].Bodega,
+                Stock: Aprovisionamiento.Detalle[i].Stock,
+                Pedido: Aprovisionamiento.Detalle[i].Pedido,
+                CodProveedor: Aprovisionamiento.Detalle[i].CodProveedor,
+                NombreProveedor: Aprovisionamiento.Detalle[i].NombreProveedor,
+                UltPrecioCompra: Aprovisionamiento.Detalle[i].UltPrecioCompra,
+                CostoPromedio: Aprovisionamiento.Detalle[i].CostoPromedio,
+                PromedioVenta: Aprovisionamiento.Detalle[i].PromedioVenta,
+                InventarioIdeal: Aprovisionamiento.Detalle[i].InventarioIdeal,
+                PedidoSugerido: Aprovisionamiento.Detalle[i].PedidoSugerido,
+                Compra: Aprovisionamiento.Detalle[i].Compra,
+                Chequeado: Aprovisionamiento.Detalle[i].Chequeado,
+                StockTodas: Aprovisionamiento.Detalle[i].StockTodas,
+                PromedioVentaTodas: Aprovisionamiento.Detalle[i].PromedioVentaTodas,
+                IndicadorSTTodas: Aprovisionamiento.Detalle[i].IndicadorSTTodas
+
+
+            };
+            ProdCadena.push(Producto);
+
+            //var Existe = ProdCadena.find(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.Bodega == ProdClientes[i].Bodega);
+            //var x = ProdCadena.findIndex(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.Bodega == ProdClientes[i].Bodega);
+
+
+            var PE = ProdClientes.find(a => a.Codigo_Articulo == Producto.CodigoProducto && a.Bodega == Producto.Bodega);
+            var x = ProdClientes.findIndex(a => a.Codigo_Articulo == Producto.CodigoProducto && a.Bodega == Producto.Bodega);
+
+            if (PE) {
+
+                $("#" + x + "_mdcheckbox").prop('checked', true);
+                $("#" + x + "_Compra").val(Producto.Compra);
+                onChangeCompra(x);
+            }
+
+
+
+
+
+        }
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar recuperar ' + e.stack
+
+        })
+    }
 }
 
 function RellenaCategorias() {
@@ -144,7 +248,7 @@ function onChangeFiltro() {
         if (Clasificacion != 0) {
             filters.push(a => a.Cat_Art_en_Bodega == Clasificacion);
         }
-        if (Indicador != undefined && IndicadorX != undefined ) { // Si hay un valor para el indicador
+        if (Indicador != undefined && IndicadorX != undefined) { // Si hay un valor para el indicador
             filters.push(a => a.Indicador_ST >= Indicador && a.Indicador_ST <= IndicadorX);
         }
         if (IndicadorX != undefined && Indicador != undefined) { // Si hay un valor para el indicador
@@ -232,8 +336,8 @@ function RellenaTabla() {
             var Categoria = Categorias.find(a => a.id == idCategoria);
             html += "<tr>";
 
-         
-      
+
+
             html += "<td > " + ProdClientes[i].Codigo_Articulo + "-" + ProdClientes[i].Nombre_Articulo + " </td>";
 
 
@@ -244,7 +348,7 @@ function RellenaTabla() {
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Ultimo_Precio_Compra).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Costo_Promedio).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Promedio_Venta_Ult_3_Meses).toFixed(2)) + " </td>";
-          
+
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Inventario_Ideal).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Indicador_ST).toFixed(2)) + " </td>";
             if (ProdClientes[i].Pedido_Sugerido < 0) {
@@ -254,8 +358,8 @@ function RellenaTabla() {
             }
             html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_Compra' class='form-control'   value= '0' min='1'/>  </td>";
             html += "<td class='text-center'>  <input  type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeCompra(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> ";
-      
-   
+
+
             html += "<td class='text-right'  style='background-color : #fff4e9;'> " + formatoDecimal(parseFloat(ProdClientes[i].Stock_Todas).toFixed(2)) + " </td>";
             html += "<td class='text-right'  style='background-color : #fff4e9;'> " + formatoDecimal(parseFloat(ProdClientes[i].Promedio_Venta_Todas_3Meses).toFixed(2)) + " </td>";
             html += "<td class='text-right'  style='background-color : #fff4e9;'> " + formatoDecimal(parseFloat(ProdClientes[i].Indicador_ST_Todas).toFixed(2)) + " </td>";
@@ -299,6 +403,7 @@ function onChangeCompra(i) {
 
 
         var idCategoria = $("#CategoriaSeleccionado").val();
+
         var idSubCategoria = $("#SubCategoriaSeleccionado").val();
 
 
@@ -306,23 +411,23 @@ function onChangeCompra(i) {
         var valorCheck = $("#" + i + "_mdcheckbox").prop('checked');
 
         if (valorCheck == true) {
-        /*    var Existe = ProdCadena.find(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.idCategoria == idCategoria && a.idSubCategoria == idSubCategoria && a.Bodega == ProdClientes[i].Bodega);*/
+            /*    var Existe = ProdCadena.find(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.idCategoria == idCategoria && a.idSubCategoria == idSubCategoria && a.Bodega == ProdClientes[i].Bodega);*/
             $("#" + i + "_Compra").prop('disabled', false);
-            $("#ClasificacionSeleccionado").prop('disabled', true); 
-            $("#CategoriaSeleccionado").prop('disabled', true); 
-            $("#SubCategoriaSeleccionado").prop('disabled', true); 
-            $("#Indicador").prop('disabled', true); 
-            $("#IndicadorX").prop('disabled', true); 
-            $("#md_checkbox_Cedi").prop('disabled', true); 
-            $("#md_checkbox_VK").prop('disabled', true); 
-            $("#md_checkbox_AZ").prop('disabled', true); 
-            $("#md_checkbox_Belen").prop('disabled', true); 
-            $("#md_checkbox_St").prop('disabled', true); 
-            $("#md_checkbox_Todas").prop('disabled', true); 
+            $("#ClasificacionSeleccionado").prop('disabled', true);
+            $("#CategoriaSeleccionado").prop('disabled', true);
+            $("#SubCategoriaSeleccionado").prop('disabled', true);
+            $("#Indicador").prop('disabled', true);
+            $("#IndicadorX").prop('disabled', true);
+            $("#md_checkbox_Cedi").prop('disabled', true);
+            $("#md_checkbox_VK").prop('disabled', true);
+            $("#md_checkbox_AZ").prop('disabled', true);
+            $("#md_checkbox_Belen").prop('disabled', true);
+            $("#md_checkbox_St").prop('disabled', true);
+            $("#md_checkbox_Todas").prop('disabled', true);
 
             var Existe = ProdCadena.find(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.Bodega == ProdClientes[i].Bodega);
             var x = ProdCadena.findIndex(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.Bodega == ProdClientes[i].Bodega);
-     
+
             var PE = ProdClientes[i];
             if (Existe == undefined) {
 
@@ -380,7 +485,7 @@ function onChangeCompra(i) {
                     $("#md_checkbox_AZ").prop('disabled', false);
                     $("#md_checkbox_Belen").prop('disabled', false);
                     $("#md_checkbox_St").prop('disabled', false);
-                    $("#md_checkbox_Todas").prop('disabled', false); 
+                    $("#md_checkbox_Todas").prop('disabled', false);
                 }
             }
         }
@@ -437,28 +542,11 @@ function Generar() {
 
     try {
 
-        var filtros = "";
-        if ($("#md_checkbox_Cedi").prop('checked')) {
-            filtros += "C;";
-        }
-        if ($("#md_checkbox_VK").prop('checked')) {
-            filtros += "VK;";
-        }
-        if ($("#md_checkbox_AZ").prop('checked')) {
-            filtros += "AZ;";
-        }
-        if ($("#md_checkbox_Belen").prop('checked')) {
-            filtros += "B;";
-        }
-        if ($("#md_checkbox_St").prop('checked')) {
-            filtros += "St;";
-        }
-        if ($("#md_checkbox_Todas").prop('checked')) {
-            filtros += "T;";
-        }
+
+
         var EncAprovisionamiento = {
 
-            id: 0,
+            id: $("#id").val(),
             idCategoria: $("#CategoriaSeleccionado").val(),
             idSubCategoria: $("#SubCategoriaSeleccionado").val(),
             idUsuarioCreador: 0,
@@ -467,7 +555,6 @@ function Generar() {
             Clasificacion: $("#ClasificacionSeleccionado").val(),
             IndicadorMayor: parseFloat($("#Indicador").val()),
             IndicadorMenor: parseFloat($("#IndicadorX").val()),
-            FiltroSeleccionado: filtros,
             Detalle: ProdCadena
         }
 
@@ -524,7 +611,7 @@ function Generar() {
                                         //Despues de insertar, ocupariamos el id del cliente en la bd 
                                         //para entonces setearlo en el array de clientes
 
-                                        window.location.href = window.location.href.split("/Nuevo")[0];
+                                        window.location.href = window.location.href.split("/Editar")[0];
 
 
                                     }
