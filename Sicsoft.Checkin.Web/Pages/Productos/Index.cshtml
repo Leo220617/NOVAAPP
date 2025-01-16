@@ -10,7 +10,16 @@
 
 @section styles{
 
-
+    <style>
+        #codigoBarrasNombre {
+            max-width: 200px; /* Cambia el valor para que coincida con el ancho del código de barras */
+            margin: 0 auto;
+            text-align: center;
+            white-space: normal; /* Permite el salto de línea */
+            word-wrap: break-word; /* Corta palabras largas */
+            overflow-wrap: break-word; /* Para mayor compatibilidad */
+        }
+    </style>
 }
 
 @section scripts{
@@ -73,6 +82,7 @@
         }
     </script>
 
+   
 }
 
 <!-- Content Header (Page header) -->
@@ -215,6 +225,14 @@
                                         </td>
                                         <td>
                                             <a id="print" class="fa fa-print icono" onclick="javascript: ImprimirEtiqueta(@item.id)"> </a>
+                                            &nbsp;
+                                            <a id="print" class="fa fa-barcode icono" onclick="javascript: ImprimirCodigoBarras('@(string.IsNullOrEmpty(item.CodBarras) ? "NOVA" + item.Codigo : item.CodBarras.Split(";").Length > 1 ? item.CodBarras.Split(";")[0] : item.CodBarras)', '@item.Nombre')"> </a>
+
+                                            <div hidden id="codigoBarrasContainer" style="display: none;">
+                                                <div id="codigoBarrasNombre"></div>
+                                                <svg id="codigoBarras"></svg>
+                                            </div>
+
                                         </td>
                                         <td>
                                             @item.Codigo - @item.Nombre

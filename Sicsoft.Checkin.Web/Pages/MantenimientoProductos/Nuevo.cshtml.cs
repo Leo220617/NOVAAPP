@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using NOVAAPP.Models;
-
 using Refit;
 using Sicsoft.Checkin.Web.Servicios;
 using Sicsoft.CostaRica.Checkin.Web.Models;
@@ -13,29 +12,30 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 
-namespace NOVAAPP.Pages.Arqueos
+namespace NOVAAPP.Pages.MantenimientoProductos
 {
-    public class ObservarModel : PageModel
+    public class NuevoModel : PageModel
     {
-        private readonly IConfiguration configuration;
-        private readonly ICrudApi<ArqueosViewModel, int> service;
+        private readonly ICrudApi<LogsProductosAprovisionamientoViewModel, int> service;
         private readonly ICrudApi<CategoriasViewModel, int> categorias;
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
         private readonly ICrudApi<ProductosViewModel, string> productos;
-        private readonly ICrudApi<UsuariosViewModel, int> usuarios;
-        private readonly ICrudApi<SucursalesViewModel, string> sucursales;
+        private readonly ICrudApi<SubCategoriasViewModel, int> subCategorias;
+
 
 
 
 
         [BindProperty]
-        public ArqueosViewModel Arqueo { get; set; }
+        public LogsProductosAprovisionamientoViewModel LogsProductosAprov { get; set; }
+
 
         [BindProperty]
         public CategoriasViewModel[] Categorias { get; set; }
 
+        [BindProperty]
+        public SubCategoriasViewModel[] SubCategorias { get; set; }
 
 
         [BindProperty]
@@ -45,60 +45,48 @@ namespace NOVAAPP.Pages.Arqueos
         public ProductosViewModel[] Productos { get; set; }
 
 
-        [BindProperty]
-        public UsuariosViewModel[] Usuarios { get; set; }
-
-
-        [BindProperty]
-        public SucursalesViewModel[] Sucursal { get; set; }
-
-        [BindProperty]
-        public string NombreCliente { get; set; }
-
-
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
-        public ObservarModel(ICrudApi<ArqueosViewModel, int> service, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<ProductosViewModel, string> productos, ICrudApi<UsuariosViewModel, int> usuarios, ICrudApi<SucursalesViewModel, string> sucursales)
+        public NuevoModel(ICrudApi<LogsProductosAprovisionamientoViewModel, int> service, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<ProductosViewModel, string> productos, ICrudApi<SubCategoriasViewModel, int> subCategorias)
         {
             this.service = service;
             this.categorias = categorias;
             this.bodegas = bodegas;
             this.productos = productos;
-            this.usuarios = usuarios;
-            this.sucursales = sucursales;
+            this.subCategorias = subCategorias;
+
+
         }
 
-        public async Task<IActionResult> OnGetAsync(int id)
+        public async Task<IActionResult> OnGetAsync()
         {
             try
             {
                 var Roles1 = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
-                if (string.IsNullOrEmpty(Roles1.Where(a => a == "71").FirstOrDefault()))
+                if (string.IsNullOrEmpty(Roles1.Where(a => a == "79").FirstOrDefault()))
                 {
                     return RedirectToPage("/NoPermiso");
                 }
 
                 Categorias = await categorias.ObtenerLista("");
+                ParametrosFiltros filtro2 = new ParametrosFiltros();
+                filtro2.Externo = true;
+          
+                SubCategorias = await subCategorias.ObtenerLista(filtro2);
 
-     
- 
                 Bodegas = await bodegas.ObtenerLista("");
 
                 ParametrosFiltros filtro = new ParametrosFiltros();
-                Arqueo = await service.ObtenerPorId(id);
                 filtro.Externo = true;
                 filtro.Activo = true;
-                //filtro.Codigo3 = Arqueo.idCategoria;
-              
+
                 Productos = await productos.ObtenerLista(filtro);
-               
-                Usuarios = await usuarios.ObtenerLista("");
+              
 
-          
-                Sucursal = await sucursales.ObtenerLista("");
 
-                NombreCliente = "NUEVA AGRICULTURA NOVAGRO SA.";
+
+
                 return Page();
             }
             catch (ApiException ex)
@@ -116,11 +104,11 @@ namespace NOVAAPP.Pages.Arqueos
             }
         }
 
-        public async Task<IActionResult> OnPostAgregarArqueo()
+        public async Task<IActionResult> OnPostAgregarLogsProductosAprov()
         {
             string error = "";
 
-            ArqueosViewModel recibidos = new ArqueosViewModel();
+            LogsProductosAprovisionamientoViewModel recibidos = new LogsProductosAprovisionamientoViewModel();
             try
             {
                 var ms = new MemoryStream();
@@ -142,21 +130,22 @@ namespace NOVAAPP.Pages.Arqueos
 
                     // Procesar la cadena JSON como desees
                     // Por ejemplo, puedes deserializarla a un objeto C# utilizando Newtonsoft.Json
-                    recibidos = Newtonsoft.Json.JsonConvert.DeserializeObject<ArqueosViewModel>(jsonString);
+                    recibidos = Newtonsoft.Json.JsonConvert.DeserializeObject<LogsProductosAprovisionamientoViewModel>(jsonString);
                 }
 
 
 
 
+             
+                recibidos.idUsuarioModificador = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == ClaimTypes.Actor).Select(s1 => s1.Value).FirstOrDefault().ToString());
 
 
-
-                await service.Editar(recibidos);
+                await service.Agregar(recibidos);
 
                 var resp2 = new
                 {
                     success = true,
-                    Arqueo = ""
+                    LogsProductosAprov = ""
 
                 };
                 return new JsonResult(resp2);
@@ -167,7 +156,7 @@ namespace NOVAAPP.Pages.Arqueos
                 var resp2 = new
                 {
                     success = false,
-                    Arqueo = be.Descripcion
+                    LogsProductosAprov = be.Descripcion
                 };
                 return new JsonResult(resp2);
             }

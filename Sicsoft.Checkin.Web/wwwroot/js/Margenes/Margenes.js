@@ -778,7 +778,11 @@ function validarMargen(e) {
             })
             return false;
         }
+<<<<<<< HEAD
         else if (e.Cobertura == null || e.Cobertura <= 0) {
+=======
+        else if (e.Cobertura == "" || e.Cobertura == null || e.Cobertura < 0) {
+>>>>>>> Trabajo
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',

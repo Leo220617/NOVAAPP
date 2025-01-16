@@ -1,0 +1,989 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.Aprovisionamiento.ObservarModel
+@{
+    ViewData["Title"] = "Aprovisionamiento";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+}
+@using Microsoft.AspNetCore.Http
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using System.Linq;
+@using System.Security.Claims;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.Extensions.Configuration;
+@using Refit;
+@using Sicsoft.Checkin.Web.Models;
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+
+}
+@section styles {
+    <style>
+        .tableFixHead th {
+            position: sticky;
+            top: 0;
+            background: white;
+        }
+    </style>
+
+}
+
+
+@section scripts {
+
+    <script>
+        function Generar() {
+
+            try {
+
+                var EncArqueos = {
+
+                    id: $("#id").val(),
+                    Status: "C"
+                }
+
+
+                Swal.fire({
+                    title: '¿Desea contabilizar la Toma Física?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: `Aceptar`,
+                    denyButtonText: `Cancelar`,
+                    customClass: {
+                        confirmButton: 'swalBtnColor',
+                        denyButton: 'swalDeny'
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var jsonString = JSON.stringify(EncArqueos);
+                        // Comprimir la cadena JSON utilizando gzip
+                        var compressedData = pako.gzip(jsonString);
+
+                        // Convertir los datos comprimidos a un ArrayBuffer (opcional, depende de tu caso de uso)
+                        var compressedArrayBuffer = compressedData.buffer;
+
+                        $.ajax({
+                            type: 'POST',
+
+                            url: '@Url.Page("Observar", "AgregarArqueo")',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            data: compressedArrayBuffer,
+                            processData: false,
+                            headers: {
+                                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                            },
+                            success: function (json) {
+
+
+                                console.log("resultado " + json.arqueo);
+                                if (json.success == true) {
+                                    $("#divProcesando").modal("hide");
+                                    Swal.fire({
+                                        title: "Ha sido generado con éxito",
+
+                                        icon: 'success',
+                                        showCancelButton: false,
+
+                                        confirmButtonText: 'OK',
+                                        customClass: {
+                                            confirmButton: 'swalBtnColor',
+
+                                        },
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            //Despues de insertar, ocupariamos el id del cliente en la bd
+                                            //para entonces setearlo en el array de clientes
+
+                                            window.location.href = window.location.href.split("/Observar")[0];
+
+
+                                        }
+                                    })
+
+                                } else {
+
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: 'Ha ocurrido un error al intentar guardar ' + json.arqueo
+
+                                    })
+                                }
+                            },
+
+                            beforeSend: function () {
+                                $("#divProcesando").modal("show");
+
+                            },
+                            complete: function () {
+                                $("#divProcesando").modal("hide");
+
+                            },
+                            error: function (error) {
+                                $("#divProcesando").modal("hide");
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Ha ocurrido un error al intentar guardar ' + error
+
+                                })
+                            }
+                        });
+                    }
+                })
+
+
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar agregar ' + e
+
+                })
+            }
+
+
+
+        }
+
+        function GenerarR() {
+
+            try {
+
+                var EncArqueos = {
+
+                    id: $("#id").val(),
+                    Status: "R"
+                }
+
+
+                Swal.fire({
+                    title: '¿Desea rechazar la Toma Física?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: `Aceptar`,
+                    denyButtonText: `Cancelar`,
+                    customClass: {
+                        confirmButton: 'swalBtnColor',
+                        denyButton: 'swalDeny'
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var jsonString = JSON.stringify(EncArqueos);
+                        // Comprimir la cadena JSON utilizando gzip
+                        var compressedData = pako.gzip(jsonString);
+
+                        // Convertir los datos comprimidos a un ArrayBuffer (opcional, depende de tu caso de uso)
+                        var compressedArrayBuffer = compressedData.buffer;
+
+                        $.ajax({
+                            type: 'POST',
+
+                            url: '@Url.Page("Observar", "AgregarArqueo")',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            data: compressedArrayBuffer,
+                            processData: false,
+                            headers: {
+                                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                            },
+                            success: function (json) {
+
+
+                                console.log("resultado " + json.arqueo);
+                                if (json.success == true) {
+                                    $("#divProcesando").modal("hide");
+                                    Swal.fire({
+                                        title: "Ha sido generado con éxito",
+
+                                        icon: 'success',
+                                        showCancelButton: false,
+
+                                        confirmButtonText: 'OK',
+                                        customClass: {
+                                            confirmButton: 'swalBtnColor',
+
+                                        },
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            //Despues de insertar, ocupariamos el id del cliente en la bd
+                                            //para entonces setearlo en el array de clientes
+
+                                            window.location.href = window.location.href.split("/Observar")[0];
+
+
+                                        }
+                                    })
+
+                                } else {
+
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: 'Ha ocurrido un error al intentar guardar ' + json.arqueo
+
+                                    })
+                                }
+                            },
+
+                            beforeSend: function () {
+                                $("#divProcesando").modal("show");
+
+                            },
+                            complete: function () {
+                                $("#divProcesando").modal("hide");
+
+                            },
+                            error: function (error) {
+                                $("#divProcesando").modal("hide");
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Ha ocurrido un error al intentar guardar ' + error
+
+                                })
+                            }
+                        });
+                    }
+                })
+
+
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar agregar ' + e
+
+                })
+            }
+
+
+
+        }
+
+        function ImprimirPantalla() {
+            try {
+                // window.print();
+                var margins = {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    width: 595
+                };
+
+
+                html = $(".html").html();
+                html2pdf(html, {
+                    margin: 1,
+                    padding: 0,
+                    filename: 'Aprovisionamiento.pdf',
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: { scale: 2, logging: true },
+                    jsPDF: { unit: 'in', format: 'A2', orientation: 'P' },
+                    class: ImprimirPantalla
+                });
+
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
+
+        function ImprimirExcel()
+        {
+            try {
+                var tablaDiv = document.getElementById('tablaDiv');
+
+                // Obtenemos la tabla dentro del div
+                var tabla = tablaDiv.querySelector('table');
+
+                // Convertimos la tabla HTML a una hoja de cálculo
+                var hoja = XLSX.utils.table_to_sheet(tabla);
+
+                // Creamos un nuevo libro de trabajo (workbook)
+                var libro = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(libro, hoja, 'Aprovisionamiento');
+
+                // Exportamos el archivo Excel
+                XLSX.writeFile(libro, 'Aprovisionamiento.xlsx');
+
+            }catch(e)
+            {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar exportar a excel ' + e
+
+                })
+            }
+        }
+    </script>
+
+
+
+}
+
+
+@using Newtonsoft.Json;
+@using System.Globalization
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Aprovisionamiento
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Aprovisionamiento</li>
+    </ol>
+</section>
+
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
+            <input hidden asp-for="Aprovisionamiento.id" id="id" />
+            <input hidden id="Aprovisionamiento" value="@JsonConvert.SerializeObject(Model.Aprovisionamiento)" />
+
+
+
+
+
+            <!-- Content Header (Page header) -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Aprovisionamiento</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Aprovisionamiento No: @Model.Aprovisionamiento.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <h5>Fecha <span class="font-size-18">@Model.Aprovisionamiento.Fecha.ToString("dd MMM yyy")</span></h5>
+                                    <input hidden id="Fecha" type="datetime" value="@Model.Aprovisionamiento.Fecha" />
+
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-4">
+                            <div class="text-left">
+                                <h5>Última Actualización <span class="font-size-18">@Model.Aprovisionamiento.FechaActualizacion.ToString("dd MMM yyy HH:mm")</span></h5>
+                                <input hidden id="Fecha" type="datetime" value="@Model.Aprovisionamiento.FechaActualizacion" />
+
+
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <div class="row invoice-info">
+                        <div class="col-md-8 invoice-col">
+                            <strong>Responsable</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @(Model.Usuarios.Where(a => a.id == Model.Aprovisionamiento.idUsuarioCreador).FirstOrDefault() == null ? "Usuario Inexistente" : Model.Usuarios.Where(a => a.id == Model.Aprovisionamiento.idUsuarioCreador).FirstOrDefault().id + " - " + Model.Usuarios.Where(a => a.id == Model.Aprovisionamiento.idUsuarioCreador).FirstOrDefault().Nombre)   </strong>
+
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+
+                    <div class="row invoice-info">
+
+
+                        <div class="col-md-4">
+                            <h5>
+                                <b>Sucursal: </b>
+
+                                @{
+                                    var StringF = "";
+                                    var ArregloFiltro = Model.Aprovisionamiento.FiltroSeleccionado.Split(";");
+                                    for (var i = 0; i < ArregloFiltro.Length; i++)
+                                    {
+                                        switch (ArregloFiltro[i])
+                                        {
+                                            case "C":
+                                                {
+                                                    StringF += "Cedi Pital" + (i < (ArregloFiltro.Length - 2) ? " - " : "");
+                                                    break;
+                                                }
+                                            case "AZ":
+                                                {
+                                                    StringF += "Aguas Zarcas" + (i < (ArregloFiltro.Length - 2) ? " - " : "");
+                                                    break;
+                                                }
+                                            case "VK":
+                                                {
+                                                    StringF += "Vuelta Kooper" + (i < (ArregloFiltro.Length - 2) ? " - " : "");
+                                                    break;
+                                                }
+                                            case "St":
+                                                {
+                                                    StringF += "Santa Rosa" + (i < (ArregloFiltro.Length - 2) ? " - " : "");
+                                                    break;
+                                                }
+                                            case "B":
+                                                {
+                                                    StringF += "Belen" + (i < (ArregloFiltro.Length - 2) ? " - " : "");
+                                                    break;
+                                                }
+                                            case "T":
+                                                {
+                                                    StringF += "Todas las sucursales" + (i < (ArregloFiltro.Length - 2) ? " - " : "");
+                                                    break;
+                                                }
+                                        }
+                                    }
+                                }
+
+                                @StringF
+                            </h5>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h5> <b>Categoría: </b>    @(Model.Categorias.Where(a => a.id == Model.Aprovisionamiento.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categorias.Where(a => a.id == Model.Aprovisionamiento.idCategoria).FirstOrDefault().CodSAP + " - " + Model.Categorias.Where(a => a.id == Model.Aprovisionamiento.idCategoria).FirstOrDefault().Nombre)</h5>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <h5> <b>Sub Categoría: </b>    @(Model.SubCategorias.Where(a => a.id == Model.Aprovisionamiento.idSubCategoria).FirstOrDefault() == null ? "SubCategoria Inexistente" : Model.SubCategorias.Where(a => a.id == Model.Aprovisionamiento.idSubCategoria).FirstOrDefault().id + " - " + Model.SubCategorias.Where(a => a.id == Model.Aprovisionamiento.idSubCategoria).FirstOrDefault().Nombre)</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <h5> <b>Clasificación: </b>@Model.Aprovisionamiento.Clasificacion</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <h5>Indicador ><span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <h5 id="Indicador">@Math.Round(Model.Aprovisionamiento.IndicadorMayor)</h5>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <h5>Indicador <<span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <h5 id="IndicadorX">@Math.Round(Model.Aprovisionamiento.IndicadorMenor)</h5>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+                <!-- /.col -->
+                <!-- /.row -->
+
+            </div>
+
+       
+
+
+
+        <div class="box">
+            <div class="box-header with-border">
+                <div class="row">
+                    <div class="col-sm-8"> <h4 class="box-title">Productos</h4></div>
+                    <div class="col-sm-4">  </div>
+
+                </div>
+
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+
+                                <th class="bg-info">Descripción</th>
+                                <th class="bg-info">Bodega</th>
+                                <th class="bg-info">Stock</th>
+                                <th class="bg-info">Pedido</th>
+                                <th class="bg-info">Proveedor</th>
+                                <th class="bg-info">Ult Precio Compra</th>
+                                <th class="bg-info">Costo Promedio</th>
+                                <th class="bg-info">Promedio Venta Ult 3 Meses</th>
+                                <th class="bg-info">Inventario Ideal</th>
+                                <th class="bg-info">Indicador ST</th>
+                                <th class="bg-info">Pedido Sugerido</th>
+                                <th class="bg-info">Compra</th>
+
+                                <th class="bg-info">Stock Todas</th>
+                                <th class="bg-info">Ventas Promedio</th>
+                                <th class="bg-info">Indicador Todas</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                            @foreach (var item in Model.Aprovisionamiento.Detalle)
+                            {
+
+
+                                <tr>
+
+
+                                    <td>
+                                        @item.CodigoProducto - @item.NombreProducto
+                                    </td>
+                                    <td>@item.Bodega</td>
+                                    <td>@item.Stock</td>
+                                    <td>@item.Pedido</td>
+                                    <td>@item.CodProveedor - @item.NombreProveedor</td>
+                                    <td>@item.UltPrecioCompra</td>
+                                    <td>@item.CostoPromedio</td>
+                                    <td>@item.PromedioVenta</td>
+                                    <td>@item.InventarioIdeal</td>
+                                    <td>@item.IndicadorST</td>
+                                    <td>@item.PedidoSugerido</td>
+                                    <td>@item.Compra</td>
+                                    <td>@item.StockTodas</td>
+                                    <td>@item.PromedioVentaTodas</td>
+                                    <td>@item.IndicadorSTTodas</td>
+
+
+                                </tr>
+
+                            }
+
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+
+                                <th class="bg-info">Descripción</th>
+                                <th class="bg-info">Bodega</th>
+                                <th class="bg-info">Stock</th>
+                                <th class="bg-info">Pedido</th>
+                                <th class="bg-info">Proveedor</th>
+                                <th class="bg-info">Ult Precio Compra</th>
+                                <th class="bg-info">Costo Promedio</th>
+                                <th class="bg-info">Promedio Venta Ult 3 Meses</th>
+                                <th class="bg-info">Inventario Ideal</th>
+                                <th class="bg-info">Indicador ST</th>
+                                <th class="bg-info">Pedido Sugerido</th>
+                                <th class="bg-info">Compra</th>
+
+                                <th class="bg-info">Stock Todas</th>
+                                <th class="bg-info">Ventas Promedio</th>
+                                <th class="bg-info">Indicador Todas</th>
+
+
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+
+
+        </div>
+
+
+
+
+    </div>
+
+    <button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
+    <button id="printExcel" class="btn btn-primary" type="button" onclick="javascript: ImprimirExcel()"> <span><i class="fa fa-print"></i> Excel</span> </button>
+
+</section>
+
+
+
+<!-- /.content -->
+<div class="html" hidden>
+    <div class="row">
+
+        <div class="col-md-6">
+            @{
+                var Sucursal = Model.Sucursal.Where(a => a.CodSuc == "005").FirstOrDefault();
+            }
+            <img id="base64image" style="width: 85%;"
+                 src="data:image/jpeg;base64,@Sucursal.Imagen.ToString()" />
+        </div>
+        <div class="col-md-6">
+            <div style=" font-weight: bold;  font-size: 15px;">
+                <p style="  font-size: 20px !important; ">@Model.NombreCliente</p>
+                <p style="  font-size: 20px !important; ">@Sucursal.Nombre</p>
+                <p>Cedula Juridica:  @Sucursal.Cedula</p>
+                <p>Telefax: @Sucursal.Telefono</p>
+
+                <p>Email: @Sucursal.Correo</p>
+
+                <p> @Sucursal.Sennas   </p>
+
+
+            </div>
+        </div>
+        <div class="col-12">
+            <input hidden asp-for="Aprovisionamiento.id" id="id" />
+            <input hidden id="Aprovisionamiento" value="@JsonConvert.SerializeObject(Model.Aprovisionamiento)" />
+
+
+
+
+
+            <!-- Content Header (Page header) -->
+            <div class="box">
+                <div class="box-header with-border">
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Aprovisionamiento No: @Model.Aprovisionamiento.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <h5>Fecha <span class="font-size-18">@Model.Aprovisionamiento.Fecha.ToString("dd MMM yyy")</span></h5>
+                                    <input hidden id="Fecha" type="datetime" value="@Model.Aprovisionamiento.Fecha" />
+
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-4">
+                            <div class="text-left">
+                                <h5>Última Actualización <span class="font-size-18">@Model.Aprovisionamiento.FechaActualizacion.ToString("dd MMM yyy HH:mm")</span></h5>
+                                <input hidden id="Fecha" type="datetime" value="@Model.Aprovisionamiento.FechaActualizacion" />
+
+
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <div class="row invoice-info">
+                        <div class="col-md-8 invoice-col">
+                            <strong>Responsable</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @(Model.Usuarios.Where(a => a.id == Model.Aprovisionamiento.idUsuarioCreador).FirstOrDefault() == null ? "Usuario Inexistente" : Model.Usuarios.Where(a => a.id == Model.Aprovisionamiento.idUsuarioCreador).FirstOrDefault().id + " - " + Model.Usuarios.Where(a => a.id == Model.Aprovisionamiento.idUsuarioCreador).FirstOrDefault().Nombre)   </strong>
+
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+
+                    <div class="row invoice-info">
+
+
+                        <div class="col-md-4">
+                            <h5>
+                                <b>Sucursal: </b>
+
+                                @{
+
+                                    for (var i = 0; i < ArregloFiltro.Length; i++)
+                                    {
+                                        switch (ArregloFiltro[i])
+                                        {
+                                            case "C":
+                                                {
+                                                    StringF += "Cedi Pital" + (i < (ArregloFiltro.Length - 2) ? " - " : "");
+                                                    break;
+                                                }
+                                            case "AZ":
+                                                {
+                                                    StringF += "Aguas Zarcas" + (i < (ArregloFiltro.Length - 2) ? " - " : "");
+                                                    break;
+                                                }
+                                            case "VK":
+                                                {
+                                                    StringF += "Vuelta Kooper" + (i < (ArregloFiltro.Length - 2) ? " - " : "");
+                                                    break;
+                                                }
+                                            case "St":
+                                                {
+                                                    StringF += "Santa Rosa" + (i < (ArregloFiltro.Length - 2) ? " - " : "");
+                                                    break;
+                                                }
+                                            case "B":
+                                                {
+                                                    StringF += "Belen" + (i < (ArregloFiltro.Length - 2) ? " - " : "");
+                                                    break;
+                                                }
+                                            case "T":
+                                                {
+                                                    StringF += "Todas las sucursales" + (i < (ArregloFiltro.Length - 2) ? " - " : "");
+                                                    break;
+                                                }
+                                        }
+                                    }
+                                }
+
+                                @StringF
+                            </h5>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h5> <b>Categoría: </b>    @(Model.Categorias.Where(a => a.id == Model.Aprovisionamiento.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categorias.Where(a => a.id == Model.Aprovisionamiento.idCategoria).FirstOrDefault().CodSAP + " - " + Model.Categorias.Where(a => a.id == Model.Aprovisionamiento.idCategoria).FirstOrDefault().Nombre)</h5>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <h5> <b>Sub Categoría: </b>    @(Model.SubCategorias.Where(a => a.id == Model.Aprovisionamiento.idSubCategoria).FirstOrDefault() == null ? "SubCategoria Inexistente" : Model.SubCategorias.Where(a => a.id == Model.Aprovisionamiento.idSubCategoria).FirstOrDefault().id + " - " + Model.SubCategorias.Where(a => a.id == Model.Aprovisionamiento.idSubCategoria).FirstOrDefault().Nombre)</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <h5> <b>Clasificación: </b>@Model.Aprovisionamiento.Clasificacion</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <h5>Indicador ><span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <h5 id="Indicador">@Math.Round(Model.Aprovisionamiento.IndicadorMayor)</h5>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <h5>Indicador <<span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <h5 id="IndicadorX">@Math.Round(Model.Aprovisionamiento.IndicadorMenor)</h5>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+                <!-- /.col -->
+                <!-- /.row -->
+
+            </div>
+
+
+
+
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Productos</h4></div>
+                        <div class="col-sm-4">  </div>
+
+                    </div>
+
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+
+                                    <th class="bg-info">Descripción</th>
+                                    <th class="bg-info">Bodega</th>
+                                    <th class="bg-info">Stock</th>
+                                    <th class="bg-info">Pedido</th>
+                                    <th class="bg-info">Proveedor</th>
+                                    <th class="bg-info">Ult Precio Compra</th>
+                                    <th class="bg-info">Costo Promedio</th>
+                                    <th class="bg-info">Promedio Venta Ult 3 Meses</th>
+                                    <th class="bg-info">Inventario Ideal</th>
+                                    <th class="bg-info">Indicador ST</th>
+                                    <th class="bg-info">Pedido Sugerido</th>
+                                    <th class="bg-info">Compra</th>
+
+                                    <th class="bg-info">Stock Todas</th>
+                                    <th class="bg-info">Ventas Promedio</th>
+                                    <th class="bg-info">Indicador Todas</th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                @foreach (var item in Model.Aprovisionamiento.Detalle)
+                                {
+
+
+                                    <tr>
+
+
+                                        <td>
+                                            @item.CodigoProducto - @item.NombreProducto
+                                        </td>
+                                        <td>@item.Bodega</td>
+                                        <td>@item.Stock</td>
+                                        <td>@item.Pedido</td>
+                                        <td>@item.CodProveedor - @item.NombreProveedor</td>
+                                        <td>@item.UltPrecioCompra</td>
+                                        <td>@item.CostoPromedio</td>
+                                        <td>@item.PromedioVenta</td>
+                                        <td>@item.InventarioIdeal</td>
+                                        <td>@item.IndicadorST</td>
+                                        <td>@item.PedidoSugerido</td>
+                                        <td>@item.Compra</td>
+                                        <td>@item.StockTodas</td>
+                                        <td>@item.PromedioVentaTodas</td>
+                                        <td>@item.IndicadorSTTodas</td>
+
+
+                                    </tr>
+
+                                }
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+
+                                    <th class="bg-info">Descripción</th>
+                                    <th class="bg-info">Bodega</th>
+                                    <th class="bg-info">Stock</th>
+                                    <th class="bg-info">Pedido</th>
+                                    <th class="bg-info">Proveedor</th>
+                                    <th class="bg-info">Ult Precio Compra</th>
+                                    <th class="bg-info">Costo Promedio</th>
+                                    <th class="bg-info">Promedio Venta Ult 3 Meses</th>
+                                    <th class="bg-info">Inventario Ideal</th>
+                                    <th class="bg-info">Indicador ST</th>
+                                    <th class="bg-info">Pedido Sugerido</th>
+                                    <th class="bg-info">Compra</th>
+
+                                    <th class="bg-info">Stock Todas</th>
+                                    <th class="bg-info">Ventas Promedio</th>
+                                    <th class="bg-info">Indicador Todas</th>
+
+
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+<div id="tablaDiv" hidden>
+    <div class="row">
+        <div class="col-12 table-responsive">
+            <table class="table table-bordered" id="tablaExportar">
+                <thead>
+                    <tr class="bg-pale-info">
+                        <th style="background-color: black; color: white;">Descripción</th>
+                        <th style="background-color: black; color: white;">Bodega</th>
+                        <th style="background-color: black; color: white;">Stock</th>
+                        <th style="background-color: black; color: white;">Pedido</th>
+                        <th style="background-color: black; color: white;">Proveedor</th>
+                        <th style="background-color: black; color: white;">Ult Precio Compra</th>
+                        <th style="background-color: black; color: white;">Costo Promedio</th>
+                        <th style="background-color: black; color: white;">Promedio Venta Ult 3 Meses</th>
+                        <th style="background-color: black; color: white;">Inventario Ideal</th>
+                        <th style="background-color: black; color: white;">Indicador ST</th>
+                        <th style="background-color: black; color: white;">Pedido Sugerido</th>
+                        <th style="background-color: black; color: white;">Compra</th>
+                        <th style="background-color: black; color: white;">Stock Todas</th>
+                        <th style="background-color: black; color: white;">Ventas Promedio</th>
+                        <th style="background-color: black; color: white;">Indicador Todas</th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.Aprovisionamiento.Detalle)
+                    {
+
+
+                        <tr>
+
+
+                            <td>
+                                @item.CodigoProducto - @item.NombreProducto
+                            </td>
+                            <td>@item.Bodega</td>
+                            <td>@item.Stock</td>
+                            <td>@item.Pedido</td>
+                            <td>@item.CodProveedor - @item.NombreProveedor</td>
+                            <td>@item.UltPrecioCompra</td>
+                            <td>@item.CostoPromedio</td>
+                            <td>@item.PromedioVenta</td>
+                            <td>@item.InventarioIdeal</td>
+                            <td>@item.IndicadorST</td>
+                            <td>@item.PedidoSugerido</td>
+                            <td>@item.Compra</td>
+                            <td>@item.StockTodas</td>
+                            <td>@item.PromedioVentaTodas</td>
+                            <td>@item.IndicadorSTTodas</td>
+
+
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.col -->
+
+    </div>
+</div> 

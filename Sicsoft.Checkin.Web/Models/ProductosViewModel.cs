@@ -19,7 +19,7 @@ namespace NOVAAPP.Models
 
         public int idListaPrecios { get; set; }
 
-        
+        public int idSubCategoria { get; set; }
         public string Nombre { get; set; }
 
         public string Moneda { get; set; }
@@ -54,5 +54,11 @@ namespace NOVAAPP.Models
 
         public DateTime FechaConteo { get; set; }
 
+        public string Localizacion { get; set; }
+
+        public decimal Minimo { get; set; }
+
+
+        public string Clasificacion { get; set; }
     }
 }
