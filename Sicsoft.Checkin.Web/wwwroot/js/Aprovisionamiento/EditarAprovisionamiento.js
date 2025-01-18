@@ -50,6 +50,7 @@ var AprovisionamientoProductos = [];
 var SubCategorias = [];
 var ProdClientes2 = [];
 var Aprovisionamiento = [];
+var Proveedores = [];
 function Recuperar() {
     try {
 
@@ -59,6 +60,7 @@ function Recuperar() {
         Categorias = JSON.parse($("#Categorias").val());
         SubCategorias = JSON.parse($("#SubCategorias").val());
         AprovisionamientoProductos = JSON.parse($("#AprovisionamientoProductos").val());
+        Proveedores = JSON.parse($("#Proveedores").val());
 
         RellenaCategorias()
         RecuperarInformacion()
@@ -145,7 +147,8 @@ function RecuperarInformacion() {
                 Chequeado: Aprovisionamiento.Detalle[i].Chequeado,
                 StockTodas: Aprovisionamiento.Detalle[i].StockTodas,
                 PromedioVentaTodas: Aprovisionamiento.Detalle[i].PromedioVentaTodas,
-                IndicadorSTTodas: Aprovisionamiento.Detalle[i].IndicadorSTTodas
+                IndicadorSTTodas: Aprovisionamiento.Detalle[i].IndicadorSTTodas,
+                PrecioCompra: Aprovisionamiento.Detalle[i].PrecioCompra
 
 
             };
@@ -162,6 +165,7 @@ function RecuperarInformacion() {
 
                 $("#" + x + "_mdcheckbox").prop('checked', true);
                 $("#" + x + "_Compra").val(Producto.Compra);
+                $("#" + x + "_PrecioCompra").val(Producto.PrecioCompra);
                 onChangeCompra(x);
             }
 
@@ -345,6 +349,7 @@ function RellenaTabla() {
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Stock_en_Bodega).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Pedido).toFixed(2)) + " </td>";
             html += "<td > " + ProdClientes[i].Cod_Proveedor + "-" + ProdClientes[i].Proveedor + " </td>";
+            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_PrecioCompra' class='form-control'   value= '0' min='1'/>  </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Ultimo_Precio_Compra).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Costo_Promedio).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Promedio_Venta_Ult_3_Meses).toFixed(2)) + " </td>";
@@ -449,7 +454,8 @@ function onChangeCompra(i) {
                     Chequeado: $("#" + i + "_mdcheckbox").prop('checked'),
                     StockTodas: PE.Stock_Todas,
                     PromedioVentaTodas: PE.Promedio_Venta_Todas_3Meses,
-                    IndicadorSTTodas: PE.Indicador_ST_Todas
+                    IndicadorSTTodas: PE.Indicador_ST_Todas,
+                    PrecioCompra: parseFloat($("#" + i + "_PrecioCompra").val()),
 
 
                 };
@@ -459,6 +465,7 @@ function onChangeCompra(i) {
                 ProdCadena.push(Producto);
             } else {
                 ProdCadena[x].Compra = parseFloat($("#" + i + "_Compra").val());
+                ProdCadena[x].PrecioCompra = parseFloat($("#" + i + "_PrecioCompra").val());
 
 
             }
@@ -470,8 +477,10 @@ function onChangeCompra(i) {
 
 
                 $("#" + i + "_Compra").prop('disabled', true);
+                $("#" + i + "_PrecioCompra").prop('disabled', true);
 
                 $("#" + i + "_Compra").val(0);
+                $("#" + i + "_PrecioCompra").val(0);
                 ProdCadena.splice(x, 1);
 
                 if (ProdCadena.length == 0) {

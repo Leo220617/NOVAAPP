@@ -304,8 +304,7 @@
             }
         }
 
-        function ImprimirExcel()
-        {
+        function ImprimirExcel() {
             try {
                 var tablaDiv = document.getElementById('tablaDiv');
 
@@ -322,8 +321,7 @@
                 // Exportamos el archivo Excel
                 XLSX.writeFile(libro, 'Aprovisionamiento.xlsx');
 
-            }catch(e)
-            {
+            } catch (e) {
                 console.log(e);
                 Swal.fire({
                     icon: 'error',
@@ -517,110 +515,110 @@
 
             </div>
 
-       
 
 
 
-        <div class="box">
-            <div class="box-header with-border">
-                <div class="row">
-                    <div class="col-sm-8"> <h4 class="box-title">Productos</h4></div>
-                    <div class="col-sm-4">  </div>
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Productos</h4></div>
+                        <div class="col-sm-4">  </div>
+
+                    </div>
+
 
                 </div>
-
-
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                <div class="table-responsive">
-                    <table id="example1" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-
-                                <th class="bg-info">Descripción</th>
-                                <th class="bg-info">Bodega</th>
-                                <th class="bg-info">Stock</th>
-                                <th class="bg-info">Pedido</th>
-                                <th class="bg-info">Proveedor</th>
-                                <th class="bg-info">Ult Precio Compra</th>
-                                <th class="bg-info">Costo Promedio</th>
-                                <th class="bg-info">Promedio Venta Ult 3 Meses</th>
-                                <th class="bg-info">Inventario Ideal</th>
-                                <th class="bg-info">Indicador ST</th>
-                                <th class="bg-info">Pedido Sugerido</th>
-                                <th class="bg-info">Compra</th>
-
-                                <th class="bg-info">Stock Todas</th>
-                                <th class="bg-info">Ventas Promedio</th>
-                                <th class="bg-info">Indicador Todas</th>
-
-
-                            </tr>
-                        </thead>
-                        <tbody>
-
-
-                            @foreach (var item in Model.Aprovisionamiento.Detalle)
-                            {
-
-
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
                                 <tr>
 
+                                    <th class="bg-info">Descripción</th>
+                                    <th class="bg-info">Bodega</th>
+                                    <th class="bg-info">Stock</th>
+                                    <th class="bg-info">Pedido</th>
+                                    <th class="bg-info">Proveedor</th>
+                                    <th class="bg-info">Ult Precio Compra</th>
+                                    <th class="bg-info">Costo Promedio</th>
+                                    <th class="bg-info">Promedio Venta Ult 3 Meses</th>
+                                    <th class="bg-info">Inventario Ideal</th>
+                                    <th class="bg-info">Indicador ST</th>
+                                    <th class="bg-info">Pedido Sugerido</th>
+                                    <th class="bg-info">Compra</th>
 
-                                    <td>
-                                        @item.CodigoProducto - @item.NombreProducto
-                                    </td>
-                                    <td>@item.Bodega</td>
-                                    <td>@item.Stock</td>
-                                    <td>@item.Pedido</td>
-                                    <td>@item.CodProveedor - @item.NombreProveedor</td>
-                                    <td>@item.UltPrecioCompra</td>
-                                    <td>@item.CostoPromedio</td>
-                                    <td>@item.PromedioVenta</td>
-                                    <td>@item.InventarioIdeal</td>
-                                    <td>@item.IndicadorST</td>
-                                    <td>@item.PedidoSugerido</td>
-                                    <td>@item.Compra</td>
-                                    <td>@item.StockTodas</td>
-                                    <td>@item.PromedioVentaTodas</td>
-                                    <td>@item.IndicadorSTTodas</td>
+                                    <th class="bg-info">Stock Todas</th>
+                                    <th class="bg-info">Ventas Promedio</th>
+                                    <th class="bg-info">Indicador Todas</th>
 
 
                                 </tr>
-
-                            }
-
-
-                        </tbody>
-                        <tfoot>
-                            <tr>
-
-                                <th class="bg-info">Descripción</th>
-                                <th class="bg-info">Bodega</th>
-                                <th class="bg-info">Stock</th>
-                                <th class="bg-info">Pedido</th>
-                                <th class="bg-info">Proveedor</th>
-                                <th class="bg-info">Ult Precio Compra</th>
-                                <th class="bg-info">Costo Promedio</th>
-                                <th class="bg-info">Promedio Venta Ult 3 Meses</th>
-                                <th class="bg-info">Inventario Ideal</th>
-                                <th class="bg-info">Indicador ST</th>
-                                <th class="bg-info">Pedido Sugerido</th>
-                                <th class="bg-info">Compra</th>
-
-                                <th class="bg-info">Stock Todas</th>
-                                <th class="bg-info">Ventas Promedio</th>
-                                <th class="bg-info">Indicador Todas</th>
+                            </thead>
+                            <tbody>
 
 
-                            </tr>
-                        </tfoot>
-                    </table>
+                                @foreach (var item in Model.Aprovisionamiento.Detalle)
+                                {
+
+
+                                    <tr>
+
+
+                                        <td>
+                                            @item.CodigoProducto - @item.NombreProducto
+                                        </td>
+                                        <td>@item.Bodega</td>
+                                        <td>@item.Stock</td>
+                                        <td>@item.Pedido</td>
+                                        <td>@item.CodProveedor - @item.NombreProveedor</td>
+                                        <td>@item.UltPrecioCompra</td>
+                                        <td>@item.CostoPromedio</td>
+                                        <td>@item.PromedioVenta</td>
+                                        <td>@item.InventarioIdeal</td>
+                                        <td>@item.IndicadorST</td>
+                                        <td>@item.PedidoSugerido</td>
+                                        <td>@item.Compra</td>
+                                        <td>@item.StockTodas</td>
+                                        <td>@item.PromedioVentaTodas</td>
+                                        <td>@item.IndicadorSTTodas</td>
+
+
+                                    </tr>
+
+                                }
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+
+                                    <th class="bg-info">Descripción</th>
+                                    <th class="bg-info">Bodega</th>
+                                    <th class="bg-info">Stock</th>
+                                    <th class="bg-info">Pedido</th>
+                                    <th class="bg-info">Proveedor</th>
+                                    <th class="bg-info">Ult Precio Compra</th>
+                                    <th class="bg-info">Costo Promedio</th>
+                                    <th class="bg-info">Promedio Venta Ult 3 Meses</th>
+                                    <th class="bg-info">Inventario Ideal</th>
+                                    <th class="bg-info">Indicador ST</th>
+                                    <th class="bg-info">Pedido Sugerido</th>
+                                    <th class="bg-info">Compra</th>
+
+                                    <th class="bg-info">Stock Todas</th>
+                                    <th class="bg-info">Ventas Promedio</th>
+                                    <th class="bg-info">Indicador Todas</th>
+
+
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
+                <!-- /.box-body -->
             </div>
-            <!-- /.box-body -->
-        </div>
 
 
 
@@ -834,11 +832,13 @@
                             <thead>
                                 <tr>
 
-                                    <th class="bg-info">Descripción</th>
+                                    <th class="bg-info">Código Producto</th>
+                                    <th class="bg-info">Nombre Producto</th>
                                     <th class="bg-info">Bodega</th>
                                     <th class="bg-info">Stock</th>
                                     <th class="bg-info">Pedido</th>
-                                    <th class="bg-info">Proveedor</th>
+                                    <th class="bg-info">Código Proveedor</th>
+                                    <th class="bg-info">Nombre Proveedor</th>
                                     <th class="bg-info">Ult Precio Compra</th>
                                     <th class="bg-info">Costo Promedio</th>
                                     <th class="bg-info">Promedio Venta Ult 3 Meses</th>
@@ -865,12 +865,18 @@
 
 
                                         <td>
-                                            @item.CodigoProducto - @item.NombreProducto
+                                            @item.CodigoProducto
+                                        </td>
+                                        <td>
+                                            @item.NombreProducto
                                         </td>
                                         <td>@item.Bodega</td>
                                         <td>@item.Stock</td>
                                         <td>@item.Pedido</td>
-                                        <td>@item.CodProveedor - @item.NombreProveedor</td>
+                                        <td>@item.CodProveedor</td>
+                                        <td>
+                                            @item.NombreProveedor
+                                        </td>
                                         <td>@item.UltPrecioCompra</td>
                                         <td>@item.CostoPromedio</td>
                                         <td>@item.PromedioVenta</td>
@@ -892,11 +898,13 @@
                             <tfoot>
                                 <tr>
 
-                                    <th class="bg-info">Descripción</th>
+                                    <th class="bg-info">Código Producto</th>
+                                    <th class="bg-info">Nombre Producto</th>
                                     <th class="bg-info">Bodega</th>
                                     <th class="bg-info">Stock</th>
                                     <th class="bg-info">Pedido</th>
-                                    <th class="bg-info">Proveedor</th>
+                                    <th class="bg-info">Código Proveedor</th>
+                                    <th class="bg-info">Nombre Proveedor</th>
                                     <th class="bg-info">Ult Precio Compra</th>
                                     <th class="bg-info">Costo Promedio</th>
                                     <th class="bg-info">Promedio Venta Ult 3 Meses</th>

@@ -79,6 +79,7 @@
             <input hidden id="urlGenerar" value="@Url.Page("Editar", "AgregarAprovisionamiento")" />
             <input hidden id="Aprovisionamiento" value="@JsonConvert.SerializeObject(Model.Aprovisionamiento)" />
             <input hidden id="id" value="@JsonConvert.SerializeObject(Model.Aprovisionamiento.id)" />
+            <input hidden id="Proveedores" value="@JsonConvert.SerializeObject(Model.Proveedores.Proveedores)" />
 
 
 
@@ -321,6 +322,7 @@
                                                 <th class="bg-info">Stock</th>
                                                 <th class="bg-info">Pedido</th>
                                                 <th class="bg-info">Proveedor</th>
+                                                <th class="bg-info">Precio Compra</th>
                                                 <th class="bg-info">Ult Precio Compra</th>
                                                 <th class="bg-info">Costo Promedio</th>
                                                 <th class="bg-info">Promedio Venta Ult 3 Meses</th>

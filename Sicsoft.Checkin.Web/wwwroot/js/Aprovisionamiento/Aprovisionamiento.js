@@ -37,7 +37,6 @@
 
     });
 
-
 });
 var Bodegas = []; // variables globales
 var ProdClientes = [];
@@ -49,6 +48,7 @@ var ProdClientes2 = [];
 var AprovisionamientoProductos = [];
 var SubCategorias = [];
 var ProdClientes2 = [];
+var Proveedores = [];
 function Recuperar() {
     try {
 
@@ -57,7 +57,7 @@ function Recuperar() {
         Categorias = JSON.parse($("#Categorias").val());
         SubCategorias = JSON.parse($("#SubCategorias").val());
         AprovisionamientoProductos = JSON.parse($("#AprovisionamientoProductos").val());
-
+        Proveedores = JSON.parse($("#Proveedores").val());
 
 
         RellenaCategorias()
@@ -203,7 +203,31 @@ function RellenaSubCategorias() {
 }
 
 
+function RellenaProveedores() {
+    try {
+        var html = "";
+        $("#SubCategoriaSeleccionado").html(html);
+        html += "<option value='0' > Seleccione Sub Categoria </option>";
+        var idCategoria = $("#CategoriaSeleccionado").val();
 
+        SubCategorias = SubCategorias.filter(a => a.idCategoria == idCategoria);
+        for (var i = 0; i < SubCategorias.length; i++) {
+            html += "<option value='" + SubCategorias[i].id + "' > " + SubCategorias[i].id + " - " + SubCategorias[i].Nombre + " </option>";
+        }
+
+
+
+        $("#SubCategoriaSeleccionado").html(html);
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error ' + e
+
+        })
+    }
+
+}
 
 function RellenaTabla() {
     try {
@@ -240,7 +264,20 @@ function RellenaTabla() {
             html += "<td > " + ProdClientes[i].Bodega + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Stock_en_Bodega).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Pedido).toFixed(2)) + " </td>";
-            html += "<td > " + ProdClientes[i].Cod_Proveedor + "-" + ProdClientes[i].Proveedor + " </td>";
+/*            html += "<td > " + ProdClientes[i].Cod_Proveedor + "-" + ProdClientes[i].Proveedor + " </td>";*/
+
+
+            html += "<td>";
+            html += "<select id='" + i + "_Proveedor' class='proveedor'>";
+            Proveedores.forEach(Proveedores => {
+                html += `<option value="${Proveedores.CardCode}" ${ProdClientes[i].Cod_Proveedor === Proveedores.CardCode ? "selected" : ""
+                    }>${Proveedores.CardCode} - ${Proveedores.Nombre}</option>`;
+            });
+            html += "</select>";
+            html += "</td>";
+
+        
+            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_PrecioCompra' class='form-control'   value= '0' min='1'/>  </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Ultimo_Precio_Compra).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Costo_Promedio).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Promedio_Venta_Ult_3_Meses).toFixed(2)) + " </td>";
@@ -281,7 +318,10 @@ function RellenaTabla() {
         }
 
         $("#tbody").html(html);
-
+        $(document).ready(function () {
+            // Solo aplicamos select2 a los elementos con la clase 'proveedor'
+            $('select.proveedor').select2();
+        });
 
     } catch (e) {
         Swal.fire({
@@ -344,7 +384,8 @@ function onChangeCompra(i) {
                     Chequeado: $("#" + i + "_mdcheckbox").prop('checked'),
                     StockTodas: PE.Stock_Todas,
                     PromedioVentaTodas: PE.Promedio_Venta_Todas_3Meses,
-                    IndicadorSTTodas: PE.Indicador_ST_Todas
+                    IndicadorSTTodas: PE.Indicador_ST_Todas,
+                    PrecioCompra: parseFloat($("#" + i + "_PrecioCompra").val()),
 
 
                 };
@@ -354,6 +395,7 @@ function onChangeCompra(i) {
                 ProdCadena.push(Producto);
             } else {
                 ProdCadena[x].Compra = parseFloat($("#" + i + "_Compra").val());
+                ProdCadena[x].PrecioCompra = parseFloat($("#" + i + "_PrecioCompra").val());
 
 
             }
@@ -365,8 +407,11 @@ function onChangeCompra(i) {
 
 
                 $("#" + i + "_Compra").prop('disabled', true);
+                $("#" + i + "_PrecioCompra").prop('disabled', true);
+
 
                 $("#" + i + "_Compra").val(0);
+                $("#" + i + "_PrecioCompra").val(0);
                 ProdCadena.splice(x, 1);
 
                 if (ProdCadena.length == 0) {

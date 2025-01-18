@@ -22,5 +22,6 @@
         public decimal StockTodas { get; set; }
         public decimal PromedioVentaTodas { get; set; }
         public decimal IndicadorSTTodas { get; set; }
+        public decimal PrecioCompra { get; set; }
     }
 }
