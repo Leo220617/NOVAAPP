@@ -51,6 +51,7 @@ var SubCategorias = [];
 var ProdClientes2 = [];
 var Aprovisionamiento = [];
 var Proveedores = [];
+var Impuestos = [];
 function Recuperar() {
     try {
 
@@ -61,6 +62,7 @@ function Recuperar() {
         SubCategorias = JSON.parse($("#SubCategorias").val());
         AprovisionamientoProductos = JSON.parse($("#AprovisionamientoProductos").val());
         Proveedores = JSON.parse($("#Proveedores").val());
+        Impuestos = JSON.parse($("#Impuestos").val());
 
         RellenaCategorias()
         RecuperarInformacion()

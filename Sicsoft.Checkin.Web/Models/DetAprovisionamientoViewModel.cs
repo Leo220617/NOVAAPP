@@ -23,5 +23,8 @@
         public decimal PromedioVentaTodas { get; set; }
         public decimal IndicadorSTTodas { get; set; }
         public decimal PrecioCompra { get; set; }
+        public string Impuesto { get; set; }
+        public decimal TotalImpuesto { get; set; }
+        public decimal TotalCompra { get; set; }
     }
 }

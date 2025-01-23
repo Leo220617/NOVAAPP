@@ -25,6 +25,7 @@ namespace NOVAAPP.Pages.Aprovisionamiento
         private readonly ICrudApi<SubCategoriasViewModel, int> subCategorias;
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
         private readonly ICrudApi<ProveedoresViewModel, int> proveedores;
+        private readonly ICrudApi<ImpuestosViewModel, int> impuestos;
 
         [BindProperty]
         public AprovisionamientoViewModel Aprovisionamiento { get; set; }
@@ -44,7 +45,14 @@ namespace NOVAAPP.Pages.Aprovisionamiento
         [BindProperty]
         public ProveedoresViewModel Proveedores { get; set; }
 
-        public EditarModel(ICrudApi<AprovisionamientoProductosViewModel, int> aprovisionamientoProductos, ICrudApi<AprovisionamientoViewModel, int> service, ICrudApi<ProveedoresViewModel, int> proveedores, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<SubCategoriasViewModel, int> subCategorias, ICrudApi<BodegasViewModel, int> bodegas) //CTOR 
+        [BindProperty]
+        public ImpuestosViewModel[] Impuestos { get; set; }
+
+
+        [BindProperty(SupportsGet = true)]
+        public ParametrosFiltros filtro { get; set; }
+
+        public EditarModel(ICrudApi<AprovisionamientoProductosViewModel, int> aprovisionamientoProductos, ICrudApi<ImpuestosViewModel, int> impuestos, ICrudApi<AprovisionamientoViewModel, int> service, ICrudApi<ProveedoresViewModel, int> proveedores, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<SubCategoriasViewModel, int> subCategorias, ICrudApi<BodegasViewModel, int> bodegas) //CTOR 
         {
             this.aprovisionamientoProductos = aprovisionamientoProductos;
             this.categorias = categorias;
@@ -52,6 +60,7 @@ namespace NOVAAPP.Pages.Aprovisionamiento
             this.bodegas = bodegas;
             this.service = service;
             this.proveedores = proveedores;
+            this.impuestos = impuestos;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -67,10 +76,12 @@ namespace NOVAAPP.Pages.Aprovisionamiento
                 Aprovisionamiento = await service.ObtenerPorId(id);
                 Bodegas = await bodegas.ObtenerLista("");
                 Categorias = await categorias.ObtenerLista("");
-                SubCategorias = await subCategorias.ObtenerLista("");
+                filtro.Procesado = true;
+                SubCategorias = await subCategorias.ObtenerLista(filtro);
                 AprovisionamientoProductos = await aprovisionamientoProductos.ObtenerListaEspecial("");
                 Proveedores = await proveedores.ObtenerListaEspecial("");
-
+           
+                Impuestos = await impuestos.ObtenerLista("");
 
 
 

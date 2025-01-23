@@ -77,6 +77,7 @@
             <input hidden id="AprovisionamientoProductos" value="@JsonConvert.SerializeObject(Model.AprovisionamientoProductos.AprovisionamientoProductos)" />
             <input hidden id="urlGenerar" value="@Url.Page("Nuevo", "AgregarAprovisionamiento")" />
             <input hidden id="Proveedores" value="@JsonConvert.SerializeObject(Model.Proveedores.Proveedores)" />
+            <input hidden id="Impuestos" value="@JsonConvert.SerializeObject(Model.Impuestos)" />
 
 
 
@@ -319,8 +320,9 @@
                                                 <th class="bg-info">Bodega</th>
                                                 <th class="bg-info">Stock</th>
                                                 <th class="bg-info">Pedido</th>
-                                                <th class="bg-info">Proveedor</th>
-                                                <th class="bg-info">Precio Compra</th>
+                                            
+                                               
+                                               
                                                 <th class="bg-info">Ult Precio Compra</th>
                                                 <th class="bg-info">Costo Promedio</th>
                                                 <th class="bg-info">Promedio Venta Ult 3 Meses</th>
@@ -328,7 +330,15 @@
                                                 <th class="bg-info">Inventario Ideal</th>
                                                 <th class="bg-info">Indicador ST</th>
                                                 <th class="bg-info">Pedido Sugerido</th>
+                                                <th class="bg-info">Proveedor</th>
+                                               
                                                 <th class="bg-info">Compra</th>
+                                                <th class="bg-info">Precio Compra</th>
+                                                <th class="bg-info">Tarifa Impuesto</th>
+                                                <th class="bg-info">Impuesto</th>
+                                          
+                                                <th class="bg-info">Total Compra</th>
+                                            
                                                 <th class="bg-info">Acción</th>
                                                 <th class="bg-info">Stock Todas</th>
                                                 <th class="bg-info">Ventas Promedio</th>

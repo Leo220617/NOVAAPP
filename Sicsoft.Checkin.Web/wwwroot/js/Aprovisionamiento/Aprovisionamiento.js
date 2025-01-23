@@ -49,6 +49,7 @@ var AprovisionamientoProductos = [];
 var SubCategorias = [];
 var ProdClientes2 = [];
 var Proveedores = [];
+var Impuestos = [];
 function Recuperar() {
     try {
 
@@ -58,6 +59,7 @@ function Recuperar() {
         SubCategorias = JSON.parse($("#SubCategorias").val());
         AprovisionamientoProductos = JSON.parse($("#AprovisionamientoProductos").val());
         Proveedores = JSON.parse($("#Proveedores").val());
+        Impuestos = JSON.parse($("#Impuestos").val());
 
 
         RellenaCategorias()
@@ -144,7 +146,7 @@ function onChangeFiltro() {
         if (Clasificacion != 0) {
             filters.push(a => a.Cat_Art_en_Bodega == Clasificacion);
         }
-        if (Indicador != undefined && IndicadorX != undefined ) { // Si hay un valor para el indicador
+        if (Indicador != undefined && IndicadorX != undefined) { // Si hay un valor para el indicador
             filters.push(a => a.Indicador_ST >= Indicador && a.Indicador_ST <= IndicadorX);
         }
         if (IndicadorX != undefined && Indicador != undefined) { // Si hay un valor para el indicador
@@ -160,9 +162,11 @@ function onChangeFiltro() {
         // Lógica para manejar habilitación de SubCategorías
         if (idCategoria != 0) {
             $("#SubCategoriaSeleccionado").prop("disabled", false);
-            if (idSubCategoria == 0 && Clasificacion == 0) {
+            if (idSubCategoria == 0) {
                 RellenaSubCategorias();
             }
+              
+            
         }
 
         // Rellena la tabla al final
@@ -175,6 +179,12 @@ function onChangeFiltro() {
             text: 'Ha ocurrido un error al intentar recuperar cliente ' + e,
         });
     }
+}
+function formatoDecimal(numero) {
+    var number = numero;
+
+    // En el alemán la coma se utiliza como separador decimal y el punto para los millares
+    return new Intl.NumberFormat("en-US").format(number);
 }
 function RellenaSubCategorias() {
     try {
@@ -256,32 +266,25 @@ function RellenaTabla() {
             var Categoria = Categorias.find(a => a.id == idCategoria);
             html += "<tr>";
 
-         
-      
+
+
             html += "<td > " + ProdClientes[i].Codigo_Articulo + "-" + ProdClientes[i].Nombre_Articulo + " </td>";
 
 
             html += "<td > " + ProdClientes[i].Bodega + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Stock_en_Bodega).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Pedido).toFixed(2)) + " </td>";
-/*            html += "<td > " + ProdClientes[i].Cod_Proveedor + "-" + ProdClientes[i].Proveedor + " </td>";*/
 
 
-            html += "<td>";
-            html += "<select id='" + i + "_Proveedor' class='proveedor'>";
-            Proveedores.forEach(Proveedores => {
-                html += `<option value="${Proveedores.CardCode}" ${ProdClientes[i].Cod_Proveedor === Proveedores.CardCode ? "selected" : ""
-                    }>${Proveedores.CardCode} - ${Proveedores.Nombre}</option>`;
-            });
-            html += "</select>";
-            html += "</td>";
 
-        
-            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_PrecioCompra' class='form-control'   value= '0' min='1'/>  </td>";
+     
+
+
+         
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Ultimo_Precio_Compra).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Costo_Promedio).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Promedio_Venta_Ult_3_Meses).toFixed(2)) + " </td>";
-          
+
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Inventario_Ideal).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Indicador_ST).toFixed(2)) + " </td>";
             if (ProdClientes[i].Pedido_Sugerido < 0) {
@@ -289,10 +292,35 @@ function RellenaTabla() {
             } else {
                 html += "<td class='text-right' style='background-color : #EFFFE9;'>" + formatoDecimal(parseFloat(ProdClientes[i].Pedido_Sugerido).toFixed(2)) + " </td>";
             }
-            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_Compra' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td>";
+            html += "<select  onchange='javascript: onChangeCompra(" + i + ")' disabled id='" + i + "_Proveedor' class='proveedor'>";
+            Proveedores.forEach(Proveedores => {
+                html += `<option value="${Proveedores.CardCode}" ${ProdClientes[i].Cod_Proveedor === Proveedores.CardCode ? "selected" : ""
+                    }>${Proveedores.CardCode} - ${Proveedores.Nombre}</option>`;
+            });
+            html += "</select>";
+            html += "</td>";
+            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_Compra' class='form-control'  style='width: 80px; height: 40px;' value= '0' min='1'/>  </td>";
+            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_PrecioCompra' class='form-control' style='width: 150px; height: 40px;'  value= '0' min='1'/>  </td>";
+
+            html += "<td>";
+            html += "<select onchange='javascript: onChangeCompra(" + i + ")' disabled id='" + i + "_Impuesto' >";
+
+            Impuestos.forEach(impuesto => {
+                if ((impuesto.Codigo === "EX" || impuesto.Codigo === "IV" || impuesto.Codigo === "IVA-1") && impuesto.Activo) {
+                    html += `<option value="${impuesto.Codigo}" ${impuesto.Codigo === "IV" ? "selected" : ""}>${impuesto.Tarifa}</option>`;
+                }
+            });
+
+            html += "</select>";
+            html += "</td>";
+            html += "<td class='text-right' id='" + i + "_TotalImpuesto'> " + '0' + " </td>";
+
+            html += "<td class='text-right' id='" + i + "_TotalCompra'> " + '0' + " </td>";
+
             html += "<td class='text-center'>  <input  type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeCompra(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> ";
-      
-   
+
+
             html += "<td class='text-right'  style='background-color : #fff4e9;'> " + formatoDecimal(parseFloat(ProdClientes[i].Stock_Todas).toFixed(2)) + " </td>";
             html += "<td class='text-right'  style='background-color : #fff4e9;'> " + formatoDecimal(parseFloat(ProdClientes[i].Promedio_Venta_Todas_3Meses).toFixed(2)) + " </td>";
             html += "<td class='text-right'  style='background-color : #fff4e9;'> " + formatoDecimal(parseFloat(ProdClientes[i].Indicador_ST_Todas).toFixed(2)) + " </td>";
@@ -346,23 +374,49 @@ function onChangeCompra(i) {
         var valorCheck = $("#" + i + "_mdcheckbox").prop('checked');
 
         if (valorCheck == true) {
-        /*    var Existe = ProdCadena.find(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.idCategoria == idCategoria && a.idSubCategoria == idSubCategoria && a.Bodega == ProdClientes[i].Bodega);*/
+            /*    var Existe = ProdCadena.find(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.idCategoria == idCategoria && a.idSubCategoria == idSubCategoria && a.Bodega == ProdClientes[i].Bodega);*/
+
+           
             $("#" + i + "_Compra").prop('disabled', false);
-            $("#ClasificacionSeleccionado").prop('disabled', true); 
-            $("#CategoriaSeleccionado").prop('disabled', true); 
-            $("#SubCategoriaSeleccionado").prop('disabled', true); 
-            $("#Indicador").prop('disabled', true); 
-            $("#IndicadorX").prop('disabled', true); 
-            $("#md_checkbox_Cedi").prop('disabled', true); 
-            $("#md_checkbox_VK").prop('disabled', true); 
-            $("#md_checkbox_AZ").prop('disabled', true); 
-            $("#md_checkbox_Belen").prop('disabled', true); 
-            $("#md_checkbox_St").prop('disabled', true); 
-            $("#md_checkbox_Todas").prop('disabled', true); 
+
+            if ($("#" + i + "_Compra").val() > 0) {
+                $("#" + i + "_PrecioCompra").prop('disabled', false);
+                $("#" + i + "_Proveedor").prop('disabled', false);
+                $("#" + i + "_Impuesto").prop('disabled', false);
+            } else {
+                $("#" + i + "_PrecioCompra").prop('disabled', true);
+                $("#" + i + "_Proveedor").prop('disabled', true);
+                $("#" + i + "_Impuesto").prop('disabled', true);
+            }
+           
+            $("#ClasificacionSeleccionado").prop('disabled', true);
+            $("#CategoriaSeleccionado").prop('disabled', true);
+            $("#SubCategoriaSeleccionado").prop('disabled', true);
+            $("#Indicador").prop('disabled', true);
+            $("#IndicadorX").prop('disabled', true);
+            $("#md_checkbox_Cedi").prop('disabled', true);
+            $("#md_checkbox_VK").prop('disabled', true);
+            $("#md_checkbox_AZ").prop('disabled', true);
+            $("#md_checkbox_Belen").prop('disabled', true);
+            $("#md_checkbox_St").prop('disabled', true);
+            $("#md_checkbox_Todas").prop('disabled', true);
 
             var Existe = ProdCadena.find(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.Bodega == ProdClientes[i].Bodega);
             var x = ProdCadena.findIndex(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.Bodega == ProdClientes[i].Bodega);
-     
+            var Impuesto = $("#" + i + "_Impuesto").val();
+            var ImpuestoTarifa = Impuestos.find(a => a.Codigo == Impuesto).Tarifa;
+            var PrecioCompra = parseFloat($("#" + i + "_PrecioCompra").val());
+
+            var Cantidad = parseFloat($("#" + i + "_Compra").val());
+            var TotalImpuesto = (PrecioCompra * (ImpuestoTarifa / 100)) * Cantidad;
+            var TotalCompra = TotalImpuesto + (PrecioCompra * Cantidad);
+            var TotalImpuestoX = formatoDecimal(parseFloat(TotalImpuesto).toFixed(2)); 
+            var TotalCompraX = formatoDecimal(parseFloat(TotalCompra).toFixed(2)); 
+
+            $("#" + i + "_TotalCompra").text(TotalCompraX);
+            $("#" + i + "_TotalImpuesto").text(TotalImpuestoX);
+            var CodProveedor = $("#" + i + "_Proveedor").val();
+            var NombreProveedor = Proveedores.find(a => a.CardCode == CodProveedor).Nombre;
             var PE = ProdClientes[i];
             if (Existe == undefined) {
 
@@ -373,8 +427,8 @@ function onChangeCompra(i) {
                     Bodega: PE.Bodega,
                     Stock: PE.Stock_en_Bodega,
                     Pedido: PE.Pedido,
-                    CodProveedor: PE.Cod_Proveedor,
-                    NombreProveedor: PE.Proveedor,
+                    CodProveedor: CodProveedor,
+                    NombreProveedor: NombreProveedor,
                     UltPrecioCompra: PE.Ultimo_Precio_Compra,
                     CostoPromedio: PE.Costo_Promedio,
                     PromedioVenta: PE.Promedio_Venta_Ult_3_Meses,
@@ -386,6 +440,9 @@ function onChangeCompra(i) {
                     PromedioVentaTodas: PE.Promedio_Venta_Todas_3Meses,
                     IndicadorSTTodas: PE.Indicador_ST_Todas,
                     PrecioCompra: parseFloat($("#" + i + "_PrecioCompra").val()),
+                    Impuesto: $("#" + i + "_Impuesto").val(),
+                    TotalImpuesto: parseFloat(TotalImpuesto),
+                    TotalCompra: parseFloat(TotalCompra)
 
 
                 };
@@ -396,6 +453,12 @@ function onChangeCompra(i) {
             } else {
                 ProdCadena[x].Compra = parseFloat($("#" + i + "_Compra").val());
                 ProdCadena[x].PrecioCompra = parseFloat($("#" + i + "_PrecioCompra").val());
+                ProdCadena[x].Impuesto = $("#" + i + "_Impuesto").val();
+                ProdCadena[x].TotalImpuesto = parseFloat(TotalImpuesto);
+                ProdCadena[x].TotalCompra = parseFloat(TotalCompra);
+                ProdCadena[x].CodProveedor = CodProveedor;
+                ProdCadena[x].NombreProveedor = NombreProveedor;
+
 
 
             }
@@ -408,10 +471,16 @@ function onChangeCompra(i) {
 
                 $("#" + i + "_Compra").prop('disabled', true);
                 $("#" + i + "_PrecioCompra").prop('disabled', true);
+                $("#" + i + "_Proveedor").prop('disabled', true);
+                $("#" + i + "_Impuesto").prop('disabled', true);
 
 
                 $("#" + i + "_Compra").val(0);
                 $("#" + i + "_PrecioCompra").val(0);
+ /*               $("#" + i + "_Proveedor").val();*/
+                $("#" + i + "_Impuesto").val("IV");
+                $("#" + i + "_TotalCompra").text("0");
+                $("#" + i + "_TotalImpuesto").text("0");
                 ProdCadena.splice(x, 1);
 
                 if (ProdCadena.length == 0) {
@@ -425,7 +494,7 @@ function onChangeCompra(i) {
                     $("#md_checkbox_AZ").prop('disabled', false);
                     $("#md_checkbox_Belen").prop('disabled', false);
                     $("#md_checkbox_St").prop('disabled', false);
-                    $("#md_checkbox_Todas").prop('disabled', false); 
+                    $("#md_checkbox_Todas").prop('disabled', false);
                 }
             }
         }
