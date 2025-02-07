@@ -1,0 +1,415 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.Aprovisionamiento.ObservarCompraModel
+@{
+    ViewData["Title"] = "Compras";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+}
+@using Microsoft.AspNetCore.Http
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using System.Linq;
+@using System.Security.Claims;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.Extensions.Configuration;
+@using Refit;
+@using Sicsoft.Checkin.Web.Models;
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+}
+@section styles {
+
+
+}
+@{
+    var Ganancia = 0.00;
+
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
+
+            });
+
+
+
+            $(document).ready(function () {
+
+            });
+
+
+        });
+
+        function ImprimirPantalla() {
+            try {
+                // window.print();
+                var margins = {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    width: 595
+                };
+
+
+                html = $(".html").html();
+                html2pdf(html, {
+                    margin: 1,
+                    padding: 0,
+                    filename: 'OrdenCompra.pdf',
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: { scale: 2, logging: true },
+                    jsPDF: { unit: 'in', format: 'A2', orientation: 'P' },
+                    class: ImprimirPantalla
+                });
+
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
+
+    </script>
+}
+
+
+@using Newtonsoft.Json;
+@using System.Globalization
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Ordenes de Compra
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Observar Documento</li>
+    </ol>
+</section>
+
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Observar Orden de Compra</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./IndexCompras" asp-route-id="@Model.Compra.idAprovisionamiento" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+
+
+
+                            &nbsp;
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Orden de Compra No: @Model.Compra.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h5> <b>Fecha: </b> @Model.Compra.Fecha.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+
+
+
+                                        <br />
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-8 invoice-col">
+                            <strong>Proveedor</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @Model.Compra.CodProveedor - @Model.Compra.NombreProveedor  </strong>
+
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">Producto</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th class="text-center">Precio Unitario</th>
+                                        <th class="text-center">Impuesto</th>
+
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var i = 0;
+                                    }
+                                    @foreach (var item in Model.Compra.Detalle)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+
+
+                                            <td>
+                                                @item.CodigoProducto - @item.NombreProducto - BOD: @item.Bodega
+                                            </td>
+
+                                            <td class="text-right">@(Math.Round(item.Cantidad))</td>
+
+
+                                            <td class="text-center">@Math.Round(item.PrecioUnitario, 2).ToString("C", formato)</td>
+
+                                            <td class="text-center">@Math.Round(@item.TotalImpuesto, 2).ToString("C", formato)</td>
+
+
+
+
+                                        </tr>
+                                        i++;
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-12  text-right">
+
+
+                            <div>
+                                <p>Sub Total  : <span> @Math.Round(Model.Compra.Subtotal, 2).ToString("C", formato)</span> </p>
+                     
+                                <p>Impuesto :  <span>  @Math.Round(Model.Compra.TotalImpuesto, 2).ToString("C", formato)</span></p>
+                 
+
+                            </div>
+                            <div class="total-payment">
+                                <h3><b>Total :</b>  <span>  @Math.Round(Model.Compra.TotalCompra, 2).ToString("C", formato)</span></h3>
+                            </div>
+                    
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+               
+                </div>
+            </div>
+
+
+            <!-- Default box -->
+    
+        </div>
+    </div>
+
+
+
+
+
+    <button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
+</section>
+
+
+
+<div class="html" hidden>
+    <div class="row">
+        <div class="col-md-6">
+            <img id="base64image" style="width: 85%;"
+                 src="data:image/jpeg;base64,@Model.Sucursales.Where(a => a.CodSuc == "005").FirstOrDefault().Imagen.ToString()" />
+        </div>
+        <div class="col-md-6">
+            <div style=" font-weight: bold;  font-size: 15px;">
+                <p style="  font-size: 20px !important; ">NUEVA AGRICULTURA NOVAGRO SA.</p>
+                <p style="  font-size: 20px !important; ">@Model.Sucursales.Where(a => a.CodSuc == "005").FirstOrDefault().Nombre</p>
+                <p>Cedula Juridica:  @Model.Sucursales.Where(a => a.CodSuc == "005").FirstOrDefault().Cedula</p>
+                <p>Telefax: @Model.Sucursales.Where(a => a.CodSuc == "005").FirstOrDefault().Telefono</p>
+
+                <p>Email: @Model.Sucursales.Where(a => a.CodSuc == "005").FirstOrDefault().Correo</p>
+
+                <p> @Model.Sucursales.Where(a => a.CodSuc == "005").FirstOrDefault().Sennas   </p>
+
+
+            </div>
+        </div>
+        <div class="col-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Compra</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Orden de Compra No: @Model.Compra.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h5> <b>Fecha: </b> @Model.Compra.Fecha.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+
+
+
+                                        <br />
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-8 invoice-col">
+                            <strong>Proveedor</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @Model.Compra.CodProveedor - @Model.Compra.NombreProveedor  </strong>
+
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">Producto</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th class="text-center">Precio Unitario</th>
+                                        <th class="text-center">Impuesto</th>
+
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var x = 0;
+                                    }
+                                    @foreach (var item in Model.Compra.Detalle)
+                                    {
+                                        <tr>
+                                            <td>@x</td>
+
+
+                                            <td>
+                                                @item.CodigoProducto - @item.NombreProducto - BOD: @item.Bodega
+                                            </td>
+
+                                            <td class="text-right">@(Math.Round(item.Cantidad))</td>
+
+
+                                            <td class="text-center">@Math.Round(item.PrecioUnitario, 2).ToString("C", formato)</td>
+
+                                            <td class="text-center">@Math.Round(@item.TotalImpuesto, 2).ToString("C", formato)</td>
+
+
+
+
+                                        </tr>
+                                        x++;
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-12  text-right">
+
+
+                            <div>
+                                <p>Sub Total : <span> @Math.Round(Model.Compra.Subtotal, 2).ToString("C", formato)</span> </p>
+
+                                <p>Impuesto :  <span>  @Math.Round(Model.Compra.TotalImpuesto, 2).ToString("C", formato)</span></p>
+
+
+                            </div>
+                            <div class="total-payment">
+                                <h3><b>Total :</b>  <span>  @Math.Round(Model.Compra.TotalCompra, 2).ToString("C", formato)</span></h3>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+
+       
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+

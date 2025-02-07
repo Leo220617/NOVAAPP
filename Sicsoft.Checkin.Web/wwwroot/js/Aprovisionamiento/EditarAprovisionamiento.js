@@ -150,7 +150,10 @@ function RecuperarInformacion() {
                 StockTodas: Aprovisionamiento.Detalle[i].StockTodas,
                 PromedioVentaTodas: Aprovisionamiento.Detalle[i].PromedioVentaTodas,
                 IndicadorSTTodas: Aprovisionamiento.Detalle[i].IndicadorSTTodas,
-                PrecioCompra: Aprovisionamiento.Detalle[i].PrecioCompra
+                PrecioCompra: Aprovisionamiento.Detalle[i].PrecioCompra,
+                Impuesto: Aprovisionamiento.Detalle[i].Impuesto,
+                TotalImpuesto: Aprovisionamiento.Detalle[i].TotalImpuesto,
+                TotalCompra: Aprovisionamiento.Detalle[i].TotalCompra
 
 
             };
@@ -168,6 +171,8 @@ function RecuperarInformacion() {
                 $("#" + x + "_mdcheckbox").prop('checked', true);
                 $("#" + x + "_Compra").val(Producto.Compra);
                 $("#" + x + "_PrecioCompra").val(Producto.PrecioCompra);
+                $("#" + x + "_Impuesto").val(Producto.Impuesto);
+                $("#" + x + "_Proveedor").val(Producto.CodProveedor).trigger('change.select2');
                 onChangeCompra(x);
             }
 
@@ -350,8 +355,13 @@ function RellenaTabla() {
             html += "<td > " + ProdClientes[i].Bodega + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Stock_en_Bodega).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Pedido).toFixed(2)) + " </td>";
-            html += "<td > " + ProdClientes[i].Cod_Proveedor + "-" + ProdClientes[i].Proveedor + " </td>";
-            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_PrecioCompra' class='form-control'   value= '0' min='1'/>  </td>";
+
+
+
+
+
+
+
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Ultimo_Precio_Compra).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Costo_Promedio).toFixed(2)) + " </td>";
             html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Promedio_Venta_Ult_3_Meses).toFixed(2)) + " </td>";
@@ -363,7 +373,32 @@ function RellenaTabla() {
             } else {
                 html += "<td class='text-right' style='background-color : #EFFFE9;'>" + formatoDecimal(parseFloat(ProdClientes[i].Pedido_Sugerido).toFixed(2)) + " </td>";
             }
-            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_Compra' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td>";
+            html += "<select  onchange='javascript: onChangeCompra(" + i + ")' disabled id='" + i + "_Proveedor' class='proveedor'>";
+            Proveedores.forEach(Proveedores => {
+                html += `<option value="${Proveedores.CardCode}" ${ProdClientes[i].Cod_Proveedor === Proveedores.CardCode ? "selected" : ""
+                    }>${Proveedores.CardCode} - ${Proveedores.Nombre}</option>`;
+            });
+            html += "</select>";
+            html += "</td>";
+            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_Compra' class='form-control'  style='width: 80px; height: 40px;' value= '0' min='1'/>  </td>";
+            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_PrecioCompra' class='form-control' style='width: 150px; height: 40px;'  value= '0' min='1'/>  </td>";
+
+            html += "<td>";
+            html += "<select onchange='javascript: onChangeCompra(" + i + ")' disabled id='" + i + "_Impuesto' >";
+
+            Impuestos.forEach(impuesto => {
+                if ((impuesto.Codigo === "EX" || impuesto.Codigo === "IV" || impuesto.Codigo === "IVA-1") && impuesto.Activo) {
+                    html += `<option value="${impuesto.Codigo}" ${impuesto.Codigo === "IV" ? "selected" : ""}>${impuesto.Tarifa}</option>`;
+                }
+            });
+
+            html += "</select>";
+            html += "</td>";
+            html += "<td class='text-right' id='" + i + "_TotalImpuesto'> " + '0' + " </td>";
+
+            html += "<td class='text-right' id='" + i + "_TotalCompra'> " + '0' + " </td>";
+
             html += "<td class='text-center'>  <input  type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeCompra(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> ";
 
 
@@ -392,7 +427,10 @@ function RellenaTabla() {
         }
 
         $("#tbody").html(html);
-
+        $(document).ready(function () {
+            // Solo aplicamos select2 a los elementos con la clase 'proveedor'
+            $('select.proveedor').select2();
+        });
 
     } catch (e) {
         Swal.fire({
@@ -410,7 +448,6 @@ function onChangeCompra(i) {
 
 
         var idCategoria = $("#CategoriaSeleccionado").val();
-
         var idSubCategoria = $("#SubCategoriaSeleccionado").val();
 
 
@@ -419,7 +456,20 @@ function onChangeCompra(i) {
 
         if (valorCheck == true) {
             /*    var Existe = ProdCadena.find(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.idCategoria == idCategoria && a.idSubCategoria == idSubCategoria && a.Bodega == ProdClientes[i].Bodega);*/
+
+
             $("#" + i + "_Compra").prop('disabled', false);
+
+            if ($("#" + i + "_Compra").val() > 0) {
+                $("#" + i + "_PrecioCompra").prop('disabled', false);
+                $("#" + i + "_Proveedor").prop('disabled', false);
+                $("#" + i + "_Impuesto").prop('disabled', false);
+            } else {
+                $("#" + i + "_PrecioCompra").prop('disabled', true);
+                $("#" + i + "_Proveedor").prop('disabled', true);
+                $("#" + i + "_Impuesto").prop('disabled', true);
+            }
+
             $("#ClasificacionSeleccionado").prop('disabled', true);
             $("#CategoriaSeleccionado").prop('disabled', true);
             $("#SubCategoriaSeleccionado").prop('disabled', true);
@@ -434,7 +484,20 @@ function onChangeCompra(i) {
 
             var Existe = ProdCadena.find(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.Bodega == ProdClientes[i].Bodega);
             var x = ProdCadena.findIndex(a => a.CodigoProducto == ProdClientes[i].Codigo_Articulo && a.Bodega == ProdClientes[i].Bodega);
+            var Impuesto = $("#" + i + "_Impuesto").val();
+            var ImpuestoTarifa = Impuestos.find(a => a.Codigo == Impuesto).Tarifa;
+            var PrecioCompra = parseFloat($("#" + i + "_PrecioCompra").val());
 
+            var Cantidad = parseFloat($("#" + i + "_Compra").val());
+            var TotalImpuesto = (PrecioCompra * (ImpuestoTarifa / 100)) * Cantidad;
+            var TotalCompra = TotalImpuesto + (PrecioCompra * Cantidad);
+            var TotalImpuestoX = formatoDecimal(parseFloat(TotalImpuesto).toFixed(2));
+            var TotalCompraX = formatoDecimal(parseFloat(TotalCompra).toFixed(2));
+
+            $("#" + i + "_TotalCompra").text(TotalCompraX);
+            $("#" + i + "_TotalImpuesto").text(TotalImpuestoX);
+            var CodProveedor = $("#" + i + "_Proveedor").val();
+            var NombreProveedor = Proveedores.find(a => a.CardCode == CodProveedor).Nombre;
             var PE = ProdClientes[i];
             if (Existe == undefined) {
 
@@ -445,8 +508,8 @@ function onChangeCompra(i) {
                     Bodega: PE.Bodega,
                     Stock: PE.Stock_en_Bodega,
                     Pedido: PE.Pedido,
-                    CodProveedor: PE.Cod_Proveedor,
-                    NombreProveedor: PE.Proveedor,
+                    CodProveedor: CodProveedor,
+                    NombreProveedor: NombreProveedor,
                     UltPrecioCompra: PE.Ultimo_Precio_Compra,
                     CostoPromedio: PE.Costo_Promedio,
                     PromedioVenta: PE.Promedio_Venta_Ult_3_Meses,
@@ -458,6 +521,9 @@ function onChangeCompra(i) {
                     PromedioVentaTodas: PE.Promedio_Venta_Todas_3Meses,
                     IndicadorSTTodas: PE.Indicador_ST_Todas,
                     PrecioCompra: parseFloat($("#" + i + "_PrecioCompra").val()),
+                    Impuesto: $("#" + i + "_Impuesto").val(),
+                    TotalImpuesto: parseFloat(TotalImpuesto),
+                    TotalCompra: parseFloat(TotalCompra)
 
 
                 };
@@ -468,6 +534,12 @@ function onChangeCompra(i) {
             } else {
                 ProdCadena[x].Compra = parseFloat($("#" + i + "_Compra").val());
                 ProdCadena[x].PrecioCompra = parseFloat($("#" + i + "_PrecioCompra").val());
+                ProdCadena[x].Impuesto = $("#" + i + "_Impuesto").val();
+                ProdCadena[x].TotalImpuesto = parseFloat(TotalImpuesto);
+                ProdCadena[x].TotalCompra = parseFloat(TotalCompra);
+                ProdCadena[x].CodProveedor = CodProveedor;
+                ProdCadena[x].NombreProveedor = NombreProveedor;
+
 
 
             }
@@ -480,9 +552,16 @@ function onChangeCompra(i) {
 
                 $("#" + i + "_Compra").prop('disabled', true);
                 $("#" + i + "_PrecioCompra").prop('disabled', true);
+                $("#" + i + "_Proveedor").prop('disabled', true);
+                $("#" + i + "_Impuesto").prop('disabled', true);
+
 
                 $("#" + i + "_Compra").val(0);
                 $("#" + i + "_PrecioCompra").val(0);
+                /*               $("#" + i + "_Proveedor").val();*/
+                $("#" + i + "_Impuesto").val("IV");
+                $("#" + i + "_TotalCompra").text("0");
+                $("#" + i + "_TotalImpuesto").text("0");
                 ProdCadena.splice(x, 1);
 
                 if (ProdCadena.length == 0) {
@@ -593,6 +672,135 @@ function Generar() {
                         type: 'POST',
 
                         url: $("#urlGenerar").val(),
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: compressedArrayBuffer,
+                        processData: false,
+                        headers: {
+                            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function (json) {
+
+
+                            console.log("resultado " + json.aprovisionamiento);
+                            if (json.success == true) {
+                                $("#divProcesando").modal("hide");
+                                Swal.fire({
+                                    title: "Ha sido generado con éxito",
+
+                                    icon: 'success',
+                                    showCancelButton: false,
+
+                                    confirmButtonText: 'OK',
+                                    customClass: {
+                                        confirmButton: 'swalBtnColor',
+
+                                    },
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        //Despues de insertar, ocupariamos el id del cliente en la bd 
+                                        //para entonces setearlo en el array de clientes
+
+                                        window.location.href = window.location.href.split("/Editar")[0];
+
+
+                                    }
+                                })
+
+                            } else {
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Ha ocurrido un error al intentar guardar ' + json.aprovisionamiento
+
+                                })
+                            }
+                        },
+
+                        beforeSend: function () {
+                            $("#divProcesando").modal("show");
+
+                        },
+                        complete: function () {
+                            $("#divProcesando").modal("hide");
+
+                        },
+                        error: function (error) {
+                            $("#divProcesando").modal("hide");
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar guardar ' + error
+
+                            })
+                        }
+                    });
+                }
+            })
+        } else {
+            $("#divProcesando").modal("hide");
+
+        }
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar agregar ' + e
+
+        })
+    }
+
+
+
+}
+
+function GeneraryEnviar() {
+
+    try {
+
+
+
+        var EncAprovisionamiento = {
+
+            id: $("#id").val(),
+            idCategoria: $("#CategoriaSeleccionado").val(),
+            idSubCategoria: $("#SubCategoriaSeleccionado").val(),
+            idUsuarioCreador: 0,
+            Fecha: $("#Fecha").val(),
+            Status: "E",
+            Clasificacion: $("#ClasificacionSeleccionado").val(),
+            IndicadorMayor: parseFloat($("#Indicador").val()),
+            IndicadorMenor: parseFloat($("#IndicadorX").val()),
+            Detalle: ProdCadena
+        }
+
+        if (validarAprovisionamiento(EncAprovisionamiento)) {
+            Swal.fire({
+                title: '¿Desea generar la compra del Aprovisionamiento?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var jsonString = JSON.stringify(EncAprovisionamiento);
+                    // Comprimir la cadena JSON utilizando gzip
+                    var compressedData = pako.gzip(jsonString);
+
+                    // Convertir los datos comprimidos a un ArrayBuffer (opcional, depende de tu caso de uso)
+                    var compressedArrayBuffer = compressedData.buffer;
+
+                    $.ajax({
+                        type: 'POST',
+
+                        url: $("#urlGenerarC").val(),
                         dataType: 'json',
                         contentType: 'application/json',
                         data: compressedArrayBuffer,

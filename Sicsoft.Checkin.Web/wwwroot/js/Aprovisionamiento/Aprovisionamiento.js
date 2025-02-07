@@ -694,6 +694,153 @@ function Generar() {
 
 }
 
+function GeneraryEnviar() {
+
+    try {
+
+        var filtros = "";
+        if ($("#md_checkbox_Cedi").prop('checked')) {
+            filtros += "C;";
+        }
+        if ($("#md_checkbox_VK").prop('checked')) {
+            filtros += "VK;";
+        }
+        if ($("#md_checkbox_AZ").prop('checked')) {
+            filtros += "AZ;";
+        }
+        if ($("#md_checkbox_Belen").prop('checked')) {
+            filtros += "B;";
+        }
+        if ($("#md_checkbox_St").prop('checked')) {
+            filtros += "St;";
+        }
+        if ($("#md_checkbox_Todas").prop('checked')) {
+            filtros += "T;";
+        }
+        var EncAprovisionamiento = {
+
+            id: 0,
+            idCategoria: $("#CategoriaSeleccionado").val(),
+            idSubCategoria: $("#SubCategoriaSeleccionado").val(),
+            idUsuarioCreador: 0,
+            Fecha: $("#Fecha").val(),
+            Status: "E",
+            Clasificacion: $("#ClasificacionSeleccionado").val(),
+            IndicadorMayor: parseFloat($("#Indicador").val()),
+            IndicadorMenor: parseFloat($("#IndicadorX").val()),
+            FiltroSeleccionado: filtros,
+            Detalle: ProdCadena
+        }
+
+        if (validarAprovisionamiento(EncAprovisionamiento)) {
+            Swal.fire({
+                title: '¿Desea generar la compra del Aprovisionamiento?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var jsonString = JSON.stringify(EncAprovisionamiento);
+                    // Comprimir la cadena JSON utilizando gzip
+                    var compressedData = pako.gzip(jsonString);
+
+                    // Convertir los datos comprimidos a un ArrayBuffer (opcional, depende de tu caso de uso)
+                    var compressedArrayBuffer = compressedData.buffer;
+
+                    $.ajax({
+                        type: 'POST',
+
+                        url: $("#urlGenerarC").val(),
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: compressedArrayBuffer,
+                        processData: false,
+                        headers: {
+                            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function (json) {
+
+
+                            console.log("resultado " + json.aprovisionamiento);
+                            if (json.success == true) {
+                                $("#divProcesando").modal("hide");
+                                Swal.fire({
+                                    title: "Ha sido generado con éxito",
+
+                                    icon: 'success',
+                                    showCancelButton: false,
+
+                                    confirmButtonText: 'OK',
+                                    customClass: {
+                                        confirmButton: 'swalBtnColor',
+
+                                    },
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        //Despues de insertar, ocupariamos el id del cliente en la bd 
+                                        //para entonces setearlo en el array de clientes
+
+                                        window.location.href = window.location.href.split("/Nuevo")[0];
+
+
+                                    }
+                                })
+
+                            } else {
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Ha ocurrido un error al intentar guardar ' + json.aprovisionamiento
+
+                                })
+                            }
+                        },
+
+                        beforeSend: function () {
+                            $("#divProcesando").modal("show");
+
+                        },
+                        complete: function () {
+                            $("#divProcesando").modal("hide");
+
+                        },
+                        error: function (error) {
+                            $("#divProcesando").modal("hide");
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar guardar ' + error
+
+                            })
+                        }
+                    });
+                }
+            })
+        } else {
+            $("#divProcesando").modal("hide");
+
+        }
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar agregar ' + e
+
+        })
+    }
+
+
+
+}
+
 function validarAprovisionamiento(e) {
     try {
 

@@ -161,5 +161,73 @@ namespace NOVAAPP.Pages.Aprovisionamiento
                 return new JsonResult(resp2);
             }
         }
+
+        public async Task<IActionResult> OnPostAgregarAprovisionamientoC()
+        {
+            string error = "";
+
+            AprovisionamientoViewModel recibidos = new AprovisionamientoViewModel();
+            try
+            {
+                var ms = new MemoryStream();
+                await Request.Body.CopyToAsync(ms);
+
+                byte[] compressedData = ms.ToArray();
+
+                // Descomprimir los datos utilizando GZip
+                using (var compressedStream = new MemoryStream(compressedData))
+                using (var decompressedStream = new MemoryStream())
+                {
+                    using (var decompressionStream = new GZipStream(compressedStream, CompressionMode.Decompress))
+                    {
+                        decompressionStream.CopyTo(decompressedStream);
+                    }
+
+                    // Convertir los datos descomprimidos a una cadena JSON
+                    var jsonString = System.Text.Encoding.UTF8.GetString(decompressedStream.ToArray());
+
+                    // Procesar la cadena JSON como desees
+                    // Por ejemplo, puedes deserializarla a un objeto C# utilizando Newtonsoft.Json
+                    recibidos = Newtonsoft.Json.JsonConvert.DeserializeObject<AprovisionamientoViewModel>(jsonString);
+                }
+
+
+
+
+                recibidos.idUsuarioCreador = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == ClaimTypes.Actor).Select(s1 => s1.Value).FirstOrDefault().ToString());
+
+
+                await service.Editar(recibidos);
+
+                var resp2 = new
+                {
+                    success = true,
+                    Aprovisionamiento = ""
+
+                };
+                return new JsonResult(resp2);
+            }
+            catch (ApiException ex)
+            {
+                BitacoraErroresViewModel be = JsonConvert.DeserializeObject<BitacoraErroresViewModel>(ex.Content.ToString());
+                var resp2 = new
+                {
+                    success = false,
+                    Aprovisionamiento = be.Descripcion
+                };
+                return new JsonResult(resp2);
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError(string.Empty, ex.Message);
+                var resp2 = new
+                {
+                    success = false,
+                    Aprovisionamiento = ex.Message
+                };
+                return new JsonResult(resp2);
+            }
+        }
     }
 }
