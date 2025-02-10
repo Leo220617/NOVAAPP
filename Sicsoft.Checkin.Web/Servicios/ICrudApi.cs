@@ -66,7 +66,8 @@ namespace Sicsoft.Checkin.Web.Servicios
 
         [Get("/SincronizarSAP")]
         Task<TEntity> SincronizarSAP(int id);
-
+        [Get("/Reclasificacion")]
+        Task<TEntity> Reclasificacion(int id);
         [Get("/Consultar")]
         Task<TEntity> ObtenerPorId(int id);
 

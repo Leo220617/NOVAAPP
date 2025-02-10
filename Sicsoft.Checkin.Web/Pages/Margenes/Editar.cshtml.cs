@@ -60,7 +60,16 @@ namespace NOVAAPP.Pages.Margenes
                     return RedirectToPage("/NoPermiso");
                 }
 
+                try
+                {
+                    //Aqui se llamaria el SP de reclasificacion
+                    await categorias.Reclasificacion(idCategoria);
+                }
+                catch (Exception wx)
+                {
 
+
+                }
                 ListaX = await service.ObtenerMargen(idListaPrecio, idCategoria, Moneda);
                 Precios = await precios.ObtenerLista("");
 
@@ -200,11 +209,11 @@ namespace NOVAAPP.Pages.Margenes
                     recibidos = Newtonsoft.Json.JsonConvert.DeserializeObject<EncMargenesViewModel>(jsonString);
                 }
                 recibidos.idUsuarioCreador = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == ClaimTypes.Actor).Select(s1 => s1.Value).FirstOrDefault().ToString());
-               await service.Editar(recibidos);
+                await service.Editar(recibidos);
 
                 var resp2 = new
                 {
-                    success = true 
+                    success = true
                 };
                 return new JsonResult(resp2);
             }

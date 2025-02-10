@@ -39,7 +39,7 @@ namespace NOVAAPP.Pages.Aprovisionamiento
             try
             {
                 var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
-                if (string.IsNullOrEmpty(Roles.Where(a => a == "49").FirstOrDefault()))
+                if (string.IsNullOrEmpty(Roles.Where(a => a == "82").FirstOrDefault()))
                 {
                     return RedirectToPage("/NoPermiso");
                 }
