@@ -106,6 +106,9 @@ function RecuperarInformacion() {
 
 
             var PE = ProdClientes.find(a => a.Codigo == Producto.ItemCode && a.idCategoria == Producto.idCategoria && a.idListaPrecios == Producto.idListaPrecio && a.Moneda == Producto.Moneda);
+            if (PE != undefined) {
+
+           
             var x = ProdClientes.findIndex(a => a.Codigo == Producto.ItemCode && a.idCategoria == Producto.idCategoria && a.idListaPrecios == Producto.idListaPrecio && a.Moneda == Producto.Moneda);
             CambiarCheck(i, true);
             $("#" + x + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal).toFixed(2)));
@@ -141,7 +144,7 @@ function RecuperarInformacion() {
             }
         }
 
-
+        }
 
 
 
@@ -629,7 +632,7 @@ function onChangeRevisado(i) {
                 ProdCadena[x].PrecioCob = PE.Costo / (1 - (ProdCadena[x].Cobertura / 100));
                 ProdCadena[x].PrecioFinal = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].Margen / 100));
                 ProdCadena[x].PrecioMin = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].MargenMin / 100));
-                ProdCadena[x].Seteable = $("#" + x + "_mdcheckbox").prop('checked');
+                ProdCadena[x].Seteable = $("#" + i + "_mdcheckbox").prop('checked');
                 var PrecioImp = ProdCadena[x].PrecioFinal * 1.13;
 
 

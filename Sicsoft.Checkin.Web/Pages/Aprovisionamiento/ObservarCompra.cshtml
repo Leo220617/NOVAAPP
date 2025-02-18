@@ -154,7 +154,7 @@
                     </div>
                     <!-- info row -->
                     <div class="row invoice-info">
-                        <div class="col-md-8 invoice-col">
+                        <div class="col-md-6 invoice-col">
                             <strong>Proveedor</strong>
                             <address>
                                 <strong class="text-blue font-size-24"> @Model.Compra.CodProveedor - @Model.Compra.NombreProveedor  </strong>
@@ -162,6 +162,16 @@
 
                             </address>
                         </div>
+                        <div class="col-md-3">
+                            <h5> <b>Usuario Creador: </b> @(Model.Users.Where(a => a.id == Model.Compra.idUsuarioCreador).FirstOrDefault() == null ? "Usuario Inexistente" : Model.Users.Where(a => a.id == Model.Compra.idUsuarioCreador).FirstOrDefault().Nombre)</h5>
+
+                        </div>
+                        <div class="col-md-3">
+                            <h5> <b>Cond.Pago: </b> @(Model.CP.Where(a => a.id == Model.Compra.idCondPago).FirstOrDefault() == null ? "Cond Pago Inexistente" : Model.CP.Where(a => a.id == Model.Compra.idCondPago).FirstOrDefault().Nombre) </h5>
+
+                        </div>
+
+                   
                         <!-- /.col -->
                     </div>
                     <!-- /.row -->
@@ -173,6 +183,7 @@
                                     <tr class="bg-pale-info">
                                         <th class="text-center">#</th>
                                         <th class="text-center">Producto</th>
+                                        <th class="text-center">Bodega</th>
                                         <th class="text-center">Cantidad</th>
                                         <th class="text-center">Precio Unitario</th>
                                         <th class="text-center">Impuesto</th>
@@ -193,9 +204,9 @@
 
 
                                             <td>
-                                                @item.CodigoProducto - @item.NombreProducto - BOD: @item.Bodega
+                                                @item.CodigoProducto - @item.NombreProducto 
                                             </td>
-
+                                            <td>  @item.Bodega  - @(Model.Bodegas.Where(a => a.CodSAP == item.Bodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.CodSAP == item.Bodega).FirstOrDefault().Nombre)</td>
                                             <td class="text-right">@(Math.Round(item.Cantidad))</td>
 
 
@@ -238,7 +249,20 @@
                 </div>
             </div>
 
+            <div class="col-6 box">
+                <div class="col-6 box-header with-border">
+                    <h4 class="box-title">Comentarios</h4>
+                </div>
+                <div class="box-body">
+                    <td>@Model.Compra.Comentarios</td>
 
+                    <!-- /.box-body -->
+                </div>
+
+
+
+
+            </div>
             <!-- Default box -->
     
         </div>
@@ -317,13 +341,22 @@
                     </div>
                     <!-- info row -->
                     <div class="row invoice-info">
-                        <div class="col-md-8 invoice-col">
+                        <div class="col-md-6 invoice-col">
                             <strong>Proveedor</strong>
                             <address>
                                 <strong class="text-blue font-size-24"> @Model.Compra.CodProveedor - @Model.Compra.NombreProveedor  </strong>
 
 
                             </address>
+                        </div>
+
+                        <div class="col-md-3">
+                            <h5> <b>Usuario Creador: </b> @(Model.Users.Where(a => a.id == Model.Compra.idUsuarioCreador).FirstOrDefault() == null ? "Usuario Inexistente" : Model.Users.Where(a => a.id == Model.Compra.idUsuarioCreador).FirstOrDefault().Nombre)</h5>
+
+                        </div>
+                        <div class="col-md-3">
+                            <h5> <b>Cond.Pago: </b> @(Model.CP.Where(a => a.id == Model.Compra.idCondPago).FirstOrDefault() == null ? "Cond Pago Inexistente" : Model.CP.Where(a => a.id == Model.Compra.idCondPago).FirstOrDefault().Nombre) </h5>
+
                         </div>
                         <!-- /.col -->
                     </div>
@@ -336,6 +369,7 @@
                                     <tr class="bg-pale-info">
                                         <th class="text-center">#</th>
                                         <th class="text-center">Producto</th>
+                                        <th class="text-center">Bodega</th>
                                         <th class="text-center">Cantidad</th>
                                         <th class="text-center">Precio Unitario</th>
                                         <th class="text-center">Impuesto</th>
@@ -356,9 +390,9 @@
 
 
                                             <td>
-                                                @item.CodigoProducto - @item.NombreProducto - BOD: @item.Bodega
+                                                @item.CodigoProducto - @item.NombreProducto
                                             </td>
-
+                                            <td>  @item.Bodega  - @(Model.Bodegas.Where(a => a.CodSAP == item.Bodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.CodSAP == item.Bodega).FirstOrDefault().Nombre)</td>
                                             <td class="text-right">@(Math.Round(item.Cantidad))</td>
 
 
@@ -397,6 +431,21 @@
                     </div>
                     <!-- /.row -->
                     <!-- /.row -->
+
+                </div>
+
+                <div class="col-6 box">
+                    <div class="col-6 box-header with-border">
+                        <h4 class="box-title">Comentarios</h4>
+                    </div>
+                    <div class="box-body">
+                        <td>@Model.Compra.Comentarios</td>
+
+                        <!-- /.box-body -->
+                    </div>
+
+
+
 
                 </div>
             </div>

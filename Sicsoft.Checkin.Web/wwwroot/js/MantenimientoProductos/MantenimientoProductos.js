@@ -49,12 +49,11 @@ var ProdPrueba = [];
 var Categorias = [];
 var Duplicado = false;
 var Fechabool = false;
-var ProdClientes2 = [];
 var ProdSinStock = [];
 var htmlS = "";
 var inicio = false;
 var MiSucursal = [];
-var ProdClientes2 = [];
+
 
 function Recuperar() {
     try {
@@ -120,8 +119,8 @@ function onChangeCategoria() {
 
 
         if (idCategoria != 0) {
-            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria && a.Stock > 0);
-            ProdClientes2 = Productos.filter(a => a.idCategoria == idCategoria && a.Stock == 0);
+            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria);
+    
             RellenaProductos();
             $("#botonGT").prop("disabled", false);
         }

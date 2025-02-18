@@ -1,0 +1,292 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.Aprovisionamiento.EditarCompraModel
+@{
+    ViewData["Title"] = "Compras";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+}
+@using Microsoft.AspNetCore.Http
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using System.Linq;
+@using System.Security.Claims;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.Extensions.Configuration;
+@using Refit;
+@using Sicsoft.Checkin.Web.Models;
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+}
+@section styles {
+
+
+}
+@{
+    var Ganancia = 0.00;
+
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
+
+            });
+
+
+
+            $(document).ready(function () {
+
+            });
+
+
+        });
+
+   
+
+    </script>
+}
+
+
+@using Newtonsoft.Json;
+@using System.Globalization
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Ordenes de Compra
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Editar Orden de Compra</li>
+    </ol>
+</section>
+
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Editar Orden de Compra</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./IndexCompras" asp-route-id="@Model.Compra.idAprovisionamiento" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+
+
+
+                            &nbsp;
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="box-body">
+                  
+                  
+                               <input hidden asp-for="Compra.id" />
+                              <input hidden asp-for="Compra.idAprovisionamiento" />
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Orden de Compra No: @Model.Compra.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h5> <b>Fecha: </b> @Model.Compra.Fecha.ToString("dd/MM/yyyy")</h5>
+
+                                        </div>
+
+
+
+
+                                        <br />
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-6 invoice-col">
+                            <strong>Proveedor</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @Model.Compra.CodProveedor - @Model.Compra.NombreProveedor  </strong>
+
+
+                            </address>
+                        </div>
+                            <div class="col-md-3">
+                                <h5> <b>Usuario Creador: </b> @(Model.Users.Where(a => a.id == Model.Compra.idUsuarioCreador).FirstOrDefault() == null ? "Usuario Inexistente" : Model.Users.Where(a => a.id == Model.Compra.idUsuarioCreador).FirstOrDefault().Nombre)</h5>
+
+                            </div>
+                        
+                        <!-- /.col -->
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <h5>Condición de Pago<span class="text-danger">*</span></h5>
+
+                                <select class="form-control select2  " asp-for="Compra.idCondPago">
+                                    @foreach (var item in Model.CP)
+                                    {
+                                        <option value="@item.id">@item.Nombre</option>
+                                    }
+
+
+                                </select>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+               
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">Producto</th>
+                                        <th class="text-center">Bodega</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th class="text-center">Precio Unitario</th>
+                                        <th class="text-center">Impuesto</th>
+
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var i = 0;
+                                    }
+                                    @foreach (var item in Model.Compra.Detalle)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+
+
+                                            <td>
+                                                @item.CodigoProducto - @item.NombreProducto
+                                            </td>
+                                                <td>  @item.Bodega  - @(Model.Bodegas.Where(a => a.CodSAP == item.Bodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.CodSAP == item.Bodega).FirstOrDefault().Nombre)</td>
+
+                                            <td class="text-right">@(Math.Round(item.Cantidad))</td>
+
+
+                                            <td class="text-center">@Math.Round(item.PrecioUnitario, 2).ToString("C", formato)</td>
+
+                                            <td class="text-center">@Math.Round(@item.TotalImpuesto, 2).ToString("C", formato)</td>
+
+
+
+
+                                        </tr>
+                                        i++;
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-12  text-right">
+
+
+                            <div>
+                                <p>Sub Total  : <span> @Math.Round(Model.Compra.Subtotal, 2).ToString("C", formato)</span> </p>
+
+                                <p>Impuesto :  <span>  @Math.Round(Model.Compra.TotalImpuesto, 2).ToString("C", formato)</span></p>
+
+
+                            </div>
+                            <div class="total-payment">
+                                <h3><b>Total :</b>  <span>  @Math.Round(Model.Compra.TotalCompra, 2).ToString("C", formato)</span></h3>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+
+                <div class="box">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+
+                                <div class="form-group">
+                                    <label>Comentarios</label>
+                                    <textarea id="inputComentarios" asp-for="Compra.Comentarios" class="form-control"></textarea>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!-- this row will not appear when printing -->
+                        <div class="row no-print">
+                            <div class="col-12">
+                                @*<button id="print" class="btn btn-warning" type="button"> <span><i class="fa fa-print"></i> Imprimir</span> </button>*@
+
+                                <div class="text-xs-right">
+                                    <button type="submit" class="btn btn-info" title="Guardar Cambios">Guardar Cambios</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                       
+                </div>
+                </form>
+            </div>
+
+
+            <!-- Default box -->
+
+        </div>
+    </div>
+
+
+
+
+
+  
+</section>
+
+
+
+
+
+
+
+

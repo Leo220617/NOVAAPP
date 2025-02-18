@@ -64,5 +64,23 @@ namespace NOVAAPP.Pages.Aprovisionamiento
                 return Page();
             }
         }
+        public async Task<IActionResult> OnGetSincronizarSAP(int id)
+        {
+            try
+            {
+
+                await service.SincronizarSAP(id);
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(false);
+
+            }
+        }
     }
 }

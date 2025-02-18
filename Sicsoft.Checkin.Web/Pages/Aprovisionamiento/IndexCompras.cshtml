@@ -250,8 +250,12 @@
 
                                             <a asp-page="./ObservarCompra" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> &nbsp;
                                             &nbsp;
+                                           
+                                         
                                             @if (item.ProcesadaSAP == false)
                                             {
+                                                <a asp-page="./EditarCompra" asp-route-id="@item.id" class="fa fa-edit icono"> </a>
+                                              
                                                 <a onclick="javascript: onClickModal('@item.id')" title="Insertar a SAP"><img src="/sapX.png" /></a>
                                             }
 
@@ -322,6 +326,8 @@
                 </div>
                 <!-- /.box-body -->
             </div>
+
+         
             <!-- /.box -->
         </div>
         <!-- /.col -->
