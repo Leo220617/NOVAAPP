@@ -179,12 +179,12 @@
                     success: function(result) {
                         $("#divProcesando").modal("hide");
                         console.log(result);
-                        if (result == false) {
+                        if (result.success == false) {
 
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops...',
-                                text: 'Ha ocurrido un error al intentar sincronizar a SAP'
+                                text: 'Ha ocurrido un error al intentar sincronizar a SAP -> ' + result.error
 
                             })
 

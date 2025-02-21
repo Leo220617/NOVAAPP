@@ -162,15 +162,33 @@ namespace NOVAAPP.Pages.Documentos
             {
 
                 await service.SincronizarSAP(id);
-                return new JsonResult(true);
+
+                var result = new
+                {
+                    success = true,
+                    error = ""
+                };
+
+                return new JsonResult(result);
             }
             catch (ApiException ex)
             {
-                return new JsonResult(false);
+                Errores error = JsonConvert.DeserializeObject<Errores>(ex.Content.ToString());
+                var result = new
+                {
+                    success = false,
+                    error = error.Message
+                };
+                return new JsonResult(result);
             }
             catch (Exception ex)
             {
-                return new JsonResult(false);
+                var result = new
+                {
+                    success = false,
+                    error = ex.Message
+                };
+                return new JsonResult(result);
 
             }
         }
