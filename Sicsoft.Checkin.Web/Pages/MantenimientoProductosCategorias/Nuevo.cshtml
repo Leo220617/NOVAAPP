@@ -1,7 +1,7 @@
 ﻿@page
-@model NOVAAPP.Pages.MantenimientoProductos.NuevoModel
+@model NOVAAPP.Pages.MantenimientoProductosCategorias.NuevoModel
 @{
-    ViewData["Title"] = "MantenimientoProductos";
+    ViewData["Title"] = "MantenimientoProductosSubCategorias";
     NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
     formato.CurrencySymbol = "";
     formato.CurrencyGroupSeparator = ",";
@@ -36,7 +36,7 @@
 @section scripts {
 
 
-    <script src="/js/MantenimientoProductos/MantenimientoProductos.js?v=0.1.3"></script>
+    <script src="/js/MantenimientoProductos/MantenimientoProductosSubCategorias.js?v=0.1.3"></script>
 
 
 }
@@ -47,11 +47,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Mantenimiento Productos
+        Mantenimiento Productos Subcategorias
     </h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-        <li class="breadcrumb-item active"> Mantenimiento Productos</li>
+        <li class="breadcrumb-item active"> Mantenimiento Productos SubCategorias</li>
     </ol>
 </section>
 
@@ -74,7 +74,7 @@
                 <div class="box-header with-border">
                     <div class="row">
                         <div class="col-8">
-                            <h6 class="box-subtitle">Mantenimiento Productos</h6>
+                            <h6 class="box-subtitle">Mantenimiento Productos SubCategorias</h6>
 
 
                         </div>
@@ -90,7 +90,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="page-header mt-0">
-                                <h2 class="d-inline"><span class="font-size-24">Mantenimiento Productos</span></h2>
+                                <h2 class="d-inline"><span class="font-size-24">Mantenimiento Productos SubCategorias</span></h2>
                                 <div class="text-left">
                                     <h5>Fecha <span class="font-size-18">@DateTime.Now.ToString("dd MMM yyy")</span></h5>
                                     <input hidden id="Fecha" type="datetime" value="@DateTime.Now" />
@@ -108,11 +108,11 @@
                     <!-- info row -->
 
                     <div class="row invoice-info">
-                  
 
 
 
-                        <div class="col-md-6">
+
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>Categoria</label>
                                 <select id="CategoriaSeleccionado" class="form-control select2" onchange="javascript: onChangeCategoria()">
@@ -126,7 +126,7 @@
 
 
                         <div class="col-md-4">
-                          @*   <div class="form-group">
+                            <div class="form-group">
                                 <label>Sub Categoria</label>
                                 <input type="text" class="form-control" id="busqueda2" placeholder="Ingrese la descripción" list="subCategoriaList">
                                 <datalist id="subCategoriaList">
@@ -135,8 +135,8 @@
                                         <option value="@subCategoria.Nombre"></option>
                                     }
                                 </datalist>
-                           
-                            </div> *@
+
+                            </div>
                         </div>
 
 
@@ -147,7 +147,7 @@
                             </button>
 
                         </div>
-             
+
 
 
                     </div>
@@ -193,72 +193,23 @@
                                     </div>
 
                                     <div class="col-md-2">
-                                        <div class="form-group">
-                                            <h5>Minimo<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <input type="number" id="MinimoT" value="0" class="form-control">
-                                            </div>
-
-                                        </div>
+                                         
 
                                     </div>
                                     <div class="col-md-2">
-                                        <div class="form-group">
-                                            <h5>Clasificación<span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <select id="ClasificacionT" class="form-control select2">
-                                                    <option value="A">A</option>
-                                                    <option value="B">B</option>
-                                                    <option value="C">C</option>
-                                                    <option value="D">D</option>
-                                                    <option value="E">E</option>
-                                                    <option value="F">F</option>
-                                                    <option value="G">G</option>
-                                                    <option value="H">H</option>
-                                                    <option value="I">I</option>
-                                                    <option value="J">J</option>
-                                                    <option value="K">K</option>
-                                                    <option value="L">L</option>
-                                                    <option value="M">M</option>
-                                                    <option value="N">N</option>
-                                                    <option value="O">O</option>
-                                                    <option value="P">P</option>
-                                                    <option value="Q">Q</option>
-                                                    <option value="R">R</option>
-                                                    <option value="S">S</option>
-                                                    <option value="T">T</option>
-                                                    <option value="U">U</option>
-                                                    <option value="V">V</option>
-                                                    <option value="W">W</option>
-                                                    <option value="X">X</option>
-                                                    <option value="Y">Y</option>
-                                                    <option value="Z">Z</option>
-                                                </select>
-                                            </div>
-                                        </div>
+                                         
                                     </div>
 
 
                                     <div class="col-md-4">
                                     </div>
                                     <div class="col-md-8">
-
-
                                         <button disabled type="button" id="botonGT" class="btn btn-info pull-right" onclick="    javascript: SetearT()">
-                                            Setear
+                                            Setear Todas
                                         </button>
-
-
                                     </div>
 
-
-
-
-
-
-
-
-
+                                     
 
                                 </div>
 
@@ -273,13 +224,9 @@
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th class="bg-info">Check</th>
-                                           @*  <th class="bg-info">Solo Minimo y Clasificación</th> *@
-                                            <th class="bg-info">Descripción</th>
-                                            <th class="bg-info">Bodega</th>
-                                            <th class="bg-info">Sub Categoria</th>
-                                            <th class="bg-info">Minimo</th>
-                                            <th class="bg-info">Clasificación</th>
+                                            <th class="bg-info">Check</th> 
+                                            <th class="bg-info">Descripción</th> 
+                                            <th class="bg-info">Sub Categoria</th> 
 
 
 
@@ -308,11 +255,6 @@
 
 
     </div>
-  
+
 
 </section>
-
-
-
-
-

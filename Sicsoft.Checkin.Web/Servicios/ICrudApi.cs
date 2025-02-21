@@ -16,6 +16,10 @@ namespace Sicsoft.Checkin.Web.Servicios
 
         [Post("/Insertar")]
         Task<TEntity> Agregar([Body] TEntity payload);
+
+        [Post("/InsertarSubs")]
+        Task<TEntity> AgregarSubs([Body] TEntity payload);
+
         [Post("")]
         Task<TEntity> CambiarClave([Body] TEntity payload);
 

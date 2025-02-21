@@ -254,6 +254,14 @@
                                 }
 
                             }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "79").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/MantenimientoProductosCategorias/Nuevo"><i class="mdi mdi-cube"></i>Mant Productos SubCat</a></li>
+                                }
+
+                            }
                             <li class="treeview">
 
 

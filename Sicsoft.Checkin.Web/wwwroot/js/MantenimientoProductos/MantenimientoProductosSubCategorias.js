@@ -119,9 +119,14 @@ function onChangeCategoria() {
 
 
         if (idCategoria != 0) {
-            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria);
-    
-            RellenaProductos();
+            ProdClientes = Productos.filter(a => a.idCategoria == idCategoria).reduce((acc, producto) => {
+                if (!acc.some(p => p.Codigo === producto.Codigo && p.Nombre === producto.Nombre)) {
+                    acc.push(producto);
+                }
+                return acc;
+            }, []);
+
+            RellenaProductos(); 
             $("#botonGT").prop("disabled", false);
         }
 
@@ -186,12 +191,10 @@ function RellenaTabla() {
             var SubCategoria = SubCategorias.find(a => a.id == idSubCategoria);
             html += "<tr>";
 
-            html += "<td class='text-center'>  <input  type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeRevisado(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> ";
-           /* html += "<td class='text-center'>  <input  type='checkbox' id='" + i + "_mdcheckboxS' class='chk-col-green' onchange='javascript: onChangeSolo(" + i + ")'>  <label for='" + i + "_mdcheckboxS'></label> </td> ";*/
+            html += "<td class='text-center'>  <input  type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeRevisado(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> "; 
             html += "<td > " + ProdClientes[i].Codigo + "-" + ProdClientes[i].Nombre + " </td>";
 
-
-            html += "<td > " + Bodega.CodSAP + " </td>";
+             
 
             if (SubCategoria != undefined) {
                 html += "<td  id='" + i + "_SubCategoria'> " + SubCategoria.id + ' - ' + SubCategoria.Nombre + " </td>";
@@ -199,23 +202,7 @@ function RellenaTabla() {
                 html += "<td  id='" + i + "_SubCategoria'> " + 'N/A' + " </td>";
             }
 
-
-
-
-
-            html += "<td class='text-center'> <input type='number' id='" + i + "_Cantidad1' class='form-control'   value= '" + ProdClientes[i].Minimo + "' min='1'/>  </td>";
-            html += "<td class='text-center'>  ";
-            let selectHTML = "<select id='" + i + "_Cantidad2' class='form-control'>";
-            let abecedario = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-            // Generar las opciones dinámicamente
-            for (let letra of abecedario) {
-                let selected = ProdClientes[i].Clasificacion === letra ? "selected" : "";
-                selectHTML += `<option value='${letra}' ${selected}>${letra}</option>`;
-            }
-
-            selectHTML += "</select>";
-            html += selectHTML;
+             
             html += "</td>";
 
 
@@ -253,10 +240,7 @@ function onChangeRevisado(i) {
 
 
         var idCategoria = $("#CategoriaSeleccionado").val();
-
-
         var valorCheck = $("#" + i + "_mdcheckbox").prop('checked');
-        var valorCheckS = $("#" + i + "_mdcheckboxS").prop('checked');
         var PalabraClave = $("#busqueda2").val();
 
 
@@ -268,10 +252,7 @@ function onChangeRevisado(i) {
         var SubCategoria = SubCategorias.find(a => a.id == idSubCategoria);
         if (Existe == undefined) {
 
-            var Cantidad1 = parseFloat($("#" + i + "_Cantidad1").val());
-            var Clasificacion = $("#" + i + "_Cantidad2").val();
-
-
+             
             var Producto =
             {
 
@@ -284,63 +265,41 @@ function onChangeRevisado(i) {
                 idUsuarioModificador: 0,
                 Fecha: $("#Fecha").val(),
                 ItemCode: PE.Codigo,
-                Minimo: Cantidad1,
-                Clasificacion: Clasificacion,
-                Solo: true
-               /* Solo: valorCheckS*/
+                Minimo: 0,
+                Clasificacion: 'A',
+                Solo: false
 
 
             };
-
-            if (valorCheck == true) {
-                $("#" + i + "_Cantidad1").prop('disabled', true);
-                $("#" + i + "_Cantidad2").prop('disabled', true);
-                $("#" + i + "_Cantidad3").prop('disabled', true);
-                //if (valorCheckS == false) {
-                //    $("#" + i + "_SubCategoria").text(PalabraClave);
-                //}
-            }
+            $("#" + i + "_SubCategoria").text(PalabraClave);
 
             ProdCadena.push(Producto);
         } else {
-            var Cantidad1 = parseFloat($("#" + i + "_Cantidad1").val());
-            var Clasificacion = $("#" + i + "_Cantidad2").val();
-
+            
             ProdCadena[x].idProducto = PE.id;
             ProdCadena[x].idCategoria = idCategoria;
             ProdCadena[x].idCategoria = 0;
             ProdCadena[x].idUsuarioModificador = 0;
             ProdCadena[x].Fecha = $("#Fecha").val();
             ProdCadena[x].ItemCode = PE.Codigo;
-            ProdCadena[x].Minimo = Cantidad1;
-            ProdCadena[x].Clasificacion = Clasificacion;
-            ProdCadena[x].Solo = true;
-           /* ProdCadena[x].Solo = valorCheckS;*/
+            ProdCadena[x].Minimo = 0;
+            ProdCadena[x].Clasificacion = 'A';
+            ProdCadena[x].Solo = false;
 
 
 
             if (valorCheck == true) {
-                $("#" + i + "_Cantidad1").prop('disabled', true);
-                $("#" + i + "_Cantidad2").prop('disabled', true);
-                //if (valorCheckS == false) {
-
-                //    $("#" + i + "_SubCategoria").text(PalabraClave);
-                //}
-
-
-
-
-
-
+                
+                $("#" + i + "_SubCategoria").text(PalabraClave);
+                 
             } else {
-                $("#" + i + "_Cantidad1").prop('disabled', false);
-                $("#" + i + "_Cantidad2").prop('disabled', false);
-                //if (SubCategoria != undefined) {
-                //    $("#" + i + "_SubCategoria").text(SubCategoria.id + ' - ' + SubCategoria.Nombre);
-                //} else {
-                //    $("#" + i + "_SubCategoria").text("N/A");
-                //}
-         
+                
+                if (SubCategoria != undefined) {
+                    $("#" + i + "_SubCategoria").text(SubCategoria.id + ' - ' + SubCategoria.Nombre);
+                } else {
+                    $("#" + i + "_SubCategoria").text("N/A");
+                }
+
 
                 ProdCadena.splice(x, 1);
 
@@ -412,7 +371,7 @@ function Generar() {
                         success: function (json) {
 
 
-                            console.log("resultado " + json.arqueo);
+                            console.log("resultado " + json.LogsProductosAprov);
                             if (json.success == true) {
                                 $("#divProcesando").modal("hide");
                                 Swal.fire({
@@ -689,14 +648,14 @@ function filtrarTabla() {
 
 function SetearT() {
     try {
-        var Minimo = $("#MinimoT").val();
-        var Clasificacion = $("#ClasificacionT").val();
-
+        
+        
         var idCategoria = $("#CategoriaSeleccionado").val();
+        var PalabraClave = $("#busqueda2").val();
 
         var indicesVisibles = filtrarTabla();
-        if (indicesVisibles == undefined) {
-            throw new Error(" Buscador esta vacio");
+        if (indicesVisibles == undefined || PalabraClave == "" || PalabraClave == undefined) {
+            throw new Error("Palabra Clave o Buscador esta vacio");
         }
         indicesVisibles.forEach(function (index) {
 
@@ -710,36 +669,16 @@ function SetearT() {
 
 
 
-                if (Existe == undefined) {
-
-
-
-
-
-                    $("#" + index + "_Cantidad1").val(Minimo);
-                    $("#" + index + "_Cantidad2").val(Clasificacion);
-
-
-
-
-
-
+                if (Existe == undefined) { 
+                    $("#" + index + "_SubCategoria").text(PalabraClave); 
+                    $("#" + index + "_mdcheckbox").prop('checked', true);
+                    onChangeRevisado(index);
 
                 }
-            } else if (valorCheck == false) {
-
-
-
-
-                $("#" + index + "_Cantidad1").val(Minimo);
-                $("#" + index + "_Cantidad2").val(Clasificacion);
-
-
-
-
-
-
-
+            } else if (valorCheck == false) { 
+                $("#" + index + "_SubCategoria").text(PalabraClave); 
+                $("#" + index + "_mdcheckbox").prop('checked', true);
+                onChangeRevisado(index);
             }
         });
     } catch (e) {
@@ -750,3 +689,4 @@ function SetearT() {
         });
     }
 }
+ 

@@ -39,7 +39,9 @@ namespace NOVAAPP.Pages.SubCategorias
                     return RedirectToPage("/NoPermiso");
                 }
                 Categorias = await categorias.ObtenerLista("");
-                Objeto = await service.ObtenerLista("");
+                filtro.Externo = true;
+                
+                Objeto = await service.ObtenerLista(filtro);
 
 
                 return Page();

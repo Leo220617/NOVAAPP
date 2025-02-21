@@ -13,7 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace NOVAAPP.Pages.MantenimientoProductos
+namespace NOVAAPP.Pages.MantenimientoProductosCategorias
 {
     public class NuevoModel : PageModel
     {
@@ -22,10 +22,6 @@ namespace NOVAAPP.Pages.MantenimientoProductos
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
         private readonly ICrudApi<ProductosViewModel, string> productos;
         private readonly ICrudApi<SubCategoriasViewModel, int> subCategorias;
-
-
-
-
 
         [BindProperty]
         public LogsProductosAprovisionamientoViewModel LogsProductosAprov { get; set; }
@@ -43,6 +39,8 @@ namespace NOVAAPP.Pages.MantenimientoProductos
 
         [BindProperty]
         public ProductosViewModel[] Productos { get; set; }
+
+   
 
 
         [BindProperty(SupportsGet = true)]
@@ -72,7 +70,7 @@ namespace NOVAAPP.Pages.MantenimientoProductos
                 Categorias = await categorias.ObtenerLista("");
                 ParametrosFiltros filtro2 = new ParametrosFiltros();
                 filtro2.Externo = true;
-          
+
                 SubCategorias = await subCategorias.ObtenerLista(filtro2);
 
                 Bodegas = await bodegas.ObtenerLista("");
@@ -83,6 +81,7 @@ namespace NOVAAPP.Pages.MantenimientoProductos
 
                 Productos = await productos.ObtenerLista(filtro);
               
+
 
 
 
@@ -136,11 +135,11 @@ namespace NOVAAPP.Pages.MantenimientoProductos
 
 
 
-             
+
                 recibidos.idUsuarioModificador = Convert.ToInt32(((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == ClaimTypes.Actor).Select(s1 => s1.Value).FirstOrDefault().ToString());
 
 
-                await service.Agregar(recibidos);
+                await service.AgregarSubs(recibidos);
 
                 var resp2 = new
                 {
@@ -167,11 +166,10 @@ namespace NOVAAPP.Pages.MantenimientoProductos
                 var resp2 = new
                 {
                     success = false,
-                    LogsProductosAprov = ex.Message
+                    Arqueo = ex.Message
                 };
                 return new JsonResult(resp2);
             }
         }
-
     }
 }
