@@ -720,7 +720,8 @@ function SetearT() {
                     $("#" + index + "_Cantidad2").val(Clasificacion);
 
 
-
+                    $("#" + index + "_mdcheckbox").prop('checked', true);
+                    onChangeRevisado(index);
 
 
 
@@ -734,11 +735,8 @@ function SetearT() {
                 $("#" + index + "_Cantidad1").val(Minimo);
                 $("#" + index + "_Cantidad2").val(Clasificacion);
 
-
-
-
-
-
+                $("#" + index + "_mdcheckbox").prop('checked', true);
+                onChangeRevisado(index);
 
             }
         });
