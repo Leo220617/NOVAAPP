@@ -87,7 +87,10 @@ namespace NOVAAPP.Pages.Aprovisionamiento
 
                 Listas = await service.ObtenerLista(filtro);
                 Categorias = await categorias.ObtenerLista("");
-                SubCategorias = await subCategorias.ObtenerLista("");
+                ParametrosFiltros filtroSub = new ParametrosFiltros();
+                filtroSub.Externo = true;
+                
+                SubCategorias = await subCategorias.ObtenerLista(filtroSub);
 
                 Users = await serviceU.ObtenerLista("");
                 Users = Users.Where(a => a.novapos == false).ToArray();

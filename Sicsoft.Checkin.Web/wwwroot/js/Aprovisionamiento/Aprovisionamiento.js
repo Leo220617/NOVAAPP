@@ -292,14 +292,7 @@ function RellenaTabla() {
             } else {
                 html += "<td class='text-right' style='background-color : #EFFFE9;'>" + formatoDecimal(parseFloat(ProdClientes[i].Pedido_Sugerido).toFixed(2)) + " </td>";
             }
-            html += "<td>";
-            html += "<select  onchange='javascript: onChangeCompra(" + i + ")' disabled id='" + i + "_Proveedor' class='proveedor'>";
-            Proveedores.forEach(Proveedores => {
-                html += `<option value="${Proveedores.CardCode}" ${ProdClientes[i].Cod_Proveedor === Proveedores.CardCode ? "selected" : ""
-                    }>${Proveedores.CardCode} - ${Proveedores.Nombre}</option>`;
-            });
-            html += "</select>";
-            html += "</td>";
+   
             html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_Compra' class='form-control'  style='width: 80px; height: 40px;' value= '0' min='1'/>  </td>";
             html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_PrecioCompra' class='form-control' style='width: 150px; height: 40px;'  value= '0' min='1'/>  </td>";
 
@@ -334,7 +327,14 @@ function RellenaTabla() {
             html += "</td>";
 
 
-
+            html += "<td>";
+            html += "<select  onchange='javascript: onChangeCompra(" + i + ")' disabled id='" + i + "_Proveedor' class='proveedor'>";
+            Proveedores.forEach(Proveedores => {
+                html += `<option value="${Proveedores.CardCode}" ${ProdClientes[i].Cod_Proveedor === Proveedores.CardCode ? "selected" : ""
+                    }>${Proveedores.CardCode} - ${Proveedores.Nombre}</option>`;
+            });
+            html += "</select>";
+            html += "</td>";
 
 
 
