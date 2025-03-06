@@ -36,7 +36,8 @@
     <link href="/assets/vendor_components/jvectormap/lib2/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
     <!-- daterange picker -->
     <link rel="stylesheet" href="~/assets/vendor_components/bootstrap-daterangepicker/daterangepicker.css">
-
+      <!--toast CSS -->
+    <link href="~/assets/vendor_components/jquery-toast-plugin-master/src/jquery.toast.css" rel="stylesheet">
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="~/assets/vendor_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 
@@ -185,6 +186,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
     <!-- SlimScroll -->
     <script src="~/assets/vendor_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+         <!-- toast -->
+    <script src="~/assets/vendor_components/jquery-toast-plugin-master/src/jquery.toast.js"></script>
     <!-- Azurex Admin App -->
     <script src="~/js/template.js"></script>
 
@@ -260,7 +263,37 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.3/pako.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
- 
+    <script>
+
+        let logoutWarningShown = false;
+
+        function checkSession() {
+            fetch('@Url.Page("/Index", "Sesion")')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "active") {
+                        const expirationTime = new Date(data.expiresAt).getTime();
+                        const currentTime = new Date().getTime();
+                        const timeLeft = expirationTime - currentTime;
+
+                        if (timeLeft <= 5 * 60 * 1000 && !logoutWarningShown) {
+                            // Muestra advertencia 5 minutos antes
+                            alert("Tu sesión está por expirar. Guarda tu trabajo o renueva tu sesión.");
+                            logoutWarningShown = true;
+                        }
+
+                    } else {
+                        // Si la sesión expiró, redirige
+                        alert("Tu sesión ha expirado. Serás redirigido al inicio de sesión.");
+                        window.location.href = '/Account/Login';
+                    }
+                })
+                .catch(error => console.error('Error verificando la sesión:', error));
+        }
+
+        // Verifica la sesión cada 30 segundos
+        setInterval(checkSession, 30000);
+    </script>
 
 
     @RenderSection("Scripts", required: false)

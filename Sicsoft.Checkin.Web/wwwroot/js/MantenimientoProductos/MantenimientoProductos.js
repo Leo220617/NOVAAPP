@@ -54,7 +54,6 @@ var htmlS = "";
 var inicio = false;
 var MiSucursal = [];
 
-
 function Recuperar() {
     try {
 
@@ -66,8 +65,10 @@ function Recuperar() {
 
 
 
-        RellenaCategorias()
 
+        RellenaCategorias();
+        ValidarMinimos();
+       ValidarMinimosIguales();
 
 
 
@@ -138,8 +139,75 @@ function onChangeCategoria() {
 }
 
 
+function ValidarMinimos() {
+    try {
+        var ProductosMin = Productos.filter(a => a.Stock < a.Minimo);
+     
+        for (var i = 0; i < ProductosMin.length; i++) {
+
+  
+                $.toast({
+                    heading: 'Precaución',
+                    text: 'El producto' + ' ' + ProductosMin[i].Codigo + '-' + ProductosMin[i].Nombre + ' ' + 'NO alcanza el minimo de' + ' ' + ProductosMin[i].Minimo + '' + ' unidades en stock, el stock real es de' + ' ' + ProductosMin[i].Stock,
+                    position: 'top-right',
+                    loaderBg: '#ff6849',
+                    icon: 'warning',
+                    hideAfter: 100000000000,
+                    stack: 6
+                });
+        
+          
+       
 
 
+        }
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar recuperar informacion ' + e
+
+        })
+    }
+ 
+}
+
+function ValidarMinimosIguales() {
+    try {
+        var ProductosMin = Productos.filter(a => a.Stock == a.Minimo && a.Minimo > 0);
+
+        for (var i = 0; i < ProductosMin.length; i++) {
+
+
+            $.toast({
+                heading: 'Precaución',
+                text: 'El producto' + ' ' + ProductosMin[i].Codigo + '-' + ProductosMin[i].Nombre + ' ' + 'esta en el minimo de' + ' ' + ProductosMin[i].Minimo + '' + ' unidades en stock, el stock real es de' + ' ' + ProductosMin[i].Stock,
+                position: 'top-right',
+                loaderBg: '#ff6849',
+                icon: 'warning',
+                hideAfter: 100000000000,
+                stack: 6
+            });
+
+
+
+
+
+        }
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar recuperar informacion ' + e
+
+        })
+    }
+
+}
 
 function RellenaProductos() {
     try {

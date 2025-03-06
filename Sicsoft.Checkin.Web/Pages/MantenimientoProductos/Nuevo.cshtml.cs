@@ -45,6 +45,7 @@ namespace NOVAAPP.Pages.MantenimientoProductos
         public ProductosViewModel[] Productos { get; set; }
 
 
+
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
@@ -81,8 +82,8 @@ namespace NOVAAPP.Pages.MantenimientoProductos
                 filtro.Externo = true;
                 filtro.Activo = true;
 
-                Productos = await productos.ObtenerLista(filtro);
-              
+                Productos = await productos.ObtenerLista(filtro);     
+ 
 
 
 

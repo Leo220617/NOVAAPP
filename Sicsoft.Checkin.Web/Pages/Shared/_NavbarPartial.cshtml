@@ -59,6 +59,15 @@
                                     }
 
                                 }
+
+                                @{
+                                    if (!string.IsNullOrEmpty(Roles.Where(a => a == "85").FirstOrDefault()))
+                                    {
+
+                                    <li><a asp-page="/BitacoraMinimos/Index"><i class="mdi mdi-book-open-page-variant"></i>Bitácora Minimos</a></li>
+                                    }
+
+                                }
                         </ul>
                     </li>
 

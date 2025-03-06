@@ -70,7 +70,13 @@ namespace Sicsoft.Checkin.Web
                 identity.AddClaim(new Claim(ClaimTypes.Actor, resultado.id.ToString()));
                 identity.AddClaim(new Claim(ClaimTypes.Role, resultado.idRol.ToString()));
                 identity.AddClaim(new Claim("Roles",str));
-               // identity.AddClaim(new Claim("CambiarClave", resultado.CambiarClave.ToString())); 
+                // identity.AddClaim(new Claim("CambiarClave", resultado.CambiarClave.ToString())); 
+
+                //Agregar Claims de tiempo de autenticación
+                var expirationTime = DateTimeOffset.UtcNow.AddMinutes(240); // Expira en 240 minutos
+                identity.AddClaim(new Claim("auth_time", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()));
+                identity.AddClaim(new Claim("exp", expirationTime.ToUnixTimeSeconds().ToString()));
+
 
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
