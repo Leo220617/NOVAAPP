@@ -8,6 +8,8 @@ namespace NOVAAPP.Models
 
         public int idCliente { get; set; }
 
+        public int idCondPago { get; set; }
+
         public int idUsuarioCreador { get; set; }
 
         public int idUsuarioAceptador { get; set; }

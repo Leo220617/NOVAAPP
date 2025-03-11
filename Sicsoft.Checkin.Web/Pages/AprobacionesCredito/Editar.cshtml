@@ -1,7 +1,7 @@
 ﻿@page "{id}"
 @model NOVAAPP.Pages.AprobacionesCredito.EditarModel
 @{
-    ViewData["Title"] = "Cajas";
+    ViewData["Title"] = "Credito";
 }
 
 <!-- Content Header (Page header) -->
@@ -41,7 +41,7 @@
                         <div class="row">
 
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <h5>Fecha Creación<span class="text-danger">*</span></h5>
                                     <div class="controls">
@@ -52,7 +52,7 @@
 
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <h5>Clientes<span class="text-danger">*</span></h5>
 
@@ -60,6 +60,25 @@
                                         @foreach (var item in Model.ClientesLista)
                                         {
                                             <option value="@item.id">@item.Codigo - @item.Nombre</option>
+                                        }
+
+
+                                    </select>
+
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Condición de Pago<span class="text-danger">*</span></h5>
+
+                                    <select class="form-control select2  " asp-for="Aprobacion.idCondPago">
+                                        @foreach (var item in Model.CP)
+                                        {
+                                            <option value="@item.id">@item.CodSAP - @item.Nombre</option>
                                         }
 
 
