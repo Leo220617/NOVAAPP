@@ -222,6 +222,44 @@
 
                         </ul>
                     </li>
+                    <li class="treeview">
+                        <a href="#">
+                            WMS
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "7").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Choferes/Index"><i class="mdi mdi-truck"></i>Choferes</a></li>
+                                }
+
+                            }
+
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "9").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Flotilla/Index"><i class="mdi mdi-truck-delivery"></i>Flotilla</a></li>
+                                }
+
+                            }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "11").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Rutas/Index"><i class="mdi mdi-traffic-light"></i>Rutas</a></li>
+                                }
+
+                            }
+                            <li class="treeview">
+
+
+                        </ul>
+                    </li>
 
                     <li class="treeview">
                         <a href="#">

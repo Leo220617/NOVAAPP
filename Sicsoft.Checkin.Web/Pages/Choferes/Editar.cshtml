@@ -1,0 +1,257 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.Choferes.EditarModel
+@{
+    ViewData["Title"] = "Choferes";
+}
+
+
+@section styles {
+
+    <style>
+        td {
+            border-bottom-style: solid !important;
+            border-bottom-width: 1px !important;
+            border-bottom-color: #dec2e6 !important;
+        }
+
+        h3 {
+            font-size: 13px !important;
+        }
+
+        th {
+            background-color: transparent !important;
+        }
+
+        td p {
+            font-weight: 300 !important;
+        }
+
+        .lab {
+            font-weight: 400;
+            font-size: 13px;
+        }
+
+        .lab2 {
+            font-weight: 400;
+            font-size: 13px;
+        }
+
+        .label {
+            color: #fff !important;
+            background-color: #57b846 !important;
+            cursor: pointer;
+            text-decoration: underline;
+            background: none;
+            font-size: 17px;
+            padding: 8px 18px !important;
+        }
+
+        .label-submit {
+            color: #fff !important;
+            background-color: #57b846 !important;
+            cursor: pointer;
+            background: none;
+            font-size: 13px;
+            padding: 8px 18px !important;
+        }
+        /*label
+        {
+            font-size: 15px;
+        }*/
+
+        #imgGalerias {
+            display: none;
+        }
+    </style>
+}
+
+@section scripts {
+    <script>
+        var ImageBae64 = '';
+
+        var fileUploadPrincipal = document.getElementById('imgPrincipalUploadG');
+        fileUploadPrincipal.onchange = async function (e) {
+
+            await readFilePrincipalP(e.srcElement);
+            // idF = setInterval(cancelar(e), 2000);
+
+            var idF = setInterval(async function () {
+
+                if (ImageBae64 != "data:," && $("#base64").val() != "data:,") {
+                    //alert("Imagen agregada con éxito");
+                    clearInterval(idF);
+                } else {
+                    await readFilePrincipalP(e.srcElement);
+                }
+            }, 1500);
+
+
+
+        }
+        async function readFilePrincipalP(input) {
+
+            if (input.files && input.files[0]) {
+                /*const maxAllowSize = 512000;*/
+                //const maxAllowSize = 2800000;
+                const maxAllowSize = 5000000;
+                if (input.files[0].size > maxAllowSize) {
+                    alert("Esta imagen es muy pesada");
+                    input.value = '';
+                } else {
+                    var reader = new FileReader();
+                    var img = document.createElement("img");
+                    var canvas = document.createElement('canvas');
+
+                    reader.onload = function (e) {
+                        img.src = e.target.result;
+                        var ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0);
+
+                        var MAX_WIDTH = 800;
+                        var MAX_HEIGHT = 600;
+                        var width = img.width;
+                        var height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        var ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0, width, height);
+                        var dataurl = canvas.toDataURL("image/jpg");
+                        document.getElementById('imgPrincipalG').src = e.target.result;
+
+                        ImageBae64 = dataurl;
+                        $("#base64").val(ImageBae64);
+                    //    IMG2 = e.target.result;
+
+                    }
+
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+
+
+
+        }
+
+    </script>
+
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Choferes
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Editar Chofer</li>
+    </ol>
+</section>
+
+
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle"> Editar Chofer</h6>
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="btn btn-outline-info" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col">
+                            <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input hidden asp-for="Chofer.id" />
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <center>
+                                            <img id="imgPrincipalG" src="data:image/jpeg;base64,@Model.Chofer.Foto" alt="image" style="width:250px; height:250px;border-radius: 15px;" class="img-fluid" />
+                                            <br />
+                                            <br />
+
+                                            <label style="font-size: 13px;" class="label" for="imgPrincipalUploadG">Subir Imagen</label><input id="imgPrincipalUploadG" accept=".jpg, .png" style="opacity:0; display:none;" type="file" name="imgPrincipalUploadG" />
+                                            <input hidden asp-for="Chofer.base64" id="base64" />
+                                        </center>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xl-6">
+                                            <div class="form-group">
+                                                <h5>Nombre<span class="text-danger">*</span></h5>
+                                                <div class="controls">
+                                                    <input type="text" asp-for="Chofer.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <h5>Télefono<span class="text-danger">*</span></h5>
+                                                <div class="controls">
+                                                    <input type="text" asp-for="Chofer.Telefono" data-inputmask="'mask':[ '(999) 9999-9999']" data-mask class="form-control" required data-validation-required-message="Este campo es requerido">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="form-group">
+                                                <h5>Cédula<span class="text-danger">*</span></h5>
+                                                <div class="controls">
+                                                    <input type="text" data-inputmask="'mask':[ ' 9-9999-9999']" data-mask asp-for="Chofer.Cedula" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <h5>Estado </h5>
+                                                <div class="controls">
+                                                    <select asp-for="Chofer.Estado" class="form-control select2">
+                                                        <option value="1">Activo</option>
+                                                        <option value="0">Desativado</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="text-xs-right">
+                                    <button type="submit" class="btn btn-info" title="Guardar Cambios">Guardar Cambios</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
