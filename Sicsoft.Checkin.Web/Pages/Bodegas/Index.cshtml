@@ -224,6 +224,10 @@
                                            <a onclick="javascript: onClickModalByProduct('@item.id')" title="Sincronizar Inventario" ><img src="/sapX.png"  /></a>
                                                 <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> 
                                                  
+                                         &nbsp;
+                                                <a asp-page="./UsuariosBodegas" asp-route-id="@item.id" title="Asignar usuarios" class="fa fa-exchange icono" style="color: #FFB700;"> </a>
+
+                                         
                                                 </td>
 
                                     <td>  @item.Nombre </td> 

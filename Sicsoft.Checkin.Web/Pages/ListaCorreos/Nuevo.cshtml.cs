@@ -1,40 +1,39 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using InversionGloblalWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NOVAAPP.Models;
 using Refit;
 using Sicsoft.Checkin.Web.Servicios;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System;
+using System.Linq;
 
-namespace NOVAAPP.Pages.Choferes
+namespace NOVAAPP.Pages.ListaCorreos
 {
-    public class EditarModel : PageModel
+    public class NuevoModel : PageModel
     {
-        private readonly ICrudApi<ChoferesViewModel, int> service;
+        private readonly ICrudApi<ListasCorreosViewModel, int> service;
+
 
         [BindProperty]
-        public ChoferesViewModel Chofer { get; set; }
+        public ListasCorreosViewModel Lista { get; set; }
 
-        public EditarModel(ICrudApi<ChoferesViewModel, int> service)
+        public NuevoModel(ICrudApi<ListasCorreosViewModel, int> service)
         {
             this.service = service;
         }
-        public async Task<IActionResult> OnGetAsync(int id)
+        public async Task<IActionResult> OnGetAsync()
         {
             try
             {
                 var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
-                if (string.IsNullOrEmpty(Roles.Where(a => a == "98").FirstOrDefault()))
+                if (string.IsNullOrEmpty(Roles.Where(a => a == "104").FirstOrDefault()))
                 {
                     return RedirectToPage("/NoPermiso");
                 }
-                Chofer = await service.ObtenerPorId(id);
+
                 return Page();
             }
             catch (Exception ex)
@@ -44,25 +43,31 @@ namespace NOVAAPP.Pages.Choferes
                 return Page();
             }
         }
-        public async Task<IActionResult> OnPostAsync()
+
+        public async Task<IActionResult> OnPostGenerar(string recibidos)
         {
             try
             {
-                await service.Editar(Chofer);
-                return RedirectToPage("./Index");
+
+                ListasCorreosViewModel recibido = JsonConvert.DeserializeObject<ListasCorreosViewModel>(recibidos);
+
+
+                await service.Agregar(recibido);
+                return new JsonResult(true);
             }
             catch (ApiException ex)
             {
                 Errores error = JsonConvert.DeserializeObject<Errores>(ex.Content.ToString());
                 ModelState.AddModelError(string.Empty, error.Message);
 
-                return Page();
+                return new JsonResult(false);
             }
             catch (Exception ex)
             {
 
                 ModelState.AddModelError(string.Empty, ex.Message);
-                return Page();
+
+                return new JsonResult(false);
             }
         }
     }

@@ -231,7 +231,7 @@
                         </a>
                         <ul class="treeview-menu">
                             @{
-                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "7").FirstOrDefault()))
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "97").FirstOrDefault()))
                                 {
 
                                     <li><a asp-page="/Choferes/Index"><i class="mdi mdi-truck"></i>Choferes</a></li>
@@ -240,7 +240,7 @@
                             }
 
                             @{
-                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "9").FirstOrDefault()))
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "99").FirstOrDefault()))
                                 {
 
                                     <li><a asp-page="/Flotilla/Index"><i class="mdi mdi-truck-delivery"></i>Flotilla</a></li>
@@ -248,10 +248,18 @@
 
                             }
                             @{
-                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "11").FirstOrDefault()))
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "101").FirstOrDefault()))
                                 {
 
                                     <li><a asp-page="/Rutas/Index"><i class="mdi mdi-traffic-light"></i>Rutas</a></li>
+                                }
+
+                            }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "103").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/ListaCorreos/Index"><i class="mdi mdi-email-open"></i>Listas de Correo</a></li>
                                 }
 
                             }

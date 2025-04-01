@@ -1,0 +1,363 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.ListaCorreos.EditarModel
+@{
+    ViewData["Title"] = "Listas de Correo";
+}
+
+
+@section styles {
+
+
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+
+            jQuery(document).ready(function ($) {
+                $(document).ready(function () {
+                });
+            });
+            Recuperar();
+
+        });
+        var CorreosCadena = [];
+
+
+         function Recuperar() {
+            try {
+                var det = JSON.parse($("#Hijos").val());
+
+                var id = "@Model.Lista.id";
+                $("#idLista").val(id);
+                var valorActivo = "@Model.Lista.Activo";
+                $("#md_checkbox_10").prop('checked', valorActivo == "True" ? true: false);
+                for (var i = 0; i < det.length; i++) {
+
+                    var detalle =
+                    {
+                        id: det[i].id,
+                        idEncabezado: det[i].idEncabezado,
+                        Correo: det[i].Correo
+
+
+                    }
+                    CorreosCadena.push(detalle);
+                }
+                RellenaTabla();
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: e
+
+                });
+            }
+        }
+
+        function RellenaTabla() {
+            var sOptions = '';
+
+            $("#tbody").html('');
+
+            for (var i = 0; i < CorreosCadena.length; i++) {
+                sOptions += '<tr>';
+                sOptions += '<td align="left" style="padding-top:15px;">  <p style="font-size:13px;">' + CorreosCadena[i].Correo + '</p></td>';
+                sOptions += '<td align="center" style="padding-top:13px;">    <a style="margin-left: -1%; position: inherit !important;" onclick = "javascript: EliminaProducto(' + i + ')" title="Eliminar" class="fa fa-trash icono"></a> ';
+
+
+
+
+
+                sOptions += '</tr>'
+            }
+            $("#tbody").html(sOptions);
+        }
+        function EliminaProducto(campo) {
+            console.log("campo: " + campo);
+            Swal.fire({
+                title: '¿Desea eliminar este correo?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+
+                    CorreosCadena.splice(campo, 1);
+
+                    RellenaTabla();
+
+                }
+            })
+
+        }
+        function InsertarCorreoTabla() {
+
+            if (ValidarAntesTabla()) {
+
+                var detalle =
+                {
+                    id: 0,
+                    idEncabezado: 0,
+                    Correo: $("#correoNuevo").val()
+
+                }
+                CorreosCadena.push(detalle);
+
+                RellenaTabla();
+                LimpiarDatos();
+            }
+
+        }
+
+        function ValidarAntesTabla() {
+            if ($("#correoNuevo").val().trim() == "") {
+                return false;
+            }
+           else {
+                return true;
+            }
+        }
+
+        function LimpiarDatos() {
+
+            $("#correoNuevo").val("");
+        }
+
+         function Generar() {
+
+
+
+
+
+             var Detalle = JSON.stringify(CorreosCadena);
+
+
+             var enviar = {
+                 id: $("#idLista").val(),
+                Nombre: $("#NombreLista").val(),
+                Activo: $("#md_checkbox_10").prop('checked'),
+                 Detalle: CorreosCadena
+            };
+
+             var str = JSON.stringify(enviar).toString();
+
+           $.ajax({
+                    type: 'POST',
+
+                    url: '@Url.Page("Editar", "Generar")',
+                    dataType: 'text',
+                    data: { recibidos: str},
+                        headers: {
+                            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                        },
+                    success: function (json) {
+
+                        $("#divProcesando").hide();
+
+                        if ($('.modal-backdrop').is(':visible')) {
+
+                            $('body').removeClass('modal-open');
+                            $('.modal-backdrop').hide();
+                        }
+                        console.log("resultado " + json);
+                        if (json == "true") {
+                            Swal.fire({
+                                title: "Ha sido guardado con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+
+                                confirmButtonText: 'OK',
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar guardar'
+
+                            })
+                        }
+                    },
+
+                    beforeSend: function (xhr) {
+
+                        $("#divProcesando").modal("show");
+                    },
+                    complete: function () {
+
+                    },
+                    error: function (error) {
+
+                    }
+                    });
+
+
+        }
+
+    </script>
+}
+@using Newtonsoft.Json;
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Lista de Correos
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Editar Lista</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-xl-12 col-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle"> Editar Lista</h6>
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="btn btn-outline-info" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-12">
+
+                            <div class="col-xl-12 col-12">
+                                <div class="form-group">
+                                    <h5>Nombre de la Lista</h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Lista.Nombre" id="NombreLista" class="form-control">
+                                        <input type="text" asp-for="Lista.id" id="idLista" class="form-control" hidden>
+                                        <input hidden id="Hijos" value="@JsonConvert.SerializeObject(Model.Lista.Detalle)" />
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-xl-12 col-12">
+                                <input type="checkbox" id="md_checkbox_10" class="chk-col-green">
+                                <label for="md_checkbox_10">Activo</label>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h3>
+                                Correo Electrónico a Agregar
+                            </h3>
+                        </div>
+                        <div class="col-sm-4" style="text-align: right;">
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-12">
+
+                            <div class="form-group validate">
+                                <h5>Correo <span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <div class="input-group">
+                                        <input type="email" id="correoNuevo" class="form-control" placeholder="Digite el correo electronico" required="" data-validation-regex-regex="([a-z0-9_\.-]+)@@([\da-z\.-]+)\.([a-z\.]{2,6})" data-validation-regex-message="Enter Valid Email"> <span class="input-group-btn">
+                                            <button class="btn btn-info" onclick="javascript: InsertarCorreoTabla()" type="button">Agregar</button>
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h3>
+                                Lista de Correos Asignados
+                            </h3>
+                        </div>
+                        <div class="coll-sm-4" style="text-align: right;">
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-12">
+
+                            <div class="table-responsive tableFixHead" style="padding:inherit; overflow:scroll;    z-index: 5; height: 290px;">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+
+
+                                            <th align="center" style=" text-align: center;"><h3>Nombre </h3></th>
+
+
+
+
+                                            <th align="center" style=" text-align: center;"><h3>Acción</h3></th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody id="tbody">
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-12">
+            <div class="text-xs-right">
+                <button onclick="javascript: Generar();" class="btn btn-info" title="Guardar Cambios">Guardar Cambios</button>
+            </div>
+        </div>
+
+    </div>
+</section>

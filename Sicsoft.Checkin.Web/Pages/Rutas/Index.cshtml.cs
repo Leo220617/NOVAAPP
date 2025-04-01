@@ -39,7 +39,7 @@ namespace NOVAAPP.Pages.Rutas
             try
             {
                 var Roles1 = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
-                if (string.IsNullOrEmpty(Roles1.Where(a => a == "11").FirstOrDefault()))
+                if (string.IsNullOrEmpty(Roles1.Where(a => a == "101").FirstOrDefault()))
                 {
                     return RedirectToPage("/NoPermiso");
                 }

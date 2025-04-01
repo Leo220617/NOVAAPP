@@ -1,52 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using InversionGloblalWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NOVAAPP.Models;
 using Refit;
-using Sicsoft.Checkin.Web.Models;
 using Sicsoft.Checkin.Web.Servicios;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System;
+using System.Linq;
 
-namespace NOVAAPP.Pages.Flotilla
+namespace NOVAAPP.Pages.ListaCorreos
 {
     public class IndexModel : PageModel
     {
-        private readonly ICrudApi<FlotillaViewModel, int> flotilla;
-        private readonly ICrudApi<ChoferesViewModel, int> choferes;
-
+        private readonly ICrudApi<ListasCorreosViewModel, int> service;
         [BindProperty]
-        public FlotillaViewModel[] Flotilla { get; set; }
-        [BindProperty]
-        public ChoferesViewModel[] Chofer { get; set; }
+        public ListasCorreosViewModel[] Listas { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
-        public IndexModel(ICrudApi<FlotillaViewModel, int> flotilla, ICrudApi<ChoferesViewModel, int> choferes)
+        public IndexModel(ICrudApi<ListasCorreosViewModel, int> service)
         {
-            this.flotilla = flotilla;
-            this.choferes = choferes;
+            this.service = service;
         }
-
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
                 var Roles1 = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
-                if (string.IsNullOrEmpty(Roles1.Where(a => a == "99").FirstOrDefault()))
+                if (string.IsNullOrEmpty(Roles1.Where(a => a == "103").FirstOrDefault()))
                 {
                     return RedirectToPage("/NoPermiso");
                 }
 
-                Flotilla = await flotilla.ObtenerLista(filtro);
-                Chofer = await choferes.ObtenerLista("");
-
+                Listas = await service.ObtenerLista(filtro);
 
                 return Page();
             }
@@ -70,7 +59,7 @@ namespace NOVAAPP.Pages.Flotilla
             try
             {
 
-                await flotilla.Eliminar(id);
+                await service.Eliminar(id);
                 return new JsonResult(true);
             }
             catch (ApiException ex)
@@ -82,5 +71,6 @@ namespace NOVAAPP.Pages.Flotilla
                 return new JsonResult(false);
             }
         }
+
     }
 }

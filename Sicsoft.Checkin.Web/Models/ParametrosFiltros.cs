@@ -40,6 +40,7 @@ namespace InversionGloblalWeb.Models
         public bool contabilizado { get; set; }
         public bool rechazados { get; set; }
 
+        public bool admin { get; set; }
         public string BuscarNombre { get; set; }
 
     }
