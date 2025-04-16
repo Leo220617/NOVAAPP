@@ -74,6 +74,7 @@ namespace NOVAAPP.Pages.BitacoraMinimos
                 Bodegas = await bodegas.ObtenerLista("");
                 Categorias = await categorias.ObtenerLista("");
                 Objeto = await service.ObtenerLista(filtro);
+
            
                 return Page();
             }

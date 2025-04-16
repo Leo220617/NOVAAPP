@@ -43,5 +43,15 @@ namespace InversionGloblalWeb.Models
         public bool admin { get; set; }
         public string BuscarNombre { get; set; }
 
+        public bool aprobados { get; set; }
+        public bool poralistar { get; set; }
+        public bool generado { get; set; }
+        public bool incompletos { get; set; }
+        public bool backorder { get; set; }
+        public bool alistado { get; set; }
+        public bool transito { get; set; }
+        public bool correo { get; set; }
+
+
     }
 }

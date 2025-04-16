@@ -34,6 +34,7 @@ namespace NOVAAPP.Models
 
         public bool ProcesadoSAP { get; set; }
         public string DocEntry { get; set; }
+        public bool Proveeduria { get; set; }
         public List<DetTrasladosViewModel> Detalle { get; set; }
         public List<AdjuntosViewModel> Adjuntos { get; set; }
         public List<LotesViewModel> Lotes { get; set; }

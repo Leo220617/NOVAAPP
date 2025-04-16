@@ -1,0 +1,831 @@
+﻿@page
+@model NOVAAPP.Pages.Traslados.IndexModel
+@{
+    ViewData["Title"] = "Traslados";
+}
+@using System.Globalization;
+@using Microsoft.AspNetCore.Http
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using System.Linq;
+@using System.Security.Claims;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.Extensions.Configuration;
+@using Refit;
+@inject IHttpContextAccessor httpContextAccessor
+
+
+@{
+    var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+}
+
+
+@section scripts {
+
+
+    <script>
+        $(document).ready(function () {
+
+
+
+
+        });
+        var ids = 0;
+        function onClickModal(id) {
+            ids = id;
+            Swal.fire({
+                title: '¿Desea asignarse este Traslado?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    Asignar();
+
+                }
+            })
+
+        }
+            function onClickModalP(id) {
+            ids = id;
+            Swal.fire({
+                title: '¿Desea aprobar este traslado por Proveeduría?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    Proveeduria();
+
+                }
+            })
+
+        }
+        function onClickModalA(id) {
+            ids = id;
+            Swal.fire({
+                title: '¿Desea cambiar el Status a Espera de Aprobación?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    Cambiar();
+
+                }
+            })
+
+        }
+
+        function onClickModalAL(id) {
+            ids = id;
+            Swal.fire({
+                title: '¿Desea cambiar el Status a Alistando?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    Cambiar();
+
+                }
+            })
+
+        }
+        function Cambiar() {
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Page("Index", "Cambiar")',
+                data: { id: ids },
+                success: function (result) {
+
+                    if (result == false) {
+                        ids = 0;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error al intentar procesar la solicitud'
+
+                        })
+
+                    } else {
+                        Swal.fire({
+                            title: "Ha sido modificado con éxito",
+
+                            icon: 'success',
+                            showCancelButton: false,
+                            customClass: {
+                                confirmButton: 'swalBtnColor',
+
+                            },
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                beforeSend: function () {
+
+                }
+            })
+        }
+        function Asignar() {
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Page("Index", "Asignar")',
+                data: { id: ids },
+                success: function (result) {
+
+                    if (result == false) {
+                        ids = 0;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error al intentar procesar la solicitud'
+
+                        })
+
+                    } else {
+                        Swal.fire({
+                            title: "Ha sido asignado con éxito",
+
+                            icon: 'success',
+                            showCancelButton: false,
+                            customClass: {
+                                confirmButton: 'swalBtnColor',
+
+                            },
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                beforeSend: function () {
+
+                }
+            })
+        }
+
+          function Proveeduria() {
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Page("Index", "Eliminar")',
+                data: { id: ids },
+                success: function (result) {
+
+                    if (result == false) {
+                        ids = 0;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error al intentar procesar la solicitud'
+
+                        })
+
+                    } else {
+                        Swal.fire({
+                            title: "Ha sido aprobado con éxito",
+
+                            icon: 'success',
+                            showCancelButton: false,
+                            customClass: {
+                                confirmButton: 'swalBtnColor',
+
+                            },
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                beforeSend: function () {
+
+                }
+            })
+        }
+
+        function AbrirModalAgregarCliente(id) {
+            try {
+                ids = id;
+                $("#ModalAgregarCliente").modal("show");
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar recuperar cliente ' + e
+
+                })
+            }
+
+        }
+
+
+        function AbrirModalAgregarCorreo(id) {
+            try {
+                ids = id;
+                $("#ModalAgregarCorreo").modal("show");
+            } catch (e) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar recuperar cliente ' + e
+
+                })
+            }
+
+        }
+
+
+        function AsignarUsuario() {
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Page("Index", "AsignarUsuario")',
+                data: { idOrden: ids, idUsuario: $("#selectC").val() },
+                success: function (result) {
+
+                    if (result == false) {
+                        ids = 0;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error al intentar procesar la solicitud'
+
+                        })
+
+                    } else {
+                        Swal.fire({
+                            title: "Ha sido asignado con éxito",
+
+                            icon: 'success',
+                            showCancelButton: false,
+                            customClass: {
+                                confirmButton: 'swalBtnColor',
+
+                            },
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                beforeSend: function () {
+
+                }
+            })
+        }
+
+        function AsignarCorreo() {
+            $("#divProcesando").modal("show");
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Page("Index", "AsignarCorreo")',
+                data: { idOrden: ids, idLista: $("#selectCorreo").val() },
+                success: function (result) {
+
+                    if (result == false) {
+                        $("#divProcesando").modal("hide");
+                        ids = 0;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error al intentar procesar la solicitud'
+
+                        })
+
+                    } else {
+                        $("#divProcesando").modal("hide");
+                        Swal.fire({
+
+                            title: "Ha sido enviado con éxito",
+
+                            icon: 'success',
+                            showCancelButton: false,
+                            customClass: {
+                                confirmButton: 'swalBtnColor',
+
+                            },
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                beforeSend: function () {
+
+                }
+            })
+        }
+
+    </script>
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Traslados
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Listado Traslados</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Filtro</h4></div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="box-body">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-sm-4 pr-1">
+                                <div class="form-group">
+                                    <label>Fecha Inicial</label>
+                                    <input class="form-control " id="FecInicial" type="date" asp-for="filtro.FechaInicial">
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-sm-4 pl-1">
+                                <div class="form-group">
+                                    <label>Fecha Final</label>
+                                    <input class="form-control" id="FecFinal" type="date" asp-for="filtro.FechaFinal">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 pl-1">
+                                <div class="form-group">
+                                    <label for="cyber">Usuario Asignado:</label>
+                                    <select class="form-control select2" id="UsuarioF" asp-for="filtro.Codigo1" required>
+                                        @if (!string.IsNullOrEmpty(Roles.Where(a => a == "33").FirstOrDefault()) && !string.IsNullOrEmpty(Roles.Where(a => a == "35").FirstOrDefault()))
+                                        {
+
+                                            <option value="0"> Seleccione</option>
+                                        }
+
+
+                                        <option value="-1">Sin Asignar</option>
+
+                                        @foreach (var item in Model.Users)
+                                        {
+                                            <option value="@item.id">@item.Nombre</option>
+                                        }
+
+
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div class="col-sm-9 pr-1">
+                                <input type="checkbox" id="md_checkbox_1" class="chk-col-red" asp-for="filtro.pendientes" onclick="this.form.submit()" />
+                                <label for="md_checkbox_1">Preliminar</label>
+                                &nbsp;
+                                &nbsp;
+
+                                <input type="checkbox" id="md_checkbox_4" class="chk-col-red" asp-for="filtro.generado" onclick="this.form.submit()" />
+                                <label for="md_checkbox_4">Espera Aprobación</label>
+
+                                &nbsp;
+                                &nbsp;
+
+                                <input type="checkbox" id="md_checkbox_7" class="chk-col-red" asp-for="filtro.aprobados" onclick="this.form.submit()" />
+                                <label for="md_checkbox_7">Aprobado</label>
+
+                                &nbsp;
+                                &nbsp;
+
+
+                                <input type="checkbox" id="md_checkbox_8" class="chk-col-red" asp-for="filtro.poralistar" onclick="this.form.submit()" />
+                                <label for="md_checkbox_8">Alistando</label>
+
+                                &nbsp;
+                                &nbsp;
+
+                                <input type="checkbox" id="md_checkbox_9" class="chk-col-red" asp-for="filtro.alistado" onclick="this.form.submit()" />
+                                <label for="md_checkbox_9">Alistado</label>
+
+                                &nbsp;
+                                &nbsp;
+
+
+
+                                <input type="checkbox" id="md_checkbox_3" class="chk-col-red" asp-for="filtro.transito" onclick="this.form.submit()" />
+                                <label for="md_checkbox_3">En Tránsito</label>
+
+                                &nbsp;
+                                &nbsp;
+
+
+
+                                <input type="checkbox" id="md_checkbox_5" class="chk-col-red" asp-for="filtro.incompletos" onclick="this.form.submit()" />
+                                <label for="md_checkbox_5">Incompleto</label>
+
+                                &nbsp;
+                                &nbsp;
+
+                                <input type="checkbox" id="md_checkbox_6" class="chk-col-red" asp-for="filtro.backorder" onclick="this.form.submit()" />
+                                <label for="md_checkbox_6">Completo</label>
+
+                                &nbsp;
+                                &nbsp;
+
+
+
+
+
+
+
+
+                            </div>
+
+
+                            <div class="col-sm-3 pl-1" style="text-align: center; padding-top: 2%;">
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary"> <i class="fa fa-search"></i></button>
+                            </div>
+
+
+
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Traslados</h4></div>
+
+                    </div>
+
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr class="bg-info">
+                                    <th>id</th>
+                                    <th>Acción</th>
+                                    <th>Estado</th>
+                                    <th>Fecha Creado</th>
+                                    <th>Bodega Origen</th>
+                                    <th>Bodega Destino</th>
+                                    <th>Lns</th>
+                                    <th>Creador</th>
+                                    <th>Asignado</th>
+                                    <th>Total KG LT</th>
+                                            <th>Proveeduría</th>
+
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Listas)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.id
+                                        </td>
+                                        <td align="center" style="padding-top:15px;">
+                              
+
+                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> &nbsp;
+
+                                            @if (item.idUsuarioAceptador == 0 && item.Status == "R" || !string.IsNullOrEmpty(Roles.Where(a => a == "29").FirstOrDefault()) && item.Status == "T" && item.idUsuarioAceptador == 0)
+                                            {
+
+                                                <a onclick="javascript: onClickModal('@item.id')" class="fa fa-user icono"></a>
+                                            }
+                                            &nbsp;
+
+                                            @if ((!string.IsNullOrEmpty(Roles.Where(a => a == "32").FirstOrDefault()) && item.Status == "R") ||
+                                           (!string.IsNullOrEmpty(Roles.Where(a => a == "32").FirstOrDefault()) && item.Status == "A") ||
+                                           ((!string.IsNullOrEmpty(Roles.Where(a => a == "32").FirstOrDefault()) && item.Status == "S") || (!string.IsNullOrEmpty(Roles.Where(a => a == "32").FirstOrDefault()) && item.Status == "T")))
+                                            {
+
+                                                <a onclick="javascript: AbrirModalAgregarCliente('@item.id')" class="fa  fa-user-plus icono"></a>
+                                            }
+                                            &nbsp;
+
+
+                                            <a onclick="javascript: AbrirModalAgregarCorreo('@item.id')" class="fa  fa-send (alias) icono"></a>
+
+                                            &nbsp;
+
+                                            @if ((item.Status == "R" || item.Status == "S") && !string.IsNullOrEmpty(Roles.Where(a => a == "36").FirstOrDefault()))
+                                            {
+
+                                                <a title="Cambiar Status" onclick="javascript: onClickModalA('@item.id')" class="fa  fa-history icono"></a>
+                                            }
+                                            &nbsp;
+
+                                            @*   @if (item.Status == "A" && !string.IsNullOrEmpty(Roles.Where(a => a == "36").FirstOrDefault()))
+                                        {
+
+                                        <a title="Cambiar Status" onclick="javascript: onClickModalAL('@item.id')" class="fa  fa-history icono"></a>
+                                        }
+                                        &nbsp;*@
+
+                                            @if (@item.Proveeduria && @item.Status == "G" && !string.IsNullOrEmpty(Roles.Where(a => a == "93").FirstOrDefault())
+                                           )
+                                            {
+                                                <a asp-page="./Aceptacion" asp-route-id="@item.id" title="Aceptación" class="fa fa-check-square-o icono" style="color: #FFB700;"> </a>
+                                            }
+                                    
+                                      
+                                      
+                                               @if (!item.Proveeduria && @item.Status == "G" && !string.IsNullOrEmpty(Roles.Where(a => a == "108").FirstOrDefault()))
+                                            {
+                                           
+                                                 <a title="Proveeduria" onclick="javascript: onClickModalP('@item.id')" class="fa  fa-check-circle icono"></a>
+                                            }
+                                        </td>
+
+
+                                        @{
+                                            switch (item.Status)
+                                            {
+                                                case "P":
+                                                    {
+                                                        <td align="center" style="padding-top:15px;"><span class="badge badge-warning">Preliminar</span></td>
+                                                        break;
+                                                    }
+                                                case "A":
+                                                    {
+                                                        <td align="center" style="padding-top:15px;"><span class="badge badge-success">Alistado</span></td>
+                                                        break;
+                                                    }
+                                                case "T":
+                                                    {
+                                                        <td align="center" style="padding-top:15px;"><span class="badge badge-info">En Tránsito</span></td>
+                                                        break;
+                                                    }
+                                                case "G":
+                                                    {
+                                                        
+                                                        <td align="center" style="padding-top:15px;"><span style="background-color: #ffc107;" class="badge badge-success">Espera Aprobación</span></td>
+                                                        break;
+                                                    }
+                                                case "I":
+                                                    {
+                                                        <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Incompleto</span></td>
+                                                        break;
+                                                    }
+                                                case "C":
+                                                    {
+                                                        <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Completo</span></td>
+                                                        break;
+                                                    }
+
+                                                case "R":
+                                                    {
+                                                        <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Aprobado</span></td>
+                                                        break;
+                                                    }
+                                                case "S":
+                                                    {
+                                                        <td align="center" style="padding-top:15px;"><span class="badge badge-info">Alistando</span></td>
+                                                        break;
+                                                    }
+                                            }
+
+
+                                        }
+
+
+                                        <td>
+                                            @item.Fecha.ToString("dd/MM/yyyy")
+                                        </td>
+                                        <td align="left" style="padding-top:15px;"><a style="font-size:15px;  ">  @(Model.Bodega.Where(a => a.id == item.BodInicial).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodega.Where(a => a.id == item.BodInicial).FirstOrDefault().CodSAP + " - " + Model.Bodega.Where(a => a.id == item.BodInicial).FirstOrDefault().Nombre) </a></td>
+                                        <td align="left" style="padding-top:15px;"><a style="font-size:15px;  ">  @(Model.Bodega.Where(a => a.id == item.BodFinal).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodega.Where(a => a.id == item.BodFinal).FirstOrDefault().CodSAP + " - " + Model.Bodega.Where(a => a.id == item.BodFinal).FirstOrDefault().Nombre) </a></td>
+
+                                        <td>
+                                            @Math.Round(Convert.ToDecimal(item.CantidadLineas - 1))
+                                        </td>
+
+
+
+
+                                        <td>
+                                            @(Model.Users.Where(a => a.id == item.idUsuarioCreador).FirstOrDefault() == null ? "" : Model.Users.Where(a => a.id == item.idUsuarioCreador).FirstOrDefault().Nombre)
+
+                                        </td>
+                                        <td>
+                                            @(Model.Users.Where(a => a.id == item.idUsuarioAceptador).FirstOrDefault() == null ? "" : Model.Users.Where(a => a.id == item.idUsuarioAceptador).FirstOrDefault().Nombre)
+
+                                        </td>
+                                        <td>
+                                            @Math.Round(Convert.ToDecimal(item.TotalKG))
+                                        </td>
+
+                                            <td>
+                                            @if (item.Proveeduria)
+                                            {
+                                                <span class="badge badge-pill badge-success">Aprobado</span>
+
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-pill badge-danger">Pendiente</span>
+                                            }
+
+                                        </td>
+
+
+                                    </tr>
+
+                                }
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-info">
+                                    <th>id</th>
+                                    <th>Acción</th>
+                                    <th>Estado</th>
+                                    <th>Fecha Creado</th>
+                                    <th>Bodega Origen</th>
+                                    <th>Bodega Destino</th>
+                                    <th>Lns</th>
+                                    <th>Creador</th>
+                                    <th>Asignado</th>
+                                    <th>Total KG LT</th>
+                                    <th>Proveeduría</th>
+
+
+
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+<!--Modal para agregar Clientes-->
+
+
+<div class="modal fade bs-example-modal-lg" id="ModalAgregarCliente" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Asignar Usuario</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="nom">Usuario:</label>
+                            <select id="selectC" class="form-control select2" required>
+                                @foreach (var item in Model.Users)
+                                {
+                                    <option value="@item.id">@item.Nombre</option>
+
+                                }
+
+
+                            </select>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect text-left" onclick="javascript: AsignarUsuario();">Asignar</button> &nbsp;
+                <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Cancelar</button> &nbsp;
+
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!--Modal para Correo-->
+<div class="modal fade bs-example-modal-lg" id="ModalAgregarCorreo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Enviar Correo</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="nom">Lista de Correo:</label>
+                            <select id="selectCorreo" class="form-control select2" required>
+                                @foreach (var item in Model.Correo)
+                                {
+                                    <option value="@item.id">@item.Nombre</option>
+
+                                }
+
+
+                            </select>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect text-left" onclick="javascript: AsignarCorreo();">Enviar</button> &nbsp;
+                <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Cancelar</button> &nbsp;
+
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

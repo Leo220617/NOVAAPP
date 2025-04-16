@@ -53,6 +53,10 @@ namespace Sicsoft.Checkin.Web.Servicios
         Task Reenvio(string code, string correos);
 
 
+        [Get("/Reenvio")]
+        Task Reenvio2(int id, int idLista);
+
+
 
         [Get("")]
         Task<TEntity[]> ObtenerLista<TQuery>(TQuery q);
@@ -90,6 +94,12 @@ namespace Sicsoft.Checkin.Web.Servicios
  
         [Delete("/Eliminar")]
         Task Eliminar(int id);
+
+        [Delete("/Asignar")]
+        Task Asignar(int id, int idUsuario);
+
+        [Delete("/CambiarAprobacion")]
+        Task Cambiar(int id);
 
         [Delete("/DesactivarProductos")]
         Task DesactivarProductos(string code);
