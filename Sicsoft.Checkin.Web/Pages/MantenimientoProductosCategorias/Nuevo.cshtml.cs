@@ -78,8 +78,8 @@ namespace NOVAAPP.Pages.MantenimientoProductosCategorias
                 ParametrosFiltros filtro = new ParametrosFiltros();
                 filtro.Externo = true;
                 filtro.Activo = true;
-
-                Productos = await productos.ObtenerLista(filtro);
+                var ProductoX = await productos.ObtenerLista(filtro);
+                Productos = ProductoX.Where(a => a.Activo == true).ToArray();
               
 
 

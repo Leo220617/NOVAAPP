@@ -34,10 +34,10 @@
 
 
         });
-        var ids = 0;
+        var idCompras = 0;
         function onClickModal(id) {
             try {
-                ids = id;
+                idCompras = id;
                 Swal.fire({
                     title: '¿Desea sincronizar a SAP?',
                     showDenyButton: true,
@@ -74,7 +74,7 @@
                     type: 'GET',
                     dataType: 'json',
                     url: '@Url.Page("IndexCompras", "SincronizarSAP")',
-                    data: { id: ids },
+                    data: { idCompra: idCompras },
                     success: function (result) {
                         $("#divProcesando").modal("hide");
                         console.log(result);
@@ -225,6 +225,7 @@
                                     <th>ID</th>
                                     <th>Acción</th>
                                     <th>Proveedor</th>
+                                    <th>Bodega</th>
                                     <th>Fecha Creado</th>
                                     <th>Moneda</th>
                                     <th>SubTotal</th>
@@ -263,7 +264,7 @@
                                         <td>
                                             @item.CodProveedor - @item.NombreProveedor
                                         </td>
-
+                                        <td>@item.Bodega</td>
 
                                         <td>
                                             @item.Fecha.ToString("dd/MM/yyyy")
