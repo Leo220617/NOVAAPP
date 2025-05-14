@@ -856,15 +856,15 @@ function validarAprovisionamiento(e) {
             return false;
         }
 
-        //if (e.idSubCategoria == "" || e.idSubCategoria == null || e.idSubCategoria == 0) {
-        //    Swal.fire({
-        //        icon: 'error',
-        //        title: 'Oops...',
-        //        text: 'Ha ocurrido un error al intentar agregar, falta la SubCategoria'
+        if (e.idSubCategoria == "" || e.idSubCategoria == null || e.idSubCategoria == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Ha ocurrido un error al intentar agregar, falta la SubCategoria'
 
-        //    })
-        //    return false;
-        //}
+            })
+            return false;
+        }
 
 
         if (e.Clasificacion == "" || e.Clasificacion == null || e.Clasificacion == 0) {
