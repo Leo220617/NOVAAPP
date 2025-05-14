@@ -324,7 +324,7 @@
                                                     (Model.Bodegas.Where(a => a.id == (Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega)).FirstOrDefault() == null ? "0" : Model.Bodegas.Where(a => a.id == (Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega)).FirstOrDefault().CodSAP))
                                             </td>
 
-                                            <td class="text-right">@(Math.Round(item.Cantidad))</td>
+                                            <td class="text-right">@(Math.Round(item.Cantidad, 2))</td>
 
 
                                             <td class="text-center">@Math.Round(item.PrecioUnitario,2).ToString("C",formato)</td>
