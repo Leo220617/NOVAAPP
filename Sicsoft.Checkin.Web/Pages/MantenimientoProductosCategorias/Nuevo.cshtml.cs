@@ -102,7 +102,7 @@ namespace NOVAAPP.Pages.MantenimientoProductosCategorias
                 return Page();
             }
         }
-
+       
         public async Task<IActionResult> OnPostAgregarLogsProductosAprov()
         {
             string error = "";
