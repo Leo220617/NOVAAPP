@@ -86,7 +86,7 @@ function RellenaCategorias() {
         html += "<option value='0' > Seleccione Categoria </option>";
 
         for (var i = 0; i < Categorias.length; i++) {
-            html += "<option value='" + Categorias[i].id + "' > " + Categorias[i].CodSAP + " - " + Categorias[i].Nombre + " </option>";
+            html += "<option value='" + Categorias[i].CodSAP + "' > " + Categorias[i].CodSAP + " - " + Categorias[i].Nombre + " </option>";
         }
 
 
@@ -191,9 +191,10 @@ function RellenaSubCategorias() {
         var html = "";
         $("#SubCategoriaSeleccionado").html(html);
         html += "<option value='0' > Seleccione Sub Categoria </option>";
-        var idCategoria = $("#CategoriaSeleccionado").val();
+       var CategoriaSAP = $("#CategoriaSeleccionado").val();
+        var idCategoria = Categorias.find(a => a.CodSAP == CategoriaSAP);
 
-        SubCategorias = SubCategorias.filter(a => a.idCategoria == idCategoria);
+        SubCategorias = SubCategorias.filter(a => a.idCategoria == idCategoria.id);
         for (var i = 0; i < SubCategorias.length; i++) {
             html += "<option value='" + SubCategorias[i].id + "' > " + SubCategorias[i].id + " - " + SubCategorias[i].Nombre + " </option>";
         }
