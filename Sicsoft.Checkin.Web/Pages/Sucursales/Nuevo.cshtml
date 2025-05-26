@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Agregar Sucursales";
 }
-@section styles{
+@section styles {
     <style>
 
 
@@ -36,9 +36,9 @@
             padding: 8px 18px !important;
         }
         /*label
-                {
-                    font-size: 15px;
-                }*/
+                                {
+                                    font-size: 15px;
+                                }*/
 
         #imgGalerias {
             display: none;
@@ -47,15 +47,15 @@
 
 }
 
-    @section scripts{
+@section scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
-            jQuery(document).ready(function($) {
-                $(document).ready(function() {
+            jQuery(document).ready(function ($) {
+                $(document).ready(function () {
                 });
             });
 
@@ -190,12 +190,12 @@
         var ImageBae64 = '';
 
         var fileUploadPrincipal = document.getElementById('imgPrincipalUploadG');
-        fileUploadPrincipal.onchange = async function(e) {
+        fileUploadPrincipal.onchange = async function (e) {
 
             await readFilePrincipalP(e.srcElement);
             // idF = setInterval(cancelar(e), 2000);
 
-            var idF = setInterval(async function() {
+            var idF = setInterval(async function () {
 
                 if (ImageBae64 != "data:," && $("#base64").val() != "data:,") {
                     //alert("Imagen agregada con éxito");
@@ -222,7 +222,7 @@
                     var img = document.createElement("img");
                     var canvas = document.createElement('canvas');
 
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         img.src = e.target.result;
                         var ctx = canvas.getContext("2d");
                         ctx.drawImage(img, 0, 0);
@@ -269,62 +269,62 @@
 
 }<!-- Content Header (Page header) -->
     @using Newtonsoft.Json;
-    <section class="content-header">
-        <h1>
-            Sucursales
-        </h1>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-            <li class="breadcrumb-item active">Crear Nueva Sucursal</li>
-        </ol>
-    </section>
+<section class="content-header">
+    <h1>
+        Sucursales
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Crear Nueva Sucursal</li>
+    </ol>
+</section>
 
 
 
-    <section class="content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box">
-                    <div class="box-header with-border">
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6 class="box-subtitle"> Crear Nueva Sucursal</h6>
+
+                        </div>
+                        <div class="col-md-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                         <div class="row">
-                            <div class="col-md-8">
-                                <h6 class="box-subtitle"> Crear Nueva Sucursal</h6>
+                            <div class="col-md-12" style="text-align: center;">
+                                <div class="form-group">
+                                    <center>
+                                        <img id="imgPrincipalG" src="~/adjunto.png" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
+                                        <br />
+                                        <br />
 
-                            </div>
-                            <div class="col-md-4">
-                                <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+                                        <label style="font-size: 13px;" class="label" for="imgPrincipalUploadG">Subir Imagen</label><input id="imgPrincipalUploadG" accept=".jpg, .png" style="opacity:0; display:none;" type="file" name="imgPrincipalUploadG" />
+
+                                        <input type="text" id="Imagen" hidden asp-for="Sucursales.Imagen" class="form-control" required data-validation-required-message="Este campo es requerido">
+
+
+                                    </center>
+                                </div>
+
+
 
 
                             </div>
                         </div>
-                    </div>
-                    <div class="box-body">
-                        <form method="post" id="formTipos" role="form" novalidate class="needs-validation " enctype="multipart/form-data">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                            <div class="row">
-                                <div class="col-md-12" style="text-align: center;">
-                                    <div class="form-group">
-                                        <center>
-                                            <img id="imgPrincipalG" src="~/adjunto.png" alt="image" style="width:200px; height:200px;border-radius: 15px;" class="img-fluid" />
-                                            <br />
-                                            <br />
-
-                                            <label style="font-size: 13px;" class="label" for="imgPrincipalUploadG">Subir Imagen</label><input id="imgPrincipalUploadG" accept=".jpg, .png" style="opacity:0; display:none;" type="file" name="imgPrincipalUploadG" />
-
-                                            <input type="text" id="Imagen" hidden asp-for="Sucursales.Imagen" class="form-control" required data-validation-required-message="Este campo es requerido">
-
-
-                                        </center>
-                                    </div>
-
-
-
-
-                                </div>
-                            </div>
-
-                            <div class="row">
+                        <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     @if (Model.Parametros.FirstOrDefault().Pais == "P")
@@ -342,9 +342,9 @@
                                             <option value="01">Natural</option>
                                             <option value="02">Jurídica</option>
                                             <option value="03">Extranjero</option>
-
+                                            <option value="99">No Contribuyente</option>
                                         }
-                                        else
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                         {
                                             <option value="01">Nacional</option>
                                             <option value="02">Jurídica</option>
@@ -352,11 +352,19 @@
                                             <option value="04">NITE</option>
 
                                         }
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                        {
+                                            <option value="01">Natural</option>
+                                            <option value="02">Jurídica</option>
+                                            <option value="03">Extranjero</option>
+
+                                        }
+
                                     </select>
                                 </div>
                             </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
+                            <div class="col-md-4">
+                                <div class="form-group">
                                     @if (Model.Parametros.FirstOrDefault().Pais == "P")
                                     {
                                         <h5>RUC<span class="text-danger">*</span></h5>
@@ -367,73 +375,81 @@
                                     }
 
                                     <div class="controls">
-                                            <input id="Cedula" type="text" asp-for="Sucursales.Cedula" maxlength="12" class="form-control" required data-validation-required-message="Este campo es requerido" onblur="javascript: validarCedula()">
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <h5>Nombre Sucursal<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" asp-for="Sucursales.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        </div>
-
+                                        <input id="Cedula" type="text" asp-for="Sucursales.Cedula" maxlength="12" class="form-control" required data-validation-required-message="Este campo es requerido" onblur="javascript: validarCedula()">
                                     </div>
 
                                 </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Nombre Sucursal<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Sucursales.Nombre" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    </div>
 
-
+                                </div>
 
                             </div>
 
 
 
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <h5>Código de Sucursal<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" asp-for="Sucursales.CodSuc" maxlength="3" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        </div>
+                        </div>
 
+
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Código de Sucursal<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Sucursales.CodSuc" maxlength="3" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
-
 
                                 </div>
 
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <h5>Email<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="email" asp-for="Sucursales.Correo" maxlength="100" class="form-control" required data-validation-required-message="Este campo es requerido">
-                                        </div>
 
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Email<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="email" asp-for="Sucursales.Correo" maxlength="100" class="form-control" required data-validation-required-message="Este campo es requerido">
                                     </div>
-
 
                                 </div>
 
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <h5>Teléfono<span class="text-danger">*</span></h5>
-                                        <div class="controls">
-                                            <input type="text" asp-for="Sucursales.Telefono" id="Telefono" class="form-control" required data-validation-required-message="Este campo es requerido">
 
-                                        </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>Teléfono<span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" asp-for="Sucursales.Telefono" id="Telefono" class="form-control" required data-validation-required-message="Este campo es requerido">
 
                                     </div>
 
-
                                 </div>
-                           
+
+
+                            </div>
+
                         </div>
 
 
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="nom">Provincia:</label>
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                    {
+                                        <label for="nom">Departamento:</label>
+                                    }
+                                    else
+                                    {
+                                        <label for="nom">Provincia:</label>
+                                    }
+
                                     <select id="selectP" class="form-control" asp-for="Sucursales.Provincia" onchange="javascript: ModificaSelects(1)" required>
                                         @if (Model.Parametros.FirstOrDefault().Pais == "P")
                                         {
@@ -450,7 +466,7 @@
                                             <option value="11">Emberá-Wounaan</option>
                                             <option value="12">Ngäbe-Buglé</option>
                                         }
-                                        else
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                         {
                                             <option value="1" selected>San José</option>
                                             <option value="2">Alajuela</option>
@@ -460,7 +476,27 @@
                                             <option value="6">Puntarenas</option>
                                             <option value="7">Limón</option>
                                         }
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                        {
+                                            <option value="1">Boaco</option>
+                                            <option value="2">Carazo</option>
+                                            <option value="3">Chinandega</option>
+                                            <option value="4">Chontales</option>
+                                            <option value="5">Estelí</option>
+                                            <option value="6">Granada</option>
+                                            <option value="7">Jinotega</option>
+                                            <option value="8">León</option>
+                                            <option value="9">Madriz</option>
+                                            <option value="10">Managua</option>
+                                            <option value="11">Masaya</option>
+                                            <option value="12">Matagalpa</option>
+                                            <option value="13">Nueva Segovia</option>
+                                            <option value="14">Río San Juan</option>
+                                            <option value="15">Rivas</option>
+                                            <option value="16">Región Autónoma Costa Caribe Norte (RACCN)</option>
+                                            <option value="17">Región Autónoma Costa Caribe Sur (RACCS)</option>
 
+                                        }
 
 
 
@@ -477,9 +513,13 @@
                                     {
                                         <label for="nom">Distrito:</label>
                                     }
-                                    else
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                     {
                                         <label for="nom">Cantón:</label>
+                                    }
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                    {
+                                        <label for="nom">Municipio:</label>
                                     }
 
 
@@ -503,9 +543,13 @@
                                     {
                                         <label for="nom">Corregimiento:</label>
                                     }
-                                    else
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                     {
                                         <label for="nom">Distrito:</label>
+                                    }
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                    {
+                                        <label for="nom">Comunidad:</label>
                                     }
                                     <select id="selectD" class="form-control" asp-for="Sucursales.Distrito" onchange="javascript: ModificaSelects(3)" required>
                                         @foreach (var item in Model.Distritos)
@@ -524,7 +568,11 @@
                             {
 
                             }
-                            else
+                            @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                            {
+
+                            }
+                            @if (Model.Parametros.FirstOrDefault().Pais == "C")
                             {
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -555,13 +603,13 @@
 
 
                             </div>
-                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <h5>Lista de Precio<span class="text-danger">*</span></h5>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <h5>Lista de Precio<span class="text-danger">*</span></h5>
 
-                                        <select class="form-control select2  " asp-for="Sucursales.idListaPrecios">
-                                            <option value="0"> Seleccione </option>
-                                            @foreach (var item in Model.Precio)
+                                    <select class="form-control select2  " asp-for="Sucursales.idListaPrecios">
+                                        <option value="0"> Seleccione </option>
+                                        @foreach (var item in Model.Precio)
                                         {
 
                                             <option value="@item.id">@item.Nombre</option>
@@ -638,14 +686,14 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="nom">Dimensión:</label>
-                                    <select  class="form-control" asp-for="Sucursales.Dimension"  required>
+                                    <select class="form-control" asp-for="Sucursales.Dimension" required>
 
                                         <option value=1 selected>1</option>
                                         <option value=2>2</option>
                                         <option value=3>3</option>
                                         <option value=4>4</option>
                                         <option value=5>5</option>
-                                        
+
 
 
 

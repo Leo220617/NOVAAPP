@@ -364,9 +364,15 @@
                                             <option value="02">Jurídica</option>
                                             <option value="03">Extranjero</option>
                                             <option value="99">No Contribuyente</option>
+                                        }
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                        {
+                                            <option value="01">Natural</option>
+                                            <option value="02">Jurídica</option>
+                                            <option value="03">Extranjero</option>
 
                                         }
-                                        else
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                         {
                                             <option value="01">Nacional</option>
                                             <option value="02">Jurídica</option>
@@ -466,7 +472,14 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="nom">Provincia:</label>
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                    {
+                                        <label for="nom">Departamento:</label>
+                                    }
+                                    else
+                                    {
+                                        <label for="nom">Provincia:</label>
+                                    }
                                     <select id="selectP" class="form-control" asp-for="Cliente.Provincia" onchange="javascript: ModificaSelects(1)" required>
                                         @if (Model.Parametros.FirstOrDefault().Pais == "P")
                                         {
@@ -483,7 +496,7 @@
                                             <option value="11">Emberá-Wounaan</option>
                                             <option value="12">Ngäbe-Buglé</option>
                                         }
-                                        else
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                         {
                                             <option value="1" selected>San José</option>
                                             <option value="2">Alajuela</option>
@@ -492,6 +505,27 @@
                                             <option value="5">Guanacaste</option>
                                             <option value="6">Puntarenas</option>
                                             <option value="7">Limón</option>
+                                        }
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                        {
+                                            <option value="1">Boaco</option>
+                                            <option value="2">Carazo</option>
+                                            <option value="3">Chinandega</option>
+                                            <option value="4">Chontales</option>
+                                            <option value="5">Estelí</option>
+                                            <option value="6">Granada</option>
+                                            <option value="7">Jinotega</option>
+                                            <option value="8">León</option>
+                                            <option value="9">Madriz</option>
+                                            <option value="10">Managua</option>
+                                            <option value="11">Masaya</option>
+                                            <option value="12">Matagalpa</option>
+                                            <option value="13">Nueva Segovia</option>
+                                            <option value="14">Río San Juan</option>
+                                            <option value="15">Rivas</option>
+                                            <option value="16">Región Autónoma Costa Caribe Norte (RACCN)</option>
+                                            <option value="17">Región Autónoma Costa Caribe Sur (RACCS)</option>
+
                                         }
 
 
@@ -510,10 +544,15 @@
                                     {
                                         <label for="nom">Distrito:</label>
                                     }
-                                    else
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                     {
                                         <label for="nom">Cantón:</label>
                                     }
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                    {
+                                        <label for="nom">Municipio:</label>
+                                    }
+
 
 
                                     <select id="selectC" class="form-control" asp-for="Cliente.Canton" onchange="javascript: ModificaSelects(2)" required>
@@ -536,9 +575,13 @@
                                     {
                                         <label for="nom">Corregimiento:</label>
                                     }
-                                    else
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                     {
                                         <label for="nom">Distrito:</label>
+                                    }
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                    {
+                                        <label for="nom">Comunidad:</label>
                                     }
                                     <select id="selectD" class="form-control" asp-for="Cliente.Distrito" onchange="javascript: ModificaSelects(3)" required>
                                         @foreach (var item in Model.Distritos)
@@ -557,7 +600,11 @@
                             {
 
                             }
-                            else
+                            @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                            {
+
+                            }
+                            @if (Model.Parametros.FirstOrDefault().Pais == "C")
                             {
                                 <div class="col-md-3">
                                     <div class="form-group">
