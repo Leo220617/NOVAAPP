@@ -17,7 +17,7 @@ namespace NOVAAPP.Models
 
 
         public bool Activo { get; set; }
-
+        public int idImpuesto { get; set; }
         public DetExoneracionesViewModel[] Detalle { get; set; }
 
        

@@ -19,6 +19,8 @@ namespace NOVAAPP.Pages.Exoneraciones
         private readonly ICrudApi<ExoneracionesViewModel, int> service; //API
         private readonly ICrudApi<ClientesViewModel, string> serviceC;
         private readonly ICrudApi<CabysViewModel, int> cabys;
+        private readonly ICrudApi<ImpuestosViewModel, int> imp;
+
 
         [BindProperty]
         public ExoneracionesViewModel Exoneracion { get; set; }
@@ -26,14 +28,15 @@ namespace NOVAAPP.Pages.Exoneraciones
         public ClientesViewModel[] Cliente { get; set; }
         [BindProperty]
         public CabysViewModel[] Cabys { get; set; }
+        [BindProperty]
+        public ImpuestosViewModel[] Impuestos { get; set; }
 
-
-        public NuevoModel(ICrudApi<ExoneracionesViewModel, int> service, ICrudApi<ClientesViewModel, string> serviceC, ICrudApi<CabysViewModel, int> cabys) //CTOR 
+        public NuevoModel(ICrudApi<ExoneracionesViewModel, int> service, ICrudApi<ClientesViewModel, string> serviceC, ICrudApi<CabysViewModel, int> cabys, ICrudApi<ImpuestosViewModel, int> imp) //CTOR 
         {
             this.service = service;
             this.serviceC = serviceC;
             this.cabys = cabys;
-
+            this.imp = imp;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -50,6 +53,7 @@ namespace NOVAAPP.Pages.Exoneraciones
                 filtro.Activo = true;
                 Cliente = await serviceC.ObtenerLista(filtro);
                 Cabys = await cabys.ObtenerLista("");
+                Impuestos = await imp.ObtenerLista("");
                 return Page();
             }
             catch (Exception ex)
