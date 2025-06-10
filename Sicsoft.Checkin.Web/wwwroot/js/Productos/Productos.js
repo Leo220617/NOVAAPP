@@ -250,6 +250,50 @@ function ImprimirEtiqueta(id) {
     }
 }
 
+function ImprimirEtiquetaG(id) {
+    try {
+        var MiProducto = Productos.find(a => a.id == id);
+        const htmlEtiqueta = "<!DOCTYPE html> <html lang='es'> <head> <meta charset='UTF-8'> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <title>Etiqueta Producto</title> </head> <body style='font-family: Arial, sans-serif; text-align: center; margin: 20px;'> <center> <div style='padding: 10px; display: inline-block; width: 100%; height: 330px; margin: 10px; box-sizing: border-box; position: relative; font-size: 20px;'> <div style='display: flex; flex-direction: column; height: 100%;'> <!-- Parte superior: Código y Descripción --> <div style='height: 50%; text-align: left; padding: 5px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;'> <p style='margin: 0 0 4px 0; line-height: 1.2;'><b>Código:</b> <b>@Codigo</b></p> <p style='margin: 0; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;'> <b>Art:</b> <b> @Descripcion </b></p> </div> <!-- Parte inferior: Precio centrado --> <div style='height: 50%; display: flex; align-items: center; justify-content: center; padding: 0;'> <p style='font-size: 150px; line-height: 1; margin: 0;'><b>@PrecioUnitario</b></p> </div> </div> <!-- Barra inferior --> <div style='background-color: #74BA3E; height: 10px; position: absolute; bottom: 0; left: 0; width: 100%;'></div> </div> </center> </body> </html>";
+
+        var ventana = window.open('', 'PRINT', 'height=400,width=600');
+        var texto = htmlEtiqueta;
+        texto = texto.replace("@Codigo", MiProducto.Codigo);
+        texto = texto.replace("@Descripcion", MiProducto.Nombre);
+
+        if (MiProducto.Moneda == "CRC") {
+            texto = texto.replace("@PrecioUnitario", "₡" + formatoDecimal(Math.round(MiProducto.PrecioUnitario * 1.13)));
+        } else {
+            texto = texto.replace("@PrecioUnitario", "$" + formatoDecimal(Math.round(MiProducto.PrecioUnitario * 1.13)));
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        ventana.document.write(texto);
+        ventana.document.close();
+        ventana.focus();
+        ventana.print();
+        ventana.close();
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error ' + e
+
+        })
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     function ImprimirCodigoBarras(id, nombreProducto) {
         const codigoBarrasSvg = document.getElementById('codigoBarras');
