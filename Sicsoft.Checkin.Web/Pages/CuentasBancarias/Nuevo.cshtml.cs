@@ -18,6 +18,7 @@ namespace NOVAAPP.Pages.CuentasBancarias
     {
         private readonly ICrudApi<CuentasBancariasViewModel, int> service; //API
         private readonly ICrudApi<SucursalesViewModel, string> sucursales;
+        private readonly ICrudApi<ParametrosViewModel, int> param;
 
         [BindProperty]
         public CuentasBancariasViewModel Cuenta { get; set; }
@@ -25,10 +26,14 @@ namespace NOVAAPP.Pages.CuentasBancarias
         [BindProperty]
         public SucursalesViewModel[] SucursalesLista { get; set; }
 
-        public NuevoModel(ICrudApi<CuentasBancariasViewModel, int> service, ICrudApi<SucursalesViewModel, string> sucursales) //CTOR 
+        [BindProperty]
+        public ParametrosViewModel[] Parametros { get; set; }
+
+        public NuevoModel(ICrudApi<CuentasBancariasViewModel, int> service, ICrudApi<SucursalesViewModel, string> sucursales, ICrudApi<ParametrosViewModel, int> param) //CTOR 
         {
             this.service = service;
             this.sucursales = sucursales;
+            this.param = param;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -41,6 +46,7 @@ namespace NOVAAPP.Pages.CuentasBancarias
                     return RedirectToPage("/NoPermiso");
                 }
                 SucursalesLista = await sucursales.ObtenerLista("");
+                Parametros = await param.ObtenerLista("");
                 return Page();
             }
             catch (Exception ex)

@@ -252,9 +252,13 @@
                                     {
                                      
                                     }
-                                    else
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                     {
                                         <th>Total Vendido Colones</th>
+                                    }
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                    {
+                                        <th>Total Vendido Córdobas</th>
                                     }
                                  
                                     <th>Total Vendido Dolares</th>
@@ -292,10 +296,17 @@
                                         {
 
                                         }
-                                        else
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                         {
                                             <td>
                                                 ₡@Math.Round(@item.TotalVendidoColones, 2).ToString("C", formato)
+                                            </td>
+
+                                        }
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                        {
+                                            <td>
+                                                C$@Math.Round(@item.TotalVendidoColones, 2).ToString("C", formato)
                                             </td>
 
                                         }
@@ -354,9 +365,13 @@
                                     {
 
                                     }
-                                    else
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                     {
-                                        <th>Total Vendido ₡</th>
+                                        <th>Total Vendido Colones</th>
+                                    }
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                    {
+                                        <th>Total Vendido Córdobas</th>
                                     }
                                   
                                     <th>Total Vendido $</th>

@@ -216,9 +216,13 @@
                                         {
                    
                                         }
-                                        else
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                         {
                                             <option value="CRC">CRC</option>
+                                        }
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                        {
+                                            <option value="COR">COR</option>
                                         }
 
                                            

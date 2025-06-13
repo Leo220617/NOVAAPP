@@ -171,6 +171,11 @@
                                         <option value="CRC" selected>CRC</option>
 
                                     }
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                    {
+                                        <option value="COR" selected>COR</option>
+
+                                    }
                                     <option value="USD">USD</option>
 
                                 </select>

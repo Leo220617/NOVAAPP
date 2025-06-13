@@ -151,9 +151,13 @@
                                     {
 
                                     }
-                                    else
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                     {
                                         <th>Apertura ₡ </th>
+                                    }
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                    {
+                                        <th>Apertura C$ </th>
                                     }
 
                                     <th>Apertura $ </th>
@@ -183,9 +187,13 @@
                                         {
 
                                         }
-                                        else
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                         {
                                             <td> ₡@Math.Round(@item.MontoAperturaColones, 2).ToString("C", formato)</td>
+                                        }
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                        {
+                                            <td> C$@Math.Round(@item.MontoAperturaColones, 2).ToString("C", formato)</td>
                                         }
 
                                 
@@ -209,9 +217,13 @@
                                     {
 
                                     }
-                                    else
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                     {
                                         <th>Apertura ₡ </th>
+                                    }
+                                    @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                    {
+                                        <th>Apertura C$ </th>
                                     }
 
                                     <th>Apertura $ </th>

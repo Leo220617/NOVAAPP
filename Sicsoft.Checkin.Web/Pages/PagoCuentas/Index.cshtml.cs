@@ -20,6 +20,7 @@ namespace NOVAAPP.Pages.PagoCuentas
         private readonly ICrudApi<RolesViewModel, int> roles;
         
         private readonly ICrudApi<SucursalesViewModel, string> sucursales;
+        private readonly ICrudApi<ParametrosViewModel, int> param;
 
 
         [BindProperty]
@@ -34,16 +35,19 @@ namespace NOVAAPP.Pages.PagoCuentas
         public SucursalesViewModel[] Sucursales { get; set; }
 
 
+        [BindProperty]
+        public ParametrosViewModel[] Parametros { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
-        public IndexModel(ICrudApi<PagoCuentasViewModel, int> service, ICrudApi<ClientesViewModel, string> clientes, ICrudApi<UsuariosViewModel, int> serviceU, ICrudApi<RolesViewModel, int> roles,  ICrudApi<SucursalesViewModel, string> sucursales)
+        public IndexModel(ICrudApi<PagoCuentasViewModel, int> service, ICrudApi<ClientesViewModel, string> clientes, ICrudApi<UsuariosViewModel, int> serviceU, ICrudApi<RolesViewModel, int> roles,  ICrudApi<SucursalesViewModel, string> sucursales, ICrudApi<ParametrosViewModel, int> param)
         {
             this.service = service;
             this.clientes = clientes;
             this.serviceU = serviceU;
             this.roles = roles;
+            this.param = param;
          
             this.sucursales = sucursales;
 
@@ -89,10 +93,9 @@ namespace NOVAAPP.Pages.PagoCuentas
                 filtro.Activo = true;
                 Listas = await service.ObtenerLista(filtro);
                 Sucursales = await sucursales.ObtenerLista(filtro);
+                Parametros = await param.ObtenerLista("");
 
 
-
-             
 
 
                 Users = await serviceU.ObtenerLista("");

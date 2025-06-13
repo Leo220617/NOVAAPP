@@ -194,7 +194,18 @@
                                     <label for="cyber">Moneda:</label>
                                     <select class="form-control" id="money" asp-for="filtro.CardCode" required onchange="this.form.submit()">
 
-                                        <option value="CRC">CRC</option>
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                        {
+
+                                        }
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "C")
+                                        {
+                                            <option value="CRC">CRC</option>
+                                        }
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                                        {
+                                            <option value="COR">COR</option>
+                                        }
                                         <option value="USD">USD</option>
 
 

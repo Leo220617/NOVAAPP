@@ -92,11 +92,24 @@
                             {
 
                             }
-                            else
+                            @if (Model.Parametros.FirstOrDefault().Pais == "C")
                             {
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <h5>Apertura Colones<span class="text-danger">*</span></h5>
+                                        <div class="controls">
+                                            <input type="number" asp-for="Caja.MontoAperturaColones" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            }
+                            @if (Model.Parametros.FirstOrDefault().Pais == "N")
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <h5>Apertura Córdobas<span class="text-danger">*</span></h5>
                                         <div class="controls">
                                             <input type="number" asp-for="Caja.MontoAperturaColones" class="form-control" required data-validation-required-message="Este campo es requerido">
                                         </div>
