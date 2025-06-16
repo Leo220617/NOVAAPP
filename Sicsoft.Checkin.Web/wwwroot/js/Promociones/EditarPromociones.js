@@ -541,13 +541,13 @@ function onChangePrecio() {
 
         if (Moneda == "CRC") {
             if ((Producto.PrecioUnitario < PrecioFinal) && Producto.PrecioUnitario > 0) { 
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + Producto.PrecioUnitario
+                //Swal.fire({
+                //    icon: 'error',
+                //    title: 'Oops...',
+                //    text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + Producto.PrecioUnitario
 
-                })
-                parseFloat($("#inputFinal").val(Producto.PrecioUnitario));
+                //})
+                //parseFloat($("#inputFinal").val(Producto.PrecioUnitario));
             } else {
 
                 var Ganancia = retornaMargenGanancia(PrecioFinal, Producto.Costo);
@@ -558,13 +558,13 @@ function onChangePrecio() {
         } else {
             if (Pais == "C") {
                 if ((Producto.PrecioUnitario / TipodeCambio.TipoCambio < PrecioFinal) && Producto.PrecioUnitario > 0) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + Producto.PrecioUnitario / TipodeCambio.TipoCambio
+                    //Swal.fire({
+                    //    icon: 'error',
+                    //    title: 'Oops...',
+                    //    text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + Producto.PrecioUnitario / TipodeCambio.TipoCambio
 
-                    })
-                    parseFloat($("#inputFinal").val(Producto.PrecioUnitario / TipodeCambio.TipoCambio));
+                    //})
+                    //parseFloat($("#inputFinal").val(Producto.PrecioUnitario / TipodeCambio.TipoCambio));
                 } else {
 
                     var Costo = Producto.Costo / TipodeCambio.TipoCambio;
@@ -575,13 +575,13 @@ function onChangePrecio() {
                 }
             } else {
                 if ((Producto.PrecioUnitario < PrecioFinal) && Producto.PrecioUnitario > 0) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + Producto.PrecioUnitario
+                    //Swal.fire({
+                    //    icon: 'error',
+                    //    title: 'Oops...',
+                    //    text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + Producto.PrecioUnitario
 
-                    })
-                    parseFloat($("#inputFinal").val(Producto.PrecioUnitario));
+                    //})
+                    //parseFloat($("#inputFinal").val(Producto.PrecioUnitario));
                 } else {
 
                     var Costo = Producto.Costo;
@@ -702,21 +702,21 @@ function AgregarProductoTabla() {
             })
         }
         if (Producto.PrecioFinal == PE.PrecioUnitario && PE.PrecioUnitario == Producto.PrecioAnterior) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Precio invalido, el precio tiene que ser menor que el Precio Unitario' + ' ' + PE.PrecioUnitario
+            //Swal.fire({
+            //    icon: 'error',
+            //    title: 'Oops...',
+            //    text: 'Precio invalido, el precio tiene que ser menor que el Precio Unitario' + ' ' + PE.PrecioUnitario
 
-            })
+            //})
         }
 
         if (Producto.PrecioFinal == Producto.PrecioAnterior && PE.PrecioUnitario != Producto.PrecioAnterior) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Precio invalido, el precio tiene que ser menor que el Precio Unitario' + ' ' + Producto.PrecioAnterior
+            //Swal.fire({
+            //    icon: 'error',
+            //    title: 'Oops...',
+            //    text: 'Precio invalido, el precio tiene que ser menor que el Precio Unitario' + ' ' + Producto.PrecioAnterior
 
-            })
+            //})
         }
 
         if (Producto.FechaVen < fechaHoyX) {
@@ -921,15 +921,15 @@ function onChangePrecioProducto(i) {
 
         }
         else if ((ProdCadena[i].PrecioAnterior < ProdCadena[i].PrecioFinal) && (ProdCadena[i].PrecioAnterior > 0)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + ProdCadena[i].PrecioAnterior
+            //Swal.fire({
+            //    icon: 'error',
+            //    title: 'Oops...',
+            //    text: 'Precio invalido, el precio tiene que ser menor  a ' + ' ' + ProdCadena[i].PrecioAnterior
 
-            })
-            ProdCadena[i].PrecioFinal = parseFloat(ProdCadena[i].PrecioAnterior);
+            //})
+            //ProdCadena[i].PrecioFinal = parseFloat(ProdCadena[i].PrecioAnterior);
 
-            parseFloat($("#" + i + "_Prod3").val(ProdCadena[i].PrecioAnterior)).toFixed(2);
+            //parseFloat($("#" + i + "_Prod3").val(ProdCadena[i].PrecioAnterior)).toFixed(2);
 
 
         }
