@@ -540,7 +540,7 @@ function onChangePrecio() {
 
 
         if (Moneda == "CRC") {
-            if (Producto.PrecioUnitario < PrecioFinal) {
+            if ((Producto.PrecioUnitario < PrecioFinal) && Producto.PrecioUnitario > 0) { 
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -557,7 +557,7 @@ function onChangePrecio() {
             }
         } else {
             if (Pais == "C") {
-                if (Producto.PrecioUnitario / TipodeCambio.TipoCambio < PrecioFinal) {
+                if ((Producto.PrecioUnitario / TipodeCambio.TipoCambio < PrecioFinal) && Producto.PrecioUnitario > 0) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -574,7 +574,7 @@ function onChangePrecio() {
 
                 }
             } else {
-                if (Producto.PrecioUnitario < PrecioFinal) {
+                if ((Producto.PrecioUnitario < PrecioFinal) && Producto.PrecioUnitario > 0) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -920,7 +920,7 @@ function onChangePrecioProducto(i) {
             parseFloat($("#" + i + "_Prod3").val(ProdCadena[i].PrecioAnterior)).toFixed(2);
 
         }
-        else if (ProdCadena[i].PrecioAnterior < ProdCadena[i].PrecioFinal) {
+        else if ((ProdCadena[i].PrecioAnterior < ProdCadena[i].PrecioFinal) && (ProdCadena[i].PrecioAnterior > 0)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
