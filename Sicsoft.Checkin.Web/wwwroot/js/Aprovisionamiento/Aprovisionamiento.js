@@ -244,111 +244,96 @@ function RellenaTabla() {
     try {
         var html = "";
 
-        var idCategoria = $("#CategoriaSeleccionado").val();
-        ProdClientes.sort(function (a, b) {
-            var nombreA = a.Nombre_Articulo.toLowerCase();
-            var nombreB = b.Nombre_Articulo.toLowerCase();
-
-            if (nombreA < nombreB) return -1;
-            if (nombreA > nombreB) return 1;
-            return 0;
-        });
-        $("#tbody").html(html);
-
+        ProdClientes.sort((a, b) => a.Nombre_Articulo.toLowerCase().localeCompare(b.Nombre_Articulo.toLowerCase()));
+        $("#tbody").html("");
 
         for (var i = 0; i < ProdClientes.length; i++) {
+            const producto = ProdClientes[i];
 
+            // Buscar si ya fue guardado
+            const guardado = ProdCadena.find(p =>
+                String(p.CodigoProducto).trim() === String(producto.Codigo_Articulo).trim() &&
+                String(p.Bodega).trim() === String(producto.Bodega).trim()
+            );
 
+            const compra = guardado ? guardado.Compra : 0;
+            const precioCompra = guardado ? guardado.PrecioCompra : 0;
+            const impuestoSel = guardado ? guardado.Impuesto : "IV";
+            const totalImpuesto = guardado ? guardado.TotalImpuesto : 0;
+            const totalCompra = guardado ? guardado.TotalCompra : 0;
+            const proveedorSel = guardado ? guardado.CodProveedor : producto.Cod_Proveedor;
+            const checked = guardado ? "checked" : "";
+            const disabled = guardado ? "" : "disabled";
 
+            html += `<tr>
+                <td>${producto.Codigo_Articulo} - ${producto.Nombre_Articulo}</td>
+                <td>${producto.Bodega}</td>
+                <td class='text-right'>${formatoDecimal(producto.Stock_en_Bodega.toFixed(2))}</td>
+                <td class='text-right'>${formatoDecimal(producto.Pedido.toFixed(2))}</td>
+                <td class='text-right'>${formatoDecimal(producto.Ultimo_Precio_Compra.toFixed(2))}</td>
+                <td class='text-right'>${formatoDecimal(producto.Costo_Promedio.toFixed(2))}</td>
+                <td class='text-right'>${formatoDecimal(producto.Promedio_Venta_Ult_3_Meses.toFixed(2))}</td>
+                <td class='text-right'>${formatoDecimal(producto.Inventario_Ideal.toFixed(2))}</td>
+                <td class='text-right'>${formatoDecimal(producto.Indicador_ST.toFixed(2))}</td>`;
 
-            var idSubCategoria = ProdClientes[i].Id_Subcategoria;
-            var idCategoria = ProdClientes[i].Id_Categoria;
-            var SubCategoria = SubCategorias.find(a => a.id == idSubCategoria);
-            var Categoria = Categorias.find(a => a.id == idCategoria);
-            html += "<tr>";
+            const sugeridoColor = producto.Pedido_Sugerido < 0 ? '#FFE9E9' : '#EFFFE9';
+            html += `<td class='text-right' style='background-color:${sugeridoColor};'>${formatoDecimal(producto.Pedido_Sugerido.toFixed(2))}</td>`;
 
+            // Compra
+            html += `<td class='text-center'>
+                        <input ${disabled} onchange='onChangeCompra(${i})' type='number' 
+                               id='${i}_Compra' class='form-control' style='width: 80px; height: 40px;' 
+                               value='${compra}' min='1'/>
+                     </td>`;
 
+            // Precio compra
+            html += `<td class='text-center'>
+                        <input ${disabled} onchange='onChangeCompra(${i})' type='number' 
+                               id='${i}_PrecioCompra' class='form-control' style='width: 150px; height: 40px;' 
+                               value='${precioCompra}' min='1'/>
+                     </td>`;
 
-            html += "<td > " + ProdClientes[i].Codigo_Articulo + "-" + ProdClientes[i].Nombre_Articulo + " </td>";
-
-
-            html += "<td > " + ProdClientes[i].Bodega + " </td>";
-            html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Stock_en_Bodega).toFixed(2)) + " </td>";
-            html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Pedido).toFixed(2)) + " </td>";
-
-
-
-     
-
-
-         
-            html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Ultimo_Precio_Compra).toFixed(2)) + " </td>";
-            html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Costo_Promedio).toFixed(2)) + " </td>";
-            html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Promedio_Venta_Ult_3_Meses).toFixed(2)) + " </td>";
-
-            html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Inventario_Ideal).toFixed(2)) + " </td>";
-            html += "<td class='text-right'> " + formatoDecimal(parseFloat(ProdClientes[i].Indicador_ST).toFixed(2)) + " </td>";
-            if (ProdClientes[i].Pedido_Sugerido < 0) {
-                html += "<td class='text-right' style='background-color : #FFE9E9;'>" + formatoDecimal(parseFloat(ProdClientes[i].Pedido_Sugerido).toFixed(2)) + " </td>";
-            } else {
-                html += "<td class='text-right' style='background-color : #EFFFE9;'>" + formatoDecimal(parseFloat(ProdClientes[i].Pedido_Sugerido).toFixed(2)) + " </td>";
-            }
-   
-            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_Compra' class='form-control'  style='width: 80px; height: 40px;' value= '0' min='1'/>  </td>";
-            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeCompra(" + i + ")' type='number' id='" + i + "_PrecioCompra' class='form-control' style='width: 150px; height: 40px;'  value= '0' min='1'/>  </td>";
-
-            html += "<td>";
-            html += "<select onchange='javascript: onChangeCompra(" + i + ")' disabled id='" + i + "_Impuesto' >";
-
+            // Impuesto
+            html += `<td>
+                        <select onchange='onChangeCompra(${i})' id='${i}_Impuesto' ${disabled}>`;
             Impuestos.forEach(impuesto => {
-                if ((impuesto.Codigo === "EX" || impuesto.Codigo === "IV" || impuesto.Codigo === "IVA-1") && impuesto.Activo) {
-                    html += `<option value="${impuesto.Codigo}" ${impuesto.Codigo === "IV" ? "selected" : ""}>${impuesto.Tarifa}</option>`;
+                if ((["EX", "IV", "IVA-1"].includes(impuesto.Codigo)) && impuesto.Activo) {
+                    const selected = impuesto.Codigo === impuestoSel ? "selected" : "";
+                    html += `<option value="${impuesto.Codigo}" ${selected}>${impuesto.Tarifa}</option>`;
                 }
             });
+            html += `</select></td>`;
 
-            html += "</select>";
-            html += "</td>";
-            html += "<td class='text-right' id='" + i + "_TotalImpuesto'> " + '0' + " </td>";
+            // Total impuesto y compra
+            html += `<td class='text-right' id='${i}_TotalImpuesto'>${totalImpuesto}</td>`;
+            html += `<td class='text-right' id='${i}_TotalCompra'>${totalCompra}</td>`;
 
-            html += "<td class='text-right' id='" + i + "_TotalCompra'> " + '0' + " </td>";
+            // Checkbox
+            html += `<td class='text-center'>
+                        <input type='checkbox' id='${i}_mdcheckbox' class='chk-col-green' 
+                               onchange='onChangeCompra(${i})' ${checked}>
+                        <label for='${i}_mdcheckbox'></label>
+                     </td>`;
 
-            html += "<td class='text-center'>  <input  type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeCompra(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> ";
+            // Stock y promedio total
+            html += `<td class='text-right' style='background-color:#fff4e9;'>${formatoDecimal(producto.Stock_Todas.toFixed(2))}</td>`;
+            html += `<td class='text-right' style='background-color:#fff4e9;'>${formatoDecimal(producto.Promedio_Venta_Todas_3Meses.toFixed(2))}</td>`;
+            html += `<td class='text-right' style='background-color:#fff4e9;'>${formatoDecimal(producto.Indicador_ST_Todas.toFixed(2))}</td>`;
 
-
-            html += "<td class='text-right'  style='background-color : #fff4e9;'> " + formatoDecimal(parseFloat(ProdClientes[i].Stock_Todas).toFixed(2)) + " </td>";
-            html += "<td class='text-right'  style='background-color : #fff4e9;'> " + formatoDecimal(parseFloat(ProdClientes[i].Promedio_Venta_Todas_3Meses).toFixed(2)) + " </td>";
-            html += "<td class='text-right'  style='background-color : #fff4e9;'> " + formatoDecimal(parseFloat(ProdClientes[i].Indicador_ST_Todas).toFixed(2)) + " </td>";
-
-
-
-
-
-
-
-            html += "</td>";
-
-
-            html += "<td>";
-            html += "<select  onchange='javascript: onChangeCompra(" + i + ")' disabled id='" + i + "_Proveedor' class='proveedor'>";
-            Proveedores.forEach(Proveedores => {
-                html += `<option value="${Proveedores.CardCode}" ${ProdClientes[i].Cod_Proveedor === Proveedores.CardCode ? "selected" : ""
-                    }>${Proveedores.CardCode} - ${Proveedores.Nombre}</option>`;
+            // Proveedor
+            html += `<td>
+                        <select onchange='onChangeCompra(${i})' id='${i}_Proveedor' class='proveedor' ${disabled}>`;
+            Proveedores.forEach(p => {
+                const selected = proveedorSel === p.CardCode ? "selected" : "";
+                html += `<option value="${p.CardCode}" ${selected}>${p.CardCode} - ${p.Nombre}</option>`;
             });
-            html += "</select>";
-            html += "</td>";
+            html += `</select></td>`;
 
-
-
-
-
-            html += "</tr>";
-
-
+            html += `</tr>`;
         }
 
         $("#tbody").html(html);
-        $(document).ready(function () {
-            // Solo aplicamos select2 a los elementos con la clase 'proveedor'
+        $(document).ready(() => {
             $('select.proveedor').select2();
         });
 
@@ -357,11 +342,10 @@ function RellenaTabla() {
             icon: 'error',
             title: 'Oops...',
             text: 'Error ' + e
-
-        })
+        });
     }
-
 }
+
 
 function onChangeCompra(i) {
     try {
@@ -392,7 +376,7 @@ function onChangeCompra(i) {
            
             $("#ClasificacionSeleccionado").prop('disabled', true);
             $("#CategoriaSeleccionado").prop('disabled', true);
-            $("#SubCategoriaSeleccionado").prop('disabled', true);
+           /* $("#SubCategoriaSeleccionado").prop('disabled', true);*/
             $("#Indicador").prop('disabled', true);
             $("#IndicadorX").prop('disabled', true);
             $("#md_checkbox_Cedi").prop('disabled', true);
