@@ -511,7 +511,7 @@ function Generar() {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Oops...',
-                                    text: 'Ha ocurrido un error al intentar guardar ' + json.LogsProductosAprov
+                                    text: 'Ha ocurrido un error al intentar guardar ' + json.logsProductosAprov
 
                                 })
                             }
