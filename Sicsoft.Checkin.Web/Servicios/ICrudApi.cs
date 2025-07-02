@@ -49,6 +49,9 @@ namespace Sicsoft.Checkin.Web.Servicios
         [Get("/MargenesProductos")]
         Task InsertarMargenes(int idListaPrecio, int idCategoria, string Moneda);
 
+        [Get("/Duplicar")]
+        Task DuplicarMargenes(int idListaPrecio, int idCategoria, string Moneda);
+
         [Get("/Reenvio")]
         Task Reenvio(string code, string correos);
 

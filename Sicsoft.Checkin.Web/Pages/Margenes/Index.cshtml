@@ -116,6 +116,93 @@
                 })
             }
         }
+
+        function onClickModal2(idListaPrecio, idCategoria, Moneda) {
+            try {
+                idListaPrecioX = idListaPrecio;
+                idCategoriaX = idCategoria;
+                MonedaX = Moneda;
+                Swal.fire({
+                    title: '¿Desea duplicar los Margenes a todas las Listas de Precio?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: `Aceptar`,
+                    denyButtonText: `Cancelar`,
+                    customClass: {
+                        confirmButton: 'swalBtnColor',
+                        denyButton: 'swalDeny'
+                    },
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        DuplicarMargenes();
+
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+
+        }
+
+        function DuplicarMargenes() {
+            try {
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Page("Index", "DuplicarMargenes")',
+                    data: { idListaPrecio: idListaPrecioX, idCategoria: idCategoriaX, Moneda: MonedaX },
+                    success: function (result) {
+                        $("#divProcesando").modal("hide");
+                        console.log(result);
+                        if (result == false) {
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar duplicar los Margenes'
+
+                            })
+
+                        } else {
+                            Swal.fire({
+                                title: "Ha sido duplicado  con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    beforeSend: function () {
+                        $("#divProcesando").modal("show");
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar sincronizar  ' + e
+
+                })
+            }
+        }
     </script>
 
 }
@@ -301,6 +388,8 @@
                                             <a asp-page="./Observar" asp-route-idListaPrecio="@item.idListaPrecio" asp-route-idCategoria="@item.idCategoria" asp-route-Moneda="@item.Moneda" class="fa fa-info-circle icono"> </a> &nbsp;
 
                                             <a onclick="javascript: onClickModal('@item.idListaPrecio', '@item.idCategoria', '@item.Moneda')" title="Insertar Margenes" class="fa fa-refresh icono" ></a>
+                                            &nbsp;
+                                            <a onclick="javascript: onClickModal2('@item.idListaPrecio', '@item.idCategoria', '@item.Moneda')" title="Duplicar Margenes" class="fa fa-clone icono"></a>
                                         </td>
 
                                         <td>  @(Model.ListaPrecio.Where(a => a.id == item.idListaPrecio).FirstOrDefault() == null ? "Lista Precio Inexistente" : Model.ListaPrecio.Where(a => a.id == item.idListaPrecio).FirstOrDefault().CodSAP + "-" + Model.ListaPrecio.Where(a => a.id == item.idListaPrecio).FirstOrDefault().Nombre) </td>

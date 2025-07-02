@@ -98,5 +98,19 @@ namespace NOVAAPP.Pages.Margenes
                 return new JsonResult(false);
             }
         }
+
+        public async Task<IActionResult> OnGetDuplicarMargenes(int idListaPrecio, int idCategoria, string Moneda)
+        {
+            try
+            {
+
+                await service.DuplicarMargenes(idListaPrecio, idCategoria, Moneda);
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+        }
     }
 }
