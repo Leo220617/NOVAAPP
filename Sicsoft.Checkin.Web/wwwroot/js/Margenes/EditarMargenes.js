@@ -96,6 +96,7 @@ function RecuperarInformacion() {
                 PrecioMin: parseFloat(Margenes.Detalle[i].PrecioMin.toFixed(2)),
                 PrecioCob: parseFloat(Margenes.Detalle[i].PrecioCob.toFixed(2)),
                 Seteable: Margenes.Detalle[i].Seteable
+               // PrecioFijo: Margenes.Detalle[i].PrecioFijo
 
 
 
@@ -379,7 +380,8 @@ function onChangeCobertura(i) {
                     PrecioFinal: 0,
                     PrecioCob: 0,
                     PrecioMin: 0,
-                    Seteable: $("#" + i + "_mdcheckbox").prop('checked')
+                    Seteable: $("#" + i + "_mdcheckbox").prop('checked'),
+                    PrecioFijo: $("#" + i + "_mdcheckbox2").prop('checked')
 
 
                 };
@@ -514,6 +516,7 @@ function RellenaTabla() {
             html += "<tr>";
 
             html += "<td class='text-center'> <input type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeRevisado(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> ";
+            html += "<td class='text-center'> <input type='checkbox' id='" + i + "_mdcheckbox2' class='chk-col-green' onchange='javascript: onChangeCheckboxPrecio(" + i + ")'>  <label for='" + i + "_mdcheckbox2'></label> </td> ";
             html += "<td > " + ProdClientes[i].Codigo + "-" + ProdClientes[i].Nombre + " </td>";
 
 
@@ -681,6 +684,202 @@ function onChangeRevisado(i) {
         });
     }
 
+}
+
+function onChangeCheckboxPrecio(i) {
+    try {
+
+
+        var idCategoria = $("#CategoriaSeleccionado").val();
+        var idListaPrecio = $("#ListaSeleccionado").val();
+        var Moneda = $("#MonedaSeleccionado").val();
+        var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
+
+
+        var valorCheck = $("#" + i + "_mdcheckbox2").prop('checked');
+        var input = $("#" + i + "_Ganancia");
+        var PE = ProdClientes[i];
+        if (valorCheck == true) {
+            var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
+            var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
+
+            var PE = ProdClientes[i];
+            if (Existe === undefined) {
+                var $td = $("#" + i + "_PrecioImp");
+                var valorOriginal = $td.text().trim().replace(/,/g, '');
+                var valorNumerico = parseFloat(valorOriginal);
+
+                if (isNaN(valorNumerico)) valorNumerico = 0;
+
+                if ($td.find('input').length === 0) {
+                    var valorFormateado = valorNumerico.toFixed(2);
+
+                    $td.empty().append(
+                        "<input onchange='onChangePrecioFijo(" + i + ")' " +
+                        "type='number' id='" + i + "_PrecioImp' class='form-control text-center' " +
+                        "value='" + valorFormateado + "' min='1' style='width: 100px;'/>"
+                    );
+                    // Ya que usaste append con string, no es necesario setear .val() de nuevo
+                    $("#" + i + "_PrecioImp").focus();
+                }
+            }
+
+        } 
+        else {
+            var $td = $("#" + i + "_PrecioImp");
+            var $input = $td.find("input");
+
+            // Si hay un input, lo reemplazamos por su valor como texto
+            if ($input.length > 0) {
+                var valor = parseFloat($input.val()).toFixed(2);
+                $td.empty().text(valor);
+            }
+        }
+
+        
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: e
+
+        });
+    }
+
+}
+function onChangePrecioFijo(i) {
+      try {
+
+
+        var idCategoria = $("#CategoriaSeleccionado").val();
+        var idListaPrecio = $("#ListaSeleccionado").val();
+        var Moneda = $("#MonedaSeleccionado").val();
+        var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
+
+        var Cobertura = $("#Cobertura").val();
+        var Margen = $("#Margen").val();
+        var MargenMin = $("#MargenMin").val();
+
+        var valorCheck = $("#" + i + "_mdcheckbox2").prop('checked');
+        var input = $("#" + i + "_Ganancia");
+        var PE = ProdClientes[i];
+        if (valorCheck == true) {
+            var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
+            var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
+         
+            var PE = ProdClientes[i];
+            if (Existe == undefined) {
+
+                var PrecioImp = parseFloat($("#" + i + "_PrecioImp").val());
+                var PrecioFinal = PrecioImp / 1.13;
+                var Producto =
+                {
+
+
+
+
+                    ItemCode: PE.Codigo,
+                    idListaPrecio: parseFloat($("#ListaSeleccionado").val()),
+                    idCategoria: PE.idCategoria,
+                    Moneda: PE.Moneda,
+                    PrecioSAP: PE.PrecioUnitario,
+                    Cobertura: parseFloat($("#" + i + "_Cobertura").val()),
+                    Margen: parseFloat($("#" + i + "_Margen").val()),
+                    MargenMin: parseFloat($("#" + i + "_MargenMin").val()),
+                    PrecioFinal: PrecioFinal,
+                    PrecioCob: 0,
+                    PrecioMin: 0,
+                    Seteable: $("#" + i + "_mdcheckbox").prop('checked')
+
+
+                };
+
+                Producto.Margen = 100 - ((Producto.PrecioCob / Producto.PrecioFinal) * 100)
+                $("#" + i + "_Margen").val(Producto.Margen);
+                Producto.PrecioCob = PE.Costo / (1 - (Producto.Cobertura / 100));
+                Producto.PrecioFinal = Producto.PrecioCob / (1 - (Producto.Margen / 100));
+                Producto.PrecioMin = Producto.PrecioCob / (1 - (Producto.MargenMin / 100));
+
+
+
+
+
+                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal).toFixed(2)));
+          
+                $("#" + i + "_PrecioCob").text(formatoDecimal(parseFloat(Producto.PrecioCob).toFixed(2)));
+                $("#" + i + "_PrecioMin").text(formatoDecimal(parseFloat(Producto.PrecioMin).toFixed(2)));
+                if (Moneda == "CRC") {
+                    Ganancia = retornaMargenGanancia(Producto.PrecioFinal, PE.Costo);
+                    $("#" + i + "_Ganancia").text(formatoDecimal(parseFloat(Ganancia).toFixed(2)));
+                } else {
+                    var Costo = PE.Costo / TipodeCambio.TipoCambio;
+                    Ganancia = retornaMargenGanancia(Producto.PrecioFinal, Costo);
+                    $("#" + i + "_Ganancia").text(formatoDecimal(parseFloat(Ganancia).toFixed(2)));
+                }
+
+                if (Ganancia > 0) {
+                    input.css('background-color', '#EFFFE9')
+                } else {
+                    input.css('background-color', '#FFE9E9')
+                }
+                ProdCadena.push(Producto);
+            } else {
+                ProdCadena[x].Margen = parseFloat($("#" + i + "_Margen").val());
+                ProdCadena[x].Cobertura = parseFloat($("#" + i + "_Cobertura").val());
+                ProdCadena[x].MargenMin = parseFloat($("#" + i + "_MargenMin").val());
+                ProdCadena[x].PrecioCob = PE.Costo / (1 - (ProdCadena[x].Cobertura / 100));
+                ProdCadena[x].PrecioFinal = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].Margen / 100));
+                ProdCadena[x].PrecioMin = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].MargenMin / 100));
+                ProdCadena[x].Seteable = $("#" + i + "_mdcheckbox").prop('checked');
+                var PrecioImp = ProdCadena[x].PrecioFinal * 1.13;
+
+
+                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioFinal).toFixed(2)));
+                $("#" + i + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
+                $("#" + i + "_PrecioCob").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioCob).toFixed(2)));
+                $("#" + i + "_PrecioMin").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioMin).toFixed(2)));
+
+                if (Moneda == "CRC") {
+                    Ganancia = retornaMargenGanancia(ProdCadena[x].PrecioFinal, PE.Costo);
+                    $("#" + i + "_Ganancia").text(formatoDecimal(parseFloat(Ganancia).toFixed(2)));
+                } else {
+                    var Costo = PE.Costo / TipodeCambio.TipoCambio;
+                    Ganancia = retornaMargenGanancia(ProdCadena[x].PrecioFinal, Costo);
+                    $("#" + i + "_Ganancia").text(formatoDecimal(parseFloat(Ganancia).toFixed(2)));
+                }
+
+
+                if (Ganancia > 0) {
+                    input.css('background-color', '#EFFFE9')
+                } else {
+                    input.css('background-color', '#FFE9E9')
+                }
+
+            }
+        }
+        else {
+            var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
+            var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
+           if (ProdCadena[x].Cobertura == Cobertura && ProdCadena[x].Margen == Margen && ProdCadena[x].MargenMin == MargenMin && Existe != undefined) {
+
+             
+              
+                ProdCadena.splice(x, 1);
+            }
+
+        }
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: e
+
+        });
+    }
 }
 function Setear() {
     try {
