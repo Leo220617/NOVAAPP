@@ -96,7 +96,7 @@ function RecuperarInformacion() {
                 PrecioMin: parseFloat(Margenes.Detalle[i].PrecioMin.toFixed(2)),
                 PrecioCob: parseFloat(Margenes.Detalle[i].PrecioCob.toFixed(2)),
                 Seteable: Margenes.Detalle[i].Seteable
-               // PrecioFijo: Margenes.Detalle[i].PrecioFijo
+                // PrecioFijo: Margenes.Detalle[i].PrecioFijo
 
 
 
@@ -109,41 +109,42 @@ function RecuperarInformacion() {
             var PE = ProdClientes.find(a => a.Codigo == Producto.ItemCode && a.idCategoria == Producto.idCategoria && a.idListaPrecios == Producto.idListaPrecio && a.Moneda == Producto.Moneda);
             if (PE != undefined) {
 
-           
-            var x = ProdClientes.findIndex(a => a.Codigo == Producto.ItemCode && a.idCategoria == Producto.idCategoria && a.idListaPrecios == Producto.idListaPrecio && a.Moneda == Producto.Moneda);
-            CambiarCheck(i, true);
-            $("#" + x + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal).toFixed(2)));
-            $("#" + x + "_PrecioCob").text(formatoDecimal(parseFloat(Producto.PrecioCob).toFixed(2)));
-            $("#" + x + "_PrecioMin").text(formatoDecimal(parseFloat(Producto.PrecioMin).toFixed(2)));
-            $("#" + x + "_Cobertura").val(Producto.Cobertura);
-            $("#" + x + "_Margen").val(Producto.Margen);
-            $("#" + x + "_MargenMin").val(Producto.MargenMin);
-            var PrecioImp = Producto.PrecioFinal * 1.13;
+
+                var x = ProdClientes.findIndex(a => a.Codigo == Producto.ItemCode && a.idCategoria == Producto.idCategoria && a.idListaPrecios == Producto.idListaPrecio && a.Moneda == Producto.Moneda);
+                CambiarCheck(i, true);
+                $("#" + x + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal).toFixed(2)));
+                $("#" + x + "_PrecioCob").text(formatoDecimal(parseFloat(Producto.PrecioCob).toFixed(2)));
+                $("#" + x + "_PrecioMin").text(formatoDecimal(parseFloat(Producto.PrecioMin).toFixed(2)));
+                $("#" + x + "_Cobertura").val(Producto.Cobertura);
+                $("#" + x + "_Margen").val(Producto.Margen);
+                $("#" + x + "_MargenMin").val(Producto.MargenMin);
+
+                var PrecioImp = Producto.PrecioFinal * 1.13;
+     
 
 
-          
-            $("#" + x + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
-            var Ganancia = 0;
-            var input = $("#" + x + "_Ganancia");
-            var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
-            var Moneda = $("#MonedaSeleccionado").val();
+                $("#" + x + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
+                var Ganancia = 0;
+                var input = $("#" + x + "_Ganancia");
+                var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
+                var Moneda = $("#MonedaSeleccionado").val();
 
-            if (Moneda == "CRC") {
-                Ganancia = retornaMargenGanancia(Producto.PrecioFinal, PE.Costo);
-                $("#" + x + "_Ganancia").text(formatoDecimal(parseFloat(Ganancia).toFixed(2)));
-            } else {
-                var Costo = PE.Costo / TipodeCambio.TipoCambio;
-                Ganancia = retornaMargenGanancia(Producto.PrecioFinal, Costo);
-                $("#" + x + "_Ganancia").text(formatoDecimal(parseFloat(Ganancia).toFixed(2)));
+                if (Moneda == "CRC") {
+                    Ganancia = retornaMargenGanancia(Producto.PrecioFinal, PE.Costo);
+                    $("#" + x + "_Ganancia").text(formatoDecimal(parseFloat(Ganancia).toFixed(2)));
+                } else {
+                    var Costo = PE.Costo / TipodeCambio.TipoCambio;
+                    Ganancia = retornaMargenGanancia(Producto.PrecioFinal, Costo);
+                    $("#" + x + "_Ganancia").text(formatoDecimal(parseFloat(Ganancia).toFixed(2)));
+                }
+
+
+                if (Ganancia > 0) {
+                    input.css('background-color', '#EFFFE9')
+                } else {
+                    input.css('background-color', '#FFE9E9')
+                }
             }
-
-
-            if (Ganancia > 0) {
-                input.css('background-color', '#EFFFE9')
-            } else {
-                input.css('background-color', '#FFE9E9')
-            }
-        }
 
         }
 
@@ -529,6 +530,9 @@ function RellenaTabla() {
             html += "<td class='text-center'> <input onchange='javascript: onChangeCobertura(" + i + ")' type='number' id='" + i + "_Margen' class='form-control'   value= '0' min='1'/>  </td>";
             html += "<td class='text-center' id='" + i + "_PrecioFinal'> 0 </td>";
             html += "<td class='text-center' id='" + i + "_PrecioImp'> 0 </td>";
+            html += "<td class='text-center' hidden id='" + i + "_PrecioFijo'> <input onchange='javascript: onChangePrecioFijo(" + i + ")' type='number' id='" + i + "_InputPrecioFijo' class='form-control'   value= '0' min='1'/>  </td>";
+
+
             html += "<td class='text-center' id='" + i + "_Ganancia'> 0 </td>";
 
 
@@ -573,7 +577,7 @@ function onChangeRevisado(i) {
         if (valorCheck == true) {
             var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
             var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
-         
+
             var PE = ProdClientes[i];
             if (Existe == undefined) {
 
@@ -665,10 +669,10 @@ function onChangeRevisado(i) {
         else {
             var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
             var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
-           if (ProdCadena[x].Cobertura == Cobertura && ProdCadena[x].Margen == Margen && ProdCadena[x].MargenMin == MargenMin && Existe != undefined) {
+            if (ProdCadena[x].Cobertura == Cobertura && ProdCadena[x].Margen == Margen && ProdCadena[x].MargenMin == MargenMin && Existe != undefined) {
 
-             
-              
+
+
                 ProdCadena.splice(x, 1);
             }
 
@@ -688,55 +692,26 @@ function onChangeRevisado(i) {
 
 function onChangeCheckboxPrecio(i) {
     try {
-
-
-        var idCategoria = $("#CategoriaSeleccionado").val();
-        var idListaPrecio = $("#ListaSeleccionado").val();
-        var Moneda = $("#MonedaSeleccionado").val();
-        var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
-
-
         var valorCheck = $("#" + i + "_mdcheckbox2").prop('checked');
-        var input = $("#" + i + "_Ganancia");
-        var PE = ProdClientes[i];
+
         if (valorCheck == true) {
-            var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
-            var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
+            $("#" + i + "_PrecioImp").attr("hidden", true);      // Oculta el primero
+            $("#" + i + "_PrecioFijo").removeAttr("hidden");
+            var texto = $("#" + i + "_PrecioImp").text();        
+            var limpio = texto.replace(/,/g, '');                   
+            var valor = parseFloat(limpio); 
+            $("#" + i + "_InputPrecioFijo").val(valor);
 
-            var PE = ProdClientes[i];
-            if (Existe === undefined) {
-                var $td = $("#" + i + "_PrecioImp");
-                var valorOriginal = $td.text().trim().replace(/,/g, '');
-                var valorNumerico = parseFloat(valorOriginal);
 
-                if (isNaN(valorNumerico)) valorNumerico = 0;
-
-                if ($td.find('input').length === 0) {
-                    var valorFormateado = valorNumerico.toFixed(2);
-
-                    $td.empty().append(
-                        "<input onchange='onChangePrecioFijo(" + i + ")' " +
-                        "type='number' id='" + i + "_PrecioImp' class='form-control text-center' " +
-                        "value='" + valorFormateado + "' min='1' style='width: 100px;'/>"
-                    );
-                    // Ya que usaste append con string, no es necesario setear .val() de nuevo
-                    $("#" + i + "_PrecioImp").focus();
-                }
-            }
-
-        } 
-        else {
-            var $td = $("#" + i + "_PrecioImp");
-            var $input = $td.find("input");
-
-            // Si hay un input, lo reemplazamos por su valor como texto
-            if ($input.length > 0) {
-                var valor = parseFloat($input.val()).toFixed(2);
-                $td.empty().text(valor);
-            }
+        } else {
+            $("#" + i + "_PrecioImp").removeAttr("hidden");
+            $("#" + i + "_PrecioFijo").attr("hidden", true);
+            var texto = $("#" + i + "_PrecioImp").text();     
+            var limpio = texto.replace(/,/g, '');                   
+            var valor = parseFloat(limpio); 
+            $("#" + i + "_InputPrecioFijo").val(valor);
         }
 
-        
 
 
     } catch (e) {
@@ -750,7 +725,7 @@ function onChangeCheckboxPrecio(i) {
 
 }
 function onChangePrecioFijo(i) {
-      try {
+    try {
 
 
         var idCategoria = $("#CategoriaSeleccionado").val();
@@ -768,11 +743,11 @@ function onChangePrecioFijo(i) {
         if (valorCheck == true) {
             var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
             var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
-         
+
             var PE = ProdClientes[i];
             if (Existe == undefined) {
 
-                var PrecioImp = parseFloat($("#" + i + "_PrecioImp").val());
+                var PrecioImp = parseFloat($("#" + i + "_InputPrecioFijo").val());
                 var PrecioFinal = PrecioImp / 1.13;
                 var Producto =
                 {
@@ -795,10 +770,10 @@ function onChangePrecioFijo(i) {
 
 
                 };
-
-                Producto.Margen = 100 - ((Producto.PrecioCob / Producto.PrecioFinal) * 100)
-                $("#" + i + "_Margen").val(Producto.Margen);
                 Producto.PrecioCob = PE.Costo / (1 - (Producto.Cobertura / 100));
+                Producto.Margen = 100 - ((Producto.PrecioCob / Producto.PrecioFinal) * 100)
+                $("#" + i + "_Margen").val(Producto.Margen.toFixed(2));
+            
                 Producto.PrecioFinal = Producto.PrecioCob / (1 - (Producto.Margen / 100));
                 Producto.PrecioMin = Producto.PrecioCob / (1 - (Producto.MargenMin / 100));
 
@@ -807,7 +782,7 @@ function onChangePrecioFijo(i) {
 
 
                 $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal).toFixed(2)));
-          
+
                 $("#" + i + "_PrecioCob").text(formatoDecimal(parseFloat(Producto.PrecioCob).toFixed(2)));
                 $("#" + i + "_PrecioMin").text(formatoDecimal(parseFloat(Producto.PrecioMin).toFixed(2)));
                 if (Moneda == "CRC") {
@@ -826,11 +801,19 @@ function onChangePrecioFijo(i) {
                 }
                 ProdCadena.push(Producto);
             } else {
-                ProdCadena[x].Margen = parseFloat($("#" + i + "_Margen").val());
+
+                var PrecioImp = parseFloat($("#" + i + "_InputPrecioFijo").val());
+                var PrecioFinal = PrecioImp / 1.13;
+
+                ProdCadena[x].PrecioCob = PE.Costo / (1 - (ProdCadena[x].Cobertura / 100));
+                ProdCadena[x].PrecioFinal = PrecioFinal;
+                ProdCadena[x].Margen = 100 - ((ProdCadena[x].PrecioCob / PrecioFinal) * 100)
+                $("#" + i + "_Margen").val(ProdCadena[x].Margen.toFixed(2));
+
                 ProdCadena[x].Cobertura = parseFloat($("#" + i + "_Cobertura").val());
                 ProdCadena[x].MargenMin = parseFloat($("#" + i + "_MargenMin").val());
-                ProdCadena[x].PrecioCob = PE.Costo / (1 - (ProdCadena[x].Cobertura / 100));
-                ProdCadena[x].PrecioFinal = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].Margen / 100));
+            
+             
                 ProdCadena[x].PrecioMin = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].MargenMin / 100));
                 ProdCadena[x].Seteable = $("#" + i + "_mdcheckbox").prop('checked');
                 var PrecioImp = ProdCadena[x].PrecioFinal * 1.13;
@@ -862,10 +845,10 @@ function onChangePrecioFijo(i) {
         else {
             var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
             var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
-           if (ProdCadena[x].Cobertura == Cobertura && ProdCadena[x].Margen == Margen && ProdCadena[x].MargenMin == MargenMin && Existe != undefined) {
+            if (ProdCadena[x].Cobertura == Cobertura && ProdCadena[x].Margen == Margen && ProdCadena[x].MargenMin == MargenMin && Existe != undefined) {
 
-             
-              
+
+
                 ProdCadena.splice(x, 1);
             }
 
@@ -1113,7 +1096,7 @@ function validarMargen(e) {
             })
             return false;
         }
-        else if ( e.Cobertura == null || e.Cobertura < 0) {
+        else if (e.Cobertura == null || e.Cobertura < 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
