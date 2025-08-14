@@ -26,6 +26,8 @@ namespace NOVAAPP.Pages.Aprovisionamiento
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
         private readonly ICrudApi<ProveedoresViewModel, int> proveedores;
         private readonly ICrudApi<ImpuestosViewModel, int> impuestos;
+        private readonly ICrudApi<BitacoraMinimosViewModel, int> minimos;
+
 
         [BindProperty]
         public AprovisionamientoViewModel Aprovisionamiento { get; set; }
@@ -53,23 +55,25 @@ namespace NOVAAPP.Pages.Aprovisionamiento
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
+        [BindProperty]
+        public BitacoraMinimosViewModel[] Minimo { get; set; }
 
-
-        public NuevoModel(ICrudApi<AprovisionamientoProductosViewModel, int> aprovisionamientoProductos, ICrudApi<ImpuestosViewModel, int> impuestos, ICrudApi<AprovisionamientoViewModel, int> service, ICrudApi<ProveedoresViewModel, int> proveedores, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<SubCategoriasViewModel, int> subCategorias, ICrudApi<BodegasViewModel, int> bodegas) //CTOR 
+        public NuevoModel(ICrudApi<AprovisionamientoProductosViewModel, int> aprovisionamientoProductos, ICrudApi<ImpuestosViewModel, int> impuestos, ICrudApi<BitacoraMinimosViewModel, int> minimos, ICrudApi<AprovisionamientoViewModel, int> service, ICrudApi<ProveedoresViewModel, int> proveedores, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<SubCategoriasViewModel, int> subCategorias, ICrudApi<BodegasViewModel, int> bodegas) //CTOR 
         {
-            this.aprovisionamientoProductos = aprovisionamientoProductos; 
+            this.aprovisionamientoProductos = aprovisionamientoProductos;
             this.categorias = categorias;
             this.subCategorias = subCategorias;
             this.bodegas = bodegas;
             this.service = service;
             this.proveedores = proveedores;
             this.impuestos = impuestos;
+            this.minimos = minimos;
         }
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
-            
+
                 var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
                 if (string.IsNullOrEmpty(Roles.Where(a => a == "81").FirstOrDefault()))
                 {
@@ -81,10 +85,11 @@ namespace NOVAAPP.Pages.Aprovisionamiento
                 Categorias = await categorias.ObtenerLista("");
                 filtro.Procesado = true;
                 SubCategorias = await subCategorias.ObtenerLista(filtro);
-           
+
                 AprovisionamientoProductos = await aprovisionamientoProductos.ObtenerListaEspecial("");
                 Proveedores = await proveedores.ObtenerListaEspecial("");
                 Impuestos = await impuestos.ObtenerLista("");
+                Minimo = await minimos.ObtenerLista("");
 
 
 

@@ -26,6 +26,9 @@ namespace NOVAAPP.Pages.Aprovisionamiento
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
         private readonly ICrudApi<ProveedoresViewModel, int> proveedores;
         private readonly ICrudApi<ImpuestosViewModel, int> impuestos;
+        private readonly ICrudApi<BitacoraMinimosViewModel, int> minimos;
+
+
 
         [BindProperty]
         public AprovisionamientoViewModel Aprovisionamiento { get; set; }
@@ -52,7 +55,10 @@ namespace NOVAAPP.Pages.Aprovisionamiento
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
-        public EditarModel(ICrudApi<AprovisionamientoProductosViewModel, int> aprovisionamientoProductos, ICrudApi<ImpuestosViewModel, int> impuestos, ICrudApi<AprovisionamientoViewModel, int> service, ICrudApi<ProveedoresViewModel, int> proveedores, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<SubCategoriasViewModel, int> subCategorias, ICrudApi<BodegasViewModel, int> bodegas) //CTOR 
+
+        [BindProperty]
+        public BitacoraMinimosViewModel[] Minimo { get; set; }
+        public EditarModel(ICrudApi<AprovisionamientoProductosViewModel, int> aprovisionamientoProductos, ICrudApi<BitacoraMinimosViewModel, int> minimos, ICrudApi<ImpuestosViewModel, int> impuestos,  ICrudApi<AprovisionamientoViewModel, int> service, ICrudApi<ProveedoresViewModel, int> proveedores, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<SubCategoriasViewModel, int> subCategorias, ICrudApi<BodegasViewModel, int> bodegas) //CTOR 
         {
             this.aprovisionamientoProductos = aprovisionamientoProductos;
             this.categorias = categorias;
@@ -61,6 +67,7 @@ namespace NOVAAPP.Pages.Aprovisionamiento
             this.service = service;
             this.proveedores = proveedores;
             this.impuestos = impuestos;
+            this.minimos = minimos;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -82,6 +89,7 @@ namespace NOVAAPP.Pages.Aprovisionamiento
                 Proveedores = await proveedores.ObtenerListaEspecial("");
            
                 Impuestos = await impuestos.ObtenerLista("");
+                Minimo = await minimos.ObtenerLista("");
 
 
 

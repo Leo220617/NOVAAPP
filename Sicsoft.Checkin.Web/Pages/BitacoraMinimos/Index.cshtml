@@ -129,22 +129,7 @@
                     <div class="box-body">
                         <form method="get">
                             <div class="row">
-                                <div class="col-sm-2 pr-1">
-                                    <div class="form-group">
-                                        <label>Fecha Inicial</label>
-                                        <input class="form-control " id="FecInicial" type="date" asp-for="filtro.FechaInicial">
-                                    </div>
-
-
-                                </div>
-
-                                <div class="col-sm-2 pl-1">
-                                    <div class="form-group">
-                                        <label>Fecha Final</label>
-                                        <input class="form-control" id="FecFinal" type="date" asp-for="filtro.FechaFinal">
-                                    </div>
-                                </div>
-
+                            
   
                      
                    
@@ -153,7 +138,7 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="cyber">Bodega:</label>
-                                    <select class="form-control select2" id="Bodega" asp-for="filtro.Codigo2" required>
+                                    <select class="form-control select2" id="Bodega" asp-for="filtro.Codigo1" required>
                                         <option value="0"> Seleccione</option>
 
                                         @foreach (var item in Model.Bodegas)
@@ -175,7 +160,7 @@
                                <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="cyber">Categoría:</label>
-                                    <select class="form-control select2" id="Caja" asp-for="filtro.Codigo1" required>
+                                    <select class="form-control select2" id="Caja" asp-for="filtro.Codigo2" required>
                                         <option value="0"> Seleccione</option>
 
                                         @foreach (var item in Model.Categorias)
@@ -231,7 +216,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Acción</th>
+                                
                                   
                                     <th>Código</th>
                                     <th>Nombre</th>
@@ -239,7 +224,7 @@
                                     <th>Categoria</th>
                                     <th>Minimo</th>
                                     <th>Stock</th>
-                                    <th>Fecha</th>
+
                           
 
 
@@ -253,12 +238,7 @@
                                         <td>
                                             @item.id
                                         </td>
-                                        <td align="center" style="padding-top:15px;">
-                                 
-                                            <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
-                                            &nbsp;
-
-                                        </td>
+                                
                                        
 
                                         <td>
@@ -267,16 +247,13 @@
                                         <td>
                                             @item.NombreProducto
                                         </td>
-                                        <td>  @(Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault().CodSAP + "-" + Model.Bodegas.Where(a => a.id == item.idBodega).FirstOrDefault().Nombre) </td>
+                                        <td>  @(Model.Bodegas.Where(a => a.CodSAP == item.Bodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.CodSAP == item.Bodega).FirstOrDefault().CodSAP + "-" + Model.Bodegas.Where(a => a.CodSAP == item.Bodega).FirstOrDefault().Nombre) </td>
                                         <td>  @(Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault().CodSAP + "-" + Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault().Nombre) </td>
 
                                         <td>  @Math.Round(@item.Minimo, 2).ToString("C", formato)</td>
-                                        <td>  @Math.Round(@item.Stock, 2).ToString("C", formato)</td>
+                                        <td>  @Math.Round(@item.StockReal, 2).ToString("C", formato)</td>
                                   
 
-                                        <td>
-                                            @item.Fecha
-                                        </td>
 
 
 
@@ -289,15 +266,15 @@
                             <tfoot>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Acción</th>
-                               
+                                 
+
                                     <th>Código</th>
                                     <th>Nombre</th>
                                     <th>Bodega</th>
                                     <th>Categoria</th>
                                     <th>Minimo</th>
                                     <th>Stock</th>
-                                    <th>Fecha</th>
+
                                 </tr>
                             </tfoot>
                         </table>

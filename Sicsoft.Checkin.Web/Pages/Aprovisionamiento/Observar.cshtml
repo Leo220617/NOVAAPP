@@ -17,6 +17,7 @@
 @using Microsoft.AspNetCore.Mvc;
 @using Microsoft.AspNetCore.Mvc.RazorPages;
 @using Microsoft.Extensions.Configuration;
+@using NOVAAPP.Models
 @using Refit;
 @using Sicsoft.Checkin.Web.Models;
 @inject IHttpContextAccessor httpContextAccessor
@@ -477,8 +478,35 @@
 
 
                         <div class="col-md-4">
-                            <h5> <b>Sub Categoría: </b>    @(Model.SubCategorias.Where(a => a.id == Model.Aprovisionamiento.idSubCategoria).FirstOrDefault() == null ? "SubCategoria Inexistente" : Model.SubCategorias.Where(a => a.id == Model.Aprovisionamiento.idSubCategoria).FirstOrDefault().id + " - " + Model.SubCategorias.Where(a => a.id == Model.Aprovisionamiento.idSubCategoria).FirstOrDefault().Nombre)</h5>
+                            <h5>
+                                <b>Sub Categorías: </b>
+                                @{
+                                    var allSubcats = Model.SubCategorias ?? Array.Empty<SubCategoriasViewModel>();
+                                    var dict = allSubcats.ToDictionary(sc => sc.id, sc => (string)sc.Nombre);
+
+                                    var ids = (Model.Aprovisionamiento.SubCategorias ?? "")
+                                    .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(s => s.Trim())
+                                    .Where(s => s.Length > 0);
+
+                                    var nombres = new List<string>();
+                                    foreach (var s in ids)
+                                    {
+                                        if (int.TryParse(s, out var id) && dict.TryGetValue(id, out var nombre))
+                                        {
+                                            nombres.Add($"{id} - {nombre}");
+                                        }
+                                        else
+                                        {
+                                            nombres.Add($"{s} - SubCategoria Inexistente");
+                                        }
+                                    }
+
+                                    @Html.Raw(string.Join("<br/>", nombres))
+                                }
+                            </h5>
                         </div>
+
                         <div class="col-md-4">
                             <h5> <b>Clasificación: </b>@Model.Aprovisionamiento.Clasificacion</h5>
                         </div>

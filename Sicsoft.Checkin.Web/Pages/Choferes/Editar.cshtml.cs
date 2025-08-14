@@ -17,13 +17,17 @@ namespace NOVAAPP.Pages.Choferes
     public class EditarModel : PageModel
     {
         private readonly ICrudApi<ChoferesViewModel, int> service;
+        private readonly ICrudApi<UsuariosViewModel, int> usuarios;
 
         [BindProperty]
         public ChoferesViewModel Chofer { get; set; }
 
-        public EditarModel(ICrudApi<ChoferesViewModel, int> service)
+        [BindProperty]
+        public UsuariosViewModel[] Usuarios { get; set; }
+        public EditarModel(ICrudApi<ChoferesViewModel, int> service, ICrudApi<UsuariosViewModel, int> usuarios)
         {
             this.service = service;
+            this.usuarios = usuarios;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -34,6 +38,7 @@ namespace NOVAAPP.Pages.Choferes
                 {
                     return RedirectToPage("/NoPermiso");
                 }
+                Usuarios = await usuarios.ObtenerLista("");
                 Chofer = await service.ObtenerPorId(id);
                 return Page();
             }

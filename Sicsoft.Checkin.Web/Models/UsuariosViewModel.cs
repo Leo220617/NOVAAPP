@@ -17,6 +17,7 @@ namespace NOVAAPP.Models
 
       
         public string NombreUsuario { get; set; }
+        public string Correo { get; set; }
 
         public string Clave { get; set; }
 

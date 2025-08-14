@@ -22,6 +22,7 @@ namespace NOVAAPP.Pages.MantenimientoProductos
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
         private readonly ICrudApi<ProductosViewModel, string> productos;
         private readonly ICrudApi<SubCategoriasViewModel, int> subCategorias;
+        private readonly ICrudApi<BitacoraMinimosViewModel, int> minimos;
 
 
 
@@ -44,18 +45,22 @@ namespace NOVAAPP.Pages.MantenimientoProductos
         [BindProperty]
         public ProductosViewModel[] Productos { get; set; }
 
+        [BindProperty]
+        public BitacoraMinimosViewModel[] Minimo { get; set; }
 
 
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
-        public NuevoModel(ICrudApi<LogsProductosAprovisionamientoViewModel, int> service, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<ProductosViewModel, string> productos, ICrudApi<SubCategoriasViewModel, int> subCategorias)
+
+        public NuevoModel(ICrudApi<LogsProductosAprovisionamientoViewModel, int> service, ICrudApi<BitacoraMinimosViewModel, int> minimos, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<ProductosViewModel, string> productos, ICrudApi<SubCategoriasViewModel, int> subCategorias)
         {
             this.service = service;
             this.categorias = categorias;
             this.bodegas = bodegas;
             this.productos = productos;
             this.subCategorias = subCategorias;
+            this.minimos = minimos;
 
 
         }
@@ -81,7 +86,7 @@ namespace NOVAAPP.Pages.MantenimientoProductos
                 ParametrosFiltros filtro = new ParametrosFiltros();
                 filtro.Externo = true;
                 filtro.Activo = true;
-
+                Minimo = await minimos.ObtenerLista("");
                 var ProductoX = await productos.ObtenerLista(filtro);
                 Productos = ProductoX.Where(a => a.Activo == true).ToArray();
 

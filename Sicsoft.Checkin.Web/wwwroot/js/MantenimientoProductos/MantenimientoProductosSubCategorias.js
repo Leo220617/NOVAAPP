@@ -53,7 +53,64 @@ var ProdSinStock = [];
 var htmlS = "";
 var inicio = false;
 var MiSucursal = [];
+var Minimos = [];
+function ValidarMinimos() {
+    try {
+        if (Minimos.length > 0) {
+            // Si no existe aún el botón, lo agregamos
+            if (!document.getElementById("btnCerrarToasts")) {
+                $("body").prepend(`
+                    <button id="btnCerrarToasts" 
+                        style="margin: 10px; padding: 10px 15px; background-color: red; color: white; 
+                        border: none; border-radius: 5px; cursor: pointer; font-size: 14px; z-index: 9999;">
+                        Cerrar todas las notificaciones
+                    </button>
+                `);
 
+                // Evento para cerrar todos los toasts y ocultar el botón
+                $("#btnCerrarToasts").on("click", function () {
+                    $.toast().reset('all');
+                    $("#btnCerrarToasts").remove();
+                });
+            }
+        }
+
+        for (var i = 0; i < Minimos.length; i++) {
+            $.toast({
+                heading: 'Precaución',
+                text: 'El producto ' + Minimos[i].CodigoProducto + ' - ' + Minimos[i].NombreProducto +
+                    ' NO alcanza el mínimo de ' + Minimos[i].Minimo + ' unidades en stock, el stock real es de ' +
+                    Minimos[i].StockReal + ' en la Bodega ' + Minimos[i].Bodega,
+                position: 'top-right',
+                loaderBg: '#ff6849',
+                icon: 'warning',
+                hideAfter: 100000000000,
+                stack: 100000,
+                beforeShow: function () {
+                    $(".jq-toast-single").css({
+                        "font-size": "18px"
+                    });
+                    $(".jq-toast-heading").css({
+                        "font-size": "20px",
+                        "font-weight": "bold"
+                    });
+                },
+                afterHidden: function () {
+                    // Si ya no hay toasts visibles, quitamos el botón
+                    if ($(".jq-toast-single:visible").length === 0) {
+                        $("#btnCerrarToasts").remove();
+                    }
+                }
+            });
+        }
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar recuperar información ' + e
+        });
+    }
+}
 
 function Recuperar() {
     try {
@@ -63,11 +120,11 @@ function Recuperar() {
         Productos = JSON.parse($("#Productos").val());
         Categorias = JSON.parse($("#Categorias").val());
         SubCategorias = JSON.parse($("#SubCategorias").val());
-
+        Minimos = JSON.parse($("#Minimos").val());
 
 
         RellenaCategorias()
-
+        ValidarMinimos()
 
 
 

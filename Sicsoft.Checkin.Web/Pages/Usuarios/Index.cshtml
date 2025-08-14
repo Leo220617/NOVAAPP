@@ -170,6 +170,7 @@
 
                                         <th>Nombre</th>
                                         <th>Usuario</th>
+                                        <th>Correo</th>
                                         <th>Vendedor</th>
                                         <th>% Descuento</th>
 
@@ -197,6 +198,7 @@
                                         <td>  @( Model.RolesLista.Where(a => a.idRol == item.idRol).FirstOrDefault() == null ? "Rol Inexistente" :  Model.RolesLista.Where(a => a.idRol == item.idRol).FirstOrDefault().NombreRol) </td>
                                         <td>         @item.Nombre </td>
                                         <td>         @item.NombreUsuario </td>
+                                        <td>         @item.Correo </td>
                                         <td>        @( Model.Vendedor.Where(a => a.id == item.idVendedor).FirstOrDefault() == null ? "Vendedor Inexistente" :  Model.Vendedor.Where(a => a.id == item.idVendedor).FirstOrDefault().Nombre) </td>
                                           <td>        @Math.Round(item.Descuento, 2)% </td>
 
@@ -227,6 +229,7 @@
 
                                     <th>Nombre</th>
                                     <th>Usuario</th>
+                                    <th>Correo</th>
                                     <th>Vendedor</th>
                                     <th>% Descuento</th>
                                     <th>Estado</th>

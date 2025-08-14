@@ -243,6 +243,7 @@
                                     <th>Acción</th>
                                     <th>Categoría</th>
                                     <th>Sub Categoría</th>
+                                    <th>Sub Categorías</th>
                                     <th>Fecha Creado</th>
                                     <th>Clasificación</th>
                                     <th>Indicador <</th>
@@ -284,6 +285,41 @@
                                         <td>
                                             @(Model.SubCategorias.Where(a => a.id == item.idSubCategoria).FirstOrDefault() == null ? "SubCategoria Inexistente" : Model.SubCategorias.Where(a => a.id == item.idSubCategoria).FirstOrDefault().id + " - " + Model.SubCategorias.Where(a => a.id == item.idSubCategoria).FirstOrDefault().Nombre)
                                         </td>
+                                        <td>
+                                            @{
+                                                // Normaliza la lista completa de subcategorías del modelo (si viene null, usa array vacío)
+                                                var allSubcats = Model.SubCategorias ?? Array.Empty<dynamic>();
+                                                // Si conocés el tipo exacto, podés usar Array.Empty<SubCategoriasViewModel>(), pero evitaré el nombre para no chocar con el namespace.
+
+                                                // Diccionario id -> Nombre para lookup rápido
+                                                // Cambiá "id" y "Nombre" si tus propiedades se llaman distinto (por ejemplo Id y Nombre)
+                                                var dict = allSubcats.ToDictionary(sc => (int)sc.id, sc => (string)sc.Nombre);
+
+                                                // Toma la cadena "10; 14", la separa y limpia
+                                                var ids = (item.SubCategorias ?? "")
+                                                .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                                .Select(s => s.Trim())
+                                                .Where(s => !string.IsNullOrEmpty(s));
+
+                                                var filas = new List<string>();
+                                                foreach (var s in ids)
+                                                {
+                                                    if (int.TryParse(s, out var id) && dict.TryGetValue(id, out var nombre))
+                                                    {
+                                                        filas.Add($"{id} - {nombre}");
+                                                    }
+                                                    else
+                                                    {
+                                                        filas.Add($"{s} - SubCategoria Inexistente");
+                                                    }
+                                                }
+
+                                                var html = string.Join("<br/>", filas);
+                                            }
+                                            @Html.Raw(html)
+                                        </td>
+
+
                                         <td>
                                             @item.Fecha.ToString("dd/MM/yyyy")
                                         </td>
@@ -341,6 +377,7 @@
                                     <th>Acción</th>
                                     <th>Categoría</th>
                                     <th>Sub Categoría</th>
+                                    <th>Sub Categorías</th>
                                     <th>Fecha Creado</th>
                                     <th>Clasificación</th>
                                     <th>Indicador <</th>

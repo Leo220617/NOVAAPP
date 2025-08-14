@@ -49,7 +49,69 @@ var AprovisionamientoProductos = [];
 var SubCategorias = [];
 var ProdClientes2 = [];
 var Proveedores = [];
+var Productos = [];
 var Impuestos = [];
+var Minimos = [];
+var Inicio = false;
+var CategoriaActual = 0;
+
+function ValidarMinimos() {
+    try {
+        if (Minimos.length > 0) {
+            // Si no existe aún el botón, lo agregamos
+            if (!document.getElementById("btnCerrarToasts")) {
+                $("body").prepend(`
+                    <button id="btnCerrarToasts" 
+                        style="margin: 10px; padding: 10px 15px; background-color: red; color: white; 
+                        border: none; border-radius: 5px; cursor: pointer; font-size: 14px; z-index: 9999;">
+                        Cerrar todas las notificaciones
+                    </button>
+                `);
+
+                // Evento para cerrar todos los toasts y ocultar el botón
+                $("#btnCerrarToasts").on("click", function () {
+                    $.toast().reset('all');
+                    $("#btnCerrarToasts").remove();
+                });
+            }
+        }
+
+        for (var i = 0; i < Minimos.length; i++) {
+            $.toast({
+                heading: 'Precaución',
+                text: 'El producto ' + Minimos[i].CodigoProducto + ' - ' + Minimos[i].NombreProducto +
+                    ' NO alcanza el mínimo de ' + Minimos[i].Minimo + ' unidades en stock, el stock real es de ' +
+                    Minimos[i].StockReal + ' en la Bodega ' + Minimos[i].Bodega,
+                position: 'top-right',
+                loaderBg: '#ff6849',
+                icon: 'warning',
+                hideAfter: 100000000000,
+                stack: 100000,
+                beforeShow: function () {
+                    $(".jq-toast-single").css({
+                        "font-size": "18px"
+                    });
+                    $(".jq-toast-heading").css({
+                        "font-size": "20px",
+                        "font-weight": "bold"
+                    });
+                },
+                afterHidden: function () {
+                    // Si ya no hay toasts visibles, quitamos el botón
+                    if ($(".jq-toast-single:visible").length === 0) {
+                        $("#btnCerrarToasts").remove();
+                    }
+                }
+            });
+        }
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar recuperar información ' + e
+        });
+    }
+}
 function Recuperar() {
     try {
 
@@ -60,10 +122,11 @@ function Recuperar() {
         AprovisionamientoProductos = JSON.parse($("#AprovisionamientoProductos").val());
         Proveedores = JSON.parse($("#Proveedores").val());
         Impuestos = JSON.parse($("#Impuestos").val());
-
+        Impuestos = JSON.parse($("#Impuestos").val());
+        Minimos = JSON.parse($("#Minimos").val());
 
         RellenaCategorias()
-
+        ValidarMinimos()
 
 
 
@@ -104,11 +167,59 @@ function RellenaCategorias() {
 }
 
 
+function generarCheckboxSubcategorias(idCategoriaInterno) {
+    try {
+
+        CategoriaActual = idCategoriaInterno;
+        var html = "";
+        $("#contenedorSubcategorias").html(html); // limpia
+
+        // Filtra subcategorías por id interno de categoría
+        var subcats = SubCategorias.filter(function (sc) {
+            return String(sc.idCategoria) === String(idCategoriaInterno);
+        });
+
+        if (subcats.length === 0) {
+            html += "<div class='col-12'>No hay subcategorías para esta categoría.</div>";
+            $("#contenedorSubcategorias").html(html);
+            return;
+        }
+
+        // Construye cada checkbox con un for (igual estilo a RellenaCategorias)
+        for (var i = 0; i < subcats.length; i++) {
+            var sc = subcats[i];
+            var id = "md_checkbox_subcat_" + sc.id;
+            var nombre = (sc.Nombre || sc.nombre || "");
+            html +=
+                "<div class='col-12' style=' padding-top: 2%;'>" +
+                "<input type='checkbox' " +
+                "id='" + id + "' " +
+                "name='subcat[]' " +
+                "value='" + sc.id + "' " +
+                "class='chk-col-red' " +
+                "onclick='javascript: onChangeFiltro()' />" +
+                "<label for='" + id + "'> " + sc.id + ' - ' + nombre + " </label>" +
+                "</div>";
+        }
+
+        // Inyecta todo de una vez
+        $("#contenedorSubcategorias").html(html);
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error generando subcategorías: ' + e
+        });
+    }
+}
+
+
 
 function onChangeFiltro() {
     try {
         var idCategoria = $("#CategoriaSeleccionado").val();
-        var idSubCategoria = $("#SubCategoriaSeleccionado").val();
         var Clasificacion = $("#ClasificacionSeleccionado").val();
         var Indicador = parseFloat($("#Indicador").val());
         var IndicadorX = parseFloat($("#IndicadorX").val());
@@ -139,10 +250,25 @@ function onChangeFiltro() {
 
         if (idCategoria != 0) {
             filters.push(a => a.Id_Categoria == idCategoria);
+
+            
+            if (idCategoria != CategoriaActual) {
+
+                generarCheckboxSubcategorias(idCategoria);
+            }                // <<-- Generar checkboxes dinámicamente
         }
-        if (idSubCategoria != 0) {
-            filters.push(a => a.Id_Subcategoria == idSubCategoria);
+
+        const subcatsSeleccionadas = $('#contenedorSubcategorias input[name="subcat[]"]:checked')
+            .map(function () { return $(this).val(); })
+            .get();
+
+        if (subcatsSeleccionadas.length > 0) {
+            // Compara por string para evitar problemas de tipos (número vs string)
+            filters.push(a => subcatsSeleccionadas.includes(String(a.Id_Subcategoria)));
         }
+        //if (idSubCategoria != 0) {
+        //    filters.push(a => a.Id_Subcategoria == idSubCategoria);
+        //}
         if (Clasificacion != 0) {
             filters.push(a => a.Cat_Art_en_Bodega == Clasificacion);
         }
@@ -161,11 +287,8 @@ function onChangeFiltro() {
 
         // Lógica para manejar habilitación de SubCategorías
         if (idCategoria != 0) {
-            $("#SubCategoriaSeleccionado").prop("disabled", false);
-            if (idSubCategoria == 0) {
-                RellenaSubCategorias();
-            }
-              
+          /*  $("#SubCategoriaSeleccionado").prop("disabled", false);*/
+           
             
         }
 
@@ -185,32 +308,6 @@ function formatoDecimal(numero) {
 
     // En el alemán la coma se utiliza como separador decimal y el punto para los millares
     return new Intl.NumberFormat("en-US").format(number);
-}
-function RellenaSubCategorias() {
-    try {
-        var html = "";
-        $("#SubCategoriaSeleccionado").html(html);
-        html += "<option value='0' > Seleccione Sub Categoria </option>";
-       var CategoriaSAP = $("#CategoriaSeleccionado").val();
-        var idCategoria = Categorias.find(a => a.CodSAP == CategoriaSAP);
-
-        SubCategorias = SubCategorias.filter(a => a.idCategoria == idCategoria.id);
-        for (var i = 0; i < SubCategorias.length; i++) {
-            html += "<option value='" + SubCategorias[i].id + "' > " + SubCategorias[i].id + " - " + SubCategorias[i].Nombre + " </option>";
-        }
-
-
-
-        $("#SubCategoriaSeleccionado").html(html);
-    } catch (e) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Error ' + e
-
-        })
-    }
-
 }
 
 
@@ -352,7 +449,7 @@ function onChangeCompra(i) {
 
 
         var idCategoria = $("#CategoriaSeleccionado").val();
-        var idSubCategoria = $("#SubCategoriaSeleccionado").val();
+
 
 
 
@@ -555,11 +652,23 @@ function Generar() {
         if ($("#md_checkbox_Todas").prop('checked')) {
             filtros += "T;";
         }
+        var subcatsSeleccionadas = "";
+        var checks = document.querySelectorAll('#contenedorSubcategorias input[name="subcat[]"]:checked');
+        for (var i = 0; i < checks.length; i++) {
+            subcatsSeleccionadas += checks[i].value + ";";
+        }
+
+        var subcatsString = $('#contenedorSubcategorias input[name="subcat[]"]:checked')
+            .map(function () { return $(this).val(); })
+            .get()
+            .filter(function (v) { return v != null && String(v).trim() !== ""; })
+            .join(";");
         var EncAprovisionamiento = {
 
             id: 0,
             idCategoria: $("#CategoriaSeleccionado").val(),
-            idSubCategoria: $("#SubCategoriaSeleccionado").val(),
+            idSubCategoria: 0,
+            SubCategorias: subcatsString,
             idUsuarioCreador: 0,
             Fecha: $("#Fecha").val(),
             Status: "P",
@@ -702,11 +811,23 @@ function GeneraryEnviar() {
         if ($("#md_checkbox_Todas").prop('checked')) {
             filtros += "T;";
         }
+        var subcatsSeleccionadas = "";
+        var checks = document.querySelectorAll('#contenedorSubcategorias input[name="subcat[]"]:checked');
+        for (var i = 0; i < checks.length; i++) {
+            subcatsSeleccionadas += checks[i].value + ";";
+        }
+
+        var subcatsString = $('#contenedorSubcategorias input[name="subcat[]"]:checked')
+            .map(function () { return $(this).val(); })
+            .get()
+            .filter(function (v) { return v != null && String(v).trim() !== ""; })
+            .join(";");
         var EncAprovisionamiento = {
 
             id: 0,
             idCategoria: $("#CategoriaSeleccionado").val(),
-            idSubCategoria: $("#SubCategoriaSeleccionado").val(),
+            idSubCategoria: 0,
+            SubCategorias: subcatsString,
             idUsuarioCreador: 0,
             Fecha: $("#Fecha").val(),
             Status: "E",
@@ -841,16 +962,15 @@ function validarAprovisionamiento(e) {
             return false;
         }
 
-        if (e.idSubCategoria == "" || e.idSubCategoria == null || e.idSubCategoria == 0) {
+        var subcatsSeleccionadas = document.querySelectorAll('#contenedorSubcategorias input[name="subcat[]"]:checked');
+        if (subcatsSeleccionadas.length === 0) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Ha ocurrido un error al intentar agregar, falta la SubCategoria'
-
-            })
+                text: 'Debe seleccionar al menos una SubCategoría'
+            });
             return false;
         }
-
 
         if (e.Clasificacion == "" || e.Clasificacion == null || e.Clasificacion == 0) {
             Swal.fire({

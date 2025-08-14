@@ -5,6 +5,7 @@ namespace NOVAAPP.Models
     public class ChoferesViewModel
     {
         public int id { get; set; }
+        public int idLogin { get; set; }
 
         [StringLength(150)]
         public string Nombre { get; set; }

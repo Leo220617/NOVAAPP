@@ -8,6 +8,7 @@ namespace NOVAAPP.Models
         public int id { get; set; }
         public int idCategoria { get; set; }
         public int idSubCategoria { get; set; }
+        public string SubCategorias { get; set; }
         public int idUsuarioCreador { get; set; }
         public DateTime Fecha { get; set; }
         public string Status { get; set; }
