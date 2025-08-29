@@ -184,6 +184,7 @@
 
         function Generar() {
             try {
+                onChangeInstitucion();
                 var Exoneracion = {
                     id: $("#id").val(),
                     TipoDoc: $("#selectTD").val(),
@@ -195,6 +196,11 @@
                     FechaVencimiento: $("#FecVen").val(),
                     Imagen: $("#Imagen").val(),
                     idImpuesto: $("#Impuesto").val(),
+                    CodigoInstitucion: $("#CodigoInstitucion").val(),
+                    NombreInstitucionOtro: $("#NomInstOtro").val(),
+                    ArticuloLey: $("#ArticuloLey").val(),
+                    IncisoLey: $("#IncisoLey").val(),
+                    TipoDocumentoOtro: $("#TipoDocOtro").val(),
                     Detalle: ProdCadena
                 };
 
@@ -305,11 +311,103 @@
 
             } else if (e.idCliente == "" || e.idCliente == null || e.idCliente == undefined) {
                 return false;
-            } else {
+            } else if (e.CodigoInstitucion == "" || e.CodigoInstitucion == null || e.CodigoInstitucion == undefined) {
+                return false;
+            } else if (e.idImpuesto == "" || e.idImpuesto == null || e.idImpuesto == undefined || e.idImpuesto == 0) {
+                return false;
+            } else if (e.CodigoInstitucion == "99" && (e.NombreInstitucionOtro == "" || e.NombreInstitucionOtro == undefined || e.NombreInstitucionOtro == null)) {
+                return false;
+            } else if (e.TipoDoc == "99" && (e.TipoDocumentoOtro == "" || e.TipoDocumentoOtro == undefined || e.TipoDocumentoOtro == null)) {
+                return false;
+            }
+
+            else {
                 return true;
             }
-        }
 
+
+        }
+        function onChangeInstitucion() {
+            try {
+                var Institucion = $("#CodigoInstitucion").val();
+                var nombre = "";
+
+                switch (Institucion) {
+                    case "01": nombre = "Ministerio de Hacienda"; break;
+                    case "02": nombre = "Ministerio de Relaciones Exteriores y Culto"; break;
+                    case "03": nombre = "Ministerio de Agricultura y Ganadería"; break;
+                    case "04": nombre = "Ministerio de Economía, Industria y Comercio"; break;
+                    case "05": nombre = "Cruz Roja Costarricense"; break;
+                    case "06": nombre = "Benemérito Cuerpo de Bomberos de Costa Rica"; break;
+                    case "07": nombre = "Asociación Obras del Espíritu Santo"; break;
+                    case "08": nombre = "Federación Cruzada Nacional de protección al Anciano (Fecrun)"; break;
+                    case "09": nombre = "Escuela de Agricultura de la Región Húmeda (EARTH)"; break;
+                    case "10": nombre = "Instituto Centroamericano de Administración de Empresas (INC)"; break;
+                    case "11": nombre = "Junta de Protección Social (JPS)"; break;
+                    case "12": nombre = "Autoridad Reguladora de los Servicios Públicos (Aresep)"; break;
+                    case "99": nombre = "Otros"; break;
+                    default: nombre = ""; break;
+                }
+                $("#NomInst").val(nombre);
+                if (Institucion == "99") {
+                    $("#DivNomInstOtro").prop("hidden", false);
+                } else {
+                    $("#DivNomInstOtro").prop("hidden", true);
+                }
+
+
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
+        function onChangeTipoDoc() {
+            try {
+                var TipoDoc = $("#selectTD").val();
+
+                if (TipoDoc == "99") {
+                    $("#DivTD").prop("hidden", false);
+                } else {
+                    $("#DivTD").prop("hidden", true);
+                }
+
+
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
+        function onChangeImpuesto() {
+            try {
+                var Impuestos = JSON.parse($("#Impuestos").val());
+
+                var MiImpuesto = $("#Impuesto").val();
+
+                var IMP = Impuestos.find(a => a.id == MiImpuesto);
+                var valor = 13 - IMP.Tarifa;
+                $("#PorExon").val(valor);
+
+
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
     </script>
     <script>
         var ImageBae64 = '';
@@ -403,6 +501,7 @@
         <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
         <li class="breadcrumb-item active">Editar Exoneración</li>
     </ol>
+    <input hidden id="Impuestos" value="@JsonConvert.SerializeObject(Model.Impuestos)" />
 </section>
 
     @using Newtonsoft.Json;
@@ -458,7 +557,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="cyber">Tipo de Documento:</label>
-                                <select class="form-control" id="selectTD" required asp-for="Exoneracion.TipoDoc">
+                                <select class="form-control select2" id="selectTD" required asp-for="Exoneracion.TipoDoc">
                                     <option value="01">01 - Compras Autorizadas</option>
                                     <option value="02">02- Ventas Exentas a Diplomáticos</option>
                                     <option value="03">03 - Autorizadas Ley Especial</option>
@@ -466,13 +565,26 @@
                                     <option value="05">05 - Transitorio V</option>
                                     <option value="06">06 - Transitorio IX</option>
                                     <option value="07">07 - Transitorio XVII</option>
+                                    <option value="08">08 - Exoneración a Zona Franca</option>
+                                    <option value="09">09 - Exoneración de servicios complementarios para la exportación articulo 11 RLIVA</option>
+                                    <option value="10">10 - Órgano de las corporaciones municipales</option>
+                                    <option value="11">11 - Exenciones Dirección General de Hacienda Autorización de Impuesto Local Concreta</option>
                                     <option value="99">99 - Otros</option>
 
 
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-4" hidden id="DivTD">
+                            <div class="form-group">
+                                <h5>Tipo de Documento Otro<span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" id="TipoDocOtro" asp-for="Exoneracion.TipoDocumentoOtro" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                </div>
 
+                            </div>
+
+                        </div>
 
                         <div class="col-md-4">
                             <div class="form-group">
@@ -486,18 +598,64 @@
                         </div>
 
 
+
                         <div class="col-md-4">
                             <div class="form-group">
-                                <h5>Nombre de Institución<span class="text-danger">*</span></h5>
+                                <label for="cyber">Nombre de Institución:</label>
+                                <select class="form-control select2" onchange="javascript: onChangeInstitucion();" id="CodigoInstitucion"  asp-for="Exoneracion.CodigoInstitucion" required>
+                                    <option value="01">01 - Ministerio de Hacienda</option>
+                                    <option value="02">02- Ministerio de Relaciones Exteriores y Culto</option>
+                                    <option value="03">03 - Ministerio de Agricultura y Ganadería</option>
+                                    <option value="04">04 - Ministerio de Economía, Industria y Comercio</option>
+                                    <option value="05">05 - Cruz Roja Costarricense</option>
+                                    <option value="06">06 - Benemérito Cuerpo de Bomberos de Costa Rica</option>
+                                    <option value="07">07 - Asociación Obras del Espíritu Santo</option>
+                                    <option value="08">08 - Federación Cruzada Nacional de protección al Anciano (Fecrun)</option>
+                                    <option value="09">09 - Escuela de Agricultura de la Región Húmeda (EARTH)</option>
+                                    <option value="10">10 - Instituto Centroamericano de Administración de Empresas (INC)</option>
+                                    <option value="11">11 - Junta de Protección Social (JPS)</option>
+                                    <option value="11">12 - Autoridad Reguladora de los Servicios Públicos (Aresep)</option>
+                                    <option value="99">99 - Otros</option>
+
+
+                                </select>
+                                <input type="hidden" id="NomInst" name="NomInst">
+                            </div>
+                        </div>
+                        <div class="col-md-4" hidden id="DivNomInstOtro">
+                            <div class="form-group">
+                                <h5>Nombre de Institución Otro<span class="text-danger">*</span></h5>
                                 <div class="controls">
-                                    <input type="text" asp-for="Exoneracion.NomInst" id="NomInst" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                    <input type="text" asp-for="Exoneracion.NombreInstitucionOtro" id="NomInstOtro" class="form-control" required data-validation-required-message="Este campo es requerido">
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <h5>Artículo Ley<span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" asp-for="Exoneracion.ArticuloLey" id="ArticuloLey" class="form-control" required data-validation-required-message="Este campo es requerido" oninput="this.value = this.value.replace(/[^0-9]/g,'');">
                                 </div>
 
                             </div>
 
                         </div>
 
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <h5>Inciso Ley<span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" asp-for="Exoneracion.IncisoLey" id="IncisoLey" class="form-control" required data-validation-required-message="Este campo es requerido" oninput="this.value = this.value.replace(/[^0-9]/g,'');">
+                                </div>
+
+                            </div>
+
+                        </div>
                     </div>
+                   
                     <div class="row">
 
                         <div class="col-md-3">
@@ -509,41 +667,11 @@
                             <label for="cyber">Fecha de Vencimiento:</label>
                             <input type="date" class="form-control" id="FecVen" asp-for="Exoneracion.FechaVencimiento" required />
                         </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <h5>%Exoneración<span class="text-danger">*</span></h5>
-                                <div class="controls">
-                                    <input type="number" id="PorExon" class="form-control" asp-for="Exoneracion.PorExon" required data-validation-required-message="Este campo es requerido">
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <h5>Cliente<span class="text-danger">*</span></h5>
-
-                                <select class="form-control select2  " id="Cliente" asp-for="Exoneracion.idCliente">
-                                    <option selected value='0'> Seleccione Cliente </option>
-                                    @foreach (var item in Model.Cliente)
-                                    {
-                                        <option value="@item.id">@item.Nombre</option>
-                                    }
-
-
-                                </select>
-
-
-
-                            </div>
-                        </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <h5>Impuesto<span class="text-danger">*</span></h5>
 
-                                <select class="form-control select2  " id="Impuesto" asp-for="Exoneracion.idImpuesto">
+                                <select class="form-control select2  " id="Impuesto" onchange="javascript: onChangeImpuesto()" asp-for="Exoneracion.idImpuesto">
                                     <option selected value='0'> Seleccione Impuesto </option>
                                     @foreach (var item in Model.Impuestos)
                                     {
@@ -557,8 +685,38 @@
 
                             </div>
                         </div>
-                    </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <h5>%Exoneración<span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input disabled type="number" id="PorExon" class="form-control" asp-for="Exoneracion.PorExon" required data-validation-required-message="Este campo es requerido">
+                                </div>
 
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <h5>Cliente<span class="text-danger">*</span></h5>
+
+                                <select class="form-control select2  " id="Cliente" asp-for="Exoneracion.idCliente">
+                                    <option selected value='0'> Seleccione Cliente </option>
+                                    @foreach (var item in Model.Cliente)
+                                    {
+                                        <option value="@item.id">@item.Codigo - @item.Nombre</option>
+                                    }
+
+
+                                </select>
+
+
+
+                            </div>
+                        </div>
+                  
+                    </div>
+                </div>
                     <br />
 
                 </div>

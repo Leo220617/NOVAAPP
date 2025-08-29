@@ -16,5 +16,11 @@
         public string Cabys { get; set; }
         public int idExoneracion { get; set; }
 
+        public string Localizacion { get; set; }
+        public string CodigoDescuento { get; set; }
+        public string TipoTransaccion { get; set; }
+        public string IVAFabrica { get; set; }
+        public bool TaxOnly { get; set; }
+
     }
 }

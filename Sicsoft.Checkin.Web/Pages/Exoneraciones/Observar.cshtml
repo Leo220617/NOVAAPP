@@ -317,8 +317,18 @@
                                             <h5> <b>Porcentaje de Exoneración:</b> @Model.Exoneracion.PorExon%</h5>
 
                                         </div>
+                                        <div class="col-2">
+                                           
 
+                                        </div>
+                                        <div class="col-4">
+                                            <h5> <b>Artículo Ley:</b> @Model.Exoneracion.ArticuloLey</h5>
 
+                                        </div>
+                                        <div class="col-4">
+                                            <h5> <b>Inciso Ley:</b> @Model.Exoneracion.IncisoLey</h5>
+
+                                        </div>
 
 
 
@@ -349,8 +359,19 @@
 
                             </address>
                         </div>
+                        @if(Model.Exoneracion.CodigoInstitucion == "99")
+                        {
+                            
+                   
+                        <div class="col-md-4 invoice-col">
+                            <strong>Institución Emisora Otro</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @Model.Exoneracion.NombreInstitucionOtro </strong>
 
 
+                            </address>
+                        </div>
+                        }
                         <div class="col-md-4 invoice-col">
 
                             <strong>
@@ -392,11 +413,36 @@
                                             <p>Transitorio XVII</p>
                                             break;
                                         }
+                                    case "08":
+                                        {
+                                            <p>Exoneración a Zona Franca</p>
+                                            break;
+                                        }
+                                      
+                                    
+                                    case "09":
+                                        {
+                                            <p>Exoneración de servicios complementarios para la exportación articulo 11 RLIVA</p>
+                                            break;
+                                        }
+                                    case "10":
+                                        {
+                                            <p>Órgano de las corporaciones municipales</p>
+                                            break;
+                                        }
+                                    case "11":
+                                        {
+                                            <p>Exenciones Dirección General de Hacienda Autorización de Impuesto Local Concreta</p>
+                                            break;
+                                        }
                                     case "99":
                                         {
                                             <p>Otros</p>
                                             break;
                                         }
+                                       
+                                      
+                                     
                                 }
 
 
@@ -404,6 +450,14 @@
                             <address>
                             </address>
                         </div>
+                        @if(Model.Exoneracion.CodigoInstitucion == "99")
+                        {
+                            <div class="col-4">
+                                <h5> <b>Tipo de Documento Otro:</b> @Model.Exoneracion.TipoDocumentoOtro</h5>
+
+                            </div>
+                        }
+                     
                         <!-- /.col -->
                     </div>
                     <!-- /.row -->
@@ -517,7 +571,16 @@
 
                         </div>
 
+                        <div class="col-2">
+                        </div>
+                        <div class="col-4">
+                            <h5> <b>Artículo Ley:</b> @Model.Exoneracion.ArticuloLey</h5>
 
+                        </div>
+                        <div class="col-4">
+                            <h5> <b>Inciso Ley:</b> @Model.Exoneracion.IncisoLey</h5>
+
+                        </div>
 
 
 
@@ -550,6 +613,19 @@
         </div>
 
 
+        @if (Model.Exoneracion.CodigoInstitucion == "99")
+        {
+
+
+            <div class="col-md-4 invoice-col">
+                <strong>Institución Emisora Otro</strong>
+                <address>
+                    <strong class="text-blue font-size-24"> @Model.Exoneracion.NombreInstitucionOtro </strong>
+
+
+                </address>
+            </div>
+        }
         <div class="col-md-4 invoice-col">
 
             <strong>
@@ -591,17 +667,50 @@
                             <p>Transitorio XVII</p>
                             break;
                         }
+                    case "08":
+                        {
+                            <p>Exoneración a Zona Franca</p>
+                            break;
+                        }
+
+
+                    case "09":
+                        {
+                            <p>Exoneración de servicios complementarios para la exportación articulo 11 RLIVA</p>
+                            break;
+                        }
+                    case "10":
+                        {
+                            <p>Órgano de las corporaciones municipales</p>
+                            break;
+                        }
+                    case "11":
+                        {
+                            <p>Exenciones Dirección General de Hacienda Autorización de Impuesto Local Concreta</p>
+                            break;
+                        }
                     case "99":
                         {
                             <p>Otros</p>
                             break;
                         }
+
+
+
                 }
 
 
             </strong>
-
+            <address>
+            </address>
         </div>
+        @if (Model.Exoneracion.CodigoInstitucion == "99")
+        {
+            <div class="col-4">
+                <h5> <b>Tipo de Documento Otro:</b> @Model.Exoneracion.TipoDocumentoOtro</h5>
+
+            </div>
+        }
         <!-- /.col -->
     </div>
     <!-- /.row -->

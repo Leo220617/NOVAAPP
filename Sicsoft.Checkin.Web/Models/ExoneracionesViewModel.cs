@@ -18,6 +18,12 @@ namespace NOVAAPP.Models
 
         public bool Activo { get; set; }
         public int idImpuesto { get; set; }
+
+        public string CodigoInstitucion { get; set; }
+        public string NombreInstitucionOtro { get; set; }
+        public string ArticuloLey { get; set; }
+        public string IncisoLey { get; set; }
+        public string TipoDocumentoOtro { get; set; }
         public DetExoneracionesViewModel[] Detalle { get; set; }
 
        

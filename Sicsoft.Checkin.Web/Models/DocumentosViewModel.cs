@@ -39,6 +39,15 @@ namespace NOVAAPP.Models
 
         public decimal Redondeo { get; set; }
         public bool Validado { get; set; }
+
+        public string TipoIdentificacion { get; set; }
+        public string CodActividadReceptor { get; set; }
+
+        public string RefCodigo { get; set; }
+        public string RefCodigoReferenciaOtro { get; set; }
+        public string RefRazon { get; set; }
+        public string RefTipoDocumento { get; set; }
+        public string TipoDocRefOtro { get; set; }
         public MetodosPagosViewModel[] MetodosPagos { get; set; }
 
         public DetDocumentoViewModel[] Detalle { get; set; }

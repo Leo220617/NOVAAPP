@@ -23,7 +23,7 @@
 @{
     var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
 }
-@section styles{
+@section styles {
 
 
 }
@@ -32,7 +32,7 @@
 
 }
 
-@section scripts{
+@section scripts {
     <script>
         $(document).ready(function () {
             jQuery(document).ready(function ($) {
@@ -281,6 +281,146 @@
                         </div>
                         <!-- /.col -->
                     </div>
+                    @if (Model.Documento.TipoDocumento == "03" && Model.Parametro.FirstOrDefault().Pais == "C")
+                    {
+
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="page-header mt-0">
+                                    <h2 class="d-inline"><span class="font-size-24">Datos Nota de Crédito</span></h2>
+
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- /.col -->
+
+
+                        </div>
+                        <!-- info row -->
+                        <div class="row invoice-info">
+
+
+                            <div class="col-4">
+                                <h5>
+                                    <b>Tipo de Documento Referencia:</b>  @switch (Model.Documento.RefTipoDocumento)
+                                    {
+                                        case "01":
+                                            {
+                                                <b>Factura Electrónica</b>
+                                                break;
+                                            }
+                                        case "03":
+                                            {
+                                                <b>Nota de Crédito</b>
+                                                break;
+                                            }
+                                        case "04":
+                                            {
+                                                <b>Tiquete Electrónico</b>
+                                                break;
+                                            }
+                                    }
+
+                                </h5>
+                            </div>
+                            <div class="col-4">
+                                <h5>
+                                    <b>Tipo de Documento Referencia:</b>  @switch (Model.Documento.RefCodigo)
+                                    {
+                                        case "01":
+                                            {
+                                                <b>01 - Anula Documento de Referencia</b>
+                                                break;
+                                            }
+                                        case "02":
+                                            {
+                                                <b>02 - Corrige monto</b>
+                                                break;
+                                            }
+                                        case "04":
+                                            {
+                                                <b>04 - Referencia a otro documento</b>
+                                                break;
+                                            }
+
+                                        case "05":
+                                            {
+                                                <b>05 - Sustituye comprobante provisional por contingen</b>
+                                                break;
+                                            }
+                                        case "06":
+                                            {
+                                                <b>06 - Devolución de mercancía</b>
+                                                break;
+                                            }
+                                        case "07":
+                                            {
+                                                <b>07 - Sustituye comprobante electrónico</b>
+                                                break;
+                                            }
+                                        case "08":
+                                            {
+                                                <b>08 - Factura Endosada</b>
+                                                break;
+                                            }
+                                        case "09":
+                                            {
+                                                <b>09 - Nota de crédito financiera</b>
+                                                break;
+                                            }
+                                        case "10":
+                                            {
+                                                <b>10 - Nota de débito financiera</b>
+                                                break;
+                                            }
+
+                                        case "11":
+                                            {
+                                                <b>11 - Proveedor No Domiciliado</b>
+                                                break;
+                                            }
+                                        case "12":
+                                            {
+                                                <b>12 - Crédito por exoneración posterior a la facturación</b>
+                                                break;
+                                            }
+                                        case "99":
+                                            {
+                                                <b>99 - Otros</b>
+                                                break;
+                                            }
+
+
+
+
+                                    }
+
+                                </h5>
+                            </div>
+
+
+
+
+
+
+                            <div class="col-4">
+                                <h5> <b>Razón Referencia Otro: </b> @(Model.Documento.RefCodigoReferenciaOtro)</h5>
+
+                            </div>
+
+
+
+                            <div class="col-6">
+                                <h5> <b>Razón: </b> @(Model.Documento.RefRazon)</h5>
+
+                            </div>
+
+                        </div>
+                    }
                     <!-- /.row -->
                     <!-- Table row -->
                     <div class="row">
@@ -288,13 +428,27 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-pale-info">
-                                        <th class="text-center">#</th>
+                                        @if (!string.IsNullOrEmpty(Roles.Where(a => a == "119").FirstOrDefault()))
+                                        {
+                                            <th class="text-center">Tax Only</th>
+                                        }
                                         <th class="text-center">Producto</th>
+
+
                                         <th class="text-center">Cantidad</th>
+
                                         <th class="text-center">Precio Unitario</th>
                                         <th class="text-center">% Descuento</th>
                                         <th class="text-center">Descuento</th>
+
                                         <th class="text-center">Impuesto</th>
+                                        @if (Model.Parametro.FirstOrDefault().Pais == "C")
+                                        {
+                                            <th>Tipo Desc</th>
+                                            <th>Tipo Transac</th>
+                                            <th>IVA Fabrica</th>
+
+                                        }
                                         <th class="text-center">% Exoneración</th>
 
 
@@ -303,10 +457,8 @@
                                         {
                                             <th class="text-center">% Ganancia</th>
                                         }
-
                                         @if (Model.Parametro.FirstOrDefault().NumeroSerie == true)
                                         {
-
                                             <th class="text-center">Serie</th>
                                         }
                                     </tr>
@@ -317,44 +469,155 @@
                                     {
                                         <tr>
                                             <td>@item.NumLinea</td>
+                                            @if (!string.IsNullOrEmpty(Roles.Where(a => a == "119").FirstOrDefault()))
+                                            {
 
+
+                                                <td class="text-center">
+                                                    <input disabled type="checkbox" class="chk-col-green" @(item.TaxOnly ? "checked" : "")
+                                                           style="appearance:auto !important; opacity:1 !important; position:static !important; transform:none !important; width:16px; height:16px;" />
+                                                </td>
+
+
+
+                                            }
 
                                             <td>
                                                 @(Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Codigo + " - " + Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Nombre + " - BOD: " +
                                                     (Model.Bodegas.Where(a => a.id == (Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega)).FirstOrDefault() == null ? "0" : Model.Bodegas.Where(a => a.id == (Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().idBodega)).FirstOrDefault().CodSAP))
                                             </td>
 
-                                            <td class="text-right">@(Math.Round(item.Cantidad, 2))</td>
+
+                                            <td class="text-right">@(Math.Round(item.Cantidad, 2).ToString("C", formato))</td>
 
 
-                                            <td class="text-center">@Math.Round(item.PrecioUnitario,2).ToString("C",formato)</td>
-                                            <td class="text-center">@Math.Round(@item.PorDescto)%</td>
-                                            <td class="text-center">@Math.Round(@item.Descuento,2).ToString("C",formato)</td>
-                                            <td class="text-center">@Math.Round(@item.TotalImpuesto,2).ToString("C",formato)</td>
-                                            <td class="text-center">@(Model.Exoneraciones.Where(a => a.id == @item.idExoneracion).FirstOrDefault() == null ? "0" : Model.Exoneraciones.Where(a => a.id == @item.idExoneracion).FirstOrDefault().PorExon.ToString()) %</td>
-                                            <td class="text-center">@Math.Round(@item.TotalLinea,2).ToString("C",formato)</td>
-                                            @if (!string.IsNullOrEmpty(Roles.Where(a => a == "53").FirstOrDefault()))
+                                            <td class="text-center">@Math.Round(item.PrecioUnitario, 2).ToString("C", formato)</td>
+                                            <td class="text-center">@Math.Round(@item.PorDescto) %</td>
+                                            <td class="text-center">@Math.Round(@item.Descuento, 2).ToString("C", formato)</td>
+
+                                            <td class="text-center">@Math.Round(@item.TotalImpuesto / @item.Cantidad, 2).ToString("C", formato)</td>
+                                            @if (Model.Parametro.FirstOrDefault().Pais == "C")
                                             {
-                                                <td class="text-center">@Math.Round(((((@item.TotalLinea - @item.TotalImpuesto) - ( (Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0: Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Costo) * item.Cantidad)) / (@item.TotalLinea - @item.TotalImpuesto)) * 100) ,2).ToString("C",formato)%</td>
+                                                @switch (item.CodigoDescuento)
+                                                {
+                                                    case "01":
+                                                        <td class="text-center">01- Descuento por Regalia</td>
+                                                        break;
+                                                    case "02":
+                                                        <td class="text-center">02- Descuento por Regalía o Bonificaciones IVA Cobrado al Cliente</td>
+                                                        break;
+                                                    case "03":
+                                                        <td class="text-center">03- Descuento por Bonificación</td>
+                                                        break;
+                                                    case "04":
+                                                        <td class="text-center">04- Descuento por volumen</td>
+                                                        break;
+                                                    case "05":
+                                                        <td class="text-center">05- Descuento por Temporada (estacional)</td>
+                                                        break;
+                                                    case "06":
+                                                        <td class="text-center">06- Descuento promocional</td>
+                                                        break;
+                                                    case "07":
+                                                        <td class="text-center">07- Descuento Comercial</td>
+                                                        break;
+                                                    case "08":
+                                                        <td class="text-center">08- Descuento por frecuencia</td>
+                                                        break;
+                                                    case "09":
+                                                        <td class="text-center">09- Descuento sostenido</td>
+                                                        break;
+                                                    default:
+                                                        <td class="text-center"></td>
+                                                        break;
+                                                }
+
+                                                @switch (item.TipoTransaccion)
+                                                {
+                                                    case "01":
+                                                        <td class="text-center">01- Venta Normal de Bienes y Servicios (Transacción General)</td>
+                                                        break;
+                                                    case "02":
+                                                        <td class="text-center">02- Mercancía de Autoconsumo exento</td>
+                                                        break;
+                                                    case "03":
+                                                        <td class="text-center">03- Mercancía de Autoconsumo gravado</td>
+                                                        break;
+                                                    case "04":
+                                                        <td class="text-center">04- Servicio de Autoconsumo exento</td>
+                                                        break;
+                                                    case "05":
+                                                        <td class="text-center">05- Servicio de Autoconsumo gravado</td>
+                                                        break;
+                                                    case "06":
+                                                        <td class="text-center">06- Cuota de afiliación</td>
+                                                        break;
+                                                    case "07":
+                                                        <td class="text-center">07- Cuota de afiliación Exenta</td>
+                                                        break;
+                                                    case "08":
+                                                        <td class="text-center">08- Bienes de Capital para el emisor</td>
+                                                        break;
+                                                    case "09":
+                                                        <td class="text-center">09- Bienes de Capital para el receptor</td>
+                                                        break;
+                                                    case "10":
+                                                        <td class="text-center">10- Bienes de Capital para el emisor y el receptor</td>
+                                                        break;
+                                                    case "11":
+                                                        <td class="text-center">11- Bienes de capital de autoconsumo exento para el emisor</td>
+                                                        break;
+                                                    default:
+                                                        <td class="text-center"></td>
+                                                        break;
+                                                }
+                                                @switch (item.IVAFabrica)
+                                                {
+                                                    case "":
+                                                        <td class="text-center">Seleccione</td>
+                                                        break;
+                                                    case "01":
+                                                        <td class="text-center">01- Venta de bienes con IVA según el sistema especial de determinación de IVA a nivel de fábrica.</td>
+                                                        break;
+                                                    case "02":
+                                                        <td class="text-center">02- Ventas exentas según el sistema especial de determinación de IVA a nivel de fábrica, mayorista y aduanas.</td>
+                                                        break;
+                                                    default:
+                                                        <td class="text-center"></td>
+                                                        break;
+                                                }
+
+
+                                            }
+                                            <td class="text-center">@(Model.Exoneraciones.Where(a => a.id == @item.idExoneracion).FirstOrDefault() == null ? "0" : Model.Exoneraciones.Where(a => a.id == @item.idExoneracion).FirstOrDefault().PorExon.ToString()) %</td>
+                                            <td class="text-center">@Math.Round(@item.TotalLinea, 2).ToString("C", formato)</td>
+                                            @if (!string.IsNullOrEmpty(Roles.Where(a => a == "53").FirstOrDefault()) && !item.TaxOnly)
+                                            {
+                                                <td class="text-center">@Math.Round(((((@item.TotalLinea - @item.TotalImpuesto) - ((Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Costo) * item.Cantidad)) / (@item.TotalLinea - @item.TotalImpuesto)) * 100), 2).ToString("C", formato)%</td>
 
                                                 Ganancia += Convert.ToDouble(@Math.Round(((((@item.TotalLinea - @item.TotalImpuesto) - ((Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Costo) * item.Cantidad)) / (@item.TotalLinea - @item.TotalImpuesto)) * 100), 2)) / Model.Documento.Detalle.Length;
 
                                             }
-                                            <td align="center" style="padding-top:15px;">
+                                            else if (!string.IsNullOrEmpty(Roles.Where(a => a == "53").FirstOrDefault()))
+                                            {
+                                                <td class="text-center">0%</td>
+                                                Ganancia = 0;
+                                            }
 
-                                                @{
-                                                    var Codigo = Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Codigo;
-                                                    var Serie = Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? false : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Serie;
 
-                                                }
-                                                @if (Model.Parametro.FirstOrDefault().NumeroSerie == true)
-                                                {
-                                                    @if (Serie == true)
-                                                    {
-                                                        <a href="#test-form" onclick="javascript: onClickModal('@Codigo', '@item.id');" class=" popup-with-form fa fa-info-circle icono"> </a>
-                                                    }
-                                                }
-                                            </td>
+                                            @{
+                                                var Codigo = Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? "Producto Inexistente" : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Codigo;
+                                                var Serie = Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? false : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Serie;
+
+                                            }
+                                            @if (Serie == true)
+                                            {
+                                                <td align="center" style="padding-top:15px;">
+                                                    <a href="#test-form" onclick="javascript: onClickModal('@Codigo', '@item.id');" class=" popup-with-form fa fa-info-circle icono"> </a>
+                                                </td>
+                                            }
+
+
 
                                         </tr>
                                     }
@@ -368,19 +631,19 @@
 
 
                             <div>
-                                <p>Sub Total  : <span> @Math.Round(Model.Documento.Subtotal, 2).ToString("C",formato)</span> </p>
-                                <p>Descuento  : <span> @Math.Round(Model.Documento.TotalDescuento, 2).ToString("C",formato)</span></p>
-                                <p>Impuesto :  <span>  @Math.Round(Model.Documento.TotalImpuestos, 2).ToString("C",formato)</span></p>
-                                <p>Redondeo :  <span>  @Math.Round(Model.Documento.Redondeo, 2).ToString("C",formato)</span></p>
+                                <p>Sub Total  : <span> @Math.Round(Model.Documento.Subtotal, 2).ToString("C", formato)</span> </p>
+                                <p>Descuento  : <span> @Math.Round(Model.Documento.TotalDescuento, 2).ToString("C", formato)</span></p>
+                                <p>Impuesto :  <span>  @Math.Round(Model.Documento.TotalImpuestos, 2).ToString("C", formato)</span></p>
+                                <p>Redondeo :  <span>  @Math.Round(Model.Documento.Redondeo, 2).ToString("C", formato)</span></p>
 
                             </div>
                             <div class="total-payment">
-                                <h3><b>Total :</b>  <span>  @Math.Round(Model.Documento.TotalCompra + Model.Documento.Redondeo, 2).ToString("C",formato)</span></h3>
+                                <h3><b>Total :</b>  <span>  @Math.Round(Model.Documento.TotalCompra + Model.Documento.Redondeo, 2).ToString("C", formato)</span></h3>
                             </div>
                             @if (!string.IsNullOrEmpty(Roles.Where(a => a == "53").FirstOrDefault()))
                             {
                                 <div class="total-payment">
-                                    <h3><b>Total Ganancia :</b>  <span>@Math.Round(Ganancia, 2).ToString("C",formato) </span>%</h3>
+                                    <h3><b>Total Ganancia :</b>  <span>@Math.Round(Ganancia, 2).ToString("C", formato) </span>%</h3>
                                 </div>
                             }
 
@@ -547,6 +810,13 @@
                                         <th class="text-center">% Descuento</th>
                                         <th class="text-center">Descuento</th>
                                         <th class="text-center">Impuesto</th>
+                                        @if (Model.Parametro.FirstOrDefault().Pais == "C")
+                                        {
+                                            <th>Tipo Desc</th>
+                                            <th>Tipo Transac</th>
+                                            <th>IVA Fabrica</th>
+
+                                        }
                                         <th class="text-center">% Exoneración</th>
 
                                         <th class="text-center">Total</th>
@@ -570,6 +840,99 @@
                                             <td class="text-center">@Math.Round(@item.PorDescto) %</td>
                                             <td class="text-center">@Math.Round(@item.Descuento, 2).ToString("C", formato)</td>
                                             <td class="text-center">@Math.Round(@item.TotalImpuesto, 2).ToString("C", formato)</td>
+                                            @if (Model.Parametro.FirstOrDefault().Pais == "C")
+                                            {
+                                                @switch (item.CodigoDescuento)
+                                                {
+                                                    case "01":
+                                                        <td class="text-center">01- Descuento por Regalia</td>
+                                                        break;
+                                                    case "02":
+                                                        <td class="text-center">02- Descuento por Regalía o Bonificaciones IVA Cobrado al Cliente</td>
+                                                        break;
+                                                    case "03":
+                                                        <td class="text-center">03- Descuento por Bonificación</td>
+                                                        break;
+                                                    case "04":
+                                                        <td class="text-center">04- Descuento por volumen</td>
+                                                        break;
+                                                    case "05":
+                                                        <td class="text-center">05- Descuento por Temporada (estacional)</td>
+                                                        break;
+                                                    case "06":
+                                                        <td class="text-center">06- Descuento promocional</td>
+                                                        break;
+                                                    case "07":
+                                                        <td class="text-center">07- Descuento Comercial</td>
+                                                        break;
+                                                    case "08":
+                                                        <td class="text-center">08- Descuento por frecuencia</td>
+                                                        break;
+                                                    case "09":
+                                                        <td class="text-center">09- Descuento sostenido</td>
+                                                        break;
+                                                    default:
+                                                        <td class="text-center"></td>
+                                                        break;
+                                                }
+
+                                                @switch (item.TipoTransaccion)
+                                                {
+                                                    case "01":
+                                                        <td class="text-center">01- Venta Normal de Bienes y Servicios (Transacción General)</td>
+                                                        break;
+                                                    case "02":
+                                                        <td class="text-center">02- Mercancía de Autoconsumo exento</td>
+                                                        break;
+                                                    case "03":
+                                                        <td class="text-center">03- Mercancía de Autoconsumo gravado</td>
+                                                        break;
+                                                    case "04":
+                                                        <td class="text-center">04- Servicio de Autoconsumo exento</td>
+                                                        break;
+                                                    case "05":
+                                                        <td class="text-center">05- Servicio de Autoconsumo gravado</td>
+                                                        break;
+                                                    case "06":
+                                                        <td class="text-center">06- Cuota de afiliación</td>
+                                                        break;
+                                                    case "07":
+                                                        <td class="text-center">07- Cuota de afiliación Exenta</td>
+                                                        break;
+                                                    case "08":
+                                                        <td class="text-center">08- Bienes de Capital para el emisor</td>
+                                                        break;
+                                                    case "09":
+                                                        <td class="text-center">09- Bienes de Capital para el receptor</td>
+                                                        break;
+                                                    case "10":
+                                                        <td class="text-center">10- Bienes de Capital para el emisor y el receptor</td>
+                                                        break;
+                                                    case "11":
+                                                        <td class="text-center">11- Bienes de capital de autoconsumo exento para el emisor</td>
+                                                        break;
+                                                    default:
+                                                        <td class="text-center"></td>
+                                                        break;
+                                                }
+                                                @switch (item.IVAFabrica)
+                                                {
+                                                    case "":
+                                                        <td class="text-center">Seleccione</td>
+                                                        break;
+                                                    case "01":
+                                                        <td class="text-center">01- Venta de bienes con IVA según el sistema especial de determinación de IVA a nivel de fábrica.</td>
+                                                        break;
+                                                    case "02":
+                                                        <td class="text-center">02- Ventas exentas según el sistema especial de determinación de IVA a nivel de fábrica, mayorista y aduanas.</td>
+                                                        break;
+                                                    default:
+                                                        <td class="text-center"></td>
+                                                        break;
+                                                }
+
+
+                                            }
                                             <td class="text-center">@(Model.Exoneraciones.Where(a => a.id == @item.idExoneracion).FirstOrDefault() == null ? "0" : Model.Exoneraciones.Where(a => a.id == @item.idExoneracion).FirstOrDefault().PorExon.ToString()) %</td>
 
                                             <td class="text-center">@Math.Round(@item.TotalLinea, 2).ToString("C", formato)</td>
@@ -587,14 +950,14 @@
 
 
                             <div>
-                                <p>Sub Total  : <span> @Math.Round(Model.Documento.Subtotal, 2).ToString("C",formato)</span> </p>
-                                <p>Descuento  : <span> @Math.Round(Model.Documento.TotalDescuento, 2).ToString("C",formato)</span></p>
-                                <p>Impuesto :  <span>  @Math.Round(Model.Documento.TotalImpuestos, 2).ToString("C",formato)</span></p>
-                                <p>Redondeo :  <span>  @Math.Round(Model.Documento.Redondeo, 2).ToString("C",formato)</span></p>
+                                <p>Sub Total  : <span> @Math.Round(Model.Documento.Subtotal, 2).ToString("C", formato)</span> </p>
+                                <p>Descuento  : <span> @Math.Round(Model.Documento.TotalDescuento, 2).ToString("C", formato)</span></p>
+                                <p>Impuesto :  <span>  @Math.Round(Model.Documento.TotalImpuestos, 2).ToString("C", formato)</span></p>
+                                <p>Redondeo :  <span>  @Math.Round(Model.Documento.Redondeo, 2).ToString("C", formato)</span></p>
 
                             </div>
                             <div class="total-payment">
-                                <h3><b>Total :</b>  <span>  @Math.Round(Model.Documento.TotalCompra + Model.Documento.Redondeo, 2).ToString("C",formato)</span></h3>
+                                <h3><b>Total :</b>  <span>  @Math.Round(Model.Documento.TotalCompra + Model.Documento.Redondeo, 2).ToString("C", formato)</span></h3>
                             </div>
 
                         </div>
@@ -666,7 +1029,7 @@
                                         <td>@item.BIN</td>
                                         <td>@item.NumReferencia</td>
                                         <td>@item.NumCheque</td>
-                                        <td>@item.Monto.ToString("N",formato)</td>
+                                        <td>@item.Monto.ToString("N", formato)</td>
 
                                     </tr>
                                 }
