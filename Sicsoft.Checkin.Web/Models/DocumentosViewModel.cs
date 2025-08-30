@@ -48,6 +48,7 @@ namespace NOVAAPP.Models
         public string RefRazon { get; set; }
         public string RefTipoDocumento { get; set; }
         public string TipoDocRefOtro { get; set; }
+        public string MedioPago { get; set; }
         public MetodosPagosViewModel[] MetodosPagos { get; set; }
 
         public DetDocumentoViewModel[] Detalle { get; set; }

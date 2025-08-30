@@ -236,7 +236,48 @@
 
                                         <br />
 
-                                        <div class="col-md-3">
+                                        <div class="col-3">
+                                            <h5>
+                                                <b>Medio Pago:</b>  @switch (Model.Documento.MedioPago)
+                                                {
+                                                    case "01":
+                                                        {
+                                                            <b>Efectivo</b>
+                                                            break;
+                                                        }
+                                                    case "02":
+                                                        {
+                                                            <b>Tarjeta</b>
+                                                            break;
+                                                        }
+                                                    case "03":
+                                                        {
+                                                            <b>Cheque</b>
+                                                            break;
+                                                        }
+                                                    case "04":
+                                                        {
+                                                            <b>Transferencia – depósito bancario</b>
+                                                            break;
+                                                        }
+                                                    case "05":
+                                                        {
+                                                            <b>Recaudado por terceros</b>
+                                                            break;
+                                                        }
+                                                    case "06":
+                                                        {
+                                                            <b>SINPE MOVIL</b>
+                                                            break;
+                                                        }
+                                                    case "07":
+                                                        {
+                                                            <b>Plataforma Digital</b>
+                                                            break;
+                                                        }
+                                                }
+
+                                            </h5>
                                         </div>
                                         <div class="col-3">
                                             <h5> <b>Moneda: </b> @Model.Documento.Moneda</h5>
