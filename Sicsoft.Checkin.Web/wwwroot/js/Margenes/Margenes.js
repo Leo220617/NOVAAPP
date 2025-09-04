@@ -838,7 +838,7 @@ function filtrarTabla() {
     var indicesVisibles = [];
 
     filas.each(function (index) {
-        var descripcion = $(this).find("td:eq(1)").text().toLowerCase();
+        var descripcion = $(this).find("td:eq(2)").text().toLowerCase();
 
         if (descripcion.includes(busqueda)) {
             $(this).show();
