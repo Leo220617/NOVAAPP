@@ -95,8 +95,8 @@ function RecuperarInformacion() {
                 PrecioFinal: parseFloat(Margenes.Detalle[i].PrecioFinal.toFixed(2)),
                 PrecioMin: parseFloat(Margenes.Detalle[i].PrecioMin.toFixed(2)),
                 PrecioCob: parseFloat(Margenes.Detalle[i].PrecioCob.toFixed(2)),
-                Seteable: Margenes.Detalle[i].Seteable
-                // PrecioFijo: Margenes.Detalle[i].PrecioFijo
+                Seteable: Margenes.Detalle[i].Seteable,
+                 PrecioFijo: Margenes.Detalle[i].PrecioFijo
 
 
 
@@ -119,6 +119,7 @@ function RecuperarInformacion() {
                 $("#" + x + "_Margen").val(Producto.Margen);
                 $("#" + x + "_MargenMin").val(Producto.MargenMin);
 
+
                 var PrecioImp = Producto.PrecioFinal * 1.13;
      
 
@@ -129,6 +130,16 @@ function RecuperarInformacion() {
                 var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
                 var Moneda = $("#MonedaSeleccionado").val();
 
+                if (Producto.PrecioFijo) {
+
+                    $("#" + x + "_PrecioImp").attr("hidden", true);
+                    $("#" + x + "_PrecioFijo").removeAttr("hidden");
+                    var texto = $("#" + x + "_PrecioImp").text();
+                    var limpio = texto.replace(/,/g, '');
+                    var valor = parseFloat(limpio);
+                    $("#" + x + "_InputPrecioFijo").val(valor);
+
+                }
                 if (Moneda == "CRC") {
                     Ganancia = retornaMargenGanancia(Producto.PrecioFinal, PE.Costo);
                     $("#" + x + "_Ganancia").text(formatoDecimal(parseFloat(Ganancia).toFixed(2)));
@@ -168,9 +179,19 @@ function CambiarCheck(i, inicio) {
             $("#" + x + "_mdcheckbox").prop('checked')
             $("#" + x + "_mdcheckbox").prop('checked', Margenes.Detalle[i].Seteable);
 
+            $("#" + x + "_mdcheckbox2").prop('checked')
+            $("#" + x + "_mdcheckbox2").prop('checked', Margenes.Detalle[i].PrecioFijo);
+
+       
+
         } else {
             var valorCheck = $("#" + x + "_mdcheckbox").prop('checked');
             Margenes.Detalle[i].Seteable = valorCheck;
+
+            var valorCheck2 = $("#" + x + "_mdcheckbox2").prop('checked');
+            Margenes.Detalle[i].PrecioFijo = valorCheck2;
+
+         
         }
 
 
@@ -598,7 +619,8 @@ function onChangeRevisado(i) {
                     PrecioFinal: 0,
                     PrecioCob: 0,
                     PrecioMin: 0,
-                    Seteable: $("#" + i + "_mdcheckbox").prop('checked')
+                    Seteable: $("#" + i + "_mdcheckbox").prop('checked'),
+                    PrecioFijo: $("#" + i + "_mdcheckbox2").prop('checked')
 
 
                 };
@@ -640,6 +662,7 @@ function onChangeRevisado(i) {
                 ProdCadena[x].PrecioFinal = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].Margen / 100));
                 ProdCadena[x].PrecioMin = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].MargenMin / 100));
                 ProdCadena[x].Seteable = $("#" + i + "_mdcheckbox").prop('checked');
+                ProdCadena[x].PrecioFijo = $("#" + i + "_mdcheckbox2").prop('checked');
                 var PrecioImp = ProdCadena[x].PrecioFinal * 1.13;
 
 
@@ -693,7 +716,11 @@ function onChangeRevisado(i) {
 function onChangeCheckboxPrecio(i) {
     try {
         var valorCheck = $("#" + i + "_mdcheckbox2").prop('checked');
-
+        var idCategoria = $("#CategoriaSeleccionado").val();
+        var idListaPrecio = $("#ListaSeleccionado").val();
+        var Moneda = $("#MonedaSeleccionado").val();
+        var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
+        var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
         if (valorCheck == true) {
             $("#" + i + "_PrecioImp").attr("hidden", true);      // Oculta el primero
             $("#" + i + "_PrecioFijo").removeAttr("hidden");
@@ -710,9 +737,13 @@ function onChangeCheckboxPrecio(i) {
             var limpio = texto.replace(/,/g, '');                   
             var valor = parseFloat(limpio); 
             $("#" + i + "_InputPrecioFijo").val(valor);
+            ProdCadena[x].PrecioFijo = $("#" + i + "_mdcheckbox2").prop('checked');
         }
 
-
+        if (Existe) {
+            ProdCadena[x].PrecioFijo = $("#" + i + "_mdcheckbox2").prop('checked'); 
+        }
+        onChangePrecioFijo(i);
 
     } catch (e) {
         Swal.fire({
@@ -741,9 +772,10 @@ function onChangePrecioFijo(i) {
         var input = $("#" + i + "_Ganancia");
         var PE = ProdClientes[i];
         if (valorCheck == true) {
+
             var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
             var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
-
+  
             var PE = ProdClientes[i];
             if (Existe == undefined) {
 
@@ -766,7 +798,8 @@ function onChangePrecioFijo(i) {
                     PrecioFinal: PrecioFinal,
                     PrecioCob: 0,
                     PrecioMin: 0,
-                    Seteable: $("#" + i + "_mdcheckbox").prop('checked')
+                    Seteable: $("#" + i + "_mdcheckbox").prop('checked'),
+                    PrecioFijo: $("#" + i + "_mdcheckbox2").prop('checked')
 
 
                 };
@@ -807,7 +840,8 @@ function onChangePrecioFijo(i) {
 
                 ProdCadena[x].PrecioCob = PE.Costo / (1 - (ProdCadena[x].Cobertura / 100));
                 ProdCadena[x].PrecioFinal = PrecioFinal;
-                ProdCadena[x].Margen = 100 - ((ProdCadena[x].PrecioCob / PrecioFinal) * 100)
+                ProdCadena[x].Margen = 100 - ((ProdCadena[x].PrecioCob / PrecioFinal) * 100);
+              
                 $("#" + i + "_Margen").val(ProdCadena[x].Margen.toFixed(2));
 
                 ProdCadena[x].Cobertura = parseFloat($("#" + i + "_Cobertura").val());
@@ -816,6 +850,7 @@ function onChangePrecioFijo(i) {
              
                 ProdCadena[x].PrecioMin = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].MargenMin / 100));
                 ProdCadena[x].Seteable = $("#" + i + "_mdcheckbox").prop('checked');
+                ProdCadena[x].PrecioFijo = $("#" + i + "_mdcheckbox2").prop('checked');
                 var PrecioImp = ProdCadena[x].PrecioFinal * 1.13;
 
 
@@ -843,8 +878,16 @@ function onChangePrecioFijo(i) {
             }
         }
         else {
+
+            $("#" + i + "_PrecioImp").removeAttr("hidden");
+            $("#" + i + "_PrecioFijo").attr("hidden", true);
+            var texto = $("#" + i + "_PrecioImp").text();
+            var limpio = texto.replace(/,/g, '');
+            var valor = parseFloat(limpio);
+            $("#" + i + "_InputPrecioFijo").val(valor);
             var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
             var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
+            ProdCadena[x].PrecioFijo = $("#" + i + "_mdcheckbox2").prop('checked');
             if (ProdCadena[x].Cobertura == Cobertura && ProdCadena[x].Margen == Margen && ProdCadena[x].MargenMin == MargenMin && Existe != undefined) {
 
 

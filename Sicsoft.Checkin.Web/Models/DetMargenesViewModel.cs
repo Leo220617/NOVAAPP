@@ -25,5 +25,6 @@
         public decimal PrecioMin { get; set; }
         public decimal PrecioCob { get; set; }
         public bool Seteable { get; set; }
+        public bool PrecioFijo { get; set; }
     }
 }
