@@ -389,6 +389,9 @@ namespace Sicsoft.Checkin.Web
 .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
 
+            services.AddRefitClient<ICrudApi<PedidosViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Pedidos"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
             return services;
         }

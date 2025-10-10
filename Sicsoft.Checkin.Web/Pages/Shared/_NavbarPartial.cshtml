@@ -300,6 +300,14 @@
 
                             }
                             @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "120").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Pedidos/Index"><i class="mdi mdi-cube"></i>Pedidos</a></li>
+                                }
+
+                            }
+                            @{
                                 if (!string.IsNullOrEmpty(Roles.Where(a => a == "77").FirstOrDefault()))
                                 {
 
