@@ -51,26 +51,7 @@ namespace NOVAAPP.Pages.BitacoraMinimos
                 {
                     return RedirectToPage("/NoPermiso");
                 }
-                DateTime time = new DateTime();
-
-                if (time == filtro.FechaInicial)
-                {
-                    filtro.FechaInicial = DateTime.Now;
-
-       
-
-
-                    DateTime primerDia = new DateTime(filtro.FechaInicial.Year, filtro.FechaInicial.Month, 1);
-
-
-                    DateTime ultimoDia = primerDia.AddMonths(1).AddDays(-1);
-
-                    filtro.FechaFinal = DateTime.Now; //ultimoDia;
-
-                    filtro.Codigo1 = 0;
-                    filtro.Codigo2 = 0;
-
-                }
+        
                 Bodegas = await bodegas.ObtenerLista("");
                 Categorias = await categorias.ObtenerLista("");
                 Objeto = await service.ObtenerLista(filtro);

@@ -112,7 +112,7 @@ function RecuperarInformacion() {
 
                 var x = ProdClientes.findIndex(a => a.Codigo == Producto.ItemCode && a.idCategoria == Producto.idCategoria && a.idListaPrecios == Producto.idListaPrecio && a.Moneda == Producto.Moneda);
                 CambiarCheck(i, true);
-                $("#" + x + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal).toFixed(2)));
+                $("#" + x + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal)));
                 $("#" + x + "_PrecioCob").text(formatoDecimal(parseFloat(Producto.PrecioCob).toFixed(2)));
                 $("#" + x + "_PrecioMin").text(formatoDecimal(parseFloat(Producto.PrecioMin).toFixed(2)));
                 $("#" + x + "_Cobertura").val(Producto.Cobertura);
@@ -413,7 +413,7 @@ function onChangeCobertura(i) {
                 var PrecioImp = Producto.PrecioFinal * 1.13;
 
 
-                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal).toFixed(2)));
+                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal)));
                 $("#" + i + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
                 $("#" + i + "_PrecioCob").text(formatoDecimal(parseFloat(Producto.PrecioCob).toFixed(2)));
                 $("#" + i + "_PrecioMin").text(formatoDecimal(parseFloat(Producto.PrecioMin).toFixed(2)));
@@ -450,7 +450,7 @@ function onChangeCobertura(i) {
                 var PrecioImp = ProdCadena[x].PrecioFinal * 1.13;
 
 
-                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioFinal).toFixed(2)));
+                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioFinal)));
                 $("#" + i + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
                 $("#" + i + "_PrecioCob").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioCob).toFixed(2)));
                 $("#" + i + "_PrecioMin").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioMin).toFixed(2)));
@@ -635,7 +635,7 @@ function onChangeRevisado(i) {
 
 
 
-                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal).toFixed(2)));
+                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal)));
                 $("#" + i + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
                 $("#" + i + "_PrecioCob").text(formatoDecimal(parseFloat(Producto.PrecioCob).toFixed(2)));
                 $("#" + i + "_PrecioMin").text(formatoDecimal(parseFloat(Producto.PrecioMin).toFixed(2)));
@@ -666,7 +666,7 @@ function onChangeRevisado(i) {
                 var PrecioImp = ProdCadena[x].PrecioFinal * 1.13;
 
 
-                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioFinal).toFixed(2)));
+                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioFinal)));
                 $("#" + i + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
                 $("#" + i + "_PrecioCob").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioCob).toFixed(2)));
                 $("#" + i + "_PrecioMin").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioMin).toFixed(2)));
@@ -814,7 +814,7 @@ function onChangePrecioFijo(i) {
 
 
 
-                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal).toFixed(2)));
+                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(Producto.PrecioFinal)));
 
                 $("#" + i + "_PrecioCob").text(formatoDecimal(parseFloat(Producto.PrecioCob).toFixed(2)));
                 $("#" + i + "_PrecioMin").text(formatoDecimal(parseFloat(Producto.PrecioMin).toFixed(2)));
@@ -842,7 +842,7 @@ function onChangePrecioFijo(i) {
                 ProdCadena[x].PrecioFinal = PrecioFinal;
                 ProdCadena[x].Margen = 100 - ((ProdCadena[x].PrecioCob / PrecioFinal) * 100);
               
-                $("#" + i + "_Margen").val(ProdCadena[x].Margen.toFixed(2));
+                $("#" + i + "_Margen").val(ProdCadena[x].Margen);
 
                 ProdCadena[x].Cobertura = parseFloat($("#" + i + "_Cobertura").val());
                 ProdCadena[x].MargenMin = parseFloat($("#" + i + "_MargenMin").val());
@@ -854,7 +854,7 @@ function onChangePrecioFijo(i) {
                 var PrecioImp = ProdCadena[x].PrecioFinal * 1.13;
 
 
-                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioFinal).toFixed(2)));
+                $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioFinal)));
                 $("#" + i + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
                 $("#" + i + "_PrecioCob").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioCob).toFixed(2)));
                 $("#" + i + "_PrecioMin").text(formatoDecimal(parseFloat(ProdCadena[x].PrecioMin).toFixed(2)));
@@ -938,7 +938,7 @@ function Setear() {
                     var PrecioImp = PrecioFinal * 1.13;
 
                     var Ganancia = 0;
-                    $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(PrecioFinal).toFixed(2)));
+                    $("#" + i + "_PrecioFinal").text(formatoDecimal(parseFloat(PrecioFinal)));
                     $("#" + i + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
                     $("#" + i + "_PrecioMin").text(formatoDecimal(parseFloat(PrecioMin).toFixed(2)));
                     $("#" + i + "_PrecioCob").text(formatoDecimal(parseFloat(PrecioCob).toFixed(2)));
@@ -1246,7 +1246,7 @@ function SetearT() {
                         var PrecioImp = PrecioFinal * 1.13;
 
                         var Ganancia = 0;
-                        $("#" + index + "_PrecioFinal").text(formatoDecimal(parseFloat(PrecioFinal).toFixed(2)));
+                        $("#" + index + "_PrecioFinal").text(formatoDecimal(parseFloat(PrecioFinal)));
                         $("#" + index + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
                         $("#" + index + "_PrecioCob").text(formatoDecimal(parseFloat(PrecioCob).toFixed(2)));
                         $("#" + index + "_PrecioMin").text(formatoDecimal(parseFloat(PrecioMin).toFixed(2)));
@@ -1286,7 +1286,7 @@ function SetearT() {
                     var PrecioImp = PrecioFinal * 1.13;
 
                     var Ganancia = 0;
-                    $("#" + index + "_PrecioFinal").text(formatoDecimal(parseFloat(PrecioFinal).toFixed(2)));
+                    $("#" + index + "_PrecioFinal").text(formatoDecimal(parseFloat(PrecioFinal)));
                     $("#" + index + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
                     $("#" + index + "_PrecioCob").text(formatoDecimal(parseFloat(PrecioCob).toFixed(2)));
                     $("#" + index + "_PrecioMin").text(formatoDecimal(parseFloat(PrecioMin).toFixed(2)));
