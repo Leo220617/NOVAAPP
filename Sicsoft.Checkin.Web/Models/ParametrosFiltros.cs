@@ -52,6 +52,6 @@ namespace InversionGloblalWeb.Models
         public bool transito { get; set; }
         public bool correo { get; set; }
 
-
+        public bool interes { get; set; }
     }
 }

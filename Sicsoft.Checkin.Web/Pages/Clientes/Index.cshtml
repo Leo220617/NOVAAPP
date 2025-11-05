@@ -39,7 +39,56 @@
 
         });
 
-     
+           function  EnviarEstadoCuenta() {
+            try { 
+         $.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        url: '@Url.Page("Index", "EnviarEstadoCuenta")',
+                        data: { },
+                        success: function (result) {
+                 $("#divProcesando").modal("hide");
+                              
+                             if (result == false) {
+                                 
+                                 Swal.fire({
+                                     icon: 'error',
+                                     title: 'Oops...',
+                                     text: 'Ha ocurrido un error al intentar enviar'
+
+                                 })
+
+                             } else {
+                                 Swal.fire({
+                                     title: "Ha sido enviado  con éxito",
+
+                                     icon: 'success',
+                                     showCancelButton: false,
+                                     customClass: {
+                                         confirmButton: 'swalBtnColor',
+
+                                     },
+                                     confirmButtonText: 'OK'
+                                 }).then((result) => {
+                                     if (result.isConfirmed) {
+                                         location.reload();
+                                     }
+                                 })
+                             }
+             },
+             beforeSend: function () {
+                 $("#divProcesando").modal("show");
+             }
+                     })
+
+           
+        }catch(e)
+        {
+
+        }
+            
+               
+       }
         function  InsertarSAP() {
             try { 
          $.ajax({
@@ -566,11 +615,13 @@ function onClickModalByClient(id) {
             <div class="box">
                 <div class="box-header with-border">
                     <div class="row">
-                        <div class="col-sm-6"> <h4 class="box-title">Clientes</h4></div>
-                            <div class="col-sm-2"> <button onclick="javascript: AbrirModalAgregarCliente()" class="btn btn-rounded btn-info"> Sincronizar desde SAP</button></div>
+                        <div class="col-sm-4"> <h4 class="box-title">Clientes</h4></div>
+                        
+              
                           <div class="col-sm-2"> <a asp-page="Nuevo" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Cliente</a></div>
-                           <div class="col-sm-2"> <button onclick="javascript: InsertarSAP()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Sincronizar a SAP"> Sincronizar a SAP</button></div>
-                       
+                                                <div class="col-sm-2"> <button onclick="javascript: EnviarEstadoCuenta()" class="btn btn-rounded btn-info"><i class="mdi mdi-send"></i  title=Estado de Cuenta"> Estado de Cuenta</button></div>
+                          <div class="col-sm-2"> <button onclick="javascript: AbrirModalAgregarCliente()" class="btn btn-rounded btn-info"> Sincronizar desde SAP</button></div>
+                 <div class="col-sm-2"> <button onclick="javascript: InsertarSAP()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Sincronizar a SAP"> Sincronizar a SAP</button></div>
 
 
                 </div>

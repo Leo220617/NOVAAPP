@@ -102,6 +102,20 @@ namespace NOVAAPP.Pages.Clientes
                 return new JsonResult(false);
             }
         }
+
+        public async Task<IActionResult> OnGetEnviarEstadoCuenta()
+        {
+            try
+            {
+
+                await service.ReenvioMasivo();
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+        }
         public async Task<IActionResult> OnGetSincronizarSAP(int id)
         {
             try

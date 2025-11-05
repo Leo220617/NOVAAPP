@@ -56,6 +56,9 @@ namespace Sicsoft.Checkin.Web.Servicios
         Task Reenvio(string code, string correos);
 
 
+        [Get("/ReenvioMasivo")]
+        Task ReenvioMasivo();
+
         [Get("/Reenvio")]
         Task Reenvio2(int id, int idLista);
 
