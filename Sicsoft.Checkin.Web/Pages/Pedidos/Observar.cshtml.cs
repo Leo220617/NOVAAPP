@@ -46,8 +46,7 @@ namespace NOVAAPP.Pages.Pedidos
         [BindProperty]
         public UsuariosViewModel[] Usuarios { get; set; }
 
-        [BindProperty]
-        public SucursalesViewModel MiSucursal { get; set; }
+
 
 
 

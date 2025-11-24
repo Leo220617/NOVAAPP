@@ -245,18 +245,18 @@
 
         <div class="col-md-6">
             <img id="base64image" style="width: 85%;"
-                 src="data:image/jpeg;base64,@Model.MiSucursal.Imagen.ToString()" />
+                 src="data:image/jpeg;base64,@Model.Sucursal.FirstOrDefault().Imagen.ToString()" />
         </div>
         <div class="col-md-6">
             <div style=" font-weight: bold;  font-size: 15px;">
                 <p style="  font-size: 20px !important; ">@Model.NombreCliente</p>
-                <p style="  font-size: 20px !important; ">@Model.MiSucursal.Nombre</p>
-                <p>Cedula Juridica:  @Model.MiSucursal.Cedula</p>
-                <p>Telefax: @Model.MiSucursal.Telefono</p>
+                <p style="  font-size: 20px !important; ">@Model.Sucursal.FirstOrDefault().Nombre</p>
+                <p>Cedula Juridica:  @Model.Sucursal.FirstOrDefault().Cedula</p>
+                <p>Telefax: @Model.Sucursal.FirstOrDefault().Telefono</p>
 
-                <p>Email: @Model.MiSucursal.Correo</p>
+                <p>Email: @Model.Sucursal.FirstOrDefault().Correo</p>
 
-                <p> @Model.MiSucursal.Sennas   </p>
+                <p> @Model.Sucursal.FirstOrDefault().Sennas   </p>
 
 
             </div>
