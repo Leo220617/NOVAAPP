@@ -101,6 +101,10 @@ namespace Sicsoft.Checkin.Web.Servicios
         [Delete("/Eliminar")]
         Task Eliminar(int id);
 
+
+        [Delete("/AsignarCaja")]
+        Task AsignarCaja(int id, int idCaja);
+
         [Delete("/Asignar")]
         Task Asignar(int id, int idUsuario);
 

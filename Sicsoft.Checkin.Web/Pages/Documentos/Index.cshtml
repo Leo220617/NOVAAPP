@@ -30,7 +30,13 @@
        <script>
         $(document).ready(function() {
 
+                $('#ModalAgregarCliente').on('shown.bs.modal', function () {
+                $('#selectC').select2({
+                    dropdownParent: $('#ModalAgregarCliente'),
+                    width: '100%'
 
+                });
+            });
 
 
         });
@@ -220,6 +226,80 @@
                 })
             }
         }
+            
+var codSucFactura = "";
+
+function AbrirModalAgregarCliente(id, codSuc) {
+    try {
+        ids = id;
+        codSucFactura = codSuc;
+
+        // LIMPIAR OPTIONS
+        $("#selectC").empty();
+
+        // FILTRAR CAJAS POR CodSuc
+        let cajas = @Html.Raw(Json.Serialize(Model.Cajas));
+
+        let filtradas = cajas.filter(c => c.codSuc == codSucFactura);
+
+        // AGREGAR SOLO LAS FILTRADAS
+        filtradas.forEach(c => {
+            $("#selectC").append(
+                `<option value="${c.id}">${c.nombre}</option>`
+            );
+        });
+
+        $("#ModalAgregarCliente").modal("show");
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar recuperar cliente ' + e
+        })
+    }
+}
+
+                     function AsignarCaja() {
+
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Page("Index", "AsignarCaja")',
+                    data: { id: ids, idCaja: $("#selectC").val() },
+                    success: function (result) {
+
+                        if (result == false) {
+                            ids = 0;
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar procesar la solicitud'
+
+                            })
+
+                        } else {
+                            Swal.fire({
+                                title: "Ha sido asignado con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    beforeSend: function () {
+
+                    }
+                })
+            }
     </script>
 }
     <!-- Content Header (Page header) -->
@@ -508,6 +588,7 @@
                                             {
                                                 <a onclick="javascript: onClickModal('@item.id')" title="Insertar a SAP"><img src="/sapX.png" /></a>
                                             }
+                                                      <a onclick="javascript: AbrirModalAgregarCliente('@item.id', '@item.CodSuc')" class="fa  fa-user-plus icono"></a>
                                         </td>
                                          <td>
                                             @(Model.Cajas.Where(a => a.id == item.idCaja).FirstOrDefault() == null ? "Caja Inexistente": Model.Cajas.Where(a => a.id == item.idCaja).FirstOrDefault().Nombre )
@@ -666,3 +747,44 @@
     <!-- /.row -->
 </section>
 <!-- /.content -->
+<!--Modal para agregar Clientes-->
+
+
+<div class="modal fade bs-example-modal-lg" id="ModalAgregarCliente" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Asignar Caja</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="nom">Caja:</label>
+                        <select id="selectC" class="form-control select2" required>
+</select>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect text-left" onclick="javascript: AsignarCaja();">Asignar</button> &nbsp;
+                <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Cancelar</button> &nbsp;
+
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

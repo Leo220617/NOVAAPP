@@ -139,12 +139,12 @@ namespace NOVAAPP.Pages.Documentos
             }
         }
 
-        public async Task<IActionResult> OnGetEliminar(int id)
+        public async Task<IActionResult> OnGetAsignarCaja(int id, int idCaja)
         {
             try
             {
 
-                await service.Eliminar(id);
+                await service.AsignarCaja(id, idCaja);
                 return new JsonResult(true);
             }
             catch (ApiException ex)
