@@ -26,5 +26,17 @@
         public decimal PrecioCob { get; set; }
         public bool Seteable { get; set; }
         public bool PrecioFijo { get; set; }
+
+        public decimal CantMin1 { get; set; }
+        public decimal CantMax1 { get; set; }
+        public decimal CantMin2 { get; set; }
+        public decimal CantMax2 { get; set; }
+        public decimal CantMin3 { get; set; }
+        public decimal CantMax3 { get; set; }
+
+        public decimal Margen1 { get; set; }
+        public decimal Margen2 { get; set; }
+        public decimal Margen3 { get; set; }
+
     }
 }

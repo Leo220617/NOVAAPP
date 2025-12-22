@@ -96,8 +96,19 @@ function RecuperarInformacion() {
                 PrecioMin: parseFloat(Margenes.Detalle[i].PrecioMin.toFixed(2)),
                 PrecioCob: parseFloat(Margenes.Detalle[i].PrecioCob.toFixed(2)),
                 Seteable: Margenes.Detalle[i].Seteable,
-                 PrecioFijo: Margenes.Detalle[i].PrecioFijo
+                PrecioFijo: Margenes.Detalle[i].PrecioFijo,
 
+                CantMin1: Margenes.Detalle[i].CantMin1 || 0,
+                CantMax1: Margenes.Detalle[i].CantMax1 || 0,
+                Margen1: Margenes.Detalle[i].Margen1 || 0,
+
+                CantMin2: Margenes.Detalle[i].CantMin2 || 0,
+                CantMax2: Margenes.Detalle[i].CantMax2 || 0,
+                Margen2: Margenes.Detalle[i].Margen2 || 0,
+
+                CantMin3: Margenes.Detalle[i].CantMin3 || 0,
+                CantMax3: Margenes.Detalle[i].CantMax3 || 0,
+                Margen3: Margenes.Detalle[i].Margen3 || 0
 
 
 
@@ -118,6 +129,19 @@ function RecuperarInformacion() {
                 $("#" + x + "_Cobertura").val(Producto.Cobertura);
                 $("#" + x + "_Margen").val(Producto.Margen);
                 $("#" + x + "_MargenMin").val(Producto.MargenMin);
+
+                $("#" + x + "_CantMin1").val(Producto.CantMin1);
+                $("#" + x + "_CantMax1").val(Producto.CantMax1);
+                $("#" + x + "_Margen1").val(Producto.Margen1);
+
+                $("#" + x + "_CantMin2").val(Producto.CantMin2);
+                $("#" + x + "_CantMax2").val(Producto.CantMax2);
+                $("#" + x + "_Margen2").val(Producto.Margen2);
+
+                $("#" + x + "_CantMin3").val(Producto.CantMin3);
+                $("#" + x + "_CantMax3").val(Producto.CantMax3);
+                $("#" + x + "_Margen3").val(Producto.Margen3);
+
 
 
                 var PrecioImp = Producto.PrecioFinal * 1.13;
@@ -369,6 +393,18 @@ function onChangeCobertura(i) {
         var MargenL = $("#" + i + "_Margen").val();
         var MargenMinL = $("#" + i + "_MargenMin").val();
 
+        var CantMin1 = parseFloat($("#" + i + "_CantMin1").val()) || 0;
+        var CantMax1 = parseFloat($("#" + i + "_CantMax1").val()) || 0;
+        var Margen1 = parseFloat($("#" + i + "_Margen1").val()) || 0;
+
+        var CantMin2 = parseFloat($("#" + i + "_CantMin2").val()) || 0;
+        var CantMax2 = parseFloat($("#" + i + "_CantMax2").val()) || 0;
+        var Margen2 = parseFloat($("#" + i + "_Margen2").val()) || 0;
+
+        var CantMin3 = parseFloat($("#" + i + "_CantMin3").val()) || 0;
+        var CantMax3 = parseFloat($("#" + i + "_CantMax3").val()) || 0;
+        var Margen3 = parseFloat($("#" + i + "_Margen3").val()) || 0;
+
         var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
 
         var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
@@ -403,7 +439,18 @@ function onChangeCobertura(i) {
                     PrecioCob: 0,
                     PrecioMin: 0,
                     Seteable: $("#" + i + "_mdcheckbox").prop('checked'),
-                    PrecioFijo: $("#" + i + "_mdcheckbox2").prop('checked')
+                    PrecioFijo: $("#" + i + "_mdcheckbox2").prop('checked'),
+                    CantMin1: CantMin1,
+                    CantMax1: CantMax1,
+                    Margen1: Margen1,
+
+                    CantMin2: CantMin2,
+                    CantMax2: CantMax2,
+                    Margen2: Margen2,
+
+                    CantMin3: CantMin3,
+                    CantMax3: CantMax3,
+                    Margen3: Margen3
 
 
                 };
@@ -446,6 +493,19 @@ function onChangeCobertura(i) {
                 ProdCadena[x].PrecioCob = PE.Costo / (1 - (ProdCadena[x].Cobertura / 100));
                 ProdCadena[x].PrecioFinal = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].Margen / 100));
                 ProdCadena[x].PrecioMin = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].MargenMin / 100));
+
+                // 🔥 ACTUALIZA ESCALONADO
+                ProdCadena[x].CantMin1 = CantMin1;
+                ProdCadena[x].CantMax1 = CantMax1;
+                ProdCadena[x].Margen1 = Margen1;
+
+                ProdCadena[x].CantMin2 = CantMin2;
+                ProdCadena[x].CantMax2 = CantMax2;
+                ProdCadena[x].Margen2 = Margen2;
+
+                ProdCadena[x].CantMin3 = CantMin3;
+                ProdCadena[x].CantMax3 = CantMax3;
+                ProdCadena[x].Margen3 = Margen3;
 
                 var PrecioImp = ProdCadena[x].PrecioFinal * 1.13;
 
@@ -503,6 +563,118 @@ function onChangeCobertura(i) {
         })
     }
 }
+function onChangeValEscalonado(i) {
+    try {
+
+        var idCategoria = $("#CategoriaSeleccionado").val();
+        var idListaPrecio = $("#ListaSeleccionado").val();
+        var Moneda = $("#MonedaSeleccionado").val();
+
+        var PE = ProdClientes[i];
+
+        // ================= LEER ESCALONADO =================
+        var CantMin1 = parseFloat($("#" + i + "_CantMin1").val()) || 0;
+        var CantMax1 = parseFloat($("#" + i + "_CantMax1").val()) || 0;
+        var Margen1 = parseFloat($("#" + i + "_Margen1").val()) || 0;
+
+        var CantMin2 = parseFloat($("#" + i + "_CantMin2").val()) || 0;
+        var CantMax2 = parseFloat($("#" + i + "_CantMax2").val()) || 0;
+        var Margen2 = parseFloat($("#" + i + "_Margen2").val()) || 0;
+
+        var CantMin3 = parseFloat($("#" + i + "_CantMin3").val()) || 0;
+        var CantMax3 = parseFloat($("#" + i + "_CantMax3").val()) || 0;
+        var Margen3 = parseFloat($("#" + i + "_Margen3").val()) || 0;
+
+        // ================= AUTO-RANGOS =================
+        if (CantMax1 > 0) {
+            CantMin2 = CantMax1 + 1;
+            $("#" + i + "_CantMin2").val(CantMin2);
+        }
+
+        if (CantMax2 > 0) {
+            CantMin3 = CantMax2 + 1;
+            $("#" + i + "_CantMin3").val(CantMin3);
+        }
+
+        // ================= BUSCAR / CREAR =================
+        var producto = ProdCadena.find(p =>
+            p.ItemCode == PE.Codigo &&
+            p.idCategoria == idCategoria &&
+            p.idListaPrecio == idListaPrecio &&
+            p.Moneda == Moneda
+        );
+
+        if (!producto) {
+            producto = {
+                ItemCode: PE.Codigo,
+                idListaPrecio: parseFloat(idListaPrecio),
+                idCategoria: PE.idCategoria,
+                Moneda: PE.Moneda,
+                PrecioSAP: PE.PrecioUnitario,
+
+                Cobertura: parseFloat($("#" + i + "_Cobertura").val()) || 0,
+                Margen: parseFloat($("#" + i + "_Margen").val()) || 0,
+                MargenMin: parseFloat($("#" + i + "_MargenMin").val()) || 0,
+
+                PrecioFinal: 0,
+                PrecioCob: 0,
+                PrecioMin: 0,
+
+                Seteable: $("#" + i + "_mdcheckbox").prop('checked'),
+                PrecioFijo: $("#" + i + "_mdcheckbox2").prop('checked'),
+
+                CantMin1: CantMin1,
+                CantMax1: CantMax1,
+                Margen1: Margen1,
+
+                CantMin2: CantMin2,
+                CantMax2: CantMax2,
+                Margen2: Margen2,
+
+                CantMin3: CantMin3,
+                CantMax3: CantMax3,
+                Margen3: Margen3
+            };
+
+            producto.PrecioCob = PE.Costo / (1 - (producto.Cobertura / 100));
+            producto.PrecioFinal = producto.PrecioCob / (1 - (producto.Margen / 100));
+            producto.PrecioMin = producto.PrecioCob / (1 - (producto.MargenMin / 100));
+
+            ProdCadena.push(producto);
+
+        } else {
+
+            producto.Cobertura = parseFloat($("#" + i + "_Cobertura").val()) || producto.Cobertura;
+            producto.Margen = parseFloat($("#" + i + "_Margen").val()) || producto.Margen;
+            producto.MargenMin = parseFloat($("#" + i + "_MargenMin").val()) || producto.MargenMin;
+
+            producto.Seteable = $("#" + i + "_mdcheckbox").prop('checked');
+            producto.PrecioFijo = $("#" + i + "_mdcheckbox2").prop('checked');
+
+            producto.CantMin1 = CantMin1;
+            producto.CantMax1 = CantMax1;
+            producto.Margen1 = Margen1;
+
+            producto.CantMin2 = CantMin2;
+            producto.CantMax2 = CantMax2;
+            producto.Margen2 = Margen2;
+
+            producto.CantMin3 = CantMin3;
+            producto.CantMax3 = CantMax3;
+            producto.Margen3 = Margen3;
+        }
+
+        console.log("Escalonado actualizado con rangos automáticos:", producto);
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error inesperado',
+            text: e.toString()
+        });
+    }
+}
+
 
 function RellenaProductos() {
     try {
@@ -539,6 +711,7 @@ function RellenaTabla() {
 
             html += "<td class='text-center'> <input type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeRevisado(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> ";
             html += "<td class='text-center'> <input type='checkbox' id='" + i + "_mdcheckbox2' class='chk-col-green' onchange='javascript: onChangeCheckboxPrecio(" + i + ")'>  <label for='" + i + "_mdcheckbox2'></label> </td> ";
+      
             html += "<td > " + ProdClientes[i].Codigo + "-" + ProdClientes[i].Nombre + " </td>";
 
 
@@ -557,16 +730,38 @@ function RellenaTabla() {
             html += "<td class='text-center' id='" + i + "_Ganancia'> 0 </td>";
 
 
+            html += '<td align="center"> <select class=" form-control " id="' + i + 'SelectEscalonado" onchange="javascript: onChangeEscalonado(' + i + ')"  > ' +
 
+                '</option> <option selected value="01">Nivel 1 </option>' +
+                '</option> <option  value="02">Nivel 2 </option>' +
+                '</option> <option value="03">Nivel 3 </option>' +
 
+                '</select> </td>';
+            html += "<td class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMin1' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMax1' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_Margen1' class='form-control'   value= '0' min='1'/>  </td>";
+
+            html += "<td  class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMin2' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td  class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMax2' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td  class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_Margen2' class='form-control'   value= '0' min='1'/>  </td>";
+
+            html += "<td  class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMin3' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td  class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMax3' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td  class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_Margen3' class='form-control'   value= '0' min='1'/>  </td>";
 
             html += "</tr>";
+
+  
 
 
         }
 
 
         $("#tbody").html(html);
+
+        for (let i = 0; i < ProdClientes.length; i++) {
+    onChangeEscalonado(i);
+}
 
     } catch (e) {
         Swal.fire({
@@ -577,6 +772,36 @@ function RellenaTabla() {
         })
     }
 
+}
+
+function onChangeEscalonado(i) {
+    try {
+        var nivel = parseInt($("#" + i + "SelectEscalonado").val(), 10);
+
+        // ocultar todos
+        toggleEscalon(i, 1, false);
+        toggleEscalon(i, 2, false);
+        toggleEscalon(i, 3, false);
+
+        // mostrar solo el seleccionado
+        toggleEscalon(i, nivel, true);
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error ' + e
+        });
+    }
+}
+
+
+function toggleEscalon(i, nivel, mostrar) {
+    var display = mostrar ? "" : "none";
+
+    $("#" + i + "_CantMin" + nivel).closest("td").css("display", display);
+    $("#" + i + "_CantMax" + nivel).closest("td").css("display", display);
+    $("#" + i + "_Margen" + nivel).closest("td").css("display", display);
 }
 
 function onChangeRevisado(i) {
@@ -1320,3 +1545,9 @@ function SetearT() {
         });
     }
 }
+
+
+
+
+
+

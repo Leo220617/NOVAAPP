@@ -30,11 +30,46 @@
             top: 0;
             background: white;
         }
+
+        /* CONTENEDOR QUE ROMPE CLIPPING DE PADRES */
+        #force-scroll-x {
+            height: 500px;
+            max-width: 100vw;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+            position: relative;
+            transform: translateZ(0); /* 🔥 CLAVE */
+        }
+
+            /* FUERZA ANCHO REAL DE LA TABLA */
+            #force-scroll-x table {
+                width: auto !important;
+                min-width: auto !important;
+                table-layout: fixed;
+
+               
+                height: 500px;
+            }
+
+            /* HEADER FIJO */
+            #force-scroll-x thead th {
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                background: #17a2b8;
+                color: white;
+            }
     </style>
 
 }
 @section scripts{
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.body.style.overflowX = "auto";
+            document.documentElement.style.overflowX = "auto";
+        });
+    </script>
 
     <script src="/js/Margenes/EditarMargenes.js?v=0.1.1"></script>
 
@@ -305,36 +340,39 @@
                         </div>
                         <div class="box-body">
                             <div class="row">
-                                <div class="col-12 table-responsive tableFixHead" style=" overflow-y:scroll; z-index: 5; height: 500px;">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th class="bg-info">No seteable</th>
-                                                <th class="bg-info">Precio Fijo</th>
-                                                <th class="bg-info">Descripción</th>
-                                                <th class="bg-info">Precio SAP</th>
+                                <div class="col-12">
 
-                                                <th class="bg-info">Cobertura %</th>
-                                                <th class="bg-info">Precio Cobertura</th>
-                                                <th class="bg-info">Margen Min %</th>
-                                                <th class="bg-info">Precio Min</th>
-                                                <th class="bg-info">Margen %</th>
-                                                <th class="bg-info">Precio Final</th>
-                                                <th class="bg-info">Precio Final Impuesto</th>
-                                                <th class="bg-info">% Ganancia</th>
+                                    <!-- CONTENEDOR FORZADO -->
+                                    <div id="force-scroll-x">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th class="bg-info">No seteable</th>
+                                                    <th class="bg-info">Precio Fijo</th>
+                                                    <th class="bg-info">Descripción</th>
+                                                    <th class="bg-info">Precio SAP</th>
+                                                    <th class="bg-info">Cobertura %</th>
+                                                    <th class="bg-info">Precio Cobertura</th>
+                                                    <th class="bg-info">Margen Min %</th>
+                                                    <th class="bg-info">Precio Min</th>
+                                                    <th class="bg-info">Margen %</th>
+                                                    <th class="bg-info">Precio Final</th>
+                                                    <th class="bg-info">Precio Final Impuesto</th>
+                                                    <th class="bg-info">% Ganancia</th>
+                                                    <th class="bg-info">Escalonado</th>
+                                                    <th class="bg-info">Cant Minima</th>
+                                                    <th class="bg-info">Cant Maxima</th>
+                                                    <th class="bg-info">Margen Min Escalonado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody"></tbody>
+                                        </table>
+                                    </div>
 
-
-
-
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbody">
-                                        </tbody>
-
-                                    </table>
                                 </div>
                             </div>
                         </div>
+
 
                         <!-- /.col -->
                     </div>
