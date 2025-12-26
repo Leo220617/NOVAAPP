@@ -26,6 +26,7 @@
         public decimal PrecioCob { get; set; }
         public bool Seteable { get; set; }
         public bool PrecioFijo { get; set; }
+        public bool Escalonado { get; set; }
 
         public decimal CantMin1 { get; set; }
         public decimal CantMax1 { get; set; }

@@ -97,6 +97,7 @@ function RecuperarInformacion() {
                 PrecioCob: parseFloat(Margenes.Detalle[i].PrecioCob.toFixed(2)),
                 Seteable: Margenes.Detalle[i].Seteable,
                 PrecioFijo: Margenes.Detalle[i].PrecioFijo,
+                Escalonado: Margenes.Detalle[i].Escalonado,
 
                 CantMin1: Margenes.Detalle[i].CantMin1 || 0,
                 CantMax1: Margenes.Detalle[i].CantMax1 || 0,
@@ -142,7 +143,11 @@ function RecuperarInformacion() {
                 $("#" + x + "_CantMax3").val(Producto.CantMax3);
                 $("#" + x + "_Margen3").val(Producto.Margen3);
 
+                onChangeCheckboxEscalonado(x);
 
+                calcularPrecioEscalonado(x, Producto.Margen1, x + "_InputEscalonado1");
+                calcularPrecioEscalonado(x, Producto.Margen2, x + "_InputEscalonado2");
+                calcularPrecioEscalonado(x, Producto.Margen3, x + "_InputEscalonado3");
 
                 var PrecioImp = Producto.PrecioFinal * 1.13;
      
@@ -206,7 +211,9 @@ function CambiarCheck(i, inicio) {
             $("#" + x + "_mdcheckbox2").prop('checked')
             $("#" + x + "_mdcheckbox2").prop('checked', Margenes.Detalle[i].PrecioFijo);
 
-       
+
+            $("#" + x + "_mdcheckbox3").prop('checked')
+            $("#" + x + "_mdcheckbox3").prop('checked', Margenes.Detalle[i].Escalonado);
 
         } else {
             var valorCheck = $("#" + x + "_mdcheckbox").prop('checked');
@@ -215,6 +222,8 @@ function CambiarCheck(i, inicio) {
             var valorCheck2 = $("#" + x + "_mdcheckbox2").prop('checked');
             Margenes.Detalle[i].PrecioFijo = valorCheck2;
 
+            var valorCheck3 = $("#" + x + "_mdcheckbox3").prop('checked');
+            Margenes.Detalle[i].Escalonado = valorCheck3;
          
         }
 
@@ -440,6 +449,7 @@ function onChangeCobertura(i) {
                     PrecioMin: 0,
                     Seteable: $("#" + i + "_mdcheckbox").prop('checked'),
                     PrecioFijo: $("#" + i + "_mdcheckbox2").prop('checked'),
+                    Escalonado: $("#" + i + "_mdcheckbox3").prop('checked'),
                     CantMin1: CantMin1,
                     CantMax1: CantMax1,
                     Margen1: Margen1,
@@ -622,6 +632,7 @@ function onChangeValEscalonado(i) {
 
                 Seteable: $("#" + i + "_mdcheckbox").prop('checked'),
                 PrecioFijo: $("#" + i + "_mdcheckbox2").prop('checked'),
+                Escalonado: $("#" + i + "_mdcheckbox3").prop('checked'),
 
                 CantMin1: CantMin1,
                 CantMax1: CantMax1,
@@ -650,6 +661,7 @@ function onChangeValEscalonado(i) {
 
             producto.Seteable = $("#" + i + "_mdcheckbox").prop('checked');
             producto.PrecioFijo = $("#" + i + "_mdcheckbox2").prop('checked');
+            producto.Escalonado = $("#" + i + "_mdcheckbox3").prop('checked');
 
             producto.CantMin1 = CantMin1;
             producto.CantMax1 = CantMax1;
@@ -663,6 +675,9 @@ function onChangeValEscalonado(i) {
             producto.CantMax3 = CantMax3;
             producto.Margen3 = Margen3;
         }
+        calcularPrecioEscalonado(i, Margen1, i + "_InputEscalonado1");
+        calcularPrecioEscalonado(i, Margen2, i + "_InputEscalonado2");
+        calcularPrecioEscalonado(i, Margen3, i + "_InputEscalonado3");
 
         console.log("Escalonado actualizado con rangos automáticos:", producto);
 
@@ -711,7 +726,7 @@ function RellenaTabla() {
 
             html += "<td class='text-center'> <input type='checkbox' id='" + i + "_mdcheckbox' class='chk-col-green' onchange='javascript: onChangeRevisado(" + i + ")'>  <label for='" + i + "_mdcheckbox'></label> </td> ";
             html += "<td class='text-center'> <input type='checkbox' id='" + i + "_mdcheckbox2' class='chk-col-green' onchange='javascript: onChangeCheckboxPrecio(" + i + ")'>  <label for='" + i + "_mdcheckbox2'></label> </td> ";
-      
+            html += "<td class='text-center'> <input type='checkbox' id='" + i + "_mdcheckbox3' class='chk-col-green' onchange='javascript: onChangeCheckboxEscalonado(" + i + ")'>  <label for='" + i + "_mdcheckbox3'></label> </td> ";
             html += "<td > " + ProdClientes[i].Codigo + "-" + ProdClientes[i].Nombre + " </td>";
 
 
@@ -730,25 +745,31 @@ function RellenaTabla() {
             html += "<td class='text-center' id='" + i + "_Ganancia'> 0 </td>";
 
 
-            html += '<td align="center"> <select class=" form-control " id="' + i + 'SelectEscalonado" onchange="javascript: onChangeEscalonado(' + i + ')"  > ' +
+            html += '<td align="center"> <select class=" form-control " disabled id="' + i + 'SelectEscalonado" onchange="javascript: onChangeEscalonado(' + i + ')"  > ' +
 
-                '</option> <option selected value="01">Nivel 1 </option>' +
-                '</option> <option  value="02">Nivel 2 </option>' +
-                '</option> <option value="03">Nivel 3 </option>' +
+                '</option> <option selected value="01"> 1 </option>' +
+                '</option> <option  value="02"> 2 </option>' +
+                '</option> <option value="03"> 3 </option>' +
 
                 '</select> </td>';
-            html += "<td class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMin1' class='form-control'   value= '0' min='1'/>  </td>";
-            html += "<td class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMax1' class='form-control'   value= '0' min='1'/>  </td>";
-            html += "<td class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_Margen1' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMin1' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMax1' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td class='text-center'> <input disabled onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_Margen1' class='form-control'   value= '0' min='1'/>  </td>";
 
-            html += "<td  class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMin2' class='form-control'   value= '0' min='1'/>  </td>";
-            html += "<td  class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMax2' class='form-control'   value= '0' min='1'/>  </td>";
-            html += "<td  class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_Margen2' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td  class='text-center'> <input disabled onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMin2' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td  class='text-center'> <input disabled onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMax2' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td  class='text-center'> <input disabled onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_Margen2' class='form-control'   value= '0' min='1'/>  </td>";
 
-            html += "<td  class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMin3' class='form-control'   value= '0' min='1'/>  </td>";
-            html += "<td  class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMax3' class='form-control'   value= '0' min='1'/>  </td>";
-            html += "<td  class='text-center'> <input onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_Margen3' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td  class='text-center'> <input disabled onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMin3' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td  class='text-center'> <input disabled onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMax3' class='form-control'   value= '0' min='1'/>  </td>";
+            html += "<td  class='text-center'> <input disabled onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_Margen3' class='form-control'   value= '0' min='1'/>  </td>";
 
+         
+            html += "<td class='text-center'> <input disabled onchange='onChangeInputEscalonado(" + i + ",1)' id='" + i + "_InputEscalonado1' class='form-control' value='0'/> </td>";
+
+            html += "<td class='text-center'> <input disabled onchange='onChangeInputEscalonado(" + i + ",2)' id='" + i + "_InputEscalonado2' class='form-control' value='0'/> </td>";
+
+            html += "<td class='text-center'> <input disabled onchange='onChangeInputEscalonado(" + i + ",3)' id='" + i + "_InputEscalonado3' class='form-control' value='0'/> </td>";
             html += "</tr>";
 
   
@@ -794,6 +815,40 @@ function onChangeEscalonado(i) {
         });
     }
 }
+function onChangeCheckboxEscalonado(i) {
+    try {
+        var checked = $("#" + i + "_mdcheckbox3").is(":checked");
+
+        // habilitar / deshabilitar select
+        $("#" + i + "SelectEscalonado").prop("disabled", !checked);
+
+        // habilitar / deshabilitar TODOS los inputs de escalonado
+        $("#" + i + "_CantMin1").prop("disabled", !checked);
+        $("#" + i + "_CantMax1").prop("disabled", !checked);
+        $("#" + i + "_Margen1").prop("disabled", !checked);
+        $("#" + i + "_InputEscalonado1").prop("disabled", !checked);
+
+        $("#" + i + "_CantMin2").prop("disabled", !checked);
+        $("#" + i + "_CantMax2").prop("disabled", !checked);
+        $("#" + i + "_Margen2").prop("disabled", !checked);
+        $("#" + i + "_InputEscalonado2").prop("disabled", !checked);
+
+        $("#" + i + "_CantMin3").prop("disabled", !checked);
+        $("#" + i + "_CantMax3").prop("disabled", !checked);
+        $("#" + i + "_Margen3").prop("disabled", !checked);
+        $("#" + i + "_InputEscalonado3").prop("disabled", !checked);
+
+  
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error ' + e
+        });
+    }
+}
+
 
 
 function toggleEscalon(i, nivel, mostrar) {
@@ -802,6 +857,7 @@ function toggleEscalon(i, nivel, mostrar) {
     $("#" + i + "_CantMin" + nivel).closest("td").css("display", display);
     $("#" + i + "_CantMax" + nivel).closest("td").css("display", display);
     $("#" + i + "_Margen" + nivel).closest("td").css("display", display);
+    $("#" + i + "_InputEscalonado" + nivel).closest("td").css("display", display);
 }
 
 function onChangeRevisado(i) {
@@ -823,6 +879,17 @@ function onChangeRevisado(i) {
         if (valorCheck == true) {
             var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
             var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
+            var CantMin1 = parseFloat($("#" + i + "_CantMin1").val()) || 0;
+            var CantMax1 = parseFloat($("#" + i + "_CantMax1").val()) || 0;
+            var Margen1 = parseFloat($("#" + i + "_Margen1").val()) || 0;
+
+            var CantMin2 = parseFloat($("#" + i + "_CantMin2").val()) || 0;
+            var CantMax2 = parseFloat($("#" + i + "_CantMax2").val()) || 0;
+            var Margen2 = parseFloat($("#" + i + "_Margen2").val()) || 0;
+
+            var CantMin3 = parseFloat($("#" + i + "_CantMin3").val()) || 0;
+            var CantMax3 = parseFloat($("#" + i + "_CantMax3").val()) || 0;
+            var Margen3 = parseFloat($("#" + i + "_Margen3").val()) || 0;
 
             var PE = ProdClientes[i];
             if (Existe == undefined) {
@@ -845,7 +912,20 @@ function onChangeRevisado(i) {
                     PrecioCob: 0,
                     PrecioMin: 0,
                     Seteable: $("#" + i + "_mdcheckbox").prop('checked'),
-                    PrecioFijo: $("#" + i + "_mdcheckbox2").prop('checked')
+                    PrecioFijo: $("#" + i + "_mdcheckbox2").prop('checked'),
+                    Escalonado: $("#" + i + "_mdcheckbox3").prop('checked'),
+                    CantMin1: CantMin1,
+                    CantMax1: CantMax1,
+                    Margen1: Margen1,
+
+                    CantMin2: CantMin2,
+                    CantMax2: CantMax2,
+                    Margen2: Margen2,
+
+                    CantMin3: CantMin3,
+                    CantMax3: CantMax3,
+                    Margen3: Margen3
+
 
 
                 };
@@ -937,6 +1017,31 @@ function onChangeRevisado(i) {
     }
 
 }
+function calcularPrecioEscalonado(i, margen, inputId) {
+
+    if (margen <= 0) {
+        $("#" + inputId).val(0);
+        return;
+    }
+
+    var PE = ProdClientes[i];
+    var Moneda = $("#MonedaSeleccionado").val();
+    var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
+
+    var Cobertura = parseFloat($("#" + i + "_Cobertura").val()) || 0;
+
+    var PrecioCob = PE.Costo / (1 - (Cobertura / 100));
+    var PrecioFinal = PrecioCob / (1 - (margen / 100));
+    var PrecioImp = PrecioFinal * 1.13;
+
+    // Si trabajas con USD
+    if (Moneda !== "CRC") {
+        PrecioImp = PrecioImp; // ya está correcto
+    }
+
+    $("#" + inputId).val(parseFloat(PrecioImp).toFixed(2));
+}
+
 
 function onChangeCheckboxPrecio(i) {
     try {
@@ -980,6 +1085,44 @@ function onChangeCheckboxPrecio(i) {
     }
 
 }
+function onChangeInputEscalonado(i, nivel) {
+    try {
+
+        var Moneda = $("#MonedaSeleccionado").val();
+        var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
+        var PE = ProdClientes[i];
+
+        var precioConIVA = parseFloat($("#" + i + "_InputEscalonado" + nivel).val()) || 0;
+        if (precioConIVA <= 0) return;
+
+        const IVA = 0.13;
+
+        // 🔥 Precio SIN IVA
+        var precioSinIVA = precioConIVA / (1 + IVA);
+
+        // Costo según moneda
+        var costo = (Moneda === "CRC")
+            ? PE.Costo
+            : PE.Costo / TipodeCambio.TipoCambio;
+
+        // 🔥 Margen calculado SIN impuesto
+        var margen = 100 - ((costo / precioSinIVA) * 100);
+
+        // Asignar margen
+        $("#" + i + "_Margen" + nivel).val(margen.toFixed(2));
+
+        // Guardar en ProdCadena
+        var prod = ProdCadena.find(a => a.ItemCode == PE.Codigo);
+        if (prod) {
+            prod["Margen" + nivel] = margen;
+        }
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+
 function onChangePrecioFijo(i) {
     try {
 
@@ -995,6 +1138,18 @@ function onChangePrecioFijo(i) {
 
         var valorCheck = $("#" + i + "_mdcheckbox2").prop('checked');
         var input = $("#" + i + "_Ganancia");
+
+        var CantMin1 = parseFloat($("#" + i + "_CantMin1").val()) || 0;
+        var CantMax1 = parseFloat($("#" + i + "_CantMax1").val()) || 0;
+        var Margen1 = parseFloat($("#" + i + "_Margen1").val()) || 0;
+
+        var CantMin2 = parseFloat($("#" + i + "_CantMin2").val()) || 0;
+        var CantMax2 = parseFloat($("#" + i + "_CantMax2").val()) || 0;
+        var Margen2 = parseFloat($("#" + i + "_Margen2").val()) || 0;
+
+        var CantMin3 = parseFloat($("#" + i + "_CantMin3").val()) || 0;
+        var CantMax3 = parseFloat($("#" + i + "_CantMax3").val()) || 0;
+        var Margen3 = parseFloat($("#" + i + "_Margen3").val()) || 0;
         var PE = ProdClientes[i];
         if (valorCheck == true) {
 
@@ -1024,7 +1179,19 @@ function onChangePrecioFijo(i) {
                     PrecioCob: 0,
                     PrecioMin: 0,
                     Seteable: $("#" + i + "_mdcheckbox").prop('checked'),
-                    PrecioFijo: $("#" + i + "_mdcheckbox2").prop('checked')
+                    PrecioFijo: $("#" + i + "_mdcheckbox2").prop('checked'),
+                    Escalonado: $("#" + i + "_mdcheckbox3").prop('checked'),
+                    CantMin1: CantMin1,
+                    CantMax1: CantMax1,
+                    Margen1: Margen1,
+
+                    CantMin2: CantMin2,
+                    CantMax2: CantMax2,
+                    Margen2: Margen2,
+
+                    CantMin3: CantMin3,
+                    CantMax3: CantMax3,
+                    Margen3: Margen3
 
 
                 };
@@ -1076,6 +1243,7 @@ function onChangePrecioFijo(i) {
                 ProdCadena[x].PrecioMin = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].MargenMin / 100));
                 ProdCadena[x].Seteable = $("#" + i + "_mdcheckbox").prop('checked');
                 ProdCadena[x].PrecioFijo = $("#" + i + "_mdcheckbox2").prop('checked');
+                ProdCadena[x].Escalonado = $("#" + i + "_mdcheckbox3").prop('checked');
                 var PrecioImp = ProdCadena[x].PrecioFinal * 1.13;
 
 
@@ -1421,7 +1589,7 @@ function filtrarTabla() {
     var indicesVisibles = [];
 
     filas.each(function (index) {
-        var descripcion = $(this).find("td:eq(2)").text().toLowerCase();
+        var descripcion = $(this).find("td:eq(3)").text().toLowerCase();
 
         if (descripcion.includes(busqueda)) {
             $(this).show();
