@@ -223,7 +223,7 @@ namespace NOVAAPP.Pages.Margenes
                 var resp2 = new
                 {
                     success = false,
-                    ListaX = be.Descripcion
+                    error = be.Descripcion
                 };
                 return new JsonResult(resp2);
 
@@ -235,7 +235,7 @@ namespace NOVAAPP.Pages.Margenes
                 var resp2 = new
                 {
                     success = false,
-                    Margen = ex.Message
+                    error = ex.Message
                 };
                 return new JsonResult(resp2);
             }

@@ -101,15 +101,15 @@ function RecuperarInformacion() {
 
                 CantMin1: Margenes.Detalle[i].CantMin1 || 0,
                 CantMax1: Margenes.Detalle[i].CantMax1 || 0,
-                Margen1: Margenes.Detalle[i].Margen1 || 0,
+                Margen1: parseFloat(Margenes.Detalle[i].Margen1.toFixed(2)) || 0,
 
                 CantMin2: Margenes.Detalle[i].CantMin2 || 0,
                 CantMax2: Margenes.Detalle[i].CantMax2 || 0,
-                Margen2: Margenes.Detalle[i].Margen2 || 0,
+                Margen2: parseFloat(Margenes.Detalle[i].Margen2.toFixed(2)) || 0,
 
                 CantMin3: Margenes.Detalle[i].CantMin3 || 0,
                 CantMax3: Margenes.Detalle[i].CantMax3 || 0,
-                Margen3: Margenes.Detalle[i].Margen3 || 0
+                Margen3: parseFloat(Margenes.Detalle[i].Margen3.toFixed(2)) || 0
 
 
 
@@ -150,7 +150,7 @@ function RecuperarInformacion() {
                 calcularPrecioEscalonado(x, Producto.Margen3, x + "_InputEscalonado3");
 
                 var PrecioImp = Producto.PrecioFinal * 1.13;
-     
+
 
 
                 $("#" + x + "_PrecioImp").text(formatoDecimal(parseFloat(PrecioImp).toFixed(2)));
@@ -224,7 +224,7 @@ function CambiarCheck(i, inicio) {
 
             var valorCheck3 = $("#" + x + "_mdcheckbox3").prop('checked');
             Margenes.Detalle[i].Escalonado = valorCheck3;
-         
+
         }
 
 
@@ -764,15 +764,14 @@ function RellenaTabla() {
             html += "<td  class='text-center'> <input disabled onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_CantMax3' class='form-control'   value= '0' min='1'/>  </td>";
             html += "<td  class='text-center'> <input disabled onchange='javascript: onChangeValEscalonado(" + i + ")' type='number' id='" + i + "_Margen3' class='form-control'   value= '0' min='1'/>  </td>";
 
-         
-            html += "<td class='text-center'> <input disabled onchange='onChangeInputEscalonado(" + i + ",1)' id='" + i + "_InputEscalonado1' class='form-control' value='0'/> </td>";
 
-            html += "<td class='text-center'> <input disabled onchange='onChangeInputEscalonado(" + i + ",2)' id='" + i + "_InputEscalonado2' class='form-control' value='0'/> </td>";
+         html += "<td class='text-center'> <input disabled onchange='onChangeInputEscalonado(" + i + ",1)' id='" + i + "_InputEscalonado1' class='form-control' value='0'/> </td>";
+html += "<td class='text-center'> <input disabled onchange='onChangeInputEscalonado(" + i + ",2)' id='" + i + "_InputEscalonado2' class='form-control' value='0'/> </td>";
+html += "<td class='text-center'> <input disabled onchange='onChangeInputEscalonado(" + i + ",3)' id='" + i + "_InputEscalonado3' class='form-control' value='0'/> </td>";
 
-            html += "<td class='text-center'> <input disabled onchange='onChangeInputEscalonado(" + i + ",3)' id='" + i + "_InputEscalonado3' class='form-control' value='0'/> </td>";
             html += "</tr>";
 
-  
+
 
 
         }
@@ -781,8 +780,8 @@ function RellenaTabla() {
         $("#tbody").html(html);
 
         for (let i = 0; i < ProdClientes.length; i++) {
-    onChangeEscalonado(i);
-}
+            onChangeEscalonado(i);
+        }
 
     } catch (e) {
         Swal.fire({
@@ -838,7 +837,7 @@ function onChangeCheckboxEscalonado(i) {
         $("#" + i + "_Margen3").prop("disabled", !checked);
         $("#" + i + "_InputEscalonado3").prop("disabled", !checked);
 
-  
+
 
     } catch (e) {
         Swal.fire({
@@ -1039,9 +1038,40 @@ function calcularPrecioEscalonado(i, margen, inputId) {
         PrecioImp = PrecioImp; // ya está correcto
     }
 
-    $("#" + inputId).val(parseFloat(PrecioImp).toFixed(2));
+    $("#" + inputId).val(parseFloat(PrecioImp).toFixed(0));
 }
 
+function onChangeInputEscalonado(i, nivel) {
+    try {
+
+        var PE = ProdClientes[i];
+        var Cobertura = parseFloat($("#" + i + "_Cobertura").val()) || 0;
+
+        var precioConIVA = parseFloat($("#" + i + "_InputEscalonado" + nivel).val()) || 0;
+        if (precioConIVA <= 0) return;
+
+        const IVA = 0.13;
+
+        // 1️⃣ Quitar IVA
+        var precioSinIVA = precioConIVA / (1 + IVA);
+
+        // 2️⃣ Quitar Cobertura
+        var precioBase = precioSinIVA * (1 - (Cobertura / 100));
+
+        // 3️⃣ Calcular margen REAL
+        var margen = 100 - ((PE.Costo / precioBase) * 100);
+
+        $("#" + i + "_Margen" + nivel).val(margen.toFixed(2));
+
+        var prod = ProdCadena.find(a => a.ItemCode == PE.Codigo);
+        if (prod) {
+            prod["Margen" + nivel] = margen;
+        }
+
+    } catch (e) {
+        console.error(e);
+    }
+}
 
 function onChangeCheckboxPrecio(i) {
     try {
@@ -1054,27 +1084,31 @@ function onChangeCheckboxPrecio(i) {
         if (valorCheck == true) {
             $("#" + i + "_PrecioImp").attr("hidden", true);      // Oculta el primero
             $("#" + i + "_PrecioFijo").removeAttr("hidden");
-            var texto = $("#" + i + "_PrecioImp").text();        
-            var limpio = texto.replace(/,/g, '');                   
-            var valor = parseFloat(limpio); 
+            var texto = $("#" + i + "_PrecioImp").text();
+            var limpio = texto.replace(/,/g, '');
+            var valor = parseFloat(limpio);
             $("#" + i + "_InputPrecioFijo").val(valor);
 
 
         } else {
             $("#" + i + "_PrecioImp").removeAttr("hidden");
             $("#" + i + "_PrecioFijo").attr("hidden", true);
-            var texto = $("#" + i + "_PrecioImp").text();     
-            var limpio = texto.replace(/,/g, '');                   
-            var valor = parseFloat(limpio); 
+            var texto = $("#" + i + "_PrecioImp").text();
+            var limpio = texto.replace(/,/g, '');
+            var valor = parseFloat(limpio);
             $("#" + i + "_InputPrecioFijo").val(valor);
             ProdCadena[x].PrecioFijo = $("#" + i + "_mdcheckbox2").prop('checked');
         }
 
         if (Existe) {
-            ProdCadena[x].PrecioFijo = $("#" + i + "_mdcheckbox2").prop('checked'); 
+            ProdCadena[x].PrecioFijo = $("#" + i + "_mdcheckbox2").prop('checked');
         }
         onChangePrecioFijo(i);
+        html += "<td class='text-center'> <input disabled onchange='onChangeInputEscalonado(" + i + ",1)' id='" + i + "_InputEscalonado1' class='form-control' value='0'/> </td>";
 
+        html += "<td class='text-center'> <input disabled onchange='onChangeInputEscalonado(" + i + ",2)' id='" + i + "_InputEscalonado2' class='form-control' value='0'/> </td>";
+
+        html += "<td class='text-center'> <input disabled onchange='onChangeInputEscalonado(" + i + ",3)' id='" + i + "_InputEscalonado3' class='form-control' value='0'/> </td>";
     } catch (e) {
         Swal.fire({
             icon: 'error',
@@ -1084,42 +1118,6 @@ function onChangeCheckboxPrecio(i) {
         });
     }
 
-}
-function onChangeInputEscalonado(i, nivel) {
-    try {
-
-        var Moneda = $("#MonedaSeleccionado").val();
-        var TipodeCambio = TipoCambio.find(a => a.Moneda == "USD");
-        var PE = ProdClientes[i];
-
-        var precioConIVA = parseFloat($("#" + i + "_InputEscalonado" + nivel).val()) || 0;
-        if (precioConIVA <= 0) return;
-
-        const IVA = 0.13;
-
-        // 🔥 Precio SIN IVA
-        var precioSinIVA = precioConIVA / (1 + IVA);
-
-        // Costo según moneda
-        var costo = (Moneda === "CRC")
-            ? PE.Costo
-            : PE.Costo / TipodeCambio.TipoCambio;
-
-        // 🔥 Margen calculado SIN impuesto
-        var margen = 100 - ((costo / precioSinIVA) * 100);
-
-        // Asignar margen
-        $("#" + i + "_Margen" + nivel).val(margen.toFixed(2));
-
-        // Guardar en ProdCadena
-        var prod = ProdCadena.find(a => a.ItemCode == PE.Codigo);
-        if (prod) {
-            prod["Margen" + nivel] = margen;
-        }
-
-    } catch (e) {
-        console.error(e);
-    }
 }
 
 
@@ -1155,7 +1153,7 @@ function onChangePrecioFijo(i) {
 
             var Existe = ProdCadena.find(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
             var x = ProdCadena.findIndex(a => a.ItemCode == ProdClientes[i].Codigo && a.idCategoria == idCategoria && a.idListaPrecio == idListaPrecio && a.Moneda == Moneda);
-  
+
             var PE = ProdClientes[i];
             if (Existe == undefined) {
 
@@ -1198,7 +1196,7 @@ function onChangePrecioFijo(i) {
                 Producto.PrecioCob = PE.Costo / (1 - (Producto.Cobertura / 100));
                 Producto.Margen = 100 - ((Producto.PrecioCob / Producto.PrecioFinal) * 100)
                 $("#" + i + "_Margen").val(Producto.Margen.toFixed(2));
-            
+
                 Producto.PrecioFinal = Producto.PrecioCob / (1 - (Producto.Margen / 100));
                 Producto.PrecioMin = Producto.PrecioCob / (1 - (Producto.MargenMin / 100));
 
@@ -1233,13 +1231,13 @@ function onChangePrecioFijo(i) {
                 ProdCadena[x].PrecioCob = PE.Costo / (1 - (ProdCadena[x].Cobertura / 100));
                 ProdCadena[x].PrecioFinal = PrecioFinal;
                 ProdCadena[x].Margen = 100 - ((ProdCadena[x].PrecioCob / PrecioFinal) * 100);
-              
+
                 $("#" + i + "_Margen").val(ProdCadena[x].Margen);
 
                 ProdCadena[x].Cobertura = parseFloat($("#" + i + "_Cobertura").val());
                 ProdCadena[x].MargenMin = parseFloat($("#" + i + "_MargenMin").val());
-            
-             
+
+
                 ProdCadena[x].PrecioMin = ProdCadena[x].PrecioCob / (1 - (ProdCadena[x].MargenMin / 100));
                 ProdCadena[x].Seteable = $("#" + i + "_mdcheckbox").prop('checked');
                 ProdCadena[x].PrecioFijo = $("#" + i + "_mdcheckbox2").prop('checked');
@@ -1455,7 +1453,7 @@ function Generar() {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Oops...',
-                                    text: 'Ha ocurrido un error al intentar guardar ' + json.listaX
+                                    text: 'Ha ocurrido un error al intentar guardar ' + json.error
 
                                 })
                             }
