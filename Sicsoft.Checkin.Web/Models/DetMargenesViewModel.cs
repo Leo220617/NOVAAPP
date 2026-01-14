@@ -39,5 +39,9 @@
         public decimal Margen2 { get; set; }
         public decimal Margen3 { get; set; }
 
+        public decimal PrecioEscalonado1 { get; set; }
+        public decimal PrecioEscalonado2 { get; set; }
+        public decimal PrecioEscalonado3 { get; set; }
+
     }
 }
