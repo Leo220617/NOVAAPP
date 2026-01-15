@@ -23,5 +23,7 @@ namespace NOVAAPP.Models
         public decimal Total { get; set; }
 
         public decimal TotalAprobado { get; set; }
+
+        public string Comentarios { get; set; }
     }
 }

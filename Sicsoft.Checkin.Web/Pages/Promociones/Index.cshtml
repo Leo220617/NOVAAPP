@@ -253,6 +253,8 @@
                                             <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a>
                                             &nbsp;
                                             <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> &nbsp;
+                                            <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
+                                        
 
                                         </td>
                                         <td>@item.Nombre</td>

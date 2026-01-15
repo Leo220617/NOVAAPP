@@ -79,6 +79,18 @@ namespace NOVAAPP.Pages.Promociones
                 return Page();
             }
         }
-    
+        public async Task<IActionResult> OnGetEliminar(int id)
+        {
+            try
+            {
+
+                await service.Eliminar(id);
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+        }
     }
 }
