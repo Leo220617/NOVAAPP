@@ -1,0 +1,261 @@
+﻿@page
+@using System.Globalization
+@model NOVAAPP.Pages.Relacionados.IndexModel
+@{
+    ViewData["Title"] = "Relacionados";
+
+
+}
+
+
+
+@section styles {
+
+
+}
+
+@section scripts {
+
+    <script>
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
+                $(document).ready(function () {
+                    $('.mi-selector').select2();
+                });
+            });
+            $(".js-example-responsive").select2({
+                width: 'resolve',// need to override the changed default
+                height: 'resolve'
+            });
+
+
+
+
+
+        });
+
+        var ids = 0;
+        function onClickModal(id) {
+            ids = id;
+            Swal.fire({
+                title: '¿Desea eliminar esta Relación?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    Eliminar();
+
+                }
+            })
+
+        }
+        function Eliminar() {
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Page("Index", "Eliminar")',
+                data: { id: ids },
+                success: function (result) {
+
+                    if (result == false) {
+                        ids = 0;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error al intentar eliminar'
+
+                        })
+
+                    } else {
+                        Swal.fire({
+                            title: "Ha sido eliminado con éxito",
+
+                            icon: 'success',
+                            showCancelButton: false,
+                            customClass: {
+                                confirmButton: 'swalBtnColor',
+
+                            },
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                beforeSend: function () {
+
+                }
+            })
+        }
+
+
+
+    </script>
+
+}
+
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Relacionados
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Listado Relacionados</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Relacionados</h4></div>
+                        <div class="col-sm-4"> <a asp-page="Nuevo" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Relación</a></div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="box-body">
+                    <form method="get">
+                        <div class="row">
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="cyber">Categoria:</label>
+                                    <select class="form-control select2" id="Lista" asp-for="filtro.Codigo2" required>
+                                        <option value="0"> Seleccione</option>
+
+                                        @foreach (var item in Model.Categoria)
+                                        {
+                                            <option value="@item.id">@item.CodSAP - @item.Nombre</option>
+                                        }
+
+
+                                    </select>
+
+
+
+
+
+
+                                </div>
+                            </div>
+                            <div class="col-sm-4 pr-1">
+                                <div class="form-group">
+                                    <label>Código Producto</label>
+
+                                    <input class="form-control" asp-for="filtro.Buscar" />
+                                </div>
+                            </div>
+
+
+
+
+
+                            <div class="col-sm-12 pl-1" style="text-align: right; padding-top: 2%;">
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary"> <i class="fa fa-search"></i></button>
+                            </div>
+
+
+
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Relacionados</h4></div>
+
+
+
+                    </div>
+
+
+                </div>
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Acción</th>
+                                    <th>Nombre </th>
+                                    <th>Categoría </th>
+                                    <th>Cant Lineas </th>
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Objeto)
+                                {
+                                    <tr>
+
+                                        <td>@item.id</td>
+                                        <td align="center" style="padding-top:15px;">
+                                            <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a>
+                                            &nbsp;
+                                            <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> &nbsp;
+                                            <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>
+
+
+                                        </td>
+                                        <td>@item.Nombre</td>
+                                        <td>  @(Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault().CodSAP + "-" + Model.Categoria.Where(a => a.id == item.idCategoria).FirstOrDefault().Nombre) </td>
+                                        <td>@item.Detalle.Length</td>
+
+
+                                    </tr>
+
+                                }
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Acción</th>
+                                    <th>Nombre </th>
+                                    <th>Categoría </th>
+                                    <th>Cant Lineas </th>
+
+
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <!-- /.box-body -->
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
