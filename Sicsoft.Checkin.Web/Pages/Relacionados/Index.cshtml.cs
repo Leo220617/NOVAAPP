@@ -46,7 +46,7 @@ namespace NOVAAPP.Pages.Relacionados
                 }
                 Categoria = await categorias.ObtenerLista("");
 
-                Objeto = await service.ObtenerLista("");
+                Objeto = await service.ObtenerLista(filtro);
              
 
 

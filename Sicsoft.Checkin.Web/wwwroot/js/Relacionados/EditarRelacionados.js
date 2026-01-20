@@ -68,6 +68,7 @@ var ProdClientes = [];
 var ProdCadena = [];
 var Categorias = [];
 var Duplicado = false;
+var Relacion = [];
 function processBarcode(code) {
     if (/^\d+$/.test(code)) {  // Verifica que el c�digo contenga solo n�meros (aj�stalo seg�n tu c�digo de barras)
 
@@ -105,10 +106,12 @@ function Recuperar() {
 
 
         Productos = JSON.parse($("#Productos").val());
+        Relacion = JSON.parse($("#Relacion").val());
         Categorias = JSON.parse($("#Categorias").val());
 
         RellenaCategorias();
-
+        RecuperarInformacion();
+        onChangeCategoria();
 
     } catch (e) {
         Swal.fire({
@@ -119,6 +122,45 @@ function Recuperar() {
         })
     }
 
+}
+function RecuperarInformacion() {
+    try {
+        $("#CategoriaSeleccionado").val(Relacion.idCategoria);
+        $("#inputNombre").val(Relacion.Nombre);
+
+
+        Inicio = true;
+
+        for (var i = 0; i < Relacion.Detalle.length; i++) {
+            var PE = Productos.find(a => a.Codigo == Relacion.Detalle[i].ItemCode);
+
+            var Producto =
+            {
+                idEncabezado: 0,
+                Descripcion: PE.Codigo + " - " + PE.Nombre,
+                ItemCode: PE.Codigo,
+                NombreProducto: PE.Nombre,
+                NumLinea: 0
+
+
+            };
+
+
+            ProdCadena.push(Producto);
+        }
+
+        RellenaTabla();
+
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+        })
+    }
 }
 function RellenaCategorias() {
     try {
@@ -156,7 +198,7 @@ function onChangeCategoria() {
         if (idCategoria != 0) {
             ProdClientes = Productos.filter(a => a.idCategoria == idCategoria);
             RellenaProductos();
-        } 
+        }
 
     } catch (e) {
         Swal.fire({
@@ -193,8 +235,8 @@ function RellenaProductos() {
                 id: prod.id,
                 Codigo: prod.Codigo,
                 Nombre: prod.Nombre,
-         
-              
+
+
                 searchable: `${prod.Codigo} ${prod.Nombre}`.toLowerCase(),
             };
         });
@@ -260,7 +302,7 @@ function onChangeProducto() {
 
 
             $("#inputNomPro").val(Producto.Nombre);
-     
+
 
         } else {
 
@@ -296,7 +338,7 @@ function RellenaTabla() {
 
             html += "<td > " + ProdCadena[i].Descripcion + " </td>";
 
-        
+
             html += "<td class='text-center'> <a class='fa fa-trash' onclick='javascript:EliminarProducto(" + i + ") '> </a> </td>";
 
 
@@ -348,7 +390,7 @@ function AgregarProductoTabla(Barras) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Ya se ingreso el mismo producto en otra línea ' 
+                    text: 'Ya se ingreso el mismo producto en otra línea '
 
                 })
                 Duplicado = true;
@@ -357,14 +399,14 @@ function AgregarProductoTabla(Barras) {
                 Duplicado = false;
             }
         }
- 
+
 
         if (!Duplicado) {
 
 
-  
-                ProdCadena.push(Producto);
-         
+
+            ProdCadena.push(Producto);
+
 
 
 
@@ -423,7 +465,7 @@ function Generar() {
 
 
         var EncRelacion = {
-            id: 0,
+            id: $("#id").val(),
             Nombre: $("#inputNombre").val(),
             idCategoria: $("#CategoriaSeleccionado").val(),
             Detalle: ProdCadena
@@ -482,7 +524,7 @@ function Generar() {
                                         //Despues de insertar, ocupariamos el id del cliente en la bd 
                                         //para entonces setearlo en el array de clientes
 
-                                        window.location.href = window.location.href.split("/Nuevo")[0];
+                                        window.location.href = window.location.href.split("/Editar")[0];
 
 
                                     }

@@ -17,7 +17,7 @@ using Sicsoft.Checkin.Web.Servicios;
 
 namespace NOVAAPP.Pages.Relacionados
 {
-    public class NuevoModel : PageModel
+    public class EditarModel : PageModel
     {
         private readonly IConfiguration configuration;
         private readonly ICrudApi<EncRelacionadosViewModel, int> service; //API
@@ -38,7 +38,7 @@ namespace NOVAAPP.Pages.Relacionados
         [BindProperty]
         public CategoriasViewModel[] Categoria { get; set; }
 
-        public NuevoModel(IConfiguration configuration, ICrudApi<EncRelacionadosViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<CategoriasViewModel, int> categorias) //CTOR 
+        public EditarModel(IConfiguration configuration, ICrudApi<EncRelacionadosViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<CategoriasViewModel, int> categorias) //CTOR 
         {
             this.configuration = configuration;
             this.service = service;
@@ -51,7 +51,7 @@ namespace NOVAAPP.Pages.Relacionados
         {
             try
             {
-        
+
                 var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
                 if (string.IsNullOrEmpty(Roles.Where(a => a == "125").FirstOrDefault()))
                 {
@@ -64,13 +64,13 @@ namespace NOVAAPP.Pages.Relacionados
 
                 ParametrosFiltros filtro = new ParametrosFiltros();
 
-            
+
                 filtro.Codigo1 = 20;
 
 
                 Categoria = await categorias.ObtenerLista("");
                 Productos = await productos.ObtenerLista(filtro);
-
+                Relacion = await service.ObtenerPorId(id);
 
                 return Page();
             }
@@ -112,7 +112,7 @@ namespace NOVAAPP.Pages.Relacionados
                 }
 
 
-                await service.Agregar(recibidos);
+                await service.Editar(recibidos);
 
                 var resp2 = new
                 {

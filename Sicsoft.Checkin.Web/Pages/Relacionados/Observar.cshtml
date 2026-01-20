@@ -1,0 +1,343 @@
+﻿@page "{id}"
+@model NOVAAPP.Pages.Relacionados.ObservarModel
+@{
+    ViewData["Title"] = "Relacionados";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+}
+@using Microsoft.AspNetCore.Http
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using System.Linq;
+@using System.Security.Claims;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.Extensions.Configuration;
+@using Refit;
+@using Sicsoft.Checkin.Web.Models;
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+    var CodSuc = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "CodSuc").Select(s1 => s1.Value).FirstOrDefault();
+}
+@section styles {
+    <style>
+        .html {
+            page-break-inside: avoid;
+        }
+
+        .no-break {
+            break-inside: avoid;
+            overflow: auto;
+        }
+
+        .box-body {
+            page-break-inside: avoid;
+            overflow: auto;
+        }
+
+    </style>
+
+}
+@section scripts {
+    <script>
+        $(document).ready(function () {
+
+
+
+        });
+
+        function ImprimirPantalla() {
+            try {
+                // window.print();
+                var margins = {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    width: 595
+                };
+
+
+                html = $(".html").html();
+                html2pdf(html, {
+                    margin: 1,
+                    padding: 0,
+                    filename: 'Relacion.pdf',
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: { scale: 2, logging: true },
+                    jsPDF: { unit: 'in', format: 'A2', orientation: 'P', compressPDF: true },
+                    class: ImprimirPantalla
+                });
+
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
+
+
+
+    </script>
+}
+
+
+@using Newtonsoft.Json;
+@using System.Globalization
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Relacion
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Observar Relacion</li>
+
+    </ol>
+</section>
+
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Observar Relacion</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+                            &nbsp;
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Relacion No: @Model.Relacion.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h5> <b>Categoria</b>  @(Model.Categoria.Where(a => a.id == Model.Relacion.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categoria.Where(a => a.id == Model.Relacion.idCategoria).FirstOrDefault().CodSAP + "-" + Model.Categoria.Where(a => a.id == Model.Relacion.idCategoria).FirstOrDefault().Nombre)</h5>
+
+                                        </div>
+
+
+
+
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-8 invoice-col">
+                            <strong>Nombre</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @Model.Relacion.Nombre </strong>
+
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th class="text-center">#</th>
+
+                                        <th class="text-center">Producto</th>
+
+                            
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var i = 0;
+                                    }
+                                    @foreach (var item in Model.Relacion.Detalle)
+                                    {
+                                        
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>
+                                              @item.ItemCode - @item.NombreProducto
+                                            </td>
+                                           
+
+                                        </tr>
+                                        i++;
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+
+ 
+        </div>
+
+    </div>
+
+
+    <button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
+</section>
+
+
+
+<div class="html" hidden>
+    <div class="row">
+
+
+        <div class="col-12">
+
+            <div class="box">
+
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Relación</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-header mt-0">
+                                <h2 class="d-inline"><span class="font-size-24">Relación No: @Model.Relacion.id</span></h2>
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h5> <b>Categoria</b>  @(Model.Categoria.Where(a => a.id == Model.Relacion.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categoria.Where(a => a.id == Model.Relacion.idCategoria).FirstOrDefault().CodSAP + "-" + Model.Categoria.Where(a => a.id == Model.Relacion.idCategoria).FirstOrDefault().Nombre)</h5>
+
+                                        </div>
+
+
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-8 invoice-col">
+                            <strong>Nombre</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @Model.Relacion.Nombre </strong>
+
+
+                            </address>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">Producto</th>
+                                 
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @{
+                                        var x = 0;
+                                    }
+                                    @foreach (var item in Model.Relacion.Detalle)
+                                    {
+
+                                        <tr>
+                                            <td>@x</td>
+                                            <td>
+                                                @item.ItemCode - @item.NombreProducto
+                                            </td>
+
+
+                                        </tr>
+                                        x++;
+                                    }
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+
+            <!-- Default box -->
+
+        </div>
+
+    </div>
+</div>

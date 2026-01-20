@@ -217,6 +217,14 @@
                                 }
 
                             }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "124").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/Relacionados/Index"><i class="mdi mdi-cube"></i>Relacionados</a></li>
+                                }
+
+                            }
                             <li class="treeview">
 
 
