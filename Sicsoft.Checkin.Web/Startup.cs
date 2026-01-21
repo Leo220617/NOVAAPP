@@ -397,7 +397,9 @@ namespace Sicsoft.Checkin.Web
 .ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/Relacionados"))
 .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
-
+            services.AddRefitClient<ICrudApi<EstadoCuentaViewModel, int>>()
+.ConfigureHttpClient(c => c.BaseAddress = new Uri($"{Configuration["UrlWebApi"]}/api/EstadoCuenta"))
+.AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
             return services;
         }
     }

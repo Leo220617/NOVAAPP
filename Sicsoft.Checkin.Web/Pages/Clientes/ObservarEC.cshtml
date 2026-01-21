@@ -1,0 +1,747 @@
+﻿@page "{id}"
+@using System.Globalization
+@model NOVAAPP.Pages.Clientes.ObservarECModel
+@{
+    ViewData["Title"] = "Clientes";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+}
+@section scripts {
+    <script>
+        function ImprimirPantalla() {
+            try {
+                // window.print();
+                var margins = {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    width: 595
+                };
+
+
+                html = $(".html").html();
+                html2pdf(html, {
+                    margin: 1,
+                    padding: 0,
+                    filename: 'EstadoCuenta.pdf',
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: { scale: 2, logging: true },
+                    jsPDF: { unit: 'in', format: 'A2', orientation: 'P' },
+                    class: ImprimirPantalla
+                });
+
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
+    </script>
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Clientes
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Observar Cliente</li>
+    </ol>
+</section>
+
+<section class="content ">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="box-subtitle">Observar Estado Cuenta</h6>
+
+
+                        </div>
+                        <div class="col-4">
+                            <a asp-page="./Index" class="nav-link text-dark" style="text-decoration: underline;"><i class="ti-back-left "></i>  Regresar</a>
+
+
+                            &nbsp;
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <!-- title row -->
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="page-header mt-0">
+
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h5> <b>Estado de Cuenta al</b> @DateTime.Now.ToString("dd/MM/yyyy")</h5>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                            {
+                                                <h5> <b>RUC:</b> @Model.Cliente.Cedula</h5>
+
+                                            }
+                                            else
+                                            {
+                                                <h5> <b>Cédula:</b> @Model.Cliente.Cedula</h5>
+                                            }
+
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5> <b>Tasa Interés Mensual:</b> 3%</h5>
+                                        </div>
+
+
+
+
+
+
+
+
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="page-header mt-0">
+
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+
+
+                                        <div class="col-md-4">
+                                            <h5> <b>Correo Cliente:</b> @Model.Cliente.Email</h5>
+
+                                        </div>
+
+
+
+
+
+                                        <div class="col-md-4">
+                                            <h5> <b>Condición de Pago:</b>  @(Model.Condiciones.Where(a => a.id == Model.Cliente.idCondicionPago).FirstOrDefault() == null ? "Condición de Pago Inexistente" : Model.Condiciones.Where(a => a.id == Model.Cliente.idCondicionPago).FirstOrDefault().Nombre)</h5>
+
+                                        </div>
+
+
+
+                                        <div class="col-4">
+                                            <button id="print" class="btn btn-warning" type="button" onclick="javascript: ImprimirPantalla()"> <span><i class="fa fa-print"></i> Imprimir</span> </button>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-3 invoice-col">
+                            <strong>Cliente</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @Model.Cliente.Codigo- @Model.Cliente.Nombre </strong>
+
+
+                            </address>
+                        </div>
+                        <div class="col-md-4">
+                            <h5> <b>Límite Crédito:</b>   @Math.Round(@Model.Cliente.LimiteCredito, 2).ToString("C", formato)</h5>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h5> <b>Saldo:</b>   @Math.Round(@Model.Cliente.Saldo, 2).ToString("C", formato)</h5>
+                        </div>
+
+
+
+                        <!-- /.col -->
+                    </div>
+
+                    <div class="row invoice-info">
+                        <div class="col-md-3 invoice-col">
+
+                            <address>
+                                <strong class="text-blue font-size-24">  COLONES </strong>
+
+
+                            </address>
+                        </div>
+
+
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+
+
+                                        <th class="text-center">Documento</th>
+                                        <th class="text-center">Doc. Referencia</th>
+                                        <th class="text-center">Fecha Doc</th>
+                                        <th class="text-center">Vencimiento</th>
+                                        <th class="text-center">Días V.</th>
+                                        <th class="text-center">Tipo Doc.</th>
+                                        <th class="text-center">Saldo</th>
+                                        <th class="text-center">Intereses</th>
+                                        <th class="text-center">Saldo Acum</th>
+
+
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @{
+                                        var SaldoColones = 0.0m;
+                                        var SaldoAcumColones = 0.0m;
+                                    }
+                                    @foreach (var item in Model.EstadoCuenta.EstadoCuenta.Where(a => a.MonedaDet == "CRC"))
+                                    {
+
+                                        <tr>
+
+
+
+
+
+                                            <td class="text-center"> @item.DocNum </td>
+                                            <td class="text-center"> @item.Consecutivo </td>
+                                            <td class="text-center"> @item.Fecha.ToString("dd/MM/yyyy") </td>
+                                            <td class="text-center"> @item.FechaVen.ToString("dd/MM/yyyy") </td>
+                                            <td class="text-center"> @item.Dias </td>
+                                            <td class="text-center"> Fact </td>
+                                            <td class="text-center">   @Math.Round(@item.Saldo, 2).ToString("C", formato) </td>
+
+                                            <td class="text-center">  @Math.Round(@item.Intereses, 2).ToString("C", formato) </td>
+                                            <td class="text-center">  @Math.Round(@item.SinVen, 2).ToString("C", formato) </td>
+
+
+
+                                        </tr>
+                                        SaldoColones += @item.Saldo;
+                                        SaldoAcumColones += @item.SinVen;
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+
+                        <div class="col-md-12  text-right">
+
+
+                            <div>
+                                <p>Moneda  : <span> CRC</span> </p>
+
+
+                            </div>
+                            <div class="total-payment">
+                                <h3><b>Saldo  :</b>  <span>@Math.Round(SaldoColones, 2).ToString("C", formato) </span></h3>
+                            </div>
+
+                            <div class="total-payment">
+                                <h3><b>Saldo Acumulado  :</b>  <span>@Math.Round(SaldoAcumColones, 2).ToString("C", formato) </span></h3>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+
+            <div class="box">
+
+                <div class="box-body">
+                    <!-- title row -->
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-3 invoice-col">
+
+                            <address>
+                                <strong class="text-blue font-size-24">  DOLARES </strong>
+
+
+                            </address>
+                        </div>
+
+
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+
+
+                                        <th class="text-center">Documento</th>
+                                        <th class="text-center">Doc. Referencia</th>
+                                        <th class="text-center">Fecha Doc</th>
+                                        <th class="text-center">Vencimiento</th>
+                                        <th class="text-center">Días V.</th>
+                                        <th class="text-center">Tipo Doc.</th>
+                                        <th class="text-center">Saldo</th>
+                                        <th class="text-center">Intereses</th>
+                                        <th class="text-center">Saldo Acum</th>
+
+
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @{
+                                        var SaldoDolares = 0.0m;
+                                        var SaldoAcumDolares = 0.0m;
+                                    }
+                                    @foreach (var item in Model.EstadoCuenta.EstadoCuenta.Where(a => a.MonedaDet == "USD"))
+                                    {
+
+                                        <tr>
+
+
+
+
+
+                                            <td class="text-center"> @item.DocNum </td>
+                                            <td class="text-center"> @item.Consecutivo </td>
+                                            <td class="text-center"> @item.Fecha.ToString("dd/MM/yyyy") </td>
+                                            <td class="text-center"> @item.FechaVen.ToString("dd/MM/yyyy") </td>
+                                            <td class="text-center"> @item.Dias </td>
+                                            <td class="text-center"> Fact </td>
+                                            <td class="text-center">   @Math.Round(@item.Saldo, 2).ToString("C", formato) </td>
+
+                                            <td class="text-center">  @Math.Round(@item.Intereses, 2).ToString("C", formato) </td>
+                                            <td class="text-center">  @Math.Round(@item.SinVen, 2).ToString("C", formato) </td>
+
+
+
+                                        </tr>
+                                        SaldoDolares += @item.Saldo;
+                                        SaldoAcumDolares += @item.SinVen;
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+
+                        <div class="col-md-12  text-right">
+
+
+                            <div>
+                                <p>Moneda  : <span> USD</span> </p>
+
+
+                            </div>
+                            <div class="total-payment">
+                                <h3><b>Saldo  :</b>  <span>@Math.Round(SaldoDolares, 2).ToString("C", formato) </span></h3>
+                            </div>
+
+                            <div class="total-payment">
+                                <h3><b>Saldo Acumulado  :</b>  <span>@Math.Round(SaldoAcumDolares, 2).ToString("C", formato) </span></h3>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+</section>
+
+
+<!--Imprimir-->
+
+<div class="html" hidden>
+    <!-- title row -->
+    <div class="row">
+        <div class="col-md-6">
+            <img id="base64image" style="width: 85%;"
+                 src="data:image/jpeg;base64,@Model.MiSucursal.FirstOrDefault().Imagen.ToString()" />
+        </div>
+        <div class="col-md-6">
+            <div style=" font-weight: bold;  font-size: 15px;">
+                <p style="  font-size: 20px !important; ">@Model.NombreCliente</p>
+                <p style="  font-size: 20px !important; ">@Model.MiSucursal.FirstOrDefault().Nombre</p>
+                <p>Cedula Juridica:  @Model.MiSucursal.FirstOrDefault().Cedula</p>
+                <p>Telefax: @Model.MiSucursal.FirstOrDefault().Telefono</p>
+
+                <p>Email: @Model.MiSucursal.FirstOrDefault().Correo</p>
+
+                <p> @Model.MiSucursal.FirstOrDefault().Sennas   </p>
+
+
+            </div>
+        </div>
+        <div class="col-12">
+
+            <div class="box">
+            
+                <div class="box-body">
+                    <!-- title row -->
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="page-header mt-0">
+
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h5> <b>Estado de Cuenta al</b> @DateTime.Now.ToString("dd/MM/yyyy")</h5>
+                                        </div>
+                                        <div class="col-md-4">
+                                            @if (Model.Parametros.FirstOrDefault().Pais == "P")
+                                            {
+                                                <h5> <b>RUC:</b> @Model.Cliente.Cedula</h5>
+
+                                            }
+                                            else
+                                            {
+                                                <h5> <b>Cédula:</b> @Model.Cliente.Cedula</h5>
+                                            }
+
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5> <b>Tasa Interés Mensual:</b> 3%</h5>
+                                        </div>
+
+
+
+
+
+
+
+
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="page-header mt-0">
+
+                                <br />
+                                <div class="text-left">
+                                    <div class="row">
+
+
+                                        <div class="col-md-4">
+                                            <h5> <b>Correo Cliente:</b> @Model.Cliente.Email</h5>
+
+                                        </div>
+
+
+
+
+
+                                        <div class="col-md-4">
+                                            <h5> <b>Condición de Pago:</b>  @(Model.Condiciones.Where(a => a.id == Model.Cliente.idCondicionPago).FirstOrDefault() == null ? "Condición de Pago Inexistente" : Model.Condiciones.Where(a => a.id == Model.Cliente.idCondicionPago).FirstOrDefault().Nombre)</h5>
+
+                                        </div>
+
+
+
+                                     
+
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-3 invoice-col">
+                            <strong>Cliente</strong>
+                            <address>
+                                <strong class="text-blue font-size-24"> @Model.Cliente.Codigo- @Model.Cliente.Nombre </strong>
+
+
+                            </address>
+                        </div>
+                        <div class="col-md-4">
+                            <h5> <b>Límite Crédito:</b>   @Math.Round(@Model.Cliente.LimiteCredito, 2).ToString("C", formato)</h5>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h5> <b>Saldo:</b>   @Math.Round(@Model.Cliente.Saldo, 2).ToString("C", formato)</h5>
+                        </div>
+
+
+
+                        <!-- /.col -->
+                    </div>
+
+                    <div class="row invoice-info">
+                        <div class="col-md-3 invoice-col">
+
+                            <address>
+                                <strong class="text-blue font-size-24">  COLONES </strong>
+
+
+                            </address>
+                        </div>
+
+
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+
+
+                                        <th class="text-center">Documento</th>
+                                        <th class="text-center">Doc. Referencia</th>
+                                        <th class="text-center">Fecha Doc</th>
+                                        <th class="text-center">Vencimiento</th>
+                                        <th class="text-center">Días V.</th>
+                                        <th class="text-center">Tipo Doc.</th>
+                                        <th class="text-center">Saldo</th>
+                                        <th class="text-center">Intereses</th>
+                                        <th class="text-center">Saldo Acum</th>
+
+
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                               
+                                    @foreach (var item in Model.EstadoCuenta.EstadoCuenta.Where(a => a.MonedaDet == "CRC"))
+                                    {
+
+                                        <tr>
+
+
+
+
+
+                                            <td class="text-center"> @item.DocNum </td>
+                                            <td class="text-center"> @item.Consecutivo </td>
+                                            <td class="text-center"> @item.Fecha.ToString("dd/MM/yyyy") </td>
+                                            <td class="text-center"> @item.FechaVen.ToString("dd/MM/yyyy") </td>
+                                            <td class="text-center"> @item.Dias </td>
+                                            <td class="text-center"> Fact </td>
+                                            <td class="text-center">   @Math.Round(@item.Saldo, 2).ToString("C", formato) </td>
+
+                                            <td class="text-center">  @Math.Round(@item.Intereses, 2).ToString("C", formato) </td>
+                                            <td class="text-center">  @Math.Round(@item.SinVen, 2).ToString("C", formato) </td>
+
+
+
+                                        </tr>
+                             
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+
+                        <div class="col-md-12  text-right">
+
+
+                            <div>
+                                <p>Moneda  : <span> CRC</span> </p>
+
+
+                            </div>
+                            <div class="total-payment">
+                                <h3><b>Saldo  :</b>  <span>@Math.Round(SaldoColones, 2).ToString("C", formato) </span></h3>
+                            </div>
+
+                            <div class="total-payment">
+                                <h3><b>Saldo Acumulado  :</b>  <span>@Math.Round(SaldoAcumColones, 2).ToString("C", formato) </span></h3>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+
+            <div class="box">
+
+                <div class="box-body">
+                    <!-- title row -->
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="col-md-3 invoice-col">
+
+                            <address>
+                                <strong class="text-blue font-size-24">  DOLARES </strong>
+
+
+                            </address>
+                        </div>
+
+
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+
+
+                                        <th class="text-center">Documento</th>
+                                        <th class="text-center">Doc. Referencia</th>
+                                        <th class="text-center">Fecha Doc</th>
+                                        <th class="text-center">Vencimiento</th>
+                                        <th class="text-center">Días V.</th>
+                                        <th class="text-center">Tipo Doc.</th>
+                                        <th class="text-center">Saldo</th>
+                                        <th class="text-center">Intereses</th>
+                                        <th class="text-center">Saldo Acum</th>
+
+
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.EstadoCuenta.EstadoCuenta.Where(a => a.MonedaDet == "USD"))
+                                    {
+
+                                        <tr>
+
+
+
+
+
+                                            <td class="text-center"> @item.DocNum </td>
+                                            <td class="text-center"> @item.Consecutivo </td>
+                                            <td class="text-center"> @item.Fecha.ToString("dd/MM/yyyy") </td>
+                                            <td class="text-center"> @item.FechaVen.ToString("dd/MM/yyyy") </td>
+                                            <td class="text-center"> @item.Dias </td>
+                                            <td class="text-center"> Fact </td>
+                                            <td class="text-center">   @Math.Round(@item.Saldo, 2).ToString("C", formato) </td>
+
+                                            <td class="text-center">  @Math.Round(@item.Intereses, 2).ToString("C", formato) </td>
+                                            <td class="text-center">  @Math.Round(@item.SinVen, 2).ToString("C", formato) </td>
+
+
+
+                                        </tr>
+                                
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.col -->
+
+                        <div class="col-md-12  text-right">
+
+
+                            <div>
+                                <p>Moneda  : <span> USD</span> </p>
+
+
+                            </div>
+                            <div class="total-payment">
+                                <h3><b>Saldo  :</b>  <span>@Math.Round(SaldoDolares, 2).ToString("C", formato) </span></h3>
+                            </div>
+
+                            <div class="total-payment">
+                                <h3><b>Saldo Acumulado  :</b>  <span>@Math.Round(SaldoAcumDolares, 2).ToString("C", formato) </span></h3>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <!-- /.row -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
