@@ -60,10 +60,9 @@ namespace NOVAAPP.Pages.BitacoraMargenes
                 {
 
 
-                    filtro.FechaInicial = DateTime.Now;
-                    filtro.FechaInicial = new DateTime(filtro.FechaInicial.Year, filtro.FechaInicial.Month, 1);
+                    filtro.FechaInicial = DateTime.Now.AddDays(-1);
 
-                    DateTime primerDia = new DateTime(filtro.FechaInicial.Year, filtro.FechaInicial.Month, 1);
+                    DateTime primerDia = DateTime.Now.AddDays(-1); ;
 
 
                     DateTime ultimoDia = primerDia.AddMonths(1).AddDays(-1);

@@ -79,8 +79,7 @@
                                 <div class="form-group">
                                     <label for="cyber">Lista de Precio:</label>
                                     <select class="form-control select2" id="Lista" asp-for="filtro.Codigo2" required>
-                                        <option value="0"> Seleccione</option>
-
+                                    
                                         @foreach (var item in Model.ListaPrecio)
                                         {
                                             <option value="@item.id">@item.CodSAP - @item.Nombre</option>
@@ -101,7 +100,7 @@
                                 <div class="form-group">
                                     <label for="cyber">Categoria:</label>
                                     <select class="form-control select2" id="Lista" asp-for="filtro.Codigo3" required>
-                                        <option value="0"> Seleccione</option>
+                                    
 
                                         @foreach (var item in Model.Categoria)
                                         {
