@@ -51,6 +51,8 @@ namespace NOVAAPP.Models
         public string MedioPago { get; set; }
 
         public bool Interes { get; set; }
+
+        public string RespuestaHacienda { get; set; }
         public MetodosPagosViewModel[] MetodosPagos { get; set; }
 
         public DetDocumentoViewModel[] Detalle { get; set; }

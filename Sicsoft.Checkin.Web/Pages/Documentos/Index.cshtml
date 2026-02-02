@@ -492,8 +492,23 @@ function AbrirModalAgregarCliente(id, codSuc) {
                             </div>
 
                            
+                             <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="cyber">Respuesta Hacienda:</label>
+                                        <select class="form-control select2" id="selectR" asp-for="filtro.Respuesta" required>
+                                            <option value="0">Seleccione</option>
+                                            <option value="procesando">Procesando</option>
+                                            <option value="aceptado">Aprobado</option>
+                                            <option value="rechazado">Rechazado</option>
 
-                               <div class="col-md-2 " style="text-align: center; padding-top: 2%;">
+
+
+
+
+                                        </select>
+                                    </div>
+                                </div>
+                               <div class="col-md-1 " style="text-align: center; padding-top: 2%;">
                                 <input type="checkbox" id="md_checkbox_1" class="chk-col-red" asp-for="filtro.Procesado" onclick="this.form.submit()" />
                                 <label for="md_checkbox_1"> Procesado SAP</label>
                             </div>
@@ -505,13 +520,13 @@ function AbrirModalAgregarCliente(id, codSuc) {
                             </div>
 
 
-                                                  <div class="col-2 " style="text-align: center; padding-top: 2%;">
+                                                  <div class="col-1 " style="text-align: center; padding-top: 2%;">
                                 <input type="checkbox" id="md_checkbox_3" class="chk-col-red" asp-for="filtro.interes" onclick="this.form.submit()" />
                                 <label for="md_checkbox_3"> Interes</label>
                             </div>
 
 
-
+                                
 
                             <div class="col-sm-12 pl-1" style="text-align: right; padding-top: 2%;">
                                 <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary"> <i class="fa fa-search"></i></button>
@@ -564,6 +579,7 @@ function AbrirModalAgregarCliente(id, codSuc) {
                                     <th>Procesado SAP</th>
                                     <th>Pago SAP</th>
                                     <th>Generado Por</th>
+                                    <th>Respuesta Hacienda</th>
                                     <th>Validado</th>
 
 
@@ -683,6 +699,31 @@ function AbrirModalAgregarCliente(id, codSuc) {
                                             @(Model.Users.Where(a => a.id == item.idUsuarioCreador).FirstOrDefault() == null ? "": Model.Users.Where(a => a.id == item.idUsuarioCreador).FirstOrDefault().Nombre )
 
                                         </td>
+                                        <td>
+                                         @{
+                                            switch (item.RespuestaHacienda)
+                                            {
+                                                case "rechazado":
+                                                    {
+                                                     <span class="badge badge-pill badge-danger">Rechazado</span>
+                                                        break;
+                                                    }
+                                                case "aceptado":
+                                                    {
+                                                       <span class="badge badge-pill badge-success">Aprobado</span>
+                                                        break;
+                                                    }
+                                                case "procesando":
+                                                    {
+                                                       <span class="badge badge-pill badge-info">Procesando</span>
+                                                        break;
+                                                    }
+                                         
+                                            }
+
+
+                                        }
+                                        </td>
                                          <td>
                                             @if (item.Validado)
                                             {
@@ -728,6 +769,7 @@ function AbrirModalAgregarCliente(id, codSuc) {
                                     <th>Procesado SAP</th>
                                     <th>Pago SAP</th>
                                     <th>Generado Por</th>
+                                     <th>Respuesta Hacienda</th>
                                     <th>Validado</th>
 
 

@@ -24,6 +24,7 @@ namespace InversionGloblalWeb.Models
         public string ListPrice { get; set; }
         public string ItemCode { get; set; }
         public string Categoria { get; set; }
+        public string Respuesta { get; set; }
         public DateTime FechaInicial { get; set; }
         public DateTime FechaFinal { get; set; }
 
