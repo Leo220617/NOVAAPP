@@ -29,6 +29,7 @@
 }
 @{
     var Ganancia = 0.00;
+    var Costo = 0.00m;
 
 }
 
@@ -635,9 +636,17 @@
                                             <td class="text-center">@Math.Round(@item.TotalLinea, 2).ToString("C", formato)</td>
                                             @if (!string.IsNullOrEmpty(Roles.Where(a => a == "53").FirstOrDefault()) && !item.TaxOnly)
                                             {
-                                                <td class="text-center">@Math.Round(((((@item.TotalLinea - @item.TotalImpuesto) - ((Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Costo) * item.Cantidad)) / (@item.TotalLinea - @item.TotalImpuesto)) * 100), 2).ToString("C", formato)%</td>
+                                                Costo = Convert.ToDecimal((Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Costo));
 
-                                                Ganancia += Convert.ToDouble(@Math.Round(((((@item.TotalLinea - @item.TotalImpuesto) - ((Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault() == null ? 0 : Model.Productos.Where(a => a.id == item.idProducto).FirstOrDefault().Costo) * item.Cantidad)) / (@item.TotalLinea - @item.TotalImpuesto)) * 100), 2)) / Model.Documento.Detalle.Length;
+                                                @if (Model.Documento.Moneda == "USD")
+                                                {
+                                                    Costo = Costo / Model.TP.FirstOrDefault().TipoCambio;
+
+                                                }
+
+                                                <td class="text-center">@Math.Round(((((@item.TotalLinea - @item.TotalImpuesto) - (Costo * item.Cantidad)) / (@item.TotalLinea - @item.TotalImpuesto)) * 100), 2).ToString("C", formato)%</td>
+
+                                                Ganancia += Convert.ToDouble(@Math.Round(((((@item.TotalLinea - @item.TotalImpuesto) - (Costo * item.Cantidad)) / (@item.TotalLinea - @item.TotalImpuesto)) * 100), 2)) / Model.Documento.Detalle.Length;
 
                                             }
                                             else if (!string.IsNullOrEmpty(Roles.Where(a => a == "53").FirstOrDefault()))

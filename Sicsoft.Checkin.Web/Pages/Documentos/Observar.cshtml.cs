@@ -25,6 +25,7 @@ namespace NOVAAPP.Pages.Documentos
         private readonly ICrudApi<VendedoresViewModel, int> vendedor;
         private readonly ICrudApi<ParametrosViewModel, int> parametro;
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
+        private readonly ICrudApi<TipoCambiosViewModel, int> tipoCambio;
 
 
         [BindProperty]
@@ -50,8 +51,11 @@ namespace NOVAAPP.Pages.Documentos
         [BindProperty]
         public BodegasViewModel[] Bodegas { get; set; }
 
+        [BindProperty]
+        public TipoCambiosViewModel[] TP { get; set; }
 
-        public ObservarModel(ICrudApi<DocumentosViewModel, int> service, ICrudApi<ClientesViewModel, string> serviceE, ICrudApi<ProductosViewModel, string> serviceP, ICrudApi<ExoneracionesViewModel, int> exoneracion, ICrudApi<CondicionesPagosViewModel, int> condiconesPago, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<ParametrosViewModel, int> parametro, ICrudApi<BodegasViewModel, int> bodegas)
+
+        public ObservarModel(ICrudApi<DocumentosViewModel, int> service, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<ClientesViewModel, string> serviceE, ICrudApi<ProductosViewModel, string> serviceP, ICrudApi<ExoneracionesViewModel, int> exoneracion, ICrudApi<CondicionesPagosViewModel, int> condiconesPago, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<ParametrosViewModel, int> parametro, ICrudApi<BodegasViewModel, int> bodegas)
         {
             this.service = service;
             this.serviceE = serviceE;
@@ -61,6 +65,7 @@ namespace NOVAAPP.Pages.Documentos
             this.vendedor = vendedor;
             this.parametro = parametro;
             this.bodegas = bodegas;
+            this.tipoCambio = tipoCambio;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -85,8 +90,19 @@ namespace NOVAAPP.Pages.Documentos
                 Vendedor = Vendedores.Where(a => a.id == Documento.idVendedor).FirstOrDefault();
 
                 Clientes = await serviceE.ObtenerLista(filtro);
-         
 
+                filtro.FechaInicial = DateTime.Now.Date;
+                TP = await tipoCambio.ObtenerLista(filtro);
+
+
+                if (Parametro.FirstOrDefault().Pais == "P" && TP.Length == 0)
+                {
+                    TP = new TipoCambiosViewModel[1];
+                    var TipoCambiosViewModel = new TipoCambiosViewModel();
+                    TipoCambiosViewModel.TipoCambio = 1;
+                    TipoCambiosViewModel.Moneda = "USD";
+                    TP[0] = TipoCambiosViewModel;
+                }
 
                 Productos = await serviceP.ObtenerLista("");
                 Exoneraciones = await exoneracion.ObtenerLista("");
