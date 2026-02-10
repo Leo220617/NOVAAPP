@@ -22,6 +22,7 @@ namespace NOVAAPP.Pages.AprobacionesCredito
         private readonly ICrudApi<AprobacionesCreditosViewModel, int> service;
         private readonly ICrudApi<ClientesViewModel, string> clientes;
         private readonly ICrudApi<CondicionesPagosViewModel, int> condiciones;
+        private readonly ICrudApi<UsuariosViewModel, int> usuarios;
 
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
@@ -34,12 +35,16 @@ namespace NOVAAPP.Pages.AprobacionesCredito
         public ClientesViewModel[] ClientesLista { get; set; }
 
         [BindProperty]
+        public UsuariosViewModel[] UsuariosLista { get; set; }
+
+        [BindProperty]
         public CondicionesPagosViewModel[] CP { get; set; }
-        public IndexModel(ICrudApi<AprobacionesCreditosViewModel, int> service, ICrudApi<ClientesViewModel, string> clientes, ICrudApi<CondicionesPagosViewModel, int> condiciones)
+        public IndexModel(ICrudApi<AprobacionesCreditosViewModel, int> service, ICrudApi<UsuariosViewModel, int> usuarios, ICrudApi<ClientesViewModel, string> clientes, ICrudApi<CondicionesPagosViewModel, int> condiciones)
         {
             this.service = service;
             this.clientes = clientes;
             this.condiciones = condiciones;
+            this.usuarios = usuarios;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -75,6 +80,7 @@ namespace NOVAAPP.Pages.AprobacionesCredito
                 filtro2.Externo = true;
                 ClientesLista = await clientes.ObtenerLista(filtro2);
                 CP = await condiciones.ObtenerLista("");
+                UsuariosLista = await usuarios.ObtenerLista("");
 
                 return Page();
             }

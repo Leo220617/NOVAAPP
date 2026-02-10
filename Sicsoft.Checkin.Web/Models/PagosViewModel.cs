@@ -26,6 +26,7 @@ namespace NOVAAPP.Models
         public int idUsuarioCreador { get; set; }
 
         public DetPagosViewModel[] Detalle { get; set; }
+        public MetodosPagosAbonosViewModel[] MetodosPagosAbonos { get; set; }
 
     }
 }

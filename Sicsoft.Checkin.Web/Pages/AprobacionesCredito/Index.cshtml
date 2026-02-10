@@ -256,6 +256,8 @@
                                    
                                     <th>Status </th>
                                     <th>Activo </th>
+                                    <th>Creador </th>
+                                    <th>Aceptador </th>
                                     <th>Comentarios </th>
 
 
@@ -335,7 +337,14 @@
                                             }
 
                                         </td>
+                                        <td>
+                                            @(Model.UsuariosLista.Where(a => a.id == item.idUsuarioCreador).FirstOrDefault() == null ? "" : Model.UsuariosLista.Where(a => a.id == item.idUsuarioCreador).FirstOrDefault().Nombre)
 
+                                        </td>
+                                        <td>
+                                            @(Model.UsuariosLista.Where(a => a.id == item.idUsuarioAceptador).FirstOrDefault() == null ? "" : Model.UsuariosLista.Where(a => a.id == item.idUsuarioAceptador).FirstOrDefault().Nombre)
+
+                                        </td>
                                         <td>@item.Comentarios</td>
 
 
@@ -357,6 +366,8 @@
                                 
                                     <th>Status </th>
                                     <th>Activo </th>
+                                    <th>Creador </th>
+                                    <th>Aceptador </th>
                                     <th>Comentarios </th>
 
 

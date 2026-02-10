@@ -450,9 +450,9 @@
                                             }
 
 
-                                            <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto).FirstOrDefault().Stock)))</td>
-                                            <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto).FirstOrDefault().Comprometido)))</td>
-                                            <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto).FirstOrDefault().StockReal)))</td>
+                                            <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault().Stock)))</td>
+                                            <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault().Comprometido)))</td>
+                                            <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault().StockReal)))</td>
 
 
                                             @if (item.Serie)
@@ -702,6 +702,28 @@
                             </div>
                         </div>
                     }
+                    else if (Model.Empresa == "A")
+                    {
+                        <div class="col-md-6">
+                            <img id="base64image" style="width: 85%;"
+                                 src="~/img/Novagro.png" />
+                        </div>
+                        <div class="col-md-6">
+                            <div style=" font-weight: bold;  font-size: 15px;">
+                                <p style="  font-size: 20px !important; ">INSUMOS AGROGAN SA.</p>
+
+
+                                <p>Cedula Juridica:  3101523515</p>
+                                <p>Telefax: 85522111</p>
+
+                                <p>Email: pital@agrogancr.com</p>
+
+                                <p> Pital San Carlos, Alajuela Costa Rica </p>
+
+
+                            </div>
+                        </div>
+                    }
                     else
                     {
                         <div class="col-md-6">
@@ -906,10 +928,9 @@
                                             <td class="text-right">@item.Ubicacion</td>
                                         }
 
-
-                                        <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto).FirstOrDefault().Stock)))</td>
-                                        <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto).FirstOrDefault().Comprometido)))</td>
-                                        <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto).FirstOrDefault().StockReal)))</td>
+                                        <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault().Stock)))</td>
+                                        <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault().Comprometido)))</td>
+                                        <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault().StockReal)))</td>
 
                                     </tr>
                                 }

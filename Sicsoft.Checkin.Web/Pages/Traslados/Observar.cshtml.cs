@@ -1,17 +1,24 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using NOVAAPP.Models;
-using Sicsoft.Checkin.Web.Servicios;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System;
-using System.Linq;
+using InversionGloblalWeb.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Refit;
+using Sicsoft.Checkin.Web.Servicios;
+using NOVAAPP.Models;
+
 
 namespace NOVAAPP.Pages.Traslados
 {
     public class ObservarModel : PageModel
     {
+        private readonly IConfiguration configuration;
         private readonly ICrudApi<EncTrasladosViewModel, int> service;
         private readonly ICrudApi<UsuariosViewModel, int> serviceU;
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
@@ -50,7 +57,7 @@ namespace NOVAAPP.Pages.Traslados
 
         [BindProperty]
         public string Empresa { get; set; }
-        public ObservarModel(ICrudApi<EncTrasladosViewModel, int> service, ICrudApi<UsuariosViewModel, int> serviceU, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<ProductosTrasladosViewModel, int> productos, ICrudApi<EstadosLotesViewModel, int> serviceE, ICrudApi<FlotillaViewModel, int> flotillas, ICrudApi<ChoferesViewModel, int> choferes, ICrudApi<RutasViewModel, int> rutas)
+        public ObservarModel(ICrudApi<EncTrasladosViewModel, int> service, IConfiguration configuration, ICrudApi<UsuariosViewModel, int> serviceU, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<ProductosTrasladosViewModel, int> productos, ICrudApi<EstadosLotesViewModel, int> serviceE, ICrudApi<FlotillaViewModel, int> flotillas, ICrudApi<ChoferesViewModel, int> choferes, ICrudApi<RutasViewModel, int> rutas)
         {
             this.service = service;
             this.serviceU = serviceU;
@@ -60,6 +67,7 @@ namespace NOVAAPP.Pages.Traslados
             this.rutas = rutas;
             this.flotillas = flotillas;
             this.choferes = choferes;
+            this.configuration = configuration;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -70,7 +78,7 @@ namespace NOVAAPP.Pages.Traslados
                 {
                     return RedirectToPage("/NoPermiso");
                 }
-                Empresa = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Empresa").Select(s1 => s1.Value).FirstOrDefault();
+                Empresa = configuration["CodCliente"].ToString();
                 Listas = await service.ObtenerPorId(id);
                 Users = await serviceU.ObtenerLista("");
                 EstadosLotes = await serviceE.ObtenerLista("");
