@@ -398,7 +398,7 @@
                 <div class="box-body">
                     <form method="get">
                         <div class="row">
-                            <div class="col-sm-4 pr-1">
+                            <div class="col-sm-3 pr-1">
                                 <div class="form-group">
                                     <label>Fecha Inicial</label>
                                     <input class="form-control " id="FecInicial" type="date" asp-for="filtro.FechaInicial">
@@ -407,13 +407,13 @@
 
                             </div>
 
-                            <div class="col-sm-4 pl-1">
+                            <div class="col-sm-3 pl-1">
                                 <div class="form-group">
                                     <label>Fecha Final</label>
                                     <input class="form-control" id="FecFinal" type="date" asp-for="filtro.FechaFinal">
                                 </div>
                             </div>
-                            <div class="col-sm-4 pl-1">
+                            <div class="col-sm-3 pl-1">
                                 <div class="form-group">
                                     <label for="cyber">Usuario Asignado:</label>
                                     <select class="form-control select2" id="UsuarioF" asp-for="filtro.Codigo1" required>
@@ -436,7 +436,21 @@
 
                                 </div>
                             </div>
+                               <div class="col-sm-3 pr-1">
+                                <div class="form-group">
+                                    <label>Sucursal</label>
+                                    <select class="form-control select2  " asp-for="filtro.Texto">
+                                        <option value="" selected> Seleccione</option>
+                                        @foreach (var item in Model.Sucursales)
+                                        {
+                            
+                                            <option value="@item.CodSuc"> @item.CodSuc - @item.Nombre</option>
+                                        }
 
+
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-sm-9 pr-1">
                                 <input type="checkbox" id="md_checkbox_1" class="chk-col-red" asp-for="filtro.pendientes" onclick="this.form.submit()" />
                                 <label for="md_checkbox_1">Preliminar</label>
@@ -479,7 +493,7 @@
 
 
                                 <input type="checkbox" id="md_checkbox_5" class="chk-col-red" asp-for="filtro.incompletos" onclick="this.form.submit()" />
-                                <label for="md_checkbox_5">Incompleto</label>
+                                <label for="md_checkbox_5">Cerrado Manual</label>
 
                                 &nbsp;
                                 &nbsp;
@@ -539,7 +553,10 @@
                                     <th>Creador</th>
                                     <th>Asignado</th>
                                     <th>Total KG LT</th>
-                                            <th>Proveeduría</th>
+                                    @if (Model.Parametros.FirstOrDefault().Proveeduria)
+                                    {
+                                        <th>Proveeduría</th>
+                                    }
 
 
 
@@ -634,12 +651,12 @@
                                                     }
                                                 case "I":
                                                     {
-                                                        <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Incompleto</span></td>
+                                                        <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Cerrado Manual</span></td>
                                                         break;
                                                     }
                                                 case "C":
                                                     {
-                                                        <td align="center" style="padding-top:15px;"><span class="badge badge-danger">Completo</span></td>
+                                                        <td align="center" style="padding-top:15px;"><span class="badge badge-success">Completo</span></td>
                                                         break;
                                                     }
 
@@ -684,20 +701,23 @@
                                             @Math.Round(Convert.ToDecimal(item.TotalKG))
                                         </td>
 
+
+                                        @if (Model.Parametros.FirstOrDefault().Proveeduria)
+                                        {
+
                                             <td>
-                                            @if (item.Proveeduria)
-                                            {
-                                                <span class="badge badge-pill badge-success">Aprobado</span>
+                                                @if (item.Proveeduria)
+                                                {
+                                                    <span class="badge badge-pill badge-success">Aprobado</span>
 
-                                            }
-                                            else
-                                            {
-                                                <span class="badge badge-pill badge-danger">Pendiente</span>
-                                            }
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge badge-pill badge-danger">Pendiente</span>
+                                                }
 
-                                        </td>
-
-
+                                            </td>
+                                        }
                                     </tr>
 
                                 }
@@ -716,7 +736,10 @@
                                     <th>Creador</th>
                                     <th>Asignado</th>
                                     <th>Total KG LT</th>
-                                    <th>Proveeduría</th>
+                                    @if (Model.Parametros.FirstOrDefault().Proveeduria)
+                                    {
+                                        <th>Proveeduría</th>
+                                    }
 
 
 

@@ -152,69 +152,69 @@
             }
         }
 
-                  function onClickModalP(id) {
-                    ids = id;
-                    Swal.fire({
-                    title: '¿Desea aprobar este traslado por Proveeduría?',
-                        showDenyButton: true,
-                        showCancelButton: false,
-                        confirmButtonText: `Aceptar`,
-                            denyButtonText: `Cancelar`,
-                        customClass: {
-                            confirmButton: 'swalBtnColor',
-                            denyButton: 'swalDeny'
-                        },
+        function onClickModalP(id) {
+            ids = id;
+            Swal.fire({
+                title: '¿Desea aprobar este traslado por Proveeduría?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    Proveeduria();
+
+                }
+            })
+
+        }
+        function Proveeduria() {
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Page("Observar", "Eliminar")',
+                data: { id: ids },
+                success: function (result) {
+
+                    if (result == false) {
+                        ids = 0;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error al intentar procesar la solicitud'
+
+                        })
+
+                    } else {
+                        Swal.fire({
+                            title: "Ha sido aprobado con éxito",
+
+                            icon: 'success',
+                            showCancelButton: false,
+                            customClass: {
+                                confirmButton: 'swalBtnColor',
+
+                            },
+                            confirmButtonText: 'OK'
                         }).then((result) => {
-                        /* Read more about isConfirmed, isDenied below */
-                        if (result.isConfirmed) {
-
-                            Proveeduria();
-
-                        }
-                    })
-
-                }
-                          function Proveeduria() {
-
-                    $.ajax({
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '@Url.Page("Observar", "Eliminar")',
-                        data: { id: ids },
-                        success: function (result) {
-
-                            if (result == false) {
-                                ids = 0;
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Oops...',
-                                    text: 'Ha ocurrido un error al intentar procesar la solicitud'
-
-                                })
-
-                            } else {
-                                Swal.fire({
-                                    title: "Ha sido aprobado con éxito",
-
-                                    icon: 'success',
-                                    showCancelButton: false,
-                                    customClass: {
-                                        confirmButton: 'swalBtnColor',
-
-                                    },
-                                    confirmButtonText: 'OK'
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        location.reload();
-                                    }
-                                })
+                            if (result.isConfirmed) {
+                                location.reload();
                             }
-                        },
-                        beforeSend: function () {
+                        })
+                    }
+                },
+                beforeSend: function () {
 
-                        }
-                    })
                 }
+            })
+        }
 
 
     </script>
@@ -307,12 +307,12 @@
                                                             }
                                                         case "I":
                                                             {
-                                                                <span class="badge badge-danger">Incompleto</span>
+                                                                <span class="badge badge-danger">Cerrado Manual</span>
                                                                 break;
                                                             }
                                                         case "C":
                                                             {
-                                                                <span class="badge badge-danger">Completo</span>
+                                                                <span class="badge badge-success">Completo</span>
                                                                 break;
                                                             }
                                                     }
@@ -322,27 +322,29 @@
                                             </h5>
 
                                         </div>
-                                        <div class="col-md-2">
-                                            <h5>
-                                                <b>Proveeduría:</b>
-                                                @if (Model.Listas.Proveeduria)
-                                                {
-                                                    <span class="badge badge-pill badge-success">Aprobado</span>
+                                        @if (Model.Parametros.FirstOrDefault().Proveeduria)
+                                        {
+                                            <div class="col-md-2">
+                                                <h5>
+                                                    <b>Proveeduría:</b>
+                                                    @if (Model.Listas.Proveeduria)
+                                                    {
+                                                        <span class="badge badge-pill badge-success">Aprobado</span>
 
-                                                }
-                                                else
-                                                {
-                                                    <span class="badge badge-pill badge-danger">Pendiente</span>
-                                                }
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge badge-pill badge-danger">Pendiente</span>
+                                                    }
 
 
 
 
 
-                                            </h5>
+                                                </h5>
 
-                                        </div>
-
+                                            </div>
+                                        }
 
 
                                         <div class="col-md-6">
@@ -794,12 +796,12 @@
                                                         }
                                                     case "I":
                                                         {
-                                                            <span class="badge badge-danger">Incompleto</span>
+                                                            <span class="badge badge-danger">Cerrado Manual</span>
                                                             break;
                                                         }
                                                     case "C":
                                                         {
-                                                            <span class="badge badge-danger">Completo</span>
+                                                            <span class="badge badge-success">Completo</span>
                                                             break;
                                                         }
                                                 }
@@ -809,6 +811,8 @@
                                         </h5>
 
                                     </div>
+                                      @if (Model.Parametros.FirstOrDefault().Proveeduria)
+                                        {
                                     <div class="col-md-2">
                                         <h5>
                                             <b>Proveeduría:</b>
@@ -829,7 +833,7 @@
                                         </h5>
 
                                     </div>
-
+                                        }
 
 
                                     <div class="col-md-6">
@@ -890,66 +894,68 @@
                 <!-- /.row -->
                 <!-- Table row -->
                 <div class="row">
-                    <div class="col-12 table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr class="bg-pale-info">
-                                    <th>#</th>
+                    <div style="font-weight: bold; font-size: 20px;">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-pale-info">
+                                        <th>#</th>
 
 
-                                    <th>Descripción</th>
-                                    <th class="text-right">Solicitada</th>
-                                    <th class="text-right">Aprobada</th>
-                                    @if (Model.Empresa == "GT")
-                                    {
-                                        <th class="text-right">Ubicación</th>
-                                    }
-                                    <th class="text-right">Stock</th>
-                                    <th class="text-right">Comprometido</th>
-                                    <th class="text-right">Stock Real</th>
-
-
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                @foreach (var item in Model.Listas.Detalle)
-                                {
-                                    <tr>
-                                        <td>@item.NumLinea</td>
-
-
-                                        <td> @item.CodigoProducto- @item.NombreProducto</td>
-
-                                        <td class="text-right">@(Math.Round(item.Cantidad))</td>
-                                        <td class="text-right">@(Math.Round(item.CantidadAprobada))</td>
+                                        <th>Descripción</th>
+                                        <th class="text-right">Solicitada</th>
+                                        <th class="text-right">Aprobada</th>
                                         @if (Model.Empresa == "GT")
                                         {
-                                            <td class="text-right">@item.Ubicacion</td>
+                                            <th class="text-right">Ubicación</th>
                                         }
+                                        <th class="text-right">Stock</th>
+                                        <th class="text-right">Comprometido</th>
+                                        <th class="text-right">Stock Real</th>
 
-                                        <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault().Stock)))</td>
-                                        <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault().Comprometido)))</td>
-                                        <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault().StockReal)))</td>
 
                                     </tr>
-                                }
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.Listas.Detalle)
+                                    {
+                                        <tr>
+                                            <td>@item.NumLinea</td>
 
 
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-12  text-right">
+                                            <td> @item.CodigoProducto- @item.NombreProducto</td>
+
+                                            <td class="text-right">@(Math.Round(item.Cantidad))</td>
+                                            <td class="text-right">@(Math.Round(item.CantidadAprobada))</td>
+                                            @if (Model.Empresa == "GT")
+                                            {
+                                                <td class="text-right">@item.Ubicacion</td>
+                                            }
+
+                                            <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault().Stock)))</td>
+                                            <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault().Comprometido)))</td>
+                                            <td class="text-right"> @(Math.Round((Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault() == null ? 0 : Model.Productos.Productos.Where(a => a.Codigo == item.CodigoProducto && a.idBodega == (Model.Bodega.Where(a => a.id == Model.Listas.BodInicial).FirstOrDefault().CodSAP)).FirstOrDefault().StockReal)))</td>
+
+                                        </tr>
+                                    }
 
 
-                        <div class="total-payment">
-                            <h3><b>Total KG-LT Solicitud  :</b>  <span>  @Math.Round(Model.Listas.TotalKG, 2).ToString("C", formato)</span></h3>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="total-payment">
-                            <h3><b>Total KG-LT Aprobado :</b>  <span>  @Math.Round(Model.Listas.TotalKGA, 2).ToString("C", formato)</span></h3>
-                        </div>
+                        <!-- /.col -->
+                        <div class="col-12  text-right">
 
+
+                            <div class="total-payment">
+                                <h3><b>Total KG-LT Solicitud  :</b>  <span>  @Math.Round(Model.Listas.TotalKG, 2).ToString("C", formato)</span></h3>
+                            </div>
+                            <div class="total-payment">
+                                <h3><b>Total KG-LT Aprobado :</b>  <span>  @Math.Round(Model.Listas.TotalKGA, 2).ToString("C", formato)</span></h3>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
                 <!-- /.row -->

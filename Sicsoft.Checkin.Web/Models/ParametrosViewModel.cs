@@ -67,6 +67,7 @@ namespace NOVAAPP.Models
         public string SQLAprovisionamiento { get; set; }
 
         public string NombreEmpresa { get; set; }
+        public bool Proveeduria { get; set; }
 
     }
 }

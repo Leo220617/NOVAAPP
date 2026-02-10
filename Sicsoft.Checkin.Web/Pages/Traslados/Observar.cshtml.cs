@@ -27,6 +27,7 @@ namespace NOVAAPP.Pages.Traslados
         private readonly ICrudApi<RutasViewModel, int> rutas;
         private readonly ICrudApi<FlotillaViewModel, int> flotillas;
         private readonly ICrudApi<ChoferesViewModel, int> choferes;
+        private readonly ICrudApi<ParametrosViewModel, int> param;
 
 
         [BindProperty]
@@ -56,8 +57,11 @@ namespace NOVAAPP.Pages.Traslados
         public ChoferesViewModel[] ChoferesLista { get; set; }
 
         [BindProperty]
+        public ParametrosViewModel[] Parametros { get; set; }
+
+        [BindProperty]
         public string Empresa { get; set; }
-        public ObservarModel(ICrudApi<EncTrasladosViewModel, int> service, IConfiguration configuration, ICrudApi<UsuariosViewModel, int> serviceU, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<ProductosTrasladosViewModel, int> productos, ICrudApi<EstadosLotesViewModel, int> serviceE, ICrudApi<FlotillaViewModel, int> flotillas, ICrudApi<ChoferesViewModel, int> choferes, ICrudApi<RutasViewModel, int> rutas)
+        public ObservarModel(ICrudApi<EncTrasladosViewModel, int> service, IConfiguration configuration, ICrudApi<ParametrosViewModel, int> param, ICrudApi<UsuariosViewModel, int> serviceU, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<ProductosTrasladosViewModel, int> productos, ICrudApi<EstadosLotesViewModel, int> serviceE, ICrudApi<FlotillaViewModel, int> flotillas, ICrudApi<ChoferesViewModel, int> choferes, ICrudApi<RutasViewModel, int> rutas)
         {
             this.service = service;
             this.serviceU = serviceU;
@@ -68,6 +72,7 @@ namespace NOVAAPP.Pages.Traslados
             this.flotillas = flotillas;
             this.choferes = choferes;
             this.configuration = configuration;
+            this.param = param;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -82,6 +87,7 @@ namespace NOVAAPP.Pages.Traslados
                 Listas = await service.ObtenerPorId(id);
                 Users = await serviceU.ObtenerLista("");
                 EstadosLotes = await serviceE.ObtenerLista("");
+                Parametros = await param.ObtenerLista("");
 
                 Bodega = await bodegas.ObtenerLista("");
                 Productos = await productos.ObtenerListaEspecial("");

@@ -19,6 +19,8 @@ namespace NOVAAPP.Pages.Traslados
         private readonly ICrudApi<UsuariosViewModel, int> serviceU;
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
         private readonly ICrudApi<ListasCorreosViewModel, int> correos;
+        private readonly ICrudApi<SucursalesViewModel, string> sucursales;
+        private readonly ICrudApi<ParametrosViewModel, int> param;
 
 
         [BindProperty]
@@ -37,12 +39,22 @@ namespace NOVAAPP.Pages.Traslados
         [BindProperty]
         public ListasCorreosViewModel[] Correo { get; set; }
 
-        public IndexModel(ICrudApi<EncTrasladosViewModel, int> service, ICrudApi<UsuariosViewModel, int> serviceU, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<ListasCorreosViewModel, int> correos)
+        [BindProperty]
+        public SucursalesViewModel[] Sucursales { get; set; }
+
+        [BindProperty]
+        public ParametrosViewModel[] Parametros { get; set; }
+
+
+
+        public IndexModel(ICrudApi<EncTrasladosViewModel, int> service, ICrudApi<SucursalesViewModel, string> sucursales, ICrudApi<ParametrosViewModel, int> param, ICrudApi<UsuariosViewModel, int> serviceU, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<ListasCorreosViewModel, int> correos)
         {
             this.service = service;
             this.serviceU = serviceU;
             this.bodegas = bodegas;
             this.correos = correos;
+            this.sucursales = sucursales;
+            this.param = param;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -94,6 +106,8 @@ namespace NOVAAPP.Pages.Traslados
 
                 }
                 filtro.correo = true;
+                Parametros = await param.ObtenerLista("");
+                Sucursales = await sucursales.ObtenerLista("");
                 Listas = await service.ObtenerLista(filtro);
 
                 Correo = await correos.ObtenerLista(filtro);
