@@ -1,5 +1,5 @@
-﻿@page
-@model NOVAAPP.Pages.RutasFac.NuevoModel
+﻿@page "{id}"
+@model NOVAAPP.Pages.RutasFac.EditarModel
 @{
     ViewData["Title"] = "RutasFac";
     NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
@@ -30,7 +30,7 @@
 @section scripts {
 
 
-    <script src="/js/RutasFac/NuevoRutasFac.js"></script>
+    <script src="/js/RutasFac/EditarRutasFac.js"></script>
 
 
 }
@@ -54,13 +54,13 @@
         <div class="col-12">
 
 
-
+            <input hidden asp-for="Lista.id" id="id" />
             <input hidden id="PrecioXLista" value="@JsonConvert.SerializeObject(Model.Lista)" />
-
+            <input hidden id="Ruta" value="@JsonConvert.SerializeObject(Model.Lista)" />
             <input hidden id="Clientes" value="@JsonConvert.SerializeObject(Model.Clientes)" />
 
 
-            <input hidden id="urlGenerar" value="@Url.Page("Nuevo", "AgregarRutasFac")" />
+            <input hidden id="urlGenerar" value="@Url.Page("Editar", "AgregarRutasFac")" />
 
 
 
@@ -88,7 +88,7 @@
                         <div class="col-md-3">
                             <div class="page-header mt-0">
                                 <h2 class="d-inline"><span class="font-size-24">Rutas</span></h2>
-                        
+
 
                             </div>
 
@@ -112,18 +112,18 @@
 
 
                         </div>
-             
-                     
 
 
-                        <div  class="col-md-4">
+
+
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>Precio</label>
                                 <input id="inputPrecio" type="number" class="form-control" placeholder="Precio">
                             </div>
                         </div>
 
-                        <div  class="col-md-4">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>Kilómetros</label>
                                 <input id="inputKM" type="number" class="form-control" placeholder="KM">
@@ -133,7 +133,7 @@
                             <div class="form-group">
                                 <h5>Sucursal<span class="text-danger">*</span></h5>
 
-                                <select id="selectSuc" class="form-control select2  ">
+                                <select id="selectSuc" class="form-control select2  " asp-for="Lista.CodSuc">
                                     @foreach (var item in Model.Sucursales)
                                     {
                                         <option value="@item.CodSuc">@item.CodSuc -@item.Nombre</option>
@@ -149,7 +149,7 @@
                         </div>
                         <div class="col-md-4">
                             <br><br>
-                     
+                      
 
 
 

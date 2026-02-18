@@ -18,15 +18,21 @@ namespace NOVAAPP.Pages.RutasFac
     public class IndexModel : PageModel
     {
         private readonly ICrudApi<RutasFacViewModel, int> rutas;
+        private readonly ICrudApi<SucursalesViewModel, string> sucursales;
         [BindProperty]
         public RutasFacViewModel[] RutasFac { get; set; }
+
+        [BindProperty]
+        public SucursalesViewModel[] Sucursales { get; set; }
+
 
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
 
-        public IndexModel(ICrudApi<RutasFacViewModel, int> rutas)
+        public IndexModel(ICrudApi<RutasFacViewModel, int> rutas, ICrudApi<SucursalesViewModel, string> sucursales)
         {
             this.rutas = rutas;
+            this.sucursales = sucursales;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -34,12 +40,13 @@ namespace NOVAAPP.Pages.RutasFac
             try
             {
                 var Roles1 = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
-                if (string.IsNullOrEmpty(Roles1.Where(a => a == "101").FirstOrDefault()))
+                if (string.IsNullOrEmpty(Roles1.Where(a => a == "129").FirstOrDefault()))
                 {
                     return RedirectToPage("/NoPermiso");
                 }
 
                 RutasFac = await rutas.ObtenerLista(filtro);
+                Sucursales = await sucursales.ObtenerLista("");
 
 
                 return Page();

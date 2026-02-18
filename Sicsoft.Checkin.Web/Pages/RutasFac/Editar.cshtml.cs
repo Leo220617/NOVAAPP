@@ -14,7 +14,7 @@ using System.IO;
 
 namespace NOVAAPP.Pages.RutasFac
 {
-    public class NuevoModel : PageModel
+    public class EditarModel : PageModel
     {
 
         private readonly ICrudApi<RutasFacViewModel, int> service; //API
@@ -22,9 +22,8 @@ namespace NOVAAPP.Pages.RutasFac
         private readonly ICrudApi<ParametrosViewModel, int> param;
         private readonly ICrudApi<SucursalesViewModel, string> sucursales;
 
-
         [BindProperty]
-        public RutasFacViewModel[] Lista { get; set; }
+        public RutasFacViewModel Lista { get; set; }
 
 
 
@@ -39,7 +38,7 @@ namespace NOVAAPP.Pages.RutasFac
         [BindProperty]
         public ParametrosViewModel[] Parametros { get; set; }
 
-        public NuevoModel(ICrudApi<RutasFacViewModel, int> service, ICrudApi<SucursalesViewModel, string> sucursales,ICrudApi<ParametrosViewModel, int> param, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<ClientesViewModel, string> clientes) //CTOR 
+        public EditarModel(ICrudApi<RutasFacViewModel, int> service, ICrudApi<SucursalesViewModel, string> sucursales, ICrudApi<ParametrosViewModel, int> param, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<ClientesViewModel, string> clientes) //CTOR 
         {
             this.service = service;
             this.clientes = clientes;
@@ -48,7 +47,7 @@ namespace NOVAAPP.Pages.RutasFac
 
 
         }
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             try
             {
@@ -63,18 +62,17 @@ namespace NOVAAPP.Pages.RutasFac
                 ParametrosFiltros filtro = new ParametrosFiltros();
 
 
-               
 
-                ParametrosFiltros filtro2 = new ParametrosFiltros();
                 Sucursales = await sucursales.ObtenerLista("");
-                Lista = await service.ObtenerLista(filtro2);
+
+                Lista = await service.ObtenerPorId(id);
                 filtro.FechaInicial = DateTime.Now.Date;
-          
+
                 filtro.Externo = true;
                 filtro.Activo = true;
                 Clientes = await clientes.ObtenerLista(filtro);
-             
-           
+
+
                 return Page();
             }
             catch (Exception ex)
@@ -116,8 +114,8 @@ namespace NOVAAPP.Pages.RutasFac
                     // Por ejemplo, puedes deserializarla a un objeto C# utilizando Newtonsoft.Json
                     recibidos = Newtonsoft.Json.JsonConvert.DeserializeObject<RutasFacViewModel>(jsonString);
                 }
-            
-                await service.Agregar(recibidos);
+
+                await service.Editar(recibidos);
 
                 var resp2 = new
                 {

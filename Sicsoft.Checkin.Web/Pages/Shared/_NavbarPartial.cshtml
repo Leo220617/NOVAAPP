@@ -290,7 +290,29 @@
 
                         </ul>
                     </li>
+                    <li class="treeview">
+                        <a href="#">
+                            Transportes
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "129").FirstOrDefault()))
+                                {
 
+                                    <li><a asp-page="/RutasFac/Index"><i class="mdi mdi-traffic-light"></i>Rutas</a></li>
+                                }
+
+                            }
+
+
+                            <li class="treeview">
+
+
+                        </ul>
+                    </li>
                     <li class="treeview">
                         <a href="#">
                             Aprovisionamiento

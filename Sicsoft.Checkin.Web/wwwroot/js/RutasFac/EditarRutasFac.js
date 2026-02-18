@@ -17,6 +17,7 @@ var ProdClientes = [];
 var ProdCadenaC = [];
 var Duplicado = false;
 var Clientes = [];
+var Ruta = [];
 
 
 
@@ -25,10 +26,10 @@ function Recuperar() {
 
 
 
-     
+        Ruta = JSON.parse($("#Ruta").val());
         Clientes = JSON.parse($("#Clientes").val());
         RellenaClientes();
-
+        RecuperarInformacion();
 
 
 
@@ -42,7 +43,51 @@ function Recuperar() {
     }
 
 }
+function RecuperarInformacion() {
+    try {
 
+       
+        $("#inputNombre").val(Ruta.Nombre);
+        $("#inputPrecio").val(Ruta.Precio);
+        $("#inputKM").val(Ruta.Km);
+        $("#selectSuc").val(Ruta.CodSuc);
+
+
+
+
+
+
+
+
+        for (var i = 0; i < Ruta.Clientes.length; i++) {
+
+
+            var Cliente =
+            {
+                idRutaFac: 0,
+
+                idCliente: Ruta.Clientes[i].idCliente
+
+
+
+            };
+            ProdCadenaC.push(Cliente);
+        }
+
+        RellenaTablaC();
+
+
+
+
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+        })
+    }
+}
 
 
 
@@ -238,9 +283,9 @@ function EliminarCliente(i) {
 function Generar() {
 
     try {
-  
+
         var Ruta = {
-            id: 0,
+            id: $("#id").val(),
             Nombre: $("#inputNombre").val(),
             Precio: $("#inputPrecio").val(),
             KM: $("#inputKM").val(),
@@ -301,7 +346,7 @@ function Generar() {
                                         //Despues de insertar, ocupariamos el id del cliente en la bd 
                                         //para entonces setearlo en el array de clientes
 
-                                        window.location.href = window.location.href.split("/Nuevo")[0];
+                                        window.location.href = window.location.href.split("/Editar")[0];
 
 
                                     }
@@ -390,6 +435,7 @@ function validarRuta(e) {
             })
             return false;
         }
+
         else if (e.Clientes.length == 0 || e.Clientes == null) {
             Swal.fire({
                 icon: 'error',
@@ -399,8 +445,6 @@ function validarRuta(e) {
             })
             return false;
         }
-
-  
 
 
         else {

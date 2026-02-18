@@ -104,11 +104,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Rutas Fac
+        Rutas
     </h1>
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-        <li class="breadcrumb-item active">Listado Rutas Fac</li>
+        <li class="breadcrumb-item active">Listado Rutas</li>
     </ol>
 </section>
 <!-- Main content -->
@@ -116,11 +116,54 @@
     <div class="row">
         <div class="col-12">
 
+              <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Filtro</h4></div>
 
+
+                    </div>
+
+
+                </div>
+                <div class="box-body">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-sm-6 pr-1">
+                                <div class="form-group">
+                                    <label>Sucursal</label>
+                                      <select class="form-control select2 " asp-for="filtro.Texto">
+                                                        <option value="0"> Seleccione</option>
+
+                                                    @foreach(var item in Model.Sucursales)
+                                                    {
+                                                        <option value="@item.CodSuc"> @item.CodSuc - @item.Nombre</option>
+                                                    }
+
+
+                                                </select>
+                                </div>
+
+
+                            </div>
+
+                       
+                            <div class="col-sm-3 pl-1" style="text-align: center; padding-top: 1%;">
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary" > <i class="fa fa-search"></i></button>
+                            </div>
+ 
+
+
+                            
+                        </div>
+
+                    </form>
+                </div>
+            </div>
             <div class="box">
                 <div class="box-header with-border">
                     <div class="row">
-                        <div class="col-sm-8"> <h4 class="box-title">Rutas Fac</h4></div>
+                        <div class="col-sm-8"> <h4 class="box-title">Rutas</h4></div>
                         <div class="col-sm-4"> <a asp-page="Nuevo" style="color: #57b846;" title="Agregar"><i class="fa fa-plus"></i> Agregar Ruta</a></div>
 
                     </div>
@@ -137,6 +180,7 @@
                                     <th>Nombre </th>
                                     <th>Precio </th>
                                     <th>KM </th>
+                                    <th>Sucursal </th>
                                     <th>Acción</th>
 
                                 </tr>
@@ -161,7 +205,7 @@
 
 
 
-
+                                            <td>  @( Model.Sucursales.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" :  Model.Sucursales.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().CodSuc + "-" + Model.Sucursales.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre ) </td> 
                                         <td align="center" style="padding-top:15px;">
                                             <a asp-page="./Editar" asp-route-id="@item.id" class="fa fa-edit icono"> </a> &nbsp;
                                             <a onclick="javascript: onClickModal('@item.id')" class="fa fa-trash icono"></a>&nbsp;
@@ -180,6 +224,7 @@
                                     <th>Nombre </th>
                                     <th>Precio </th>
                                     <th>KM </th>
+                                          <th>Sucursal </th>
                                     <th>Acción</th>
 
                                 </tr>
