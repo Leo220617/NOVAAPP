@@ -322,6 +322,38 @@
                             </address>
                         </div>
                         <!-- /.col -->
+                        @if (Model.Parametro.FirstOrDefault().Transporte)
+                        {
+                            <div class="col-md-3">
+                                <h5>
+                                    <b>Transporte:</b>@if (Model.Documento.Transporte)
+                                    {
+                                        <span class="badge badge-pill badge-success">Con Transporte</span>
+
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-pill badge-danger">Sin Transporte</span>
+                                    }
+                                </h5>
+
+                            </div>
+                            @if (Model.Documento.Transporte)
+                            {
+
+
+                                <div class="col-6">
+                                </div>
+                                <div class="col-3">
+                                    <h5> <b>Ruta: </b> @(Model.Rutas.Where(a => a.id == Model.Documento.idRutaFac).FirstOrDefault() == null ? "Sin Ruta" : Model.Rutas.Where(a => a.id == Model.Documento.idRutaFac).FirstOrDefault().Nombre)</h5>
+
+                                </div>
+                                <div class="col-3">
+                                    <h5> <b>Dirección: </b> @(Model.Documento.Direccion)</h5>
+
+                                </div>
+                            }
+                        }
                     </div>
                     @if (Model.Documento.TipoDocumento == "03" && Model.Parametro.FirstOrDefault().Pais == "C")
                     {

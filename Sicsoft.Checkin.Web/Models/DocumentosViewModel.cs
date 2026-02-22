@@ -53,6 +53,15 @@ namespace NOVAAPP.Models
         public bool Interes { get; set; }
 
         public string RespuestaHacienda { get; set; }
+
+
+        public int idRutaFac { get; set; }
+        public bool Transporte { get; set; }
+        public string Direccion { get; set; }
+
+        public decimal TotalTransporte { get; set; }
+
+        public string ModoTransporte { get; set; }
         public MetodosPagosViewModel[] MetodosPagos { get; set; }
 
         public DetDocumentoViewModel[] Detalle { get; set; }

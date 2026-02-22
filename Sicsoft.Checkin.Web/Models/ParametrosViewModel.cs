@@ -69,5 +69,7 @@ namespace NOVAAPP.Models
         public string NombreEmpresa { get; set; }
         public bool Proveeduria { get; set; }
 
+        public bool Transporte { get; set; }
+
     }
 }

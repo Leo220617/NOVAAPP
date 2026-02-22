@@ -26,6 +26,7 @@ namespace NOVAAPP.Pages.Documentos
         private readonly ICrudApi<ParametrosViewModel, int> parametro;
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
         private readonly ICrudApi<TipoCambiosViewModel, int> tipoCambio;
+        private readonly ICrudApi<RutasFacViewModel, int> ruta;
 
 
         [BindProperty]
@@ -54,8 +55,10 @@ namespace NOVAAPP.Pages.Documentos
         [BindProperty]
         public TipoCambiosViewModel[] TP { get; set; }
 
+        [BindProperty]
+        public RutasFacViewModel[] Rutas { get; set; }
 
-        public ObservarModel(ICrudApi<DocumentosViewModel, int> service, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<ClientesViewModel, string> serviceE, ICrudApi<ProductosViewModel, string> serviceP, ICrudApi<ExoneracionesViewModel, int> exoneracion, ICrudApi<CondicionesPagosViewModel, int> condiconesPago, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<ParametrosViewModel, int> parametro, ICrudApi<BodegasViewModel, int> bodegas)
+        public ObservarModel(ICrudApi<DocumentosViewModel, int> service, ICrudApi<RutasFacViewModel, int> ruta, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<ClientesViewModel, string> serviceE, ICrudApi<ProductosViewModel, string> serviceP, ICrudApi<ExoneracionesViewModel, int> exoneracion, ICrudApi<CondicionesPagosViewModel, int> condiconesPago, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<ParametrosViewModel, int> parametro, ICrudApi<BodegasViewModel, int> bodegas)
         {
             this.service = service;
             this.serviceE = serviceE;
@@ -66,6 +69,7 @@ namespace NOVAAPP.Pages.Documentos
             this.parametro = parametro;
             this.bodegas = bodegas;
             this.tipoCambio = tipoCambio;
+            this.ruta = ruta;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -107,6 +111,7 @@ namespace NOVAAPP.Pages.Documentos
                 Productos = await serviceP.ObtenerLista("");
                 Exoneraciones = await exoneracion.ObtenerLista("");
                 Bodegas = await bodegas.ObtenerLista("");
+                Rutas = await ruta.ObtenerLista("");
                 return Page();
             }
             catch (Exception ex)

@@ -22,5 +22,12 @@
         public string IVAFabrica { get; set; }
         public bool TaxOnly { get; set; }
 
+        public bool Regalia { get; set; }
+        public bool Escalonado { get; set; }
+        public decimal TotalTransporte { get; set; }
+
+        public decimal PrecioBase { get; set; }
+
+
     }
 }
