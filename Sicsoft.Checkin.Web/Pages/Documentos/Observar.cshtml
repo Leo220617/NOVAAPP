@@ -195,7 +195,14 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="page-header mt-0">
-                                <h2 class="d-inline"><span class="font-size-24">Documento No: @Model.Documento.id</span></h2>
+                                @if (Model.Parametro.FirstOrDefault().ConsecutivoManual)
+                                {
+                                    <h2 class="d-inline"><span class="font-size-24">Documento No: @Model.Documento.ConsecutivoManual</span></h2>
+                                }
+                                else
+                                {
+                                    <h2 class="d-inline"><span class="font-size-24">Documento No: @Model.Documento.id</span></h2>
+                                }
                                 <br />
                                 <div class="text-left">
                                     <div class="row">
@@ -353,6 +360,25 @@
 
                                 </div>
                             }
+                        }
+                        @if (Model.Documento.Retencion1)
+                        {
+                            <div class="col-sm-2 pl-1 text-right">
+                                <h5>
+                                    <b>Retención 1%</b>
+                                    <i class="fa fa-check-circle text-success"></i>
+                                </h5>
+                            </div>
+                        }
+
+                        @if (Model.Documento.Retencion2)
+                        {
+                            <div class="col-sm-2 pl-1 text-right">
+                                <h5>
+                                    <b>Retención 2%</b>
+                                    <i class="fa fa-check-circle text-success"></i>
+                                </h5>
+                            </div>
                         }
                     </div>
                     @if (Model.Documento.TipoDocumento == "03" && Model.Parametro.FirstOrDefault().Pais == "C")
@@ -717,8 +743,16 @@
                                 <p>Sub Total  : <span> @Math.Round(Model.Documento.Subtotal, 2).ToString("C", formato)</span> </p>
                                 <p>Descuento  : <span> @Math.Round(Model.Documento.TotalDescuento, 2).ToString("C", formato)</span></p>
                                 <p>Impuesto :  <span>  @Math.Round(Model.Documento.TotalImpuestos, 2).ToString("C", formato)</span></p>
+                                  @if (Model.Parametro.FirstOrDefault().Retenciones)
+                                {
+                                    <p>Retención :  <span>  @Math.Round(Model.Documento.TotalRetenciones, 2).ToString("C", formato)</span></p>
+                                }
+                             
                                 <p>Redondeo :  <span>  @Math.Round(Model.Documento.Redondeo, 2).ToString("C", formato)</span></p>
-
+                                @if (Model.Parametro.FirstOrDefault().Transporte)
+                                {
+                                    <p>Transporte :  <span>  @Math.Round(Model.Documento.TotalTransporte, 2).ToString("C", formato)</span></p>
+                                }
                             </div>
                             <div class="total-payment">
                                 <h3><b>Total :</b>  <span>  @Math.Round(Model.Documento.TotalCompra + Model.Documento.Redondeo, 2).ToString("C", formato)</span></h3>
@@ -792,7 +826,14 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-header mt-0">
-                                <h2 class="d-inline"><span class="font-size-24">Documento No: @Model.Documento.id</span></h2>
+                                @if (Model.Parametro.FirstOrDefault().ConsecutivoManual)
+                                {
+                                    <h2 class="d-inline"><span class="font-size-24">Documento No: @Model.Documento.ConsecutivoManual</span></h2>
+                                }
+                                else
+                                {
+                                    <h2 class="d-inline"><span class="font-size-24">Documento No: @Model.Documento.id</span></h2>
+                                }
                                 <br />
                                 <div class="text-left">
                                     <div class="row">
@@ -1036,8 +1077,16 @@
                                 <p>Sub Total  : <span> @Math.Round(Model.Documento.Subtotal, 2).ToString("C", formato)</span> </p>
                                 <p>Descuento  : <span> @Math.Round(Model.Documento.TotalDescuento, 2).ToString("C", formato)</span></p>
                                 <p>Impuesto :  <span>  @Math.Round(Model.Documento.TotalImpuestos, 2).ToString("C", formato)</span></p>
+                                @if (Model.Parametro.FirstOrDefault().Retenciones)
+                                {
+                                    <p>Retención :  <span>  @Math.Round(Model.Documento.TotalRetenciones, 2).ToString("C", formato)</span></p>
+                                }
+                             
                                 <p>Redondeo :  <span>  @Math.Round(Model.Documento.Redondeo, 2).ToString("C", formato)</span></p>
-
+                                @if (Model.Parametro.FirstOrDefault().Transporte)
+                                {
+                                    <p>Transporte :  <span>  @Math.Round(Model.Documento.TotalTransporte, 2).ToString("C", formato)</span></p>
+                                }
                             </div>
                             <div class="total-payment">
                                 <h3><b>Total :</b>  <span>  @Math.Round(Model.Documento.TotalCompra + Model.Documento.Redondeo, 2).ToString("C", formato)</span></h3>

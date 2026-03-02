@@ -62,6 +62,14 @@ namespace NOVAAPP.Models
         public decimal TotalTransporte { get; set; }
 
         public string ModoTransporte { get; set; }
+
+        public int ConsecutivoManual { get; set; }
+
+        public decimal TotalRetenciones { get; set; }
+        public decimal TotalRetencion1 { get; set; }
+        public decimal TotalRetencion2 { get; set; }
+        public bool Retencion1 { get; set; }
+        public bool Retencion2 { get; set; }
         public MetodosPagosViewModel[] MetodosPagos { get; set; }
 
         public DetDocumentoViewModel[] Detalle { get; set; }

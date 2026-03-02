@@ -70,6 +70,10 @@ namespace NOVAAPP.Models
         public bool Proveeduria { get; set; }
 
         public bool Transporte { get; set; }
+        public int consecFac { get; set; }
+        public int consecNC { get; set; }
+        public bool ConsecutivoManual { get; set; }
 
+        public bool Retenciones { get; set; }
     }
 }

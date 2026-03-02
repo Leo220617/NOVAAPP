@@ -579,7 +579,10 @@ function AbrirModalAgregarCliente(id, codSuc) {
                                     <th>Procesado SAP</th>
                                     <th>Pago SAP</th>
                                     <th>Generado Por</th>
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "C")
+                                        {
                                     <th>Respuesta Hacienda</th>
+                                        }
                                     <th>Validado</th>
 
 
@@ -592,9 +595,20 @@ function AbrirModalAgregarCliente(id, codSuc) {
                                     <tr>
 
 
-                                        <td>
-                                            @item.id
-                                        </td>
+                                     
+                                        @if (Model.Parametros.FirstOrDefault().ConsecutivoManual)
+                                        {
+                                            <td>
+                                                @item.ConsecutivoManual
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                @item.id
+                                            </td>
+                                        }
+
                                         <td align="center" style="padding-top:15px;">
 
                                          
@@ -699,32 +713,35 @@ function AbrirModalAgregarCliente(id, codSuc) {
                                             @(Model.Users.Where(a => a.id == item.idUsuarioCreador).FirstOrDefault() == null ? "": Model.Users.Where(a => a.id == item.idUsuarioCreador).FirstOrDefault().Nombre )
 
                                         </td>
-                                        <td>
-                                         @{
-                                            switch (item.RespuestaHacienda)
-                                            {
-                                                case "rechazado":
+                                            @if (Model.Parametros.FirstOrDefault().Pais == "C")
+                                        {
+                                            <td>
+                                                @{
+                                                    switch (item.RespuestaHacienda)
                                                     {
-                                                     <span class="badge badge-pill badge-danger">Rechazado</span>
-                                                        break;
+                                                        case "rechazado":
+                                                            {
+                                                                <span class="badge badge-pill badge-danger">Rechazado</span>
+                                                                break;
+                                                            }
+                                                        case "aceptado":
+                                                            {
+                                                                <span class="badge badge-pill badge-success">Aprobado</span>
+                                                                break;
+                                                            }
+                                                        case "procesando":
+                                                            {
+                                                                <span class="badge badge-pill badge-info">Procesando</span>
+                                                                break;
+                                                            }
+
                                                     }
-                                                case "aceptado":
-                                                    {
-                                                       <span class="badge badge-pill badge-success">Aprobado</span>
-                                                        break;
-                                                    }
-                                                case "procesando":
-                                                    {
-                                                       <span class="badge badge-pill badge-info">Procesando</span>
-                                                        break;
-                                                    }
-                                         
-                                            }
 
 
+                                                }
+                                            </td>
                                         }
-                                        </td>
-                                         <td>
+                                        <td>
                                             @if (item.Validado)
                                             {
                                                 <span class="badge badge-pill badge-success">Validado</span>
@@ -769,7 +786,10 @@ function AbrirModalAgregarCliente(id, codSuc) {
                                     <th>Procesado SAP</th>
                                     <th>Pago SAP</th>
                                     <th>Generado Por</th>
+                                        @if (Model.Parametros.FirstOrDefault().Pais == "C")
+                                        {
                                      <th>Respuesta Hacienda</th>
+                                        }
                                     <th>Validado</th>
 
 
