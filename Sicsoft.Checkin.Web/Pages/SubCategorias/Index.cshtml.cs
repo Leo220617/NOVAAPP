@@ -15,6 +15,7 @@ namespace NOVAAPP.Pages.SubCategorias
     {
         private readonly ICrudApi<SubCategoriasViewModel, int> service;
         private readonly ICrudApi<CategoriasViewModel, int> categorias;
+        private readonly ICrudApi<ParametrosViewModel, int> param;
 
         [BindProperty]
         public CategoriasViewModel[] Categorias { get; set; }
@@ -22,12 +23,17 @@ namespace NOVAAPP.Pages.SubCategorias
         [BindProperty]
         public SubCategoriasViewModel[] Objeto { get; set; }
 
+        [BindProperty]
+        public ParametrosViewModel[] Parametro { get; set; }
+
+
         [BindProperty(SupportsGet = true)]
         public ParametrosFiltros filtro { get; set; }
-        public IndexModel(ICrudApi<SubCategoriasViewModel, int> service, ICrudApi<CategoriasViewModel, int> categorias)
+        public IndexModel(ICrudApi<SubCategoriasViewModel, int> service, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<ParametrosViewModel, int> param)
         {
             this.service = service;
             this.categorias = categorias;
+            this.param = param;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -40,7 +46,7 @@ namespace NOVAAPP.Pages.SubCategorias
                 }
                 Categorias = await categorias.ObtenerLista("");
                 filtro.Externo = true;
-                
+                Parametro = await param.ObtenerLista("");
                 Objeto = await service.ObtenerLista(filtro);
 
 
@@ -67,6 +73,31 @@ namespace NOVAAPP.Pages.SubCategorias
                 return new JsonResult(false);
             }
         }
+        public async Task<IActionResult> OnGetInsertarSAP()
+        {
+            try
+            {
 
+                await service.InsertarSAP();
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+        }
+        public async Task<IActionResult> OnGetInsertarSAPByProduct(int id)
+        {
+            try
+            {
+
+                await service.InsertarSAPByProduct(id);
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+        }
     }
 }

@@ -35,8 +35,11 @@
             Distritos = JSON.parse($("#Distritos").val());
             Barrios = JSON.parse($("#Barrios").val());  //Viene de input
 
+          
             ModificaSelects(0);
-            maskCedula();
+            if (Pais != "N") {
+                maskCedula();
+            }
         }
         function ModificaSelects(i) {
             var codProvincia = parseInt($("#selectP").val());

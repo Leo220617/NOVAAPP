@@ -6,6 +6,7 @@ namespace NOVAAPP.Models
     {
         public int id { get; set; }
         public int idCategoria { get; set; }
+        public string CodSAP { get; set; }
         public string Nombre { get; set; }
         public bool ProcesadoSAP { get; set; }
         public DateTime FechaActualizacion { get; set; }

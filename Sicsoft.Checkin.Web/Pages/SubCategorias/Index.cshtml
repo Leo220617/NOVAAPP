@@ -124,6 +124,57 @@
             }
         }
 
+        function InsertarSAP() {
+            try {
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Page("Index", "InsertarSAP")',
+                    data: {},
+                    success: function (result) {
+                        $("#divProcesando").modal("hide");
+
+                        if (result == false) {
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar insertar a SAP'
+
+                            })
+
+                        } else {
+                            Swal.fire({
+                                title: "Ha sido insertado a SAP con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    beforeSend: function () {
+                        $("#divProcesando").modal("show");
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar imprimir ' + e
+
+                })
+            }
+        }
 
 
     </script>
@@ -201,7 +252,11 @@
                 <div class="box-header with-border">
                     <div class="row">
                         <div class="col-sm-6"> <h4 class="box-title">Sub Categorias</h4></div>
-
+                        @if (Model.Parametro.FirstOrDefault().SubCatArqueos)
+                        {
+                             <div class="col-sm-2"> <button onclick="javascript: InsertarSAP()" class="btn btn-rounded btn-success"><i class="mdi mdi-cached"></i  title="Sincronizar a SAP"> Sincronizar a SAP</button></div>
+                        }
+                       
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">

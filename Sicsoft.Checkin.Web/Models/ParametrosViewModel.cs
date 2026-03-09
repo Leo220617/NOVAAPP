@@ -75,5 +75,7 @@ namespace NOVAAPP.Models
         public bool ConsecutivoManual { get; set; }
 
         public bool Retenciones { get; set; }
+
+        public bool SubCatArqueos { get; set; }
     }
 }
