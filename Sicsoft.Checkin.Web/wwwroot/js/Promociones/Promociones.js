@@ -26,7 +26,8 @@ var Pais = "";
 
 function retornaMargenGanancia(PrecioVenta, Costo) {
     try {
-
+        var Moneda = $("#selectMoneda").val();
+     
         return ((PrecioVenta - Costo) / (PrecioVenta)) * 100;
 
     } catch (e) {

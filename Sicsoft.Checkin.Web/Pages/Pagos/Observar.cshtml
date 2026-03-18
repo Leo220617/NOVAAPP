@@ -535,7 +535,7 @@
                                     <th class="text-right">BIN</th>
                                     <th class="text-right">Referencia</th>
                                     <th class="text-right">Cheque</th>
-
+                                    <th class="text-center">Cuenta</th>
                                     <th class="text-right">Total</th>
 
                                 </tr>
@@ -550,6 +550,7 @@
                                         <td align="center">@item.BIN</td>
                                         <td align="center">@item.NumReferencia</td>
                                         <td align="center">@item.NumCheque</td>
+                                        <td>@(Model.Cuentas.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault() == null ? "Cuenta Inexistente" : Model.Cuentas.Where(a => a.id == item.idCuentaBancaria).FirstOrDefault().Nombre)</td>
                                         <td align="right">@item.Monto.ToString("N", formato)</td>
 
                                     </tr>

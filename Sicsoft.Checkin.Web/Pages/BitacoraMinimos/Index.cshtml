@@ -250,8 +250,8 @@
                                         <td>  @(Model.Bodegas.Where(a => a.CodSAP == item.Bodega).FirstOrDefault() == null ? "Bodega Inexistente" : Model.Bodegas.Where(a => a.CodSAP == item.Bodega).FirstOrDefault().CodSAP + "-" + Model.Bodegas.Where(a => a.CodSAP == item.Bodega).FirstOrDefault().Nombre) </td>
                                         <td>  @(Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault() == null ? "Categoria Inexistente" : Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault().CodSAP + "-" + Model.Categorias.Where(a => a.id == item.idCategoria).FirstOrDefault().Nombre) </td>
 
-                                        <td>  @Math.Round(@item.Minimo, 2).ToString("C", formato)</td>
-                                        <td>  @Math.Round(@item.StockReal, 2).ToString("C", formato)</td>
+                                        <td>  @Math.Round(@item.Minimo, 2)</td>
+                                        <td>  @Math.Round(@item.StockReal, 2)</td>
                                   
 
 

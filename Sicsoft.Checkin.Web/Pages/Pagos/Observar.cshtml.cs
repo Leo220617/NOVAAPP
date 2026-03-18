@@ -29,6 +29,7 @@ namespace NOVAAPP.Pages.Pagos
         private readonly ICrudApi<CondicionesPagosViewModel, int> serviceCP; //API
 
         private readonly ICrudApi<VendedoresViewModel, int> vendedor;
+        private readonly ICrudApi<CuentasBancariasViewModel, int> cuentas;
 
 
 
@@ -71,8 +72,10 @@ namespace NOVAAPP.Pages.Pagos
 
 
 
+        [BindProperty]
+        public CuentasBancariasViewModel[] Cuentas { get; set; }
 
-        public ObservarModel(ICrudApi<PagosViewModel, int> service, ICrudApi<ClientesViewModel, string> clientes, ICrudApi<ProductosViewModel, string> productos, ICrudApi<SucursalesViewModel, string> sucursales, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<CondicionesPagosViewModel, int> serviceCP, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<DocumentosCreditoViewModel, int> documentos) //CTOR 
+        public ObservarModel(ICrudApi<PagosViewModel, int> service, ICrudApi<ClientesViewModel, string> clientes, ICrudApi<CuentasBancariasViewModel, int> cuentas, ICrudApi<ProductosViewModel, string> productos, ICrudApi<SucursalesViewModel, string> sucursales, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<CondicionesPagosViewModel, int> serviceCP, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<DocumentosCreditoViewModel, int> documentos) //CTOR 
         {
             this.service = service;
             this.clientes = clientes;
@@ -82,6 +85,7 @@ namespace NOVAAPP.Pages.Pagos
             this.tipoCambio = tipoCambio;
             this.serviceCP = serviceCP;
             this.vendedor = vendedor;
+            this.cuentas = cuentas;
 
         }
 
@@ -110,6 +114,9 @@ namespace NOVAAPP.Pages.Pagos
                 Clientes = await clientes.ObtenerLista(filtro);
 
                 Productos = await productos.ObtenerLista("");
+                ParametrosFiltros filtroCB = new ParametrosFiltros();
+                filtroCB.Texto = Pago.CodSuc;
+                Cuentas = await cuentas.ObtenerLista(filtroCB);
                 filtro.FechaInicial = DateTime.Now.Date;
                 TP = await tipoCambio.ObtenerLista(filtro);
                 Vendedores = await vendedor.ObtenerLista("");

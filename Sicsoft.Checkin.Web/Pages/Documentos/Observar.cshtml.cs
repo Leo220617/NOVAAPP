@@ -27,6 +27,7 @@ namespace NOVAAPP.Pages.Documentos
         private readonly ICrudApi<BodegasViewModel, int> bodegas;
         private readonly ICrudApi<TipoCambiosViewModel, int> tipoCambio;
         private readonly ICrudApi<RutasFacViewModel, int> ruta;
+        private readonly ICrudApi<CuentasBancariasViewModel, int> cuentas;
 
 
         [BindProperty]
@@ -58,7 +59,10 @@ namespace NOVAAPP.Pages.Documentos
         [BindProperty]
         public RutasFacViewModel[] Rutas { get; set; }
 
-        public ObservarModel(ICrudApi<DocumentosViewModel, int> service, ICrudApi<RutasFacViewModel, int> ruta, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<ClientesViewModel, string> serviceE, ICrudApi<ProductosViewModel, string> serviceP, ICrudApi<ExoneracionesViewModel, int> exoneracion, ICrudApi<CondicionesPagosViewModel, int> condiconesPago, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<ParametrosViewModel, int> parametro, ICrudApi<BodegasViewModel, int> bodegas)
+        [BindProperty]
+        public CuentasBancariasViewModel[] Cuentas { get; set; }
+
+        public ObservarModel(ICrudApi<DocumentosViewModel, int> service, ICrudApi<CuentasBancariasViewModel, int> cuentas, ICrudApi<RutasFacViewModel, int> ruta, ICrudApi<TipoCambiosViewModel, int> tipoCambio, ICrudApi<ClientesViewModel, string> serviceE, ICrudApi<ProductosViewModel, string> serviceP, ICrudApi<ExoneracionesViewModel, int> exoneracion, ICrudApi<CondicionesPagosViewModel, int> condiconesPago, ICrudApi<VendedoresViewModel, int> vendedor, ICrudApi<ParametrosViewModel, int> parametro, ICrudApi<BodegasViewModel, int> bodegas)
         {
             this.service = service;
             this.serviceE = serviceE;
@@ -70,6 +74,7 @@ namespace NOVAAPP.Pages.Documentos
             this.bodegas = bodegas;
             this.tipoCambio = tipoCambio;
             this.ruta = ruta;
+            this.cuentas = cuentas;
         }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -92,7 +97,9 @@ namespace NOVAAPP.Pages.Documentos
                 Documento = await service.ObtenerPorId(id);
                 CondicionesPago = CondPago.Where(a => a.id == Documento.idCondPago).FirstOrDefault();
                 Vendedor = Vendedores.Where(a => a.id == Documento.idVendedor).FirstOrDefault();
-
+                ParametrosFiltros filtroCB = new ParametrosFiltros();
+                filtroCB.Texto = Documento.CodSuc;
+                Cuentas = await cuentas.ObtenerLista(filtroCB);
                 Clientes = await serviceE.ObtenerLista(filtro);
 
                 filtro.FechaInicial = DateTime.Now.Date;

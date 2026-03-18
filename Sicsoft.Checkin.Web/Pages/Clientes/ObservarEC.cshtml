@@ -235,7 +235,8 @@
                                     }
                                     @foreach (var item in Model.EstadoCuenta.EstadoCuenta.Where(a => a.MonedaDet == "CRC"))
                                     {
-
+                                             SaldoColones += @item.Saldo;
+                                        SaldoAcumColones += @item.Intereses + @item.Saldo;
                                         <tr>
 
 
@@ -251,13 +252,20 @@
                                             <td class="text-center">   @Math.Round(@item.Saldo, 2).ToString("C", formato) </td>
 
                                             <td class="text-center">  @Math.Round(@item.Intereses, 2).ToString("C", formato) </td>
-                                            <td class="text-center">  @Math.Round(@item.Intereses + @item.Saldo, 2).ToString("C", formato) </td>
+                                            @if(Model.Parametros.FirstOrDefault().NombreEmpresa == "AGROGAN")
+                                            {
+                                             <td class="text-center">  @Math.Round(SaldoAcumColones, 2).ToString("C", formato) </td>
+                                            }
+                                            else
+                                            {
+                                                 <td class="text-center">  @Math.Round(@item.Intereses + @item.Saldo, 2).ToString("C", formato) </td>  
+                                            }
+                                         
 
 
 
                                         </tr>
-                                        SaldoColones += @item.Saldo;
-                                        SaldoAcumColones += @item.Intereses + @item.Saldo;
+                                   
                                     }
 
                                 </tbody>
@@ -343,11 +351,12 @@
                                     }
                                     @foreach (var item in Model.EstadoCuenta.EstadoCuenta.Where(a => a.MonedaDet == "USD"))
                                     {
-
+                                                      SaldoDolares += @item.Saldo;
+                                        SaldoAcumDolares += @item.Saldo + @item.Intereses;
                                         <tr>
 
 
-
+                                    
 
 
                                             <td class="text-center"> @item.DocNum </td>
@@ -359,13 +368,19 @@
                                             <td class="text-center">   @Math.Round(@item.Saldo, 2).ToString("C", formato) </td>
 
                                             <td class="text-center">  @Math.Round(@item.Intereses, 2).ToString("C", formato) </td>
-                                            <td class="text-center">  @Math.Round(@item.Saldo + @item.Intereses, 2).ToString("C", formato) </td>
+                                             @if(Model.Parametros.FirstOrDefault().NombreEmpresa == "AGROGAN")
+                                            {
+                                             <td class="text-center">  @Math.Round(SaldoAcumDolares, 2).ToString("C", formato) </td>
+                                            }
+                                            else
+                                            {
+                                                 <td class="text-center">  @Math.Round(@item.Intereses + @item.Saldo, 2).ToString("C", formato) </td>  
+                                            }
 
 
 
                                         </tr>
-                                        SaldoDolares += @item.Saldo;
-                                        SaldoAcumDolares += @item.Saldo + @item.Intereses;
+                                  
                                     }
 
                                 </tbody>
@@ -580,11 +595,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                                       @{
+                                        var SaldoColones2 = 0.0m;
+                                        var SaldoAcumColones2 = 0.0m;
+                                    }
                                
                                     @foreach (var item in Model.EstadoCuenta.EstadoCuenta.Where(a => a.MonedaDet == "CRC"))
                                     {
-
+                                         SaldoColones2 += @item.Saldo;
+                                        SaldoAcumColones2 += @item.Saldo + @item.Intereses;
                                         <tr>
 
 
@@ -600,7 +619,14 @@
                                             <td class="text-center">   @Math.Round(@item.Saldo, 2).ToString("C", formato) </td>
 
                                             <td class="text-center">  @Math.Round(@item.Intereses, 2).ToString("C", formato) </td>
-                                            <td class="text-center">  @Math.Round(@item.Saldo + @item.Intereses, 2).ToString("C", formato) </td>
+                                             @if(Model.Parametros.FirstOrDefault().NombreEmpresa == "AGROGAN")
+                                            {
+                                             <td class="text-center">  @Math.Round(SaldoAcumColones2, 2).ToString("C", formato) </td>
+                                            }
+                                            else
+                                            {
+                                                 <td class="text-center">  @Math.Round(@item.Intereses + @item.Saldo, 2).ToString("C", formato) </td>  
+                                            }
 
 
 
@@ -684,10 +710,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                                       @{
+                                        var SaldoDolares2 = 0.0m;
+                                        var SaldoAcumDolares2 = 0.0m;
+                                    }
                                     @foreach (var item in Model.EstadoCuenta.EstadoCuenta.Where(a => a.MonedaDet == "USD"))
                                     {
-
+                                        SaldoDolares2 += @item.Saldo;
+                                        SaldoAcumDolares2 += @item.Saldo + @item.Intereses;
                                         <tr>
 
 
@@ -703,7 +733,14 @@
                                             <td class="text-center">   @Math.Round(@item.Saldo, 2).ToString("C", formato) </td>
 
                                             <td class="text-center">  @Math.Round(@item.Intereses, 2).ToString("C", formato) </td>
-                                            <td class="text-center">  @Math.Round(@item.Saldo + @item.Intereses, 2).ToString("C", formato) </td>
+                                          @if(Model.Parametros.FirstOrDefault().NombreEmpresa == "AGROGAN")
+                                            {
+                                             <td class="text-center">  @Math.Round(SaldoAcumDolares2, 2).ToString("C", formato) </td>
+                                            }
+                                            else
+                                            {
+                                                 <td class="text-center">  @Math.Round(@item.Intereses + @item.Saldo, 2).ToString("C", formato) </td>  
+                                            }
 
 
 
