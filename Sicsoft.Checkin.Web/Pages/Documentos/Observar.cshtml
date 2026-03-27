@@ -349,10 +349,15 @@
                             {
 
 
-                                <div class="col-6">
+                           
+                                <div class="col-4">
                                 </div>
                                 <div class="col-3">
                                     <h5> <b>Ruta: </b> @(Model.Rutas.Where(a => a.id == Model.Documento.idRutaFac).FirstOrDefault() == null ? "Sin Ruta" : Model.Rutas.Where(a => a.id == Model.Documento.idRutaFac).FirstOrDefault().Nombre)</h5>
+
+                                </div>
+                                <div class="col-2">
+                                    <h5> <b>Cantidad Viajes: </b> @Math.Round(Model.Documento.CantidadTransporte, 0)</h5>
 
                                 </div>
                                 <div class="col-3">
