@@ -125,8 +125,9 @@ function Recuperar() {
         Impuestos = JSON.parse($("#Impuestos").val());
         Minimos = JSON.parse($("#Minimos").val());
 
-        RellenaCategorias()
-        ValidarMinimos()
+        RellenaCategorias();
+        RellenaProveedoresX();
+        ValidarMinimos();
 
 
 
@@ -166,6 +167,29 @@ function RellenaCategorias() {
 
 }
 
+function RellenaProveedoresX() {
+    try {
+        var html = "";
+        $("#ProveedorSeleccionado").html(html);
+        html += "<option value='0' > Seleccione Proveedor </option>";
+
+        for (var i = 0; i < Proveedores.length; i++) {
+            html += "<option value='" + Proveedores[i].CardCode + "' > " + Proveedores[i].CardCode + " - " + Proveedores[i].Nombre + " </option>";
+        }
+
+
+
+        $("#ProveedorSeleccionado").html(html);
+    } catch (e) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error ' + e
+
+        })
+    }
+
+}
 
 function generarCheckboxSubcategorias(idCategoriaInterno) {
     try {
@@ -223,6 +247,7 @@ function onChangeFiltro() {
         var Clasificacion = $("#ClasificacionSeleccionado").val();
         var Indicador = parseFloat($("#Indicador").val());
         var IndicadorX = parseFloat($("#IndicadorX").val());
+        var idProveedor = $("#ProveedorSeleccionado").val();
 
         // Obtiene los checkboxes y las bodegas correspondientes
         var bodegasSeleccionadas = [];
@@ -244,7 +269,7 @@ function onChangeFiltro() {
         if ($("#md_checkbox_Todas").prop('checked')) {
             bodegasSeleccionadas = Bodegas.map(b => b.CodSAP); // Todas las bodegas
         }
-
+        
         // Inicializa un array de filtros
         let filters = [];
 
@@ -281,7 +306,9 @@ function onChangeFiltro() {
         if (bodegasSeleccionadas.length > 0) {
             filters.push(a => bodegasSeleccionadas.includes(a.Bodega)); // Filtra por bodegas seleccionadas
         }
-
+        if (idProveedor != 0) {
+            filters.push(a => a.Cod_Proveedor == idProveedor);
+        }
         // Filtra los productos usando el array de filtros
         ProdClientes = AprovisionamientoProductos.filter(a => filters.every(filter => filter(a)));
 
