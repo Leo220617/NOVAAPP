@@ -1,0 +1,370 @@
+﻿@page
+@using System.Globalization
+@model NOVAAPP.Pages.ReporteMargenesMinimos.IndexModel
+@{
+    ViewData["Title"] = "ReporteMargenesMinimos";
+    NumberFormatInfo formato = new CultureInfo("es-CR").NumberFormat;
+    formato.CurrencySymbol = "";
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+
+}
+
+
+
+@section styles {
+
+
+}
+
+@section scripts {
+
+    <script>
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
+                $(document).ready(function () {
+                    $('.mi-selector').select2();
+                });
+            });
+            $(".js-example-responsive").select2({
+                width: 'resolve',// need to override the changed default
+                height: 'resolve'
+            });
+
+
+
+
+
+        });
+
+        var ids = 0;
+        function onClickModal(id) {
+            ids = id;
+            Swal.fire({
+                title: '¿Desea eliminar esta Bitácora?',
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: `Aceptar`,
+                denyButtonText: `Cancelar`,
+                customClass: {
+                    confirmButton: 'swalBtnColor',
+                    denyButton: 'swalDeny'
+                },
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+                    Eliminar();
+
+                }
+            })
+
+        }
+        function Eliminar() {
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: '@Url.Page("Index", "Eliminar")',
+                data: { id: ids },
+                success: function (result) {
+
+                    if (result == false) {
+                        ids = 0;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ha ocurrido un error al intentar eliminar'
+
+                        })
+
+                    } else {
+                        Swal.fire({
+                            title: "Ha sido eliminado con éxito",
+
+                            icon: 'success',
+                            showCancelButton: false,
+                            customClass: {
+                                confirmButton: 'swalBtnColor',
+
+                            },
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        })
+                    }
+                },
+                beforeSend: function () {
+
+                }
+            })
+        }
+
+
+
+    </script>
+
+}
+
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Reporte Margenes Menor al Minimo
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Listado Reporte Margenes Menor al Minimo</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="box">
+
+                <div class="box-body">
+                    <form method="get">
+                        <div class="row">
+
+
+
+
+
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="cyber">Lista de Precio:</label>
+                                    <select class="form-control select2" id="Bodega" asp-for="filtro.Codigo1" required>
+                                        <option value="0"> Seleccione</option>
+
+                                        @foreach (var item in Model.ListaPrecios)
+                                        {
+                                            <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
+                                        }
+
+
+                                    </select>
+
+
+
+
+
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="cyber">Categoría:</label>
+                                    <select class="form-control select2" id="Caja" asp-for="filtro.Codigo2" required>
+
+                                        <option value="0"> Seleccione</option>
+                                        @foreach (var item in Model.Categorias)
+                                        {
+                                            <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
+                                        }
+
+
+                                    </select>
+
+
+
+
+
+
+                                </div>
+                            </div>
+                            <div class="col-sm-6 pr-1">
+                                <div class="form-group">
+                                    <label>Código Producto</label>
+                                    <input type="text" class="form-control" asp-for="filtro.Buscar" />
+                                </div>
+                            </div>
+                           
+
+
+                            <div class="col-sm-12 pl-1" style="text-align: right; padding-top: 2%;">
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary"> <i class="fa fa-search"></i></button>
+                            </div>
+
+
+
+
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title"> Reporte Margenes</h4></div>
+
+
+                    </div>
+
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+
+                                    <th>Descripción</th>
+                                    <th>Categoría</th>
+                                    <th>Lista Precio</th>
+                                    <th>Precio Cob</th>
+                                    <th>MargenMin</th>
+                                    <th>Margen</th>
+                                    <th>Precio</th>
+                                    <th>Precio Imp</th>
+                                    <th>Escalonado</th>
+                                    <th>CantMin1</th>
+                                    <th>Margen1</th>
+                                    <th>CantMin2</th>
+                                    <th>Margen2</th>
+                                    <th>CantMin3</th>
+                                    <th>Margen3</th>
+                                    <th>PrecioFijo</th>
+                                    <th>Seteable</th>
+
+
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Objeto)
+                                {
+                                    <tr>
+
+                                        <td>@item.ItemCode - @item.Nombre </td>
+                                        <td>@item.Categoria - @item.NombreCategoria </td>
+                                        <td>@item.ListaPrecio</td>
+
+                                        <td>
+                                            @Math.Round(@item.PrecioCob, 2)
+                                        </td>
+                                        <td>
+                                            @Math.Round(@item.MargenMin, 2)
+                                        </td>
+                                        <td>
+                                            @Math.Round(@item.Margen, 2)
+                                        </td>
+                                        <td>
+                                            @Math.Round(@item.Precio, 2)
+                                        </td>
+                                        <td>
+                                            @Math.Round(item.Precio * 1.13m, 2)
+                                        </td>
+                                        <td>
+                                            @if (item.Escalonado)
+                                            {
+                                                <span class="badge badge-pill badge-success">SI</span>
+
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-pill badge-danger">NO</span>
+                                            }
+
+                                        </td>
+
+                                        <td>
+                                            @Math.Round(@item.CantMin1, 2)
+                                        </td>
+                                        <td>
+                                            @Math.Round(@item.Margen1, 2)
+                                        </td>
+                                        <td>
+                                            @Math.Round(@item.CantMin2, 2)
+                                        </td>
+                                        <td>
+                                            @Math.Round(@item.Margen2, 2)
+                                        </td>
+                                        <td>
+                                            @Math.Round(@item.CantMin3, 2)
+                                        </td>
+                                        <td>
+                                            @Math.Round(@item.Margen3, 2)
+                                        </td>
+
+                                        <td>
+                                            @if (item.PrecioFijo)
+                                            {
+                                                <span class="badge badge-pill badge-success">SI</span>
+
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-pill badge-danger">NO</span>
+                                            }
+
+                                        </td>
+                                        <td>
+                                            @if (item.Seteble)
+                                            {
+                                                <span class="badge badge-pill badge-success">SI</span>
+
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-pill badge-danger">NO</span>
+                                            }
+
+                                        </td>
+
+
+
+
+
+
+                                    </tr>
+
+                                }
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>PrecioFijo</th>
+                                    <th>Seteable</th>
+
+                                    <th>Descripción</th>
+                                    <th>Categoría</th>
+                                    <th>Lista Precio</th>
+                                    <th>Precio Cob</th>
+                                    <th>MargenMin</th>
+                                    <th>Margen</th>
+                                    <th>Precio</th>
+                                    <th>Precio Imp</th>
+                                    <th>Escalonado</th>
+                                    <th>CantMin1</th>
+                                    <th>Margen1</th>
+                                    <th>CantMin2</th>
+                                    <th>Margen2</th>
+                                    <th>CantMin3</th>
+                                    <th>Margen3</th>
+
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->

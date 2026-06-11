@@ -22,6 +22,8 @@ namespace NOVAAPP.Pages.Margenes
         private readonly ICrudApi<ListaPreciosViewModel, int> precios;
         private readonly ICrudApi<CategoriasViewModel, int> categorias;
         private readonly ICrudApi<TipoCambiosViewModel, int> tipoCambio;
+        private readonly ICrudApi<SucursalesViewModel, string> sucursales;
+        private readonly ICrudApi<BodegasViewModel, int> bodegas;
 
         [BindProperty]
         public EncMargenesViewModel[] Lista { get; set; }
@@ -41,13 +43,23 @@ namespace NOVAAPP.Pages.Margenes
         [BindProperty]
         public TipoCambiosViewModel[] TP { get; set; }
 
-        public EditarModel(ICrudApi<EncMargenesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
+        [BindProperty]
+        public SucursalesViewModel[] Sucursales { get; set; }
+
+
+        [BindProperty]
+        public BodegasViewModel[] Bodegas { get; set; }
+
+
+        public EditarModel(ICrudApi<EncMargenesViewModel, int> service, ICrudApi<ProductosViewModel, string> productos, ICrudApi<BodegasViewModel, int> bodegas, ICrudApi<SucursalesViewModel, string> sucursales, ICrudApi<ListaPreciosViewModel, int> precios, ICrudApi<CategoriasViewModel, int> categorias, ICrudApi<TipoCambiosViewModel, int> tipoCambio) //CTOR 
         {
             this.service = service;
             this.productos = productos;
             this.precios = precios;
             this.categorias = categorias;
             this.tipoCambio = tipoCambio;
+            this.sucursales = sucursales;
+            this.bodegas = bodegas;
 
         }
         public async Task<IActionResult> OnGetAsync(int idListaPrecio, int idCategoria, string Moneda)
@@ -72,30 +84,40 @@ namespace NOVAAPP.Pages.Margenes
                 }
                 ListaX = await service.ObtenerMargen(idListaPrecio, idCategoria, Moneda);
                 Precios = await precios.ObtenerLista("");
+                Sucursales = await sucursales.ObtenerLista("");
+                Bodegas = await bodegas.ObtenerLista("");
 
                 Categoria = await categorias.ObtenerLista("");
                 ParametrosFiltros filtro = new ParametrosFiltros();
 
 
+                var codSucPrincipales = Sucursales.Select(s => s.CodSuc).ToList();
+
+                var idsBodegasPrincipales = Bodegas.Where(b => codSucPrincipales.Contains(b.CodSAP)).Select(b => b.id).ToList();
+
                 var Productos1 = await productos.ObtenerLista(filtro);
 
-                Productos = Productos1.Select(a => new
-                {
-                    a.Codigo,
-                    a.idCategoria,
-                    a.idImpuesto,
-                    a.idListaPrecios,
-                    a.Nombre,
-                    a.Moneda,
-                    a.PrecioUnitario,
-                    a.UnidadMedida,
-                    a.Cabys,
-                    a.TipoCod,
-                    a.CodBarras,
-                    a.Costo,
-                    a.Activo
-
-                }).Distinct().ToList();
+                Productos = Productos1
+                    .Where(a => idsBodegasPrincipales.Contains(a.idBodega))
+                    .Select(a => new
+                    {
+                        a.Codigo,
+                        a.idBodega,
+                        a.idCategoria,
+                        a.idImpuesto,
+                        a.idListaPrecios,
+                        a.Nombre,
+                        a.Moneda,
+                        a.PrecioUnitario,
+                        a.UnidadMedida,
+                        a.Cabys,
+                        a.TipoCod,
+                        a.CodBarras,
+                        a.Costo,
+                        a.Activo
+                    })
+                    .Distinct()
+                    .ToList();
 
                 ParametrosFiltros filtro2 = new ParametrosFiltros();
 
@@ -125,29 +147,39 @@ namespace NOVAAPP.Pages.Margenes
 
                     var objetos = await productos.ObtenerLista(filtros);
 
-                    var objeto = objetos.Select(a => new
-                    {
-                        a.id,
-                        a.Codigo,
-                        a.idCategoria,
-                        a.idImpuesto,
-                        a.idListaPrecios,
-                        a.Nombre,
-                        a.Moneda,
-                        a.PrecioUnitario,
-                        a.UnidadMedida,
-                        a.Cabys,
-                        a.TipoCod,
-                        a.CodBarras,
-                        a.Costo,
-                        a.Stock,
-                        a.Activo,
-                        a.ProcesadoSAP,
-                        a.FechaActualizacion,
-                        a.MAG,
-                        a.Serie
+                    var listaSucursales = await sucursales.ObtenerLista("");
+                    var listaBodegas = await bodegas.ObtenerLista("");
 
-                    }).Distinct().ToList();
+                    var codSucPrincipales = listaSucursales.Select(s => s.CodSuc).ToList();
+
+                    var idsBodegasPrincipales = listaBodegas.Where(b => codSucPrincipales.Contains(b.CodSAP)).Select(b => b.id).ToList();
+
+                    var objeto = objetos
+                        .Where(a => idsBodegasPrincipales.Contains(a.idBodega))
+                        .Select(a => new
+                        {
+                            a.id,
+                            a.Codigo,
+                            a.idBodega,
+                            a.idCategoria,
+                            a.idImpuesto,
+                            a.idListaPrecios,
+                            a.Nombre,
+                            a.Moneda,
+                            a.PrecioUnitario,
+                            a.UnidadMedida,
+                            a.Cabys,
+                            a.TipoCod,
+                            a.CodBarras,
+                            a.Costo,
+                            a.Stock,
+                            a.Activo,
+                            a.ProcesadoSAP,
+                            a.FechaActualizacion,
+                            a.MAG,
+                            a.Serie
+
+                        }).Distinct().ToList();
 
 
 

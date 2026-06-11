@@ -513,6 +513,11 @@
 
                                     <li><a asp-page="/ReporteMargenes/Index"><i class="mdi mdi-book-open-page-variant"></i>Reporte Margenes</a></li>
                                 }
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "127").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/ReporteMargenesMinimos/Index"><i class="mdi mdi-book-open-page-variant"></i>Reporte Margenes Minimo</a></li>
+                                }
 
                             }
 
