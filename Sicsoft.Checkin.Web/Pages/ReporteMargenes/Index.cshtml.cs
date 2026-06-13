@@ -1,4 +1,5 @@
 using Castle.Core.Configuration;
+using ClosedXML.Excel;
 using InversionGloblalWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,6 +8,7 @@ using NOVAAPP.Models;
 using Refit;
 using Sicsoft.Checkin.Web.Servicios;
 using System;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -55,9 +57,14 @@ namespace NOVAAPP.Pages.ReporteMargenes
                 {
                     filtro.Codigo1 = 1;
                 }
-                if (filtro.Codigo2 == 0)
+                if (filtro.Codigo2 == 0 )
                 {
                     filtro.Codigo2 = 1;
+                }
+                
+                if (filtro.Codigo2 == 15151515)
+                {
+                    filtro.Codigo2 = 0;
                 }
                 ListaPrecios = await listas.ObtenerLista("");
                 Categorias = await categorias.ObtenerLista("");
@@ -85,6 +92,79 @@ namespace NOVAAPP.Pages.ReporteMargenes
             catch (ApiException ex)
             {
                 return new JsonResult(false);
+            }
+        }
+        public async Task<IActionResult> OnGetExcelMasivoAsync()
+        {
+            try
+            {
+                filtro.Codigo1 = 0;
+                filtro.Codigo2 = 0;
+
+                var datos = await service.ObtenerLista(filtro);
+
+                using var workbook = new XLWorkbook();
+                var ws = workbook.Worksheets.Add("Reporte Margenes");
+
+                ws.Cell(1, 1).Value = "Producto";
+                ws.Cell(1, 2).Value = "Categoria";
+                ws.Cell(1, 3).Value = "Lista Precio";
+                ws.Cell(1, 4).Value = "Precio Cob";
+                ws.Cell(1, 5).Value = "MargenMin";
+                ws.Cell(1, 6).Value = "Margen";
+                ws.Cell(1, 7).Value = "Precio";
+                ws.Cell(1, 8).Value = "Precio Imp";
+                ws.Cell(1, 9).Value = "Escalonado";
+                ws.Cell(1, 10).Value = "CantMin1";
+                ws.Cell(1, 11).Value = "Margen1";
+                ws.Cell(1, 12).Value = "CantMin2";
+                ws.Cell(1, 13).Value = "Margen2";
+                ws.Cell(1, 14).Value = "CantMin3";
+                ws.Cell(1, 15).Value = "Margen3";
+                ws.Cell(1, 16).Value = "PrecioFijo";
+                ws.Cell(1, 17).Value = "Seteable";
+
+                int fila = 2;
+
+                foreach (var item in datos)
+                {
+                    ws.Cell(fila, 1).Value = item.ItemCode + " - " + item.Nombre;
+                    ws.Cell(fila, 2).Value = item.Categoria + " - " + item.NombreCategoria;
+                    ws.Cell(fila, 3).Value = item.ListaPrecio;
+                    ws.Cell(fila, 4).Value = item.PrecioCob;
+                    ws.Cell(fila, 5).Value = item.MargenMin;
+                    ws.Cell(fila, 6).Value = item.Margen;
+                    ws.Cell(fila, 7).Value = item.Precio;
+                    ws.Cell(fila, 8).Value = item.Precio * 1.13m;
+                    ws.Cell(fila, 9).Value = item.Escalonado ? "SI" : "NO";
+                    ws.Cell(fila, 10).Value = item.CantMin1;
+                    ws.Cell(fila, 11).Value = item.Margen1;
+                    ws.Cell(fila, 12).Value = item.CantMin2;
+                    ws.Cell(fila, 13).Value = item.Margen2;
+                    ws.Cell(fila, 14).Value = item.CantMin3;
+                    ws.Cell(fila, 15).Value = item.Margen3;
+                    ws.Cell(fila, 16).Value = item.PrecioFijo ? "SI" : "NO";
+                    ws.Cell(fila, 17).Value = item.Seteble ? "SI" : "NO";
+
+                    fila++;
+                }
+
+                ws.Row(1).Style.Font.Bold = true;
+                ws.Columns().Width = 18;
+
+                using var stream = new MemoryStream();
+                workbook.SaveAs(stream);
+
+                return File(
+                    stream.ToArray(),
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    $"ReporteMargenesMasivo_{DateTime.Now:yyyyMMddHHmmss}.xlsx"
+                );
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return Page();
             }
         }
     }

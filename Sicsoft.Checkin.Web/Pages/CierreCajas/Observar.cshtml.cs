@@ -139,7 +139,11 @@ namespace NOVAAPP.Pages.CierreCajas
 
                 Documento = await documento.ObtenerLista(filtro); //Documentos de la fecha de la caja y de la caja
                 PagoCuentas = await pagocuentas.ObtenerLista(filtro);
-                Depositos = await depositos.ObtenerLista(filtro);
+                ParametrosFiltros filtroD = new ParametrosFiltros();
+                filtroD.FechaInicial = Cierres.FechaCaja;
+                filtroD.FechaFinal = Cierres.FechaCaja.AddTicks(-1); 
+                filtroD.Codigo3 = Cierres.idCaja;
+                Depositos = await depositos.ObtenerLista(filtroD);
                 filtro.Codigo2 = Cierres.idUsuario;
                 filtro.Codigo1 = Cierres.idCaja;
                 Pagos = await pagos.ObtenerLista(filtro); //aqui nos traemos los pagos de la caja

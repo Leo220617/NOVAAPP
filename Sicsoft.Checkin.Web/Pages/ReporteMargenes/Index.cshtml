@@ -137,10 +137,10 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="cyber">Bodega:</label>
+                                    <label for="cyber">Lista de Precio:</label>
                                     <select class="form-control select2" id="Bodega" asp-for="filtro.Codigo1" required>
-                              
 
+                                     
                                         @foreach (var item in Model.ListaPrecios)
                                         {
                                             <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
@@ -161,13 +161,13 @@
                                 <div class="form-group">
                                     <label for="cyber">Categoría:</label>
                                     <select class="form-control select2" id="Caja" asp-for="filtro.Codigo2" required>
-                        
 
+                                      
                                         @foreach (var item in Model.Categorias)
                                         {
                                             <option value="@item.id"> @item.CodSAP - @item.Nombre</option>
                                         }
-
+                                        <option value="15151515"> Todas</option>
 
                                     </select>
 
@@ -200,12 +200,22 @@
                                 <input type="checkbox" id="md_checkbox_3" class="chk-col-red" asp-for="filtro.Activo" onclick="this.form.submit()" />
                                 <label for="md_checkbox_3"> Escalonado</label>
                             </div>
-                           
+
 
                             <div class="col-sm-12 pl-1" style="text-align: right; padding-top: 2%;">
-                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary"> <i class="fa fa-search"></i></button>
-                            </div>
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary">
+                                    <i class="fa fa-search"></i>
+                                </button>
 
+                                <button title="Excel masivo"
+                                        type="submit"
+                                        name="handler"
+                                        value="ExcelMasivo"
+                                        formnovalidate
+                                        class="btn btn-rounded btn-outline-success">
+                                    <i class="fa fa-file-excel-o"></i> Excel
+                                </button>
+                            </div>
 
 
 
