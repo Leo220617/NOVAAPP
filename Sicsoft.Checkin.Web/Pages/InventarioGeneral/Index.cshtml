@@ -1,0 +1,277 @@
+﻿@page
+@model NOVAAPP.Pages.InventarioGeneral.IndexModel
+@{
+    ViewData["Title"] = "Inventario General";
+}
+
+
+@using System.Globalization;
+@{
+    NumberFormatInfo formato = new CultureInfo("en-US").NumberFormat;
+    formato.CurrencyGroupSeparator = ",";
+    formato.NumberDecimalSeparator = ".";
+    var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
+
+    var Admin = !string.IsNullOrEmpty(Roles.Where(a => a == "128").FirstOrDefault());
+}
+
+@section styles {
+
+    <style>
+        .tableFixHead th {
+            position: sticky;
+            top: 0;
+            background: white;
+        }
+
+        .inventario-subtitle {
+            display: block;
+            margin-top: 4px;
+            color: #6c757d;
+            font-size: 13px;
+        }
+    </style>
+
+}
+
+@section scripts {
+
+    <script>
+        $(document).ready(function () {
+
+
+            $('.select2').select2({
+                placeholder: "Seleccione",
+                allowClear: true,
+                closeOnSelect: false,
+                width: '100%'
+            });
+        });
+    </script>
+
+}
+
+@using Microsoft.AspNetCore.Http
+@using System;
+@using System.Collections.Generic;
+@using System.IO;
+@using System.Linq;
+@using System.Security.Claims;
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
+@using Microsoft.Extensions.Configuration;
+@using Refit;
+@using Sicsoft.Checkin.Web.Models;
+@inject IHttpContextAccessor httpContextAccessor
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Inventario General
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Inventario General</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h4 class="box-title">Filtros</h4>
+                        </div>
+                        <div class="col-sm-4">
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Codigo Producto</label>
+                                    <input class="form-control" type="text" placeholder="Codigo" asp-for="filtro.Texto">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Nombre Producto</label>
+                                    <input class="form-control" type="text" placeholder="Nombre Producto" asp-for="filtro.Texto2">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Bodegas:</label>
+                                    <select id="selectB" class="form-control select2" asp-for="filtro.seleccionMultipleString" multiple>
+                                        @foreach (var item in Model.Bodegas)
+                                        {
+                                            <option value="@item.CodSAP"> @item.CodSAP - @item.Nombre</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Familias:</label>
+                                    <select id="selectF" class="form-control select2" asp-for="filtro.seleccionMultipleString2" multiple>
+                                        @foreach (var item in Model.Familias)
+                                        {
+                                            <option value="@item.ItmsGrpNam"> @item.ItmsGrpCod - @item.ItmsGrpNam</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12" style="text-align: right; padding-top: 2%;">
+                                <button title="Buscar" type="submit" class="btn btn-rounded btn-outline-primary">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h4 class="box-title">Inventario General</h4>
+                        </div>
+                        <div class="col-sm-4">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Codigo</th>
+                                    <th>Nombre</th>
+                                    <th>Moneda</th>
+                                    <th>Precio</th>
+                                    <th>Bodega</th>
+                                    <th>Stock</th>
+                                    <th>Meses Cobertura Stock</th>
+
+                                    @if (Admin)
+                                    {
+                                        <th>Costo</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Reporte)
+                                {
+                                    <tr>
+                                        <td>@item.Codigo</td>
+                                        <td align="left" style="padding-top:15px;"><a style="font-size:15px;"> @item.NombreProducto</a></td>
+                                        <td>@item.Moneda</td>
+                                        <td>@item.PrecioUnitario.ToString("N")</td>
+                                        <td>@item.Bodega</td>
+                                        <td>@item.Stock.ToString("N")</td>
+                                        <td>@item.Cobertura.ToString("N")</td>
+
+                                        @if (Admin)
+                                        {
+                                            <td>@item.Costo.ToString("N")</td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Codigo</th>
+                                    <th>Nombre</th>
+                                    <th>Moneda</th>
+                                    <th>Precio</th>
+                                    <th>Bodega</th>
+                                    <th>Stock</th>
+                                    <th>Meses Cobertura Stock</th>
+
+                                    @if (Admin)
+                                    {
+                                        <th>Costo</th>
+                                    }
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h4 class="box-title">Ordenes en transito</h4>
+                        </div>
+                        <div class="col-sm-4">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table id="example2" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No. Orden</th>
+                                    <th>Fecha Creacion</th>
+                                    <th>Producto</th>
+                                    <th>Status</th>
+                                    <th>Fecha Estimada Arribo</th>
+                                    <th>Cantidad</th>
+                                    <th>Meses Cobertura Transitos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ReporteO)
+                                {
+                                    <tr>
+                                        <td>@item.NumeroOC</td>
+                                        <td>@item.FechaOC.ToString("dd/MM/yyyy")</td>
+                                        <td align="left" style="padding-top:15px;"><a style="font-size:15px;"> @item.Producto</a></td>
+                                        <td>@item.Estado</td>
+                                        <td>@item.FechaEstimadaArribo.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.Cantidad.ToString("N")</td>
+                                        <td>@item.MesesCobertura.ToString("N")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>No. Orden</th>
+                                    <th>Fecha Creacion</th>
+                                    <th>Producto</th>
+                                    <th>Status</th>
+                                    <th>Fecha Estimada Arribo</th>
+                                    <th>Cantidad</th>
+                                    <th>Meses Cobertura Transitos</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->

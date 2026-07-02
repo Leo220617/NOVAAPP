@@ -8,6 +8,9 @@ namespace InversionGloblalWeb.Models
     public class ParametrosFiltros
     {
         public string Texto { get; set; }
+        public string Texto2 { get; set; }
+        public string Texto3 { get; set; }
+        public string Texto4 { get; set; }
         public string CardName { get; set; }
 
         public string Buscar { get; set; }
@@ -54,5 +57,30 @@ namespace InversionGloblalWeb.Models
         public bool correo { get; set; }
 
         public bool interes { get; set; }
+
+
+        public string strCodigo1 { get; set; }
+        public string strCodigo2 { get; set; }
+        public string strCodigo3 { get; set; }
+        public string strCodigo4 { get; set; }
+        public string strCodigo5 { get; set; }
+        public string strCodigo6 { get; set; }
+
+        public List<int> seleccionMultiple { get; set; } = new List<int>();
+        public List<int> seleccionMultiple1 { get; set; } = new List<int>();
+        public List<int> seleccionMultiple2 { get; set; } = new List<int>();
+
+        public List<int> seleccionMultiple3 { get; set; } = new List<int>();
+
+        public List<int> seleccionMultiple4 { get; set; } = new List<int>();
+
+        public List<string> seleccionMultipleString { get; set; } = new List<string>();
+        public List<string> seleccionMultipleString2 { get; set; } = new List<string>();
+
+        public List<string> seleccionMultipleString3 { get; set; } = new List<string>();
+
+        public List<string> seleccionMultipleString4 { get; set; } = new List<string>();
+
+        public List<string> seleccionMultipleString5 { get; set; } = new List<string>();
     }
 }

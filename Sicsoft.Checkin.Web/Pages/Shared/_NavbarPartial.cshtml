@@ -181,6 +181,16 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
+
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "127").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/InventarioGeneral/Index"><i class="mdi mdi-cube"></i>Inventario General</a></li>
+                                }
+
+                            }
+
                             @{
                                 if (!string.IsNullOrEmpty(Roles.Where(a => a == "9").FirstOrDefault()))
                                 {
