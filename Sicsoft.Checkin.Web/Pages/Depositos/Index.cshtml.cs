@@ -111,6 +111,24 @@ namespace NOVAAPP.Pages.Depositos
                 return Page();
             }
         }
+
+        public async Task<IActionResult> OnGetEliminar(int id)
+        {
+            try
+            {
+
+                await service.Eliminar(id);
+                return new JsonResult(true);
+            }
+            catch (ApiException ex)
+            {
+                return new JsonResult(false);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(false);
+            }
+        }
         public async Task<IActionResult> OnGetSincronizarSAP(int id)
         {
             try

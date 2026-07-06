@@ -24,11 +24,11 @@
 @{
     var Roles = ((ClaimsIdentity)User.Identity).Claims.Where(d => d.Type == "Roles").Select(s1 => s1.Value).FirstOrDefault().Split("|");
 }
-@section scripts{
+@section scripts {
 
 
-      <script>
-        $(document).ready(function() {
+    <script>
+        $(document).ready(function () {
 
 
 
@@ -75,7 +75,7 @@
                     dataType: 'json',
                     url: '@Url.Page("Index", "SincronizarSAP")',
                     data: { id: ids },
-                    success: function(result) {
+                    success: function (result) {
                         $("#divProcesando").modal("hide");
                         console.log(result);
                         if (result == false) {
@@ -105,7 +105,7 @@
                             })
                         }
                     },
-                    beforeSend: function() {
+                    beforeSend: function () {
                         $("#divProcesando").modal("show");
                     }
                 })
@@ -119,60 +119,150 @@
                 })
             }
         }
+
+
+        ///Eliminar pago
+
+        function onClickModalPago(id) {
+            try {
+                ids = id;
+                Swal.fire({
+                    title: '¿Desea eliminar este pago?',
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: `Aceptar`,
+                    denyButtonText: `Cancelar`,
+                    customClass: {
+                        confirmButton: 'swalBtnColor',
+                        denyButton: 'swalDeny'
+                    },
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        EliminarPago();
+
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar eliminar pago:  ' + e
+
+                })
+            }
+
+        }
+
+        function EliminarPago() {
+            try {
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: '@Url.Page("Index", "Eliminar")',
+                    data: { id: ids },
+                    success: function (result) {
+                        $("#divProcesando").modal("hide");
+                        console.log(result);
+                        if (result == false) {
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ha ocurrido un error al intentar eliminar pago'
+
+                            })
+
+                        } else {
+                            Swal.fire({
+                                title: "Ha sido eliminado con éxito",
+
+                                icon: 'success',
+                                showCancelButton: false,
+                                customClass: {
+                                    confirmButton: 'swalBtnColor',
+
+                                },
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            })
+                        }
+                    },
+                    beforeSend: function () {
+                        $("#divProcesando").modal("show");
+                    }
+                })
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error al intentar sincronizar a SAP ' + e
+
+                })
+            }
+        }
+
+
     </script>
 }
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>
-            Abonos
-        </h1>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
-            <li class="breadcrumb-item active">Listado Abonos</li>
-        </ol>
-    </section>
-    <!-- Main content -->
-    <section class="content">
-        <div class="row">
-            <div class="col-12">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Abonos
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="ti-dashboard"></i></a></li>
+        <li class="breadcrumb-item active">Listado Abonos</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
 
-                <div class="box">
-                    <div class="box-header with-border">
-                        <div class="row">
-                            <div class="col-sm-8"> <h4 class="box-title">Abonos</h4></div>
-                            
-                        </div>
-
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-sm-8"> <h4 class="box-title">Abonos</h4></div>
 
                     </div>
-                    <div class="box-body">
-                        <form method="get">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>Fecha Inicial</label>
-                                        <input class="form-control " id="FecInicial" type="date" asp-for="filtro.FechaInicial">
-                                    </div>
 
 
+                </div>
+                <div class="box-body">
+                    <form method="get">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Fecha Inicial</label>
+                                    <input class="form-control " id="FecInicial" type="date" asp-for="filtro.FechaInicial">
                                 </div>
 
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>Fecha Final</label>
-                                        <input class="form-control" id="FecFinal" type="date" asp-for="filtro.FechaFinal">
-                                    </div>
+
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Fecha Final</label>
+                                    <input class="form-control" id="FecFinal" type="date" asp-for="filtro.FechaFinal">
                                 </div>
+                            </div>
 
-                           
 
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="cyber">Cliente:</label>
-                                        <select class="form-control select2" id="ClienteF" asp-for="filtro.Codigo1" required>
-                                            <option value="0"> Seleccione</option>
 
-                                            @foreach (var item in Model.Clientes)
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="cyber">Cliente:</label>
+                                    <select class="form-control select2" id="ClienteF" asp-for="filtro.Codigo1" required>
+                                        <option value="0"> Seleccione</option>
+
+                                        @foreach (var item in Model.Clientes)
                                         {
                                             <option value="@item.id"> @item.Codigo - @item.Nombre</option>
                                         }
@@ -208,13 +298,13 @@
                                 </div>
                             </div>
 
-                              <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="cyber">Moneda:</label>
-                                        <select class="form-control" id="money" asp-for="filtro.CardCode" required>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="cyber">Moneda:</label>
+                                    <select class="form-control" id="money" asp-for="filtro.CardCode" required>
                                         @if (Model.Parametros.FirstOrDefault().Pais == "P")
                                         {
-                   
+
                                         }
                                         @if (Model.Parametros.FirstOrDefault().Pais == "C")
                                         {
@@ -225,20 +315,20 @@
                                             <option value="COR">COR</option>
                                         }
 
-                                           
-                                            <option value="USD">USD</option>
-                                    
+
+                                        <option value="USD">USD</option>
 
 
 
 
 
-                                        </select>
-                                    </div>
+
+                                    </select>
                                 </div>
-                          
-                           
-                             <div class="col-md-2 " style="text-align: center; padding-top: 2%;">
+                            </div>
+
+
+                            <div class="col-md-2 " style="text-align: center; padding-top: 2%;">
                                 <input type="checkbox" id="md_checkbox_1" class="chk-col-red" asp-for="filtro.Procesado" onclick="this.form.submit()" />
                                 <label for="md_checkbox_1"> Procesado SAP</label>
                             </div>
@@ -279,7 +369,7 @@
                                 <tr>
 
                                     <th>ID</th>
-                                     <th>Acción</th>
+                                    <th>Acción</th>
                                     <th>Cliente</th>
                                     <th>Sucursal</th>
                                     <th>Fecha</th>
@@ -290,11 +380,11 @@
                                     <th>Total Pagado</th>
                                     <th>Procesado SAP</th>
 
-                                   
 
 
-                              
-                                   
+
+
+
 
                                 </tr>
                             </thead>
@@ -307,23 +397,30 @@
                                         <td>
                                             @item.id
                                         </td>
-                                          <td align="center" style="padding-top:15px;">
-                                           
+                                        <td align="center" style="padding-top:15px;">
+
                                             <a asp-page="./Observar" asp-route-id="@item.id" class="fa fa-info-circle icono"> </a> &nbsp;
                                             &nbsp;
-                                            
-                                             @if (item.ProcesadaSAP == false)
+
+                                            @if (item.ProcesadaSAP == false)
                                             {
                                                 <a onclick="javascript: onClickModal('@item.id')" title="Insertar a SAP"><img src="/sapX.png" /></a>
                                             }
-                                          
+                                            &nbsp;
+
+                                            @if (!string.IsNullOrEmpty(Roles.Where(a => a == "133").FirstOrDefault()))
+                                            {
+                                                <a onclick="javascript: onClickModalPago('@item.id')" class="fa fa-trash icono"></a>
+
+                                            }
+
                                         </td>
                                         <td>
-                                            @( Model.Clientes.Where(a => a.id == item.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" :  Model.Clientes.Where(a => a.id == item.idCliente).FirstOrDefault().Codigo + " - " +  Model.Clientes.Where(a => a.id == item.idCliente).FirstOrDefault().Nombre)
+                                            @(Model.Clientes.Where(a => a.id == item.idCliente).FirstOrDefault() == null ? "Cliente Inexistente" : Model.Clientes.Where(a => a.id == item.idCliente).FirstOrDefault().Codigo + " - " + Model.Clientes.Where(a => a.id == item.idCliente).FirstOrDefault().Nombre)
                                         </td>
 
                                         <td>
-                                            @(Model.Sucursales.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente": Model.Sucursales.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre )
+                                            @(Model.Sucursales.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault() == null ? "Sucursal Inexistente" : Model.Sucursales.Where(a => a.CodSuc == item.CodSuc).FirstOrDefault().Nombre)
 
                                         </td>
                                         <td>
@@ -332,18 +429,18 @@
                                         <td>
                                             @item.FechaVencimiento.ToString("dd/MM/yyyy")
                                         </td>
-                                           <td>
+                                        <td>
                                             @item.FechaContabilizacion.ToString("dd/MM/yyyy")
                                         </td>
-                                       
+
                                         <td>
                                             @item.Moneda
                                         </td>
                                         <td>
-                                            @Math.Round(@item.TotalPagado, 2).ToString("C",formato)
+                                            @Math.Round(@item.TotalPagado, 2).ToString("C", formato)
                                         </td>
 
-                                           <td>
+                                        <td>
                                             @if (item.ProcesadaSAP)
                                             {
                                                 <span class="badge badge-pill badge-success">Procesado</span>
@@ -354,16 +451,16 @@
                                                 <span class="badge badge-pill badge-danger">Sin Procesar</span>
                                             }
                                         </td>
-                                       
 
 
 
 
-                                     
 
 
 
-                                      
+
+
+
 
 
                                     </tr>
@@ -375,8 +472,8 @@
                             <tfoot>
                                 <tr>
 
-                                     <th>ID</th>
-                                     <th>Acción</th>
+                                    <th>ID</th>
+                                    <th>Acción</th>
                                     <th>Cliente</th>
                                     <th>Sucursal</th>
                                     <th>Fecha</th>
@@ -385,8 +482,8 @@
                                     <th>Fecha Contabilización</th>
                                     <th>Moneda</th>
                                     <th>Total Pagado</th>
-                                     <th>Procesado SAP</th>
-                                   
+                                    <th>Procesado SAP</th>
+
 
                                 </tr>
                             </tfoot>
