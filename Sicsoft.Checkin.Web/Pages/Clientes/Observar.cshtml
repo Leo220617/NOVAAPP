@@ -207,6 +207,12 @@
                                 }
                             </h5>
                         </div>
+                          @if (Model.Parametros.FirstOrDefault().MAG)
+                            {
+                        <div class="col-md-2">
+                            <h5> <b>Fecha Vencimiento MAG:</b>  @Model.Cliente.FechaVenMAG.ToString("dd/MM/yyyy") </h5>
+                        </div>
+                            }
                         <div class="col-md-1">
                             <h5>
                                 <b>CxC:</b>

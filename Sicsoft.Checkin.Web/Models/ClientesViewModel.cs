@@ -72,6 +72,7 @@ namespace NOVAAPP.Models
 
         public bool Transitorio { get; set; }
         public string DV { get; set; }
+        public DateTime FechaVenMAG { get; set; }
 
 
     }

@@ -77,5 +77,6 @@ namespace NOVAAPP.Models
         public bool Retenciones { get; set; }
 
         public bool SubCatArqueos { get; set; }
+        public bool MAG { get; set; }
     }
 }
