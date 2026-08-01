@@ -530,7 +530,19 @@
                                 }
 
                             }
+                            @{
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "136").FirstOrDefault()))
+                                {
 
+                                    <li><a asp-page="/ReporteVentasVendedores/Index2"><i class="mdi mdi-book-open-page-variant"></i>Reporte Ventas Vendedores</a></li>
+                                }
+                                if (!string.IsNullOrEmpty(Roles.Where(a => a == "136").FirstOrDefault()))
+                                {
+
+                                    <li><a asp-page="/ReporteVentasVendedores/Index"><i class="mdi mdi-book-open-page-variant"></i>Dashboard Ventas</a></li>
+                                }
+
+                            }
 
 
 
