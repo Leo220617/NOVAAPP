@@ -10,5 +10,10 @@
         public string Bodega { get; set; }
         public decimal Costo { get; set; }
         public decimal Cobertura { get; set; }
+        public decimal CoberturaTransito { get; set; }
+        public decimal PromedioUnidadesGeneral { get; set; }
+        public decimal PromedioUnidades { get; set; } 
+        public string Categoria { get; set; }
+        public string CategoriaGeneral { get; set; }
     }
 }

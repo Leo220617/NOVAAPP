@@ -159,14 +159,14 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Codigo</th>
-                                    <th>Nombre</th>
+                                    <th>Código </th>
+                                    <th>Nombre </th>
+                                    <th>Bodega</th>
+                                    <th>Categoria</th>
                                     <th>Moneda</th>
                                     <th>Precio</th>
-                                    <th>Bodega</th>
                                     <th>Stock</th>
                                     <th>Meses Cobertura Stock</th>
-
                                     @if (Admin)
                                     {
                                         <th>Costo</th>
@@ -178,13 +178,13 @@
                                 {
                                     <tr>
                                         <td>@item.Codigo</td>
-                                        <td align="left" style="padding-top:15px;"><a style="font-size:15px;"> @item.NombreProducto</a></td>
+                                        <td align="left" style="padding-top:15px;"><a style="font-size:15px;  "> @item.NombreProducto</a></td>
+                                        <td align="left" style="padding-top:15px;"><a style="font-size:15px;  "> @item.Bodega</a></td>
+                                        <td align="left">@item.Categoria</td>
                                         <td>@item.Moneda</td>
                                         <td>@item.PrecioUnitario.ToString("N")</td>
-                                        <td>@item.Bodega</td>
                                         <td>@item.Stock.ToString("N")</td>
                                         <td>@item.Cobertura.ToString("N")</td>
-
                                         @if (Admin)
                                         {
                                             <td>@item.Costo.ToString("N")</td>
@@ -194,18 +194,25 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Codigo</th>
-                                    <th>Nombre</th>
-                                    <th>Moneda</th>
-                                    <th>Precio</th>
-                                    <th>Bodega</th>
-                                    <th>Stock</th>
-                                    <th>Meses Cobertura Stock</th>
-
+                                    <td><b>TOTALIZADOS</b></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>@Model.Reporte.FirstOrDefault()?.CategoriaGeneral</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td> @(Model.Reporte.Sum(a => a.Stock).ToString("N")) </td>
+                                    <td>
+                                        @(
+                                            Model.Reporte.FirstOrDefault()?.PromedioUnidadesGeneral != 0 && Model.Reporte.FirstOrDefault()?.PromedioUnidadesGeneral != null
+                                            ? (Model.Reporte.Sum(a => a.Stock) / Model.Reporte.FirstOrDefault().PromedioUnidadesGeneral).ToString("N")
+                                            : "0.00"
+                                            )
+                                    </td>
                                     @if (Admin)
                                     {
-                                        <th>Costo</th>
+                                        <td> </td>
                                     }
+
                                 </tr>
                             </tfoot>
                         </table>
