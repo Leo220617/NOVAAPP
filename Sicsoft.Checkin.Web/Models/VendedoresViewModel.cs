@@ -11,5 +11,8 @@
         public string CodSuc { get; set; }
 
         public bool Activo { get; set; }
+
+        public int Dimension { get; set; }
+        public string NormaReparto { get; set; }
     }
 }
