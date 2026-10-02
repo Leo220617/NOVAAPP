@@ -36,9 +36,9 @@
             padding: 8px 18px !important;
         }
         /*label
-                                {
-                                    font-size: 15px;
-                                }*/
+                                        {
+                                            font-size: 15px;
+                                        }*/
 
         #imgGalerias {
             display: none;
@@ -108,7 +108,7 @@
                 var link = document.createElement('a');
                 link.href = pdfDataUrl;
                 link.target = '_blank';
-                link.download = 'documento_'+'@Model.Exoneracion.NumDoc'+'.pdf';
+                link.download = 'documento_' + '@Model.Exoneracion.NumDoc' + '.pdf';
 
                 // Simula un clic en el enlace
                 link.click();
@@ -155,7 +155,7 @@
         }
 
     </script>
-  @*   <script>
+    @*   <script>
         var ImageBae64 = '';
 
         var fileUploadPrincipal = document.getElementById('imgPrincipalUploadG');
@@ -318,8 +318,6 @@
 
                                         </div>
                                         <div class="col-2">
-                                           
-
                                         </div>
                                         <div class="col-4">
                                             <h5> <b>Artículo Ley:</b> @Model.Exoneracion.ArticuloLey</h5>
@@ -359,18 +357,18 @@
 
                             </address>
                         </div>
-                        @if(Model.Exoneracion.CodigoInstitucion == "99")
+                        @if (Model.Exoneracion.CodigoInstitucion == "99")
                         {
-                            
-                   
-                        <div class="col-md-4 invoice-col">
-                            <strong>Institución Emisora Otro</strong>
-                            <address>
-                                <strong class="text-blue font-size-24"> @Model.Exoneracion.NombreInstitucionOtro </strong>
 
 
-                            </address>
-                        </div>
+                            <div class="col-md-4 invoice-col">
+                                <strong>Institución Emisora Otro</strong>
+                                <address>
+                                    <strong class="text-blue font-size-24"> @Model.Exoneracion.NombreInstitucionOtro </strong>
+
+
+                                </address>
+                            </div>
                         }
                         <div class="col-md-4 invoice-col">
 
@@ -418,8 +416,8 @@
                                             <p>Exoneración a Zona Franca</p>
                                             break;
                                         }
-                                      
-                                    
+
+
                                     case "09":
                                         {
                                             <p>Exoneración de servicios complementarios para la exportación articulo 11 RLIVA</p>
@@ -440,9 +438,9 @@
                                             <p>Otros</p>
                                             break;
                                         }
-                                       
-                                      
-                                     
+
+
+
                                 }
 
 
@@ -450,14 +448,14 @@
                             <address>
                             </address>
                         </div>
-                        @if(Model.Exoneracion.CodigoInstitucion == "99")
+                        @if (Model.Exoneracion.CodigoInstitucion == "99")
                         {
                             <div class="col-4">
                                 <h5> <b>Tipo de Documento Otro:</b> @Model.Exoneracion.TipoDocumentoOtro</h5>
 
                             </div>
                         }
-                     
+
                         <!-- /.col -->
                     </div>
                     <!-- /.row -->
@@ -503,6 +501,45 @@
                     <!-- /.row -->
                     <!-- /.row -->
 
+                </div>
+            </div>
+
+
+            <div class="box mt-3">
+                <div class="box-header with-border">
+                    <h4 class="box-title">Bitácora de cambios</h4>
+                </div>
+                <div class="box-body">
+                    @if (Model.Exoneracion.LogsExoneraciones != null && Model.Exoneracion.LogsExoneraciones.Any())
+                    {
+                        foreach (var log in Model.Exoneracion.LogsExoneraciones.OrderByDescending(a => a.Fecha))
+                        {
+                            <details class="mb-2 border rounded p-2">
+                                <summary style="cursor:pointer;">
+                                    <strong>@log.Accion</strong>
+                                    <span class="ml-2">@log.Fecha.ToString("dd/MM/yyyy HH:mm")</span>
+                                    @if (!String.IsNullOrEmpty(log.Usuario))
+                                    {
+                                        <span class="ml-2">por @log.Usuario</span>
+                                    }
+                                </summary>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <strong>Antes</strong>
+                                        <pre class="bg-light p-2 mt-1" style="white-space: pre-wrap;">@(String.IsNullOrEmpty(log.DatosAntes) ? "No aplica" : log.DatosAntes)</pre>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Después</strong>
+                                        <pre class="bg-light p-2 mt-1" style="white-space: pre-wrap;">@(String.IsNullOrEmpty(log.DatosDespues) ? "No aplica" : log.DatosDespues)</pre>
+                                    </div>
+                                </div>
+                            </details>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-info mb-0">Esta exoneración todavía no tiene movimientos registrados.</div>
+                    }
                 </div>
             </div>
 
@@ -756,3 +793,4 @@
     <!-- /.row -->
     <!-- /.row -->
 </div>
+

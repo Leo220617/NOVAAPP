@@ -25,6 +25,7 @@ namespace NOVAAPP.Models
         public string IncisoLey { get; set; }
         public string TipoDocumentoOtro { get; set; }
         public DetExoneracionesViewModel[] Detalle { get; set; }
+        public LogsExoneracionesViewModel[] LogsExoneraciones { get; set; }
 
        
     }
